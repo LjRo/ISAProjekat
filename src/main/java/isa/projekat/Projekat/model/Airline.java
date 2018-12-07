@@ -1,14 +1,29 @@
-package isa.projekat.Projekat.domain;
+package isa.projekat.Projekat.model;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Airline {
+import static javax.persistence.GenerationType.IDENTITY;
 
+@Entity
+@Table(name="Airlines")
+public class Airline implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy=IDENTITY)
+    private Long id;
+
+    @Column(name = "A_NAME", nullable = false)
     private String name;
+
+    @Column(name = "A_ADDRESS", nullable = false)
     private String address;
+
+    @Column(name = "A_DESCRIPTION", nullable = false)
     private String description;
-    private ArrayList<Double> grades;
-    private ArrayList<String> destinations;
+    //private ArrayList<Double> grades;
+    //private ArrayList<String> destinations;
 
     public Airline() {
 
@@ -38,19 +53,5 @@ public class Airline {
         this.description = description;
     }
 
-    public ArrayList<Double> getGrades() {
-        return grades;
-    }
 
-    public void setGrades(ArrayList<Double> grades) {
-        this.grades = grades;
-    }
-
-    public ArrayList<String> getDestinations() {
-        return destinations;
-    }
-
-    public void setDestinations(ArrayList<String> destinations) {
-        this.destinations = destinations;
-    }
 }
