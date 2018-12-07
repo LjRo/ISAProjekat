@@ -10,6 +10,10 @@ public class Airline {
     private ArrayList<Double> grades;
     private ArrayList<String> destinations;
 
+    public Airline() {
+
+    }
+
     public String getName() {
         return name;
     }
