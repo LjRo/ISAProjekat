@@ -16,13 +16,19 @@ public class Hotel implements Serializable {
     private String name;
 
     @Column(nullable = false)
-    private  String adress;
+    private  String address;
 
     @Column(nullable = false)
     private String description;
 
     @ManyToMany
-    private Set<Service> services = new HashSet<Service>();
+    private Set<HotelService> hotelServices = new HashSet<HotelService>();
+
+    @OneToMany(mappedBy = "Hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Room> sobe = new HashSet<Room>();
+
+    //TODO Dodati Ocenu
+    //TODO Dodati Rezervaciju Hotela
 
     public Integer getId() {
         return id;
@@ -40,12 +46,12 @@ public class Hotel implements Serializable {
         this.name = name;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getDescription() {
@@ -56,11 +62,11 @@ public class Hotel implements Serializable {
         this.description = description;
     }
 
-    public Set<Service> getServices() {
-        return services;
+    public Set<HotelService> getHotelServices() {
+        return hotelServices;
     }
 
-    public void setServices(Set<Service> services) {
-        this.services = services;
+    public void setHotelServices(Set<HotelService> hotelServices) {
+        this.hotelServices = hotelServices;
     }
 }

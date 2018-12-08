@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-public class Service implements Serializable {
+public class HotelService implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class Service implements Serializable {
     @Column(nullable = false)
     private BigDecimal price;
 
-    public  Service(){
+    public HotelService(){
         super();
     }
 
@@ -52,13 +52,11 @@ public class Service implements Serializable {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if( !(o instanceof Service))
+        if( !(o instanceof HotelService))
             return false;
-        Service service = (Service) o;
-        if (service.id.equals(this.id)) {
-            return true;
-        } else
-            return false;
+        HotelService hotelService = (HotelService) o;
+        return (hotelService.id.equals(this.id));
+
     }
 
     @Override
@@ -68,6 +66,6 @@ public class Service implements Serializable {
 
     @Override
     public String toString() {
-        return "Service" + "[id=" +this.id + ",name="+ this.name + ",price=" + this.price+"]";
+        return "HotelService" + "[id=" +this.id + ",name="+ this.name + ",price=" + this.price+"]";
     }
 }
