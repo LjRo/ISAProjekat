@@ -1,17 +1,19 @@
 package isa.projekat.Projekat.model;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 
 @Entity
-@Table(name = "CARS")
+@Table(name = "Cars")
 public class Cars {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -32,26 +34,34 @@ public class Cars {
     @Column(name = "dailyPrice", nullable = false)
     private BigDecimal dailyPrice;
 
+    @Column(name = "isFastReserved", nullable = false)
+    private Boolean isFastReserved;
+
+    @Column(name = "inUsed", nullable = false)
+    private Boolean isUsed;
+
     //TODO SET LIST OF REVIEWS
 
 
     public Cars() {
     }
 
-    public Cars(CarType type, String registrationNumber, int numberOfBags, int maxPassengers, int numberOfDoors, BigDecimal dailyPrice) {
+    public Cars(CarType type, String registrationNumber, int numberOfBags, int maxPassengers, int numberOfDoors, BigDecimal dailyPrice, Boolean isFastReserved, Boolean isUsed) {
         this.type = type;
         this.registrationNumber = registrationNumber;
         this.numberOfBags = numberOfBags;
         this.maxPassengers = maxPassengers;
         this.numberOfDoors = numberOfDoors;
         this.dailyPrice = dailyPrice;
+        this.isFastReserved = isFastReserved;
+        this.isUsed = isUsed;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -101,5 +111,21 @@ public class Cars {
 
     public void setDailyPrice(BigDecimal dailyPrice) {
         this.dailyPrice = dailyPrice;
+    }
+
+    public Boolean getFastReserved() {
+        return isFastReserved;
+    }
+
+    public void setFastReserved(Boolean fastReserved) {
+        isFastReserved = fastReserved;
+    }
+
+    public Boolean getUsed() {
+        return isUsed;
+    }
+
+    public void setUsed(Boolean used) {
+        isUsed = used;
     }
 }
