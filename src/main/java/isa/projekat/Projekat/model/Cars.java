@@ -37,6 +37,7 @@ public class Cars {
     @Column(name = "isFastReserved", nullable = false)
     private Boolean isFastReserved;
 
+
     @Column(name = "inUsed", nullable = false)
     private Boolean isUsed;
 

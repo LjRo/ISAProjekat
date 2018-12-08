@@ -33,4 +33,5 @@ public class CarType {
     public void setName(String name) {
         this.name = name;
     }
+
 }
