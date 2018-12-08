@@ -7,23 +7,24 @@ import java.util.ArrayList;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name="Airlines")
+@Table(name = "Airlines")
 public class Airline implements Serializable {
 
     @Id
-    @GeneratedValue(strategy=IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "A_NAME", nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(name = "A_ADDRESS", nullable = false)
+    @Column(nullable = false)
     private String address;
 
-    @Column(name = "A_DESCRIPTION", nullable = false)
+    @Column
     private String description;
     //private ArrayList<Double> grades;
-    //private ArrayList<String> destinations;
+    @ManyToMany
+    private ArrayList<Destination> destinations;
 
     public Airline() {
 
@@ -53,5 +54,11 @@ public class Airline implements Serializable {
         this.description = description;
     }
 
+    public ArrayList<Destination> getDestinations() {
+        return destinations;
+    }
 
+    public void setDestinations(ArrayList<Destination> destinations) {
+        this.destinations = destinations;
+    }
 }
