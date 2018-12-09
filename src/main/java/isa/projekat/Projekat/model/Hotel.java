@@ -22,10 +22,11 @@ public class Hotel implements Serializable {
     private String description;
 
     @ManyToMany
-    private Set<HotelService> hotelServices = new HashSet<HotelService>();
+    private Set<HotelService> hotelServices = new HashSet<>();
 
-    @OneToMany(mappedBy = "Hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Room> sobe = new HashSet<Room>();
+    //mappedBy = "Hotel"
+    @OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Room> rooms = new HashSet<>();
 
     //TODO Dodati Ocenu
     //TODO Dodati Rezervaciju Hotela

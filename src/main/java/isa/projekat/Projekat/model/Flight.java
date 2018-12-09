@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="Flights")
@@ -29,7 +30,7 @@ public class Flight {
     private Integer numberOfStops;
 
     @ManyToMany
-    private ArrayList<Destination> stops;
+    private List<Destination> stops;
 
     @Column (nullable = false)
     private BigDecimal price;
@@ -82,7 +83,7 @@ public class Flight {
         this.numberOfStops = numberOfStops;
     }
 
-    public ArrayList<Destination> getStops() {
+    public List<Destination> getStops() {
         return stops;
     }
 

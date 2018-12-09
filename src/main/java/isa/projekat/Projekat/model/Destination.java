@@ -3,17 +3,17 @@ package isa.projekat.Projekat.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="Destinations")
+@Table(name = "Destinations")
 public class Destination {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String country;
 
     public Long getId() {

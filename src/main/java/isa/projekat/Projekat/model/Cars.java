@@ -1,6 +1,5 @@
 package isa.projekat.Projekat.model;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,7 +14,6 @@ public class Cars {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private CarType type;
 

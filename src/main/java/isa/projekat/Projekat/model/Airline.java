@@ -2,7 +2,7 @@ package isa.projekat.Projekat.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -24,7 +24,7 @@ public class Airline implements Serializable {
     private String description;
     //private ArrayList<Double> grades;
     @ManyToMany
-    private ArrayList<Destination> destinations;
+    private List<Destination> destinations;
 
     public Airline() {
 
@@ -54,11 +54,11 @@ public class Airline implements Serializable {
         this.description = description;
     }
 
-    public ArrayList<Destination> getDestinations() {
+    public List<Destination> getDestinations() {
         return destinations;
     }
 
-    public void setDestinations(ArrayList<Destination> destinations) {
+    public void setDestinations(List<Destination> destinations) {
         this.destinations = destinations;
     }
 }
