@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "Rooms")
 public class Room implements Serializable {
 
     @Id

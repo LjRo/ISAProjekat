@@ -3,6 +3,8 @@ package isa.projekat.Projekat.model;
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "Ratings")
 public class Rating implements Serializable {
 
 
@@ -14,7 +16,6 @@ public class Rating implements Serializable {
     private int userRating;
 
     @ManyToOne
-    @Column(nullable = false)
     private User user;
 
     public Rating(){

@@ -3,7 +3,7 @@ package isa.projekat.Projekat.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Location")
+@Table(name = "Locations")
 public class Location {
 
     @Id
