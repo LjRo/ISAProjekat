@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,8 +24,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public User findById(Long id) throws AccessDeniedException {
-		User u = userRepository.findOne(id);
-		return u;
+		Optional<User> u = this.userRepository.findById(id);
+		if (u.isPresent()) {
+			return u.get();
+		} else {
+			return null;
+		}
 	}
 
 	public List<User> findAll() throws AccessDeniedException {
