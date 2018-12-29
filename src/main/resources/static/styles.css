@@ -1,0 +1,34 @@
+#indexHighlight {
+	max-width: 450px;
+	max-height: 450px;
+}
+.btn-primary {
+	background-color:#f4476b;
+	color:#fff;
+  	border:none;
+
+}
+.btn-primary:hover {
+	opacity:1;
+	background:#eb3b60;
+}
+
+.logged {
+	visibility: hidden;
+}
+
+.admin {
+	visibility: hidden;
+}
+
+.customer {
+	visibility: hidden;
+}
+
+.distributor {
+	visibility: hidden;
+}
+
+/*.not-logged {
+	visibility: hidden;
+}*/

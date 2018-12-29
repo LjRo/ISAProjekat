@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="/NavigationWithButton.css">
+    <link rel="stylesheet" href="/HighlightPhone.css">
+    <link rel="stylesheet" href="/ProjectsHorizontal.css">
+    <link rel="stylesheet" href="/FeaturesBoxed.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/LoginForm.css">
+    <link rel="stylesheet" href="/RegFormWithPhoto.css">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="js/register.js"></script>
+    <script type="text/javascript" src="js/loggedCheck.js"></script>
+</head>
+
+<body>
+    <div id="navbar-frame"></div>
+
+    <div class="register-photo">
+        <div class="form-container"><div class="image-holder"></div>
+            <form id="registerForm">
+                <h2 class="text-center"><strong>Create</strong> an account.</h2>
+                <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Username" required pattern="^(?=.{3,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$" /></div>
+                <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password" required></div>
+                <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email" required></div>
+                <div class="form-group"><input class="form-control" type="text" name="name" placeholder="Name" required /></div>
+                <div class="form-group"><input type="text" name="surname" placeholder="Surname" class="form-control" /></div>
+                <div class="form-group"><input type="tel" name="phoneNumber"  class="form-control" 
+    placeholder="Phone Number (123-456-7890)"
+    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+    />
+</div>
+
+                <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Sign Up</button></div><a href="/login.html" class="already">You already have an account? Login here.</a></form>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

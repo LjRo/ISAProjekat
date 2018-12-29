@@ -26,7 +26,8 @@ public class AirlineController {
 
     @RequestMapping(value = "api/airline/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void updateInfo(@RequestBody AirlineData ad, HttpServletRequest req){
-        airlineService.updateAirlineData(ad);
+        String email = "temp";
+        airlineService.updateAirlineData(ad, email);
     }
 
 }
