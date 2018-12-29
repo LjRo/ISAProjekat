@@ -2,40 +2,86 @@
 <html>
 <head>
     <title>Spring Boot WebSocket Messaging</title>
-    <script type="text/javascript"
-            src="//cdn.jsdelivr.net/jquery/2.2.0/jquery.min.js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    </script>
-    <!-- Koristi sockjs biblioteku da se konektuje na /stomp endpoint -->
-    <script type="text/javascript"
-            src="//cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js">
-
-    </script>
-    <!-- Koristi stomp biblioteku da se pretplati na brokerov /topic/message endpoint -->
-    <script type="text/javascript"
-            src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
 <div>
     <h3>Messages:</h3>
     <ol id="messages"></ol>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $.get({
+            url : 'http://localhost:8080/api/cars/findAll',
+            success : function(data) {
+
+                if (data != null) {
+                    for ( var us in data) {
+                        addUser(data[us]);
+                    }
+
+                    $.get({
+                        url : 'http://localhost:8080/Project/rest/user',
+                        success : function(data) {
+
+                            if (data != null) {
+                                $(".not-logged").remove();
+                                $(".logged").css("visibility", "visible");
+                                if (data.type == "ADMIN") {
+                                    $(".admin").css("visibility", "visible");
+                                } else {
+                                    $(".admin").remove();
+                                }
+                            } else {
+                                $(".not-logged").css("visibility", "visible");
+                            }
+                        }
+                    });
+
+                } else {
+
+                }
+            }
+        });
+    });
+    function addUser(user) {
+        var table = $('#tableCars > tbody');
+
+        var tr = $('<tr></tr>');
+        var name = $('<td>' + user.name + '</td>');
+        var mark = $('<td>' + user.mark + '</td>');
+        // var phoneNumber = $('<td>' + user.phoneNumber + '</td>');
+        // var email = $('<td>' + user.email + '</td>');
+        // var date = $('<td>' + user.date + '</td>');
+
+        tr.append(name).append(mark);
+        //table.row.add(tr).draw();
+
+    }
+
+
+</script>
+
+
+
+
+
 <!-- Primer pretplate na topic message
     Prvo se pravi konekcija na registrovani endpoint,
     a zatim pretplata na topic message. -->
-<script type="text/javascript">
-    $(document).ready(function() {
-        var messageList = $("#messages");
-        var socket = new SockJS('/nekiEndpoint');
-        var stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
-            stompClient.subscribe("/topic/message", function(data) {
-                var message = data.body;
-                messageList.append("<li>" + message + "</li>");
-            });
-        });
-    });
-</script>
+<table id="tableCars">
+    <thead>
+        <th>Name</th>
+        <th>Mark</th>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+
 <a href="testPage.html">Next page</a>
 <br />
 <a href="sendMessage.html">Send message page</a>

@@ -1,6 +1,6 @@
-package isa.projekat.Projekat.service.RentACar;
+package isa.projekat.Projekat.service.rent_a_car;
 
-import isa.projekat.Projekat.model.RentACar.Cars;
+import isa.projekat.Projekat.model.rent_a_car.Cars;
 import isa.projekat.Projekat.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
