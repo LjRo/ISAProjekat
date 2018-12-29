@@ -1,7 +1,7 @@
 package isa.projekat.Projekat.controller.airline;
 
-import isa.projekat.Projekat.model.RentACar.Cars;
-import isa.projekat.Projekat.service.RentACar.CarService;
+import isa.projekat.Projekat.model.rent_a_car.Cars;
+import isa.projekat.Projekat.service.rent_a_car.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
