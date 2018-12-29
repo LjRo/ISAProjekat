@@ -1,4 +1,4 @@
-package isa.projekat.Projekat.model;
+package isa.projekat.Projekat.model.airline;
 
 import javax.persistence.*;
 

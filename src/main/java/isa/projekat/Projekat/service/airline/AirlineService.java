@@ -1,6 +1,6 @@
 package isa.projekat.Projekat.service.airline;
 
-import isa.projekat.Projekat.model.Airline;
+import isa.projekat.Projekat.model.airline.Airline;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

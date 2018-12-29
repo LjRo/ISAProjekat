@@ -1,6 +1,6 @@
 package isa.projekat.Projekat.model.RentACar;
 
-import isa.projekat.Projekat.model.Location;
+import isa.projekat.Projekat.model.airline.Location;
 
 import javax.persistence.*;
 import java.util.ArrayList;
