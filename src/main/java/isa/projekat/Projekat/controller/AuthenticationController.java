@@ -1,11 +1,11 @@
 package isa.projekat.Projekat.controller;
 
-import isa.projekat.Projekat.utils.DeviceProvider;
-import isa.projekat.Projekat.model.User;
-import isa.projekat.Projekat.model.UserTokenState;
+import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.model.user.UserTokenState;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.security.auth.JwtAuthenticationRequest;
 import isa.projekat.Projekat.service.impl.CustomUserDetailsService;
+import isa.projekat.Projekat.utils.DeviceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package isa.projekat.Projekat.model.airline;
 
-import isa.projekat.Projekat.model.User;
+import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;

@@ -1,13 +1,14 @@
-package isa.projekat.Projekat.model;
+package isa.projekat.Projekat.model.hotel;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+// Model for Services which the hotel does provide
 @Entity
 @Table(name = "HotelServices")
-public class HotelService implements Serializable {
+public class HotelServices implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +20,7 @@ public class HotelService implements Serializable {
     @Column(nullable = false)
     private BigDecimal price;
 
-    public HotelService(){
+    public HotelServices() {
         super();
     }
 
@@ -53,10 +54,10 @@ public class HotelService implements Serializable {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if( !(o instanceof HotelService))
+        if (!(o instanceof HotelServices))
             return false;
-        HotelService hotelService = (HotelService) o;
-        return (hotelService.id.equals(this.id));
+        HotelServices hotelServices = (HotelServices) o;
+        return (hotelServices.id.equals(this.id));
 
     }
 
@@ -67,6 +68,6 @@ public class HotelService implements Serializable {
 
     @Override
     public String toString() {
-        return "HotelService" + "[id=" +this.id + ",name="+ this.name + ",price=" + this.price+"]";
+        return "HotelServices" + "[id=" + this.id + ",name=" + this.name + ",price=" + this.price + "]";
     }
 }

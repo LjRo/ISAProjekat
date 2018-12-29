@@ -1,10 +1,13 @@
-package isa.projekat.Projekat.model;
+package isa.projekat.Projekat.model.hotel;
+
+import isa.projekat.Projekat.model.Rating;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+// Model for hotel
 @Entity
 @Table(name = "Hotels")
 public class Hotel implements Serializable {
@@ -17,20 +20,21 @@ public class Hotel implements Serializable {
     private String name;
 
     @Column(nullable = false)
-    private  String address;
+    private String address;
 
     @Column(nullable = false)
     private String description;
 
     @ManyToMany
-    private Set<HotelService> hotelServices = new HashSet<>();
+    private Set<HotelServices> hotelServices = new HashSet<>();
 
-    //mappedBy = "Hotel"
-    @OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //mappedBy = "hotel"
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Room> rooms = new HashSet<>();
 
-    //TODO Dodati Ocenu
-    //TODO Dodati Rezervaciju Hotela
+    @OneToMany
+    private Set<Rating> ratings = new HashSet<>();
+
 
     public Integer getId() {
         return id;
@@ -64,11 +68,11 @@ public class Hotel implements Serializable {
         this.description = description;
     }
 
-    public Set<HotelService> getHotelServices() {
+    public Set<HotelServices> getHotelServices() {
         return hotelServices;
     }
 
-    public void setHotelServices(Set<HotelService> hotelServices) {
+    public void setHotelServices(Set<HotelServices> hotelServices) {
         this.hotelServices = hotelServices;
     }
 }

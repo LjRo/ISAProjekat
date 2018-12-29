@@ -1,5 +1,7 @@
 package isa.projekat.Projekat.model;
 
+import isa.projekat.Projekat.model.user.User;
+
 import javax.persistence.*;
 import java.io.Serializable;
 

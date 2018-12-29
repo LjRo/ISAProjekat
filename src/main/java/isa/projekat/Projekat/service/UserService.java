@@ -1,6 +1,6 @@
 package isa.projekat.Projekat.service;
 
-import isa.projekat.Projekat.model.User;
+import isa.projekat.Projekat.model.user.User;
 
 import java.util.List;
 

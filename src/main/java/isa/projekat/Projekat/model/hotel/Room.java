@@ -1,9 +1,10 @@
-package isa.projekat.Projekat.model;
+package isa.projekat.Projekat.model.hotel;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+// Model for room in hotels
 @Entity
 @Table(name = "Rooms")
 public class Room implements Serializable {

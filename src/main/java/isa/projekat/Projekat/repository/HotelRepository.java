@@ -1,11 +1,11 @@
 package isa.projekat.Projekat.repository;
 
-import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.model.hotel.Hotel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
-}
+public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
+
+}

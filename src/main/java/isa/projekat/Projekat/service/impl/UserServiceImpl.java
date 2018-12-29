@@ -1,6 +1,6 @@
 package isa.projekat.Projekat.service.impl;
 
-import isa.projekat.Projekat.model.User;
+import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.UserRepository;
 import isa.projekat.Projekat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

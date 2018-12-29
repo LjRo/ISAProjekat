@@ -1,4 +1,4 @@
-package isa.projekat.Projekat.model;
+package isa.projekat.Projekat.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.joda.time.DateTime;
