@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
 
+import javax.annotation.security.PermitAll;
 import java.util.List;
 
 @RestController
@@ -16,6 +17,7 @@ public class CarController {
     @Autowired
     private CarService carService;
 
+    @PermitAll
     @RequestMapping(value = "api/cars/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Cars> findAll() {
         return carService.findAll();
