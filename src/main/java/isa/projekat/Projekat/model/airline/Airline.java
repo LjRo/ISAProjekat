@@ -1,5 +1,7 @@
 package isa.projekat.Projekat.model.airline;
 
+import isa.projekat.Projekat.model.user.User;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -25,6 +27,12 @@ public class Airline implements Serializable {
     //private ArrayList<Double> grades;
     @ManyToMany
     private List<Destination> destinations;
+
+    @OneToMany
+    private List<Flight> flights;
+
+    @ManyToMany
+    private List<User> admins;
 
     public Airline() {
 
@@ -60,5 +68,21 @@ public class Airline implements Serializable {
 
     public void setDestinations(List<Destination> destinations) {
         this.destinations = destinations;
+    }
+
+    public List<User> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(List<User> admins) {
+        this.admins = admins;
+    }
+
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
     }
 }
