@@ -1,4 +1,6 @@
-package isa.projekat.Projekat.model;
+package isa.projekat.Projekat.model.RentACar;
+
+import isa.projekat.Projekat.model.Location;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -6,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "RentServices")
-public class RentService {
+public class RentACar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +24,7 @@ public class RentService {
     private String promotionalDescription;
 
     @OneToMany
-    private List<CarService> carServices = new ArrayList<>();
+    private List<CarOffice> carOffices = new ArrayList<>();
 
     @OneToMany
     private List<Cars> cars = new ArrayList<>();
@@ -33,7 +35,7 @@ public class RentService {
     @Column(name = "fastDiscount", nullable = false)
     private int fastDiscount;
 
-    public RentService() {
+    public RentACar() {
         super();
     }
 
@@ -69,12 +71,12 @@ public class RentService {
         this.promotionalDescription = promotionalDescription;
     }
 
-    public List<CarService> getCarServices() {
-        return carServices;
+    public List<CarOffice> getCarOffices() {
+        return carOffices;
     }
 
-    public void setCarServices(List<CarService> carServices) {
-        this.carServices = carServices;
+    public void setCarOffices(List<CarOffice> carOffices) {
+        this.carOffices = carOffices;
     }
 
     public List<Cars> getCars() {

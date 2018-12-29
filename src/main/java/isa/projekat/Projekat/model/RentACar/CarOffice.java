@@ -1,11 +1,11 @@
-package isa.projekat.Projekat.model;
+package isa.projekat.Projekat.model.RentACar;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "CarService")
-public class CarService {
+@Table(name = "CarOffice")
+public class CarOffice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +19,9 @@ public class CarService {
     private BigDecimal price;
 
     @ManyToOne
-    private RentService rentService;
+    private RentACar rentACar;
 
-    public CarService() {
+    public CarOffice() {
     }
 
     public Long getId() {
@@ -49,11 +49,11 @@ public class CarService {
         this.price = price;
     }
 
-    public RentService getRentService() {
-        return rentService;
+    public RentACar getRentACar() {
+        return rentACar;
     }
 
-    public void setRentService(RentService rentService) {
-        this.rentService = rentService;
+    public void setRentACar(RentACar rentACar) {
+        this.rentACar = rentACar;
     }
 }

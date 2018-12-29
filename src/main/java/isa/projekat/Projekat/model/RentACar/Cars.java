@@ -1,4 +1,4 @@
-package isa.projekat.Projekat.model;
+package isa.projekat.Projekat.model.RentACar;
 
 
 import javax.persistence.*;
@@ -16,6 +16,16 @@ public class Cars {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private CarType type;
+
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "mark", nullable = false)
+    private String mark;
+
+    @Column(name = "model", nullable =  false)
+    private String model;
 
     @Column(name = "registrationNumber", unique = true, nullable = false)
     private String registrationNumber;
@@ -45,8 +55,11 @@ public class Cars {
     public Cars() {
     }
 
-    public Cars(CarType type, String registrationNumber, int numberOfBags, int maxPassengers, int numberOfDoors, BigDecimal dailyPrice, Boolean isFastReserved, Boolean isUsed) {
+    public Cars(CarType type, String name, String mark, String model, String registrationNumber, int numberOfBags, int maxPassengers, int numberOfDoors, BigDecimal dailyPrice, Boolean isFastReserved, Boolean isUsed) {
         this.type = type;
+        this.name = name;
+        this.mark = mark;
+        this.model = model;
         this.registrationNumber = registrationNumber;
         this.numberOfBags = numberOfBags;
         this.maxPassengers = maxPassengers;
@@ -54,6 +67,30 @@ public class Cars {
         this.dailyPrice = dailyPrice;
         this.isFastReserved = isFastReserved;
         this.isUsed = isUsed;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public Long getId() {

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spring Boot WebSocket Messaging</title>
+    <script type="text/javascript"
+            src="//cdn.jsdelivr.net/jquery/2.2.0/jquery.min.js">
+
+    </script>
+    <!-- Koristi sockjs biblioteku da se konektuje na /stomp endpoint -->
+    <script type="text/javascript"
+            src="//cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js">
+
+    </script>
+    <!-- Koristi stomp biblioteku da se pretplati na brokerov /topic/message endpoint -->
+    <script type="text/javascript"
+            src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<div>
+    <h3>Messages:</h3>
+    <ol id="messages"></ol>
+</div>
+<!-- Primer pretplate na topic message
+    Prvo se pravi konekcija na registrovani endpoint,
+    a zatim pretplata na topic message. -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        var messageList = $("#messages");
+        var socket = new SockJS('/nekiEndpoint');
+        var stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            stompClient.subscribe("/topic/message", function(data) {
+                var message = data.body;
+                messageList.append("<li>" + message + "</li>");
+            });
+        });
+    });
+</script>
+<a href="testPage.html">Next page</a>
+<br />
+<a href="sendMessage.html">Send message page</a>
+</body>
+</html>
