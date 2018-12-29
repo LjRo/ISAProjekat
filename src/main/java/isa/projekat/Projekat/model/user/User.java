@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import isa.projekat.Projekat.model.airline.Airline;
 import org.joda.time.DateTime;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,10 @@ public class User implements UserDetails {
     @Column(name = "id")
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
+    @Column
+    private Integer type;
+    //0 - Normal, 1 - Admin, 2 - Airline Admin, 3 - Hotel Admin, 4 - RentACar Admin
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -47,7 +52,19 @@ public class User implements UserDetails {
 
     private boolean enabled;
 
+    // Airline stuff
+    @ManyToOne
+    private Airline administratedAirline;
 
+    public Airline getAdministratedAirline() {
+        return administratedAirline;
+    }
+
+    public void setAdministratedAirline(Airline administratedAirline) {
+        this.administratedAirline = administratedAirline;
+    }
+
+    //
 
     @Column
     private Timestamp lastPasswordResetDate;
