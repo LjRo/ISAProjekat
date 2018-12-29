@@ -1,8 +1,7 @@
-package isa.projekat.Projekat.service.impl;
+package isa.projekat.Projekat.service.user_auth;
 
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.UserRepository;
-import isa.projekat.Projekat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,12 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
 
-	@Override
 	public User findByUsername(String username) throws UsernameNotFoundException {
 		User u = userRepository.findByUsername(username);
 		return u;

@@ -3,7 +3,7 @@ package isa.projekat.Projekat.config;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.security.auth.RestAuthenticationEntryPoint;
 import isa.projekat.Projekat.security.auth.TokenAuthenticationFilter;
-import isa.projekat.Projekat.service.impl.CustomUserDetailsService;
+import isa.projekat.Projekat.service.user_auth.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package isa.projekat.Projekat.service.impl;
+package isa.projekat.Projekat.service.user_auth;
 
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.UserRepository;
