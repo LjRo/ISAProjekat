@@ -39,7 +39,15 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @ManyToMany
+    private List<User> friends;
+
+    @ManyToMany
+    private List<User> friendRequests;
+
     private boolean enabled;
+
+
 
     @Column
     private Timestamp lastPasswordResetDate;
@@ -100,6 +108,22 @@ public class User implements UserDetails {
 
     public String getPassword() {
         return password;
+    }
+
+    public List<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<User> friends) {
+        this.friends = friends;
+    }
+
+    public List<User> getFriendRequests() {
+        return friendRequests;
+    }
+
+    public void setFriendRequests(List<User> friendRequests) {
+        this.friendRequests = friendRequests;
     }
 
     public void setPassword(String password) {

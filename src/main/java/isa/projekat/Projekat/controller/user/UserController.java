@@ -1,0 +1,72 @@
+package isa.projekat.Projekat.controller.user;
+
+import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.model.user.UserData;
+import isa.projekat.Projekat.security.TokenUtils;
+import isa.projekat.Projekat.service.user_auth.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+@RestController
+public class UserController {
+
+    @Autowired
+    private TokenUtils jwtTokenUtils;
+    @Autowired
+    private UserService userService;
+
+    @RequestMapping(value = "api/user/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void updateInfo(@RequestBody UserData ud, HttpServletRequest req){
+        String tempEmail = "temp";
+        ud.setEmail(tempEmail);
+        userService.updateUserData(ud);
+    }
+
+    @RequestMapping(value = "api/user/findAllFriends", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<User> findAllFriends() {
+        String email = "temp";
+        return userService.findAllFriends(email);
+    }
+
+    @RequestMapping(value = "api/user/findSpecificFriends", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<User> findAllFriends(@RequestBody String search) {
+        String email = "temp";
+        return userService.findSpecificFriends(email,search);
+    }
+
+    @RequestMapping(value = "api/user/findAllFriendRequests", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<User> findAllFriendRequests() {
+        String email = "temp";
+        return userService.findAllFriendRequests(email);
+    }
+
+    @RequestMapping(value = "api/user/sendFriendRequest", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void sendFriendRequest(@RequestBody String targetEmail){
+        String tempEmail = "temp";
+        userService.addFriendRequest(tempEmail, targetEmail);
+
+    }
+
+    @RequestMapping(value = "api/user/acceptFriendRequest", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void acceptFriendRequest(@RequestBody String targetEmail){
+        String tempEmail = "temp";
+        userService.confirmRequest(tempEmail, targetEmail);
+
+    }
+
+    @RequestMapping(value = "api/user/denyFriendRequest", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void denyFriendRequest(@RequestBody String targetEmail){
+        String tempEmail = "temp";
+        userService.denyRequest(tempEmail, targetEmail);
+
+    }
+
+
+}
