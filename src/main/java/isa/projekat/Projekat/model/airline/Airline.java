@@ -1,7 +1,5 @@
 package isa.projekat.Projekat.model.airline;
 
-import isa.projekat.Projekat.model.Destination;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
