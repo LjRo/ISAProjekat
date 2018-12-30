@@ -93,7 +93,7 @@ public class UserService {
 		User firstUser = findByEmail(user);
 		User friendUser = findByEmail(friendEmail);
 
-		if(friendUser != null && firstUser != null) {
+		if(friendUser != null && firstUser != null && !firstUser.equals(friendUser) && !friendUser.getFriendRequests().contains(firstUser) && friendUser.getFriends().contains(firstUser) && !firstUser.getFriendRequests().contains(friendUser)) {
 			friendUser.getFriendRequests().add(firstUser);
 			return true;
 		}
@@ -109,6 +109,7 @@ public class UserService {
 			if(firstUser.getFriendRequests().contains(friendUser)) {
 				firstUser.getFriendRequests().remove(friendUser);
 				firstUser.getFriends().add(friendUser);
+				friendUser.getFriends().add(firstUser);
 				return true;
 			}
 		}
@@ -123,6 +124,20 @@ public class UserService {
 		if(friendUser != null && firstUser != null) {
 			if(firstUser.getFriendRequests().contains(friendUser)) {
 				firstUser.getFriendRequests().remove(friendUser);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean removeFriend(String user, String friendEmail) {
+		User firstUser = findByEmail(user);
+		User friendUser = findByEmail(friendEmail);
+
+		if(friendUser != null && firstUser != null) {
+			if(firstUser.getFriends().contains(friendUser)) {
+				firstUser.getFriendRequests().remove(friendUser);
+				friendUser.getFriendRequests().remove(firstUser);
 				return true;
 			}
 		}

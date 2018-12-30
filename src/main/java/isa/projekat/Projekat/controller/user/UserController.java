@@ -24,47 +24,62 @@ public class UserController {
 
     @RequestMapping(value = "api/user/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void updateInfo(@RequestBody UserData ud, HttpServletRequest req){
-        String tempEmail = "temp";
-        ud.setEmail(tempEmail);
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        ud.setEmail(email);
         userService.updateUserData(ud);
     }
 
     @RequestMapping(value = "api/user/findAllFriends", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<User> findAllFriends() {
-        String email = "temp";
+    public List<User> findAllFriends(HttpServletRequest req) {
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
         return userService.findAllFriends(email);
     }
 
     @RequestMapping(value = "api/user/findSpecificFriends", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<User> findAllFriends(@RequestBody String search) {
-        String email = "temp";
+    public List<User> findAllFriends(@RequestBody String search, HttpServletRequest req) {
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
         return userService.findSpecificFriends(email,search);
     }
 
     @RequestMapping(value = "api/user/findAllFriendRequests", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<User> findAllFriendRequests() {
-        String email = "temp";
+    public List<User> findAllFriendRequests(HttpServletRequest req) {
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
         return userService.findAllFriendRequests(email);
     }
 
     @RequestMapping(value = "api/user/sendFriendRequest", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void sendFriendRequest(@RequestBody String targetEmail){
-        String tempEmail = "temp";
-        userService.addFriendRequest(tempEmail, targetEmail);
+    public void sendFriendRequest(@RequestBody String targetEmail, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        userService.addFriendRequest(email, targetEmail);
 
     }
 
     @RequestMapping(value = "api/user/acceptFriendRequest", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void acceptFriendRequest(@RequestBody String targetEmail){
-        String tempEmail = "temp";
-        userService.confirmRequest(tempEmail, targetEmail);
+    public void acceptFriendRequest(@RequestBody String targetEmail, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        userService.confirmRequest(email, targetEmail);
 
     }
 
     @RequestMapping(value = "api/user/denyFriendRequest", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void denyFriendRequest(@RequestBody String targetEmail){
-        String tempEmail = "temp";
-        userService.denyRequest(tempEmail, targetEmail);
+    public void denyFriendRequest(@RequestBody String targetEmail, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        userService.denyRequest(email, targetEmail);
+
+    }
+
+    @RequestMapping(value = "api/user/removeFriend", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void removeFriend(@RequestBody String targetEmail, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        userService.removeFriend(email, targetEmail);
 
     }
 
