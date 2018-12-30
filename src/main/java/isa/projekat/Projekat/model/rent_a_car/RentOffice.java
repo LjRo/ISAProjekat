@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "CarOffice")
-public class CarOffice {
+@Table(name = "RentOffice")
+public class RentOffice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,11 @@ public class CarOffice {
     @ManyToOne
     private RentACar rentACar;
 
-    public CarOffice() {
+    @ManyToOne
+    private Location location;
+
+
+    public RentOffice() {
     }
 
     public Long getId() {
@@ -55,5 +59,13 @@ public class CarOffice {
 
     public void setRentACar(RentACar rentACar) {
         this.rentACar = rentACar;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

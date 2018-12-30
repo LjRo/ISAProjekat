@@ -22,13 +22,13 @@ public class RentACar {
     private String promotionalDescription;
 
     @OneToMany
-    private List<CarOffice> carOffices = new ArrayList<>();
+    private List<RentOffice> rentOffices = new ArrayList<>();
 
     @OneToMany
     private List<Cars> cars = new ArrayList<>();
 
-    @OneToMany
-    private List<Location> branches = new ArrayList<>();
+    //@OneToMany moved to car offices
+    //private List<Location> branches = new ArrayList<>();
 
     @Column(name = "fastDiscount", nullable = false)
     private int fastDiscount;
@@ -69,12 +69,12 @@ public class RentACar {
         this.promotionalDescription = promotionalDescription;
     }
 
-    public List<CarOffice> getCarOffices() {
-        return carOffices;
+    public List<RentOffice> getRentOffices() {
+        return rentOffices;
     }
 
-    public void setCarOffices(List<CarOffice> carOffices) {
-        this.carOffices = carOffices;
+    public void setRentOffices(List<RentOffice> rentOffices) {
+        this.rentOffices = rentOffices;
     }
 
     public List<Cars> getCars() {
@@ -83,14 +83,6 @@ public class RentACar {
 
     public void setCars(List<Cars> cars) {
         this.cars = cars;
-    }
-
-    public List<Location> getBranches() {
-        return branches;
-    }
-
-    public void setBranches(List<Location> branches) {
-        this.branches = branches;
     }
 
     public int getFastDiscount() {
