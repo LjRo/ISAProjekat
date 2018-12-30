@@ -13,7 +13,7 @@ public class HotelService {
     @Autowired
     private HotelRepository hotelRepository;
 
-    public List<Hotel> findAll(){
+    public List<Hotel> findAll() {
         return hotelRepository.findAll();
     }
 }
