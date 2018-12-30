@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurants</title>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="FeaturesBoxed.css">
+    <link rel="stylesheet" href="NewsletterSubscriptionForm.css">
+    <link rel="stylesheet" href="NavigationWithButton.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="js/nav.js"></script>
+    <script type="text/javascript" src="js/loggedCheck.js"></script>
+    <script type="text/javascript" src="js/articles.js"></script>
+
+
+
+</head>
+<body>
+
+    <div id="navbar-frame"></div>
+
+
+
+
+    <div class="newsletter-subscribe">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center">Article Filter</h2>
+            </div>
+            <form class="form-inline" method="get" action="airlines.html"><div class="form-group">
+    <input id="search-name" class="form-control" type="text" name="name" placeholder="Article Name" />
+    <input id="search-minPrice" class="form-control" type="number" min="0.01" step="0.01" name="minPrice" placeholder="Min Price" /> 
+    <input id="search-maxPrice" class="form-control" type="number" min="0.01" step="0.01" name="maxPrice" placeholder="Max Price" /> 
+	<div class="form-group"><select id="search-restaurant" class="form-control" name="restaurant">
+			    <optgroup id="restaurantOptions" label="Restaurant">
+			    <option value="">Any</option>
+			    </optgroup>		    
+			</select>
+			</div>    <select id="search-type" class="form-control" name="type">
+        <option value="">Any</option>
+        <option value="MEAL">Meal</option>
+        <option value="DRINK">Drink</option>
+    </select>
+</div>
+
+                <div class="form-group"><button class="btn btn-primary btn-block" type="submit" style="margin-top: 20px">Search</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="features-boxed">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center">Articles</h2>
+            </div>
+            <div class="row justify-content-center features" id="articleList">
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
