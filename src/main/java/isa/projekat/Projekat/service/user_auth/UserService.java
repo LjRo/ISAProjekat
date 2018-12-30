@@ -22,8 +22,8 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public User findByEmail(String email) throws UsernameNotFoundException {
-		User u = userRepository.findByEmail(email);
+	public User findByUsername(String username) throws UsernameNotFoundException {
+		User u = userRepository.findByUsername(username);
 		return u;
 	}
 
@@ -43,7 +43,7 @@ public class UserService {
 
 	public boolean updateUserData(UserData ud) {
 
-		User target = findByEmail(ud.getEmail());
+		User target = findByUsername(ud.getEmail());
 		if(target == null || ud.getFirstName() == "" || ud.getLastName() == "" || ud.getAddress() == "" || ud.getUsername() == "") {
 			return false;
 		}
@@ -64,18 +64,18 @@ public class UserService {
 	}
 
 	public List<User> findAllFriends(String email) throws AccessDeniedException {
-		List<User> result = userRepository.findByEmail(email).getFriends();
+		List<User> result = userRepository.findByUsername(email).getFriends();
 		return result;
 	}
 
 	public List<User> findAllFriendRequests(String email) throws AccessDeniedException {
-		List<User> result = userRepository.findByEmail(email).getFriendRequests();
+		List<User> result = userRepository.findByUsername(email).getFriendRequests();
 		return result;
 	}
 
 	public List<User> findSpecificFriends(String email, String searchString) throws AccessDeniedException {
 		List<User> result =  new ArrayList<>();
-		List<User> friendsList = userRepository.findByEmail(email).getFriends();
+		List<User> friendsList = userRepository.findByUsername(email).getFriends();
 		String[] tokens = searchString.split(" ");
 
 		for(String tok : tokens) {
@@ -88,9 +88,9 @@ public class UserService {
 		return result;
 	}
 
-	public boolean addFriendRequest(String user, String friendEmail) {
-		User firstUser = findByEmail(user);
-		User friendUser = findByEmail(friendEmail);
+	public boolean addFriendRequest(String user, String friendUsername) {
+		User firstUser = findByUsername(user);
+		User friendUser = findByUsername(friendUsername);
 
 		if(friendUser != null && firstUser != null && !firstUser.equals(friendUser) && !friendUser.getFriendRequests().contains(firstUser) && friendUser.getFriends().contains(firstUser) && !firstUser.getFriendRequests().contains(friendUser)) {
 			friendUser.getFriendRequests().add(firstUser);
@@ -101,8 +101,8 @@ public class UserService {
 	}
 
 	public boolean confirmRequest(String user, String friendEmail) {
-		User firstUser = findByEmail(user);
-		User friendUser = findByEmail(friendEmail);
+		User firstUser = findByUsername(user);
+		User friendUser = findByUsername(friendEmail);
 
 		if(friendUser != null && firstUser != null) {
 			if(firstUser.getFriendRequests().contains(friendUser)) {
@@ -117,8 +117,8 @@ public class UserService {
 	}
 
 	public boolean denyRequest(String user, String friendEmail) {
-		User firstUser = findByEmail(user);
-		User friendUser = findByEmail(friendEmail);
+		User firstUser = findByUsername(user);
+		User friendUser = findByUsername(friendEmail);
 
 		if(friendUser != null && firstUser != null) {
 			if(firstUser.getFriendRequests().contains(friendUser)) {
@@ -130,8 +130,8 @@ public class UserService {
 	}
 
 	public boolean removeFriend(String user, String friendEmail) {
-		User firstUser = findByEmail(user);
-		User friendUser = findByEmail(friendEmail);
+		User firstUser = findByUsername(user);
+		User friendUser = findByUsername(friendEmail);
 
 		if(friendUser != null && firstUser != null) {
 			if(firstUser.getFriends().contains(friendUser)) {
@@ -144,13 +144,12 @@ public class UserService {
 	}
 
 	public UserData getProfileData(String email) {
-		User u = findByEmail(email);
+		User u = findByUsername(email);
 		UserData result = new UserData();
 		if(u == null) {
 			return null;
 		}
 
-		result.setEmail(u.getEmail());
 		result.setUsername(u.getUsername());
 		result.setAddress(u.getAddress());
 		result.setFirstName(u.getFirstName());

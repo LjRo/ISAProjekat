@@ -1,7 +1,7 @@
 $(function() {
     $.get({
 		url : '/api/user/profile',
-        headers: {"accessToken": localStorage.getItem('accessToken'), "expiresIn": localStorage.getItem('expiresIn')},
+		headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
 		success : function(data) {
 
 			if (data != null) {
@@ -14,8 +14,7 @@ $(function() {
 });
 
 function fillData(data) {
-	$('input[name="email"]').val(data.email);
-	$('input[name="username"]').val(data.username);
+	$('input[name="email"]').val(data.username);
 	$('input[name="name"]').val(data.firstName);
 	$('input[name="surname"]').val(data.lastName);
 	$('input[name="address"]').val(data.address);

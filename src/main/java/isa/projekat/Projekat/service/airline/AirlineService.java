@@ -24,10 +24,10 @@ public class AirlineService {
 
     public Airline findById(Long id) { return airlineRepository.findById(id).get(); }
 
-    public boolean updateAirlineData(AirlineData ad, String email) {
+    public boolean updateAirlineData(AirlineData ad, String username) {
 
         Airline target = findById(ad.getId());
-        User admin = userRepository.findByEmail(email);
+        User admin = userRepository.findByUsername(username);
 
         if(target == null || ad.getAddress() == "" || ad.getDescription() == "" || ad.getName() == ""){
             return false;
@@ -46,9 +46,9 @@ public class AirlineService {
 
     }
 
-    public boolean addFlight(Flight fl, Long id, String email) {
+    public boolean addFlight(Flight fl, Long id, String username) {
         Airline target = findById(id);
-        User admin = userRepository.findByEmail(email);
+        User admin = userRepository.findByUsername(username);
 
         if(target.getAdmins().contains(admin)) {
 

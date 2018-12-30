@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.service.user_auth;
 
+import isa.projekat.Projekat.model.user.Authority;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.UserRepository;
 import org.apache.commons.logging.Log;
@@ -9,6 +10,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +19,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import isa.projekat.Projekat.model.user.UserData;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -37,7 +44,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	// Funkcija koja na osnovu username-a iz baze vraca objekat User-a
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByEmail(username);
+		User user = userRepository.findByUsername(username);
 		if (user == null) {
 			throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
 		} else {
@@ -78,7 +85,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 		user = new User();
 
-		user.setEmail(userData.getEmail());
+		user.setType(0);
+
+		Authority authority = new Authority("USER");
+
+		List<Authority> list = new ArrayList<Authority>();
+
+		list.add(authority);
+
+		user.setAuthorities(list);
+
 		user.setAddress(userData.getAddress());
 		user.setCity(userData.getCity());
 		user.setFirstName(userData.getFirstName());

@@ -8,7 +8,7 @@ $(document).ready(function () {
         $.post({
             url: window.location.href.match(/^.*\//) + "auth/login",
             data: JSON.stringify({username:username, password: password}),
-            headers: {"accessToken": localStorage.getItem('accessToken'), "expiresIn": localStorage.getItem('expiresIn')},
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
             contentType: 'application/json',
             success: function(data) {
 

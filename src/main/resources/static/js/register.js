@@ -3,7 +3,7 @@ $(document).ready(function () {
 
     $('#registerForm').on('submit', function(e) {
         e.preventDefault();
-        var username = $('input[name="username"]').val();
+      //  var username = $('input[name="username"]').val();
         var password = $('input[name="password"]').val();
         var email = $('input[name="email"]').val();
         var firstName = $('input[name="name"]').val();
@@ -16,7 +16,7 @@ $(document).ready(function () {
 
         $.post({
             url: window.location.href.match(/^.*\//) + "auth/register",
-            data: JSON.stringify({email: email, username: username, password: password, firstName: firstName, lastName:lastName, address:address, city:city, phoneNumber:phoneNumber }),
+            data: JSON.stringify({ username: email, password: password, firstName: firstName, lastName:lastName, address:address, city:city, phoneNumber:phoneNumber }),
             contentType: 'application/json',
             success: function () {
                 window.location.replace("http://localhost:8080/index.html");

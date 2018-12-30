@@ -26,6 +26,7 @@ public class User implements UserDetails {
     private Integer type;
     //0 - Normal, 1 - Admin, 2 - Airline Admin, 3 - Hotel Admin, 4 - RentACar Admin
 
+    // Email values will be stored in username
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -34,9 +35,6 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String lastName;
-
-    @Column(nullable = false, unique = true)
-    private String email;
 
     @Column(nullable = false)
     private String city;
@@ -114,14 +112,6 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -171,6 +161,20 @@ public class User implements UserDetails {
         this.setLastPasswordResetDate( now );
         this.password = password;
     }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+
 
     public Timestamp getLastPasswordResetDate() {
         return lastPasswordResetDate;
