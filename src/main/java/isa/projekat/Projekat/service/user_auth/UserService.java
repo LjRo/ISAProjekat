@@ -6,6 +6,7 @@ import isa.projekat.Projekat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +18,9 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public User findByEmail(String email) throws UsernameNotFoundException {
 		User u = userRepository.findByEmail(email);
@@ -48,10 +52,13 @@ public class UserService {
 		target.setFirstName(ud.getFirstName());
 		target.setLastName(ud.getLastName());
 		target.setAddress(ud.getAddress());
+		target.setCity(ud.getCity());
+		target.setPhoneNumber(ud.getPhoneNumber());
+
 
 		if(ud.getPassword() != "") {
 			//Hashovati
-			target.setPassword(ud.getPassword());
+			target.setPassword(passwordEncoder.encode(ud.getPassword()));
 		}
 
 		return true;

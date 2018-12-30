@@ -1,29 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="/NavigationWithButton.css">
+    <link rel="stylesheet" href="/HighlightPhone.css">
+    <link rel="stylesheet" href="/ProjectsHorizontal.css">
+    <link rel="stylesheet" href="/FeaturesBoxed.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/LoginForm.css">
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="login.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" src="/js/loggedCheck.js"></script>
+    <!-- <script type="text/javascript" src="js/loggedCheck.js"></script> -->
 
 </head>
+
 <body>
+    <div id="navbar-frame"></div>
 
-<div >
-    <form id="loginForm" method="post">
-        <div >
-            <label >Username:</label>
-            <input type="text" placeholder="user/admin"  id="username" name="username" required/>
-        </div>
-        <div >
-            <label >Password:</label>
-            <input type="password" placeholder="strong password"  id="password" name="password" required/>
-        </div>
-        <button type="submit">Submit</button>
-    </form>
-</div>
+    <div class="login-clean">
+        <form id="loginForm" method="post">
+            <h2 class="sr-only">Login Form</h2>
+            <div class="illustration"><img src="assets/img/suitcase.png"/></div>
+            <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Email" required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/></div>
+            <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"/></div>
+            <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div><a href="register.html" class="forgot">Don't have an account? Register now!</a></form>
+    </div>
+
 </body>
+
 </html>
-
-

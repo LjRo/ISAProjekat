@@ -1,26 +1,29 @@
 package isa.projekat.Projekat.controller;
 
 import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.model.user.UserData;
 import isa.projekat.Projekat.model.user.UserTokenState;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.security.auth.JwtAuthenticationRequest;
 import isa.projekat.Projekat.service.user_auth.CustomUserDetailsService;
-import isa.projekat.Projekat.utils.DeviceProvider;
+//import isa.projekat.Projekat.utils.DeviceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mobile.device.Device;
+//import org.springframework.mobile.device.Device;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -41,12 +44,12 @@ public class AuthenticationController {
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 
-	@Autowired
-	private DeviceProvider deviceProvider;
+	//@Autowired
+	//private DeviceProvider deviceProvider;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
-                                                       HttpServletResponse response, Device device) throws AuthenticationException, IOException {
+                                                       HttpServletResponse response) throws AuthenticationException, IOException {
 		System.out.println("USAOOOOO");
 		final Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(
@@ -58,8 +61,8 @@ public class AuthenticationController {
 
 		// Kreiraj token
 		User user = (User) authentication.getPrincipal();
-		String jwt = tokenUtils.generateToken(user.getUsername(), device);
-		int expiresIn = tokenUtils.getExpiredIn(device);
+		String jwt = tokenUtils.generateToken(user.getUsername());
+		int expiresIn = tokenUtils.getExpiredIn();
 
 		// Vrati token kao odgovor na uspesno autentifikaciju
 		return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
@@ -72,11 +75,11 @@ public class AuthenticationController {
 		String username = this.tokenUtils.getUsernameFromToken(token);
 	    User user = (User) this.userDetailsService.loadUserByUsername(username);
 
-		Device device = deviceProvider.getCurrentDevice(request);
+		//Device device = deviceProvider.getCurrentDevice(request);
 
 		if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-			String refreshedToken = tokenUtils.refreshToken(token, device);
-			int expiresIn = tokenUtils.getExpiredIn(device);
+			String refreshedToken = tokenUtils.refreshToken(token);
+			int expiresIn = tokenUtils.getExpiredIn();
 
 			return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn));
 		} else {
@@ -94,6 +97,28 @@ public class AuthenticationController {
 		result.put("result", "success");
 		return ResponseEntity.accepted().body(result);
 	}
+
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<?> register(@RequestBody UserData userData) {
+
+
+		try {
+			userDetailsService.loadUserByUsername(userData.getEmail());
+			Map<String, String> result = new HashMap<>();
+			result.put("result", "User already in database");
+			return ResponseEntity.badRequest().body(result);
+		}catch (UsernameNotFoundException e){
+			userDetailsService.register(userData);
+		}
+
+
+		Map<String, String> result = new HashMap<>();
+		result.put("result", "success");
+		return ResponseEntity.accepted().body(result);
+	}
+
+
 
 	static class PasswordChanger {
 		public String oldPassword;
