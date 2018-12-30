@@ -12,14 +12,14 @@ public class RentACar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne
     private Location address;
 
-    @Column(name = "promotionalDescription")
-    private String promotionalDescription;
+    @Column
+    private String description;
 
     @OneToMany
     private List<RentOffice> rentOffices = new ArrayList<>();
@@ -30,7 +30,7 @@ public class RentACar {
     //@OneToMany moved to car offices
     //private List<Location> branches = new ArrayList<>();
 
-    @Column(name = "fastDiscount", nullable = false)
+    @Column(nullable = false)
     private int fastDiscount;
 
     public RentACar() {
@@ -61,12 +61,12 @@ public class RentACar {
         this.address = address;
     }
 
-    public String getPromotionalDescription() {
-        return promotionalDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPromotionalDescription(String promotionalDescription) {
-        this.promotionalDescription = promotionalDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<RentOffice> getRentOffices() {
