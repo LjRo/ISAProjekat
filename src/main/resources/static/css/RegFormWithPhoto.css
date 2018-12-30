@@ -7,7 +7,7 @@
   display:table-cell;
   width:auto;
   /*height: fit-content; */
-  background:url(/assets/img/registerTravel.jpg)  no-repeat;
+  background:url(/../assets/img/registerTravel.jpg)  no-repeat;
   background-size:cover;
 }
 
