@@ -1,6 +1,4 @@
 $(document).ready(function () {
-    $("#navbar-frame").load("/navbar.html");
-
     $('#loginForm').on('submit', function(e) {
         e.preventDefault();
         var username = $('input[name="username"]').val();

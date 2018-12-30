@@ -1,9 +1,5 @@
 $(document).ready(function () {
-    $("#navbar-frame").load("/navbar.html");
-
     $('#errorPassword').fadeOut(0);
-
-
 
     $('#registerForm').on('submit', function(e) {
         e.preventDefault();
