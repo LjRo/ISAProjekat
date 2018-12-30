@@ -44,43 +44,44 @@ public class TokenUtils {
 
 	// Functions for generating new JWT token
 
-	public String generateToken(String username, Device device) {
+	public String generateToken(String username) {
 		return Jwts.builder()
 				.setIssuer(APP_NAME)
 				.setSubject(username)
-				.setAudience(generateAudience(device))
+				.setAudience(generateAudience())
 				.setIssuedAt(timeProvider.now())
-				.setExpiration(generateExpirationDate(device))
+				.setExpiration(generateExpirationDate())
 				.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 	}
 
-	private String generateAudience(Device device) {
-		String audience = AUDIENCE_UNKNOWN;
+	private String generateAudience() {
+		/*String audience = AUDIENCE_UNKNOWN;
 		if (device.isNormal()) {
 			audience = AUDIENCE_WEB;
 		} else if (device.isTablet()) {
 			audience = AUDIENCE_TABLET;
 		} else if (device.isMobile()) {
 			audience = AUDIENCE_MOBILE;
-		}
-		return audience;
+		}*/
+		return AUDIENCE_WEB;
 	}
 
-	private Date generateExpirationDate(Device device) {
-		long expiresIn = device.isTablet() || device.isMobile() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
-		return new Date(timeProvider.now().getTime() + expiresIn * 1000);
+	private Date generateExpirationDate() {
+		//long expiresIn = device.isTablet() || device.isMobile() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
+		//return new Date(timeProvider.now().getTime() + expiresIn * 1000);
+		return new Date(timeProvider.now().getTime() + EXPIRES_IN * 1000 );
 	}
 
 	// Functions for refreshing JWT token
 
-	public String refreshToken(String token, Device device) {
+	public String refreshToken(String token) {
 		String refreshedToken;
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			claims.setIssuedAt(timeProvider.now());
 			refreshedToken = Jwts.builder()
 					.setClaims(claims)
-					.setExpiration(generateExpirationDate(device))
+					.setExpiration(generateExpirationDate())
 					.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 		} catch (Exception e) {
 			refreshedToken = null;
@@ -178,8 +179,9 @@ public class TokenUtils {
 		return expiration;
 	}
 
-	public int getExpiredIn(Device device) {
-		return device.isMobile() || device.isTablet() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
+	public int getExpiredIn() {
+		//return device.isMobile() || device.isTablet() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
+		return EXPIRES_IN;
 	}
 
 	// Functions for getting JWT token out of HTTP request

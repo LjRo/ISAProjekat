@@ -38,6 +38,13 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
+    private String city;
+
+    @Column(nullable = false)
+    private String phoneNumber;
+
+
     @Column
     private String address;
 
@@ -141,6 +148,22 @@ public class User implements UserDetails {
 
     public void setFriendRequests(List<User> friendRequests) {
         this.friendRequests = friendRequests;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public void setPassword(String password) {
