@@ -57,7 +57,6 @@ public class UserService {
 
 
 		if(ud.getPassword() != "") {
-			//Hashovati
 			target.setPassword(passwordEncoder.encode(ud.getPassword()));
 		}
 
@@ -143,5 +142,26 @@ public class UserService {
 		}
 		return false;
 	}
+
+	public UserData getProfileData(String email) {
+		User u = findByEmail(email);
+		UserData result = new UserData();
+		if(u == null) {
+			return null;
+		}
+
+		result.setEmail(u.getEmail());
+		result.setUsername(u.getUsername());
+		result.setAddress(u.getAddress());
+		result.setFirstName(u.getFirstName());
+		result.setLastName(u.getLastName());
+		result.setCity(u.getCity());
+		result.setPhoneNumber(u.getPhoneNumber());
+		result.setPassword("");
+
+		return result;
+
+	}
+
 
 }
