@@ -90,10 +90,10 @@ INSERT INTO hotels (name, address, description)
 VALUES ('Putnik', 'Trg Trifuna Miltuića, Novi Sad', 'Cheap rooms ,Hotel with 3 stars near the center');
 
 INSERT INTO locations (address_name,city,country,latitude,longitude)
-VALUES ("Buto Musilini 2, Venecia", "Venecia", "Italy" 12.144123 , 15.1414 );
+VALUES ("Buto Musilini 2, Venecia", "Venecia", "Italy", 12.144123 , 15.1414 );
 
 INSERT INTO locations (address_name,city,country,latitude,longitude)
-VALUES ("Albara Musafa 2, Milano", "Milano", "Italy" 42.144123 , 11.155 );
+VALUES ("Albara Musafa 2, Milano", "Milano", "Italy", 42.144123 , 11.155 );
 
 
 INSERT INTO rentacar (name, address_id, description,fast_discount)

@@ -31,10 +31,10 @@ public class Flight {
     @Column (nullable = false)
     private Integer numberOfStops;
 
-    @ManyToMany
+    @ManyToOne
     private Location start;
 
-    @ManyToMany
+    @ManyToOne
     private Location finish;
 
     @ManyToMany

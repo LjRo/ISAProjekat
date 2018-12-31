@@ -23,7 +23,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "api/user/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "api/user/updateInfo", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
     public void updateInfo(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);

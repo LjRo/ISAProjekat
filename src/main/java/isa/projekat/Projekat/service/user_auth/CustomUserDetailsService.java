@@ -2,25 +2,21 @@ package isa.projekat.Projekat.service.user_auth;
 
 import isa.projekat.Projekat.model.user.Authority;
 import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.model.user.UserData;
 import isa.projekat.Projekat.repository.UserRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import isa.projekat.Projekat.model.user.UserData;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,7 +96,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		user.setFirstName(userData.getFirstName());
 		user.setLastName(userData.getLastName());
 		user.setPassword(passwordEncoder.encode(userData.getPassword()));
-		user.setUsername(userData.getUsername());
+		user.setUsername(userData.getEmail());
 		user.setPhoneNumber(userData.getPhoneNumber());
 
 		userRepository.save(user);
