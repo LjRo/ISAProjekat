@@ -1,5 +1,7 @@
 package isa.projekat.Projekat.model.airline;
 
+import isa.projekat.Projekat.model.rent_a_car.Location;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,7 +32,13 @@ public class Flight {
     private Integer numberOfStops;
 
     @ManyToMany
-    private List<Destination> stops;
+    private Location start;
+
+    @ManyToMany
+    private Location finish;
+
+    @ManyToMany
+    private List<Location> stops;
 
     @Column (nullable = false)
     private BigDecimal price;
@@ -83,11 +91,11 @@ public class Flight {
         this.numberOfStops = numberOfStops;
     }
 
-    public List<Destination> getStops() {
+    public List<Location> getStops() {
         return stops;
     }
 
-    public void setStops(ArrayList<Destination> stops) {
+    public void setStops(ArrayList<Location> stops) {
         this.stops = stops;
     }
 
@@ -97,5 +105,25 @@ public class Flight {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Location getStart() {
+        return start;
+    }
+
+    public void setStart(Location start) {
+        this.start = start;
+    }
+
+    public Location getFinish() {
+        return finish;
+    }
+
+    public void setFinish(Location finish) {
+        this.finish = finish;
+    }
+
+    public void setStops(List<Location> stops) {
+        this.stops = stops;
     }
 }
