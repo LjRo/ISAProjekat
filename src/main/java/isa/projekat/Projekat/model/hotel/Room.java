@@ -2,7 +2,6 @@ package isa.projekat.Projekat.model.hotel;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 // Model for room in hotels
 @Entity
@@ -13,11 +12,21 @@ public class Room implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
-    private BigDecimal cost;
+
+    @ManyToOne
+    private RoomType roomType;
 
     @Column(nullable = false)
-    private int beds;
+    private int numberOfBeds;
+
+    @Column(nullable = false)
+    private int numberOfRooms;
+
+    @Column(nullable = false)
+    private int roomNumber;
+
+    @Column(nullable = false)
+    private int floor;
 
     @Column
     private boolean isFastReservation;
@@ -27,14 +36,6 @@ public class Room implements Serializable {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Hotel hotel;
-
-    /*
-    @ManyToMany
-    @JoinTable(name = "reservation_room",
-            joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "rezervacijaHotel_id", referencedColumnName = "id"))
-    private Set<RezervacijaHotel> rezervacije = new HashSet<RezervacijaHotel>();
-    */
 
     public Room() {
         super();
@@ -48,20 +49,44 @@ public class Room implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getCost() {
-        return cost;
+    public RoomType getRoomType() {
+        return roomType;
     }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
     }
 
-    public int getBeds() {
-        return beds;
+    public int getNumberOfRooms() {
+        return numberOfRooms;
     }
 
-    public void setBeds(int beds) {
-        this.beds = beds;
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(int roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
+    public int getNumberOfBeds() {
+        return numberOfBeds;
+    }
+
+    public void setNumberOfBeds(int numberOfBeds) {
+        this.numberOfBeds = numberOfBeds;
     }
 
     public boolean isFastReservation() {

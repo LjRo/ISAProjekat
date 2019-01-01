@@ -1,14 +1,22 @@
+var longitude,latitude,description,name,address;
+
 $(document).ready(function () {
     $("#carsList").load("/carList.html");
 
     var pId = getUrlParameter('id');
     $.get({
         url : '/api/rentacar/findById=' + pId,
-        success : function(hotel) {
-            if (hotel != null) {
-                $("#nameOfCompany").text(hotel.name);
-                $("#Address").text(hotel.address.addressName);
-                $("#Description").text(hotel.description);
+        success : function(data) {
+            if (data != null) {
+                address= data.address.addressName + ', ' + data.address.city;
+                longitude= data.address.longitude;
+                latitude=data.address.latitude;
+                name = data.name;
+                description = data.description;
+                $("#nameOfCompany").text(name);
+                $("#Address").text(address);
+                $("#Description").text(description);
+                ymaps.ready(makeMap);
             }
         }
     });
@@ -26,6 +34,28 @@ $(document).ready(function () {
     });
 
 });
+
+function makeMap(){
+    var myMap = new ymaps.Map('map', {
+            center: [latitude, longitude ],
+            zoom: 9
+        }, {
+            searchControlProvider: 'yandex#search'
+        }),
+        myPlacemark = new ymaps.Placemark(myMap.getCenter(), {
+            hintContent: name,
+            balloonContent: '<strong>' + name + '</strong>' + '<br>' + address + '<br>' + description
+        }, {
+            iconLayout: 'default#image',
+            iconImageHref: 'https://image.flaticon.com/icons/svg/252/252025.svg',
+            iconImageSize: [30, 42],
+            iconImageOffset: [-5, -38]
+        });
+    myMap.controls.remove('fullscreenControl');
+    myMap.geoObjects
+        .add(myPlacemark);
+}
+
 
 
 function setPagingButtons(MaxPages, MaxElements) {

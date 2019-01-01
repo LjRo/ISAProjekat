@@ -25,7 +25,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
             integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
             crossorigin="anonymous"></script>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=<8919cfc8-630c-48b2-bb54-e81375325ce9>&lang=en_US" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=<8919cfc8-630c-48b2-bb54-e81375325ce9>&lang=en_US"
+            type="text/javascript"></script>
     <script type="text/javascript" src="js/nav.js"></script>
     <script type="text/javascript" src="js/hotelProfile.js"></script>
     <script type="text/javascript" src="/js/loggedCheck.js"></script>
@@ -92,7 +93,167 @@
 </div>
 
 
+<section id="tabs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 ">
+                <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-rooms-tab" data-toggle="tab" href="#nav-rooms" role="tab" aria-controls="nav-rooms" aria-selected="true">Rooms</a>
+                        <a class="nav-item nav-link" id="nav-layout-tab" data-toggle="tab" href="#nav-layout" role="tab" aria-controls="nav-layout" aria-selected="false">Layout</a>
+                        <a class="nav-item nav-link" id="nav-admin-tab" data-toggle="tab" href="#nav-admin" role="tab" aria-controls="nav-admin" aria-selected="false">Admin</a>
+                        <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab" aria-controls="nav-about" aria-selected="false">About</a>
+                    </div>
+                </nav>
+                <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                    <!-- TAB WITH ROOMS BEGIN -->
+                    <div class="tab-pane fade show active" id="nav-rooms" role="tabpanel" aria-labelledby="nav-rooms-tab">
+                        <!-- Filters begin -->
+                        <div class="newsletter-subscribe" id="filters">
+                            <div class="container">
+                                <div class="intro">
+                                    <h2 class="text-center">Article Filter</h2>
+                                </div>
+                                <form class="form-inline" method="get" action="airlines.html">
+                                    <div class="form-group">
+                                        <input id="checkIn" type="datetime-local">
+                                        <input id="checkOut" type="datetime-local">
+                                        <input id="search-minPrice" class="form-control" type="number" min="0.01" step="0.01" name="minPrice"placeholder="Min Price"/>
+                                        <input id="search-maxPrice" class="form-control" type="number" min="0.01" step="0.01" name="maxPrice"placeholder="Max Price"/>
+                                        <div class="form-group"><select id="search-restaurant" class="form-control" name="restaurant">
+                                            <optgroup id="restaurantOptions" label="Restaurant">
+                                                <option value="">Any</option>
+                                            </optgroup>
+                                        </select>
+                                        </div>
+                                        <select id="search-type" class="form-control" name="type">
+                                            <option value="">Any</option>
+                                            <option value="MEAL">Meal</option>
+                                            <option value="DRINK">Drink</option>
+                                        </select>
+                                    </div>
 
+                                    <div class="form-group">
+                                        <button class="btn btn-primary btn-block" type="submit">Search</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Filters end -->
+                        <!-- Navigation buttons begin -->
+                        <div class="newsletter-subscribe" >
+                            <div class="container">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                        <li class="page-item"><a class="page-link" id="previous" href="#">Previous</a></li>
+                                        <li id="TotalPages" class="infoText">Test</li>
+                                        <li id="TotalListings" class="infoText">Test</li>
+                                        <li class="page-item"><a class="page-link" id="next" href="#">Next</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <!-- Navigation buttons end -->
+                        <!-- Listing begins -->
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div id="addListings" class="col-md-12">
+                                            <!-- One listing begin-->
+
+                                            <!-- One listing end-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <img class="ads" style="object-fit: cover;" src="assets/img/ads.png">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Listing ends -->
+
+                    </div>
+                    <!-- TAB WITH ROOMS end -->
+
+                    <!-- LAYOUTING LAYOUTING LAYOUTINGLAYOUTINGLAYOUTINGLAYOUTING        --------------------------------------------------------------------------------------------------------------------->
+                    <div class="tab-pane fade" id="nav-layout" role="tabpanel" aria-labelledby="nav-layout-tab">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <!-- One listing begin-->
+                                            <div class="card mb-1">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <img class="card-img" src="assets/img/room.png">
+                                                            <!--<p class="card-text"><small class="text-muted">Tags: Second Hand, Honda, SUV, Delhi</small></p> -->
+                                                        </div>
+                                                        <div class="col-md-6 border-right">
+                                                            <h5 class="text-danger" id="Location-Destination"> SRB - HUN</h5>
+                                                            <a href="#" id="duration" class="badge badge-secondary">Duration:24min</a>
+                                                            <br>
+                                                            <div style="width: 50%;float:left;" style="width: auto">Start date: <strong>
+                                                                <div id="startDate">31.1.2018</div>
+                                                            </strong></div>
+                                                            <div style="width: 50%;float:right;" style="width: auto">Arrival date: <strong>
+                                                                <div id="endDate">1.2.2018</div>
+                                                            </strong></div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <h5>$45000</h5>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <br>
+                                                            Number of stops: <strong><span id="NumberOfStops">2</span></strong>
+                                                            <button type="button"
+                                                                    class="btn btn-primary admin-airline btn-outline-secondary rounded-0 mb-1">
+                                                                Edit
+                                                            </button>
+                                                            <button type="button" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1">
+                                                                BUY
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- One listing end-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <img class="ads" style="object-fit: cover;" src="assets/img/ads.png">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="tab-pane fade" id="nav-admin" role="tabpanel" aria-labelledby="nav-admin-tab">
+                        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat ex.
+                    </div>
+                    <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+                        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat ex.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
 
 </body>
 </html>
