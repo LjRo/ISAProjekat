@@ -1,6 +1,6 @@
 $(function() {
     $.get({
-        url : 'http://localhost:8080/api/cars/findAll',
+        url : '/api/cars/findAll',
         success : function(data) {
             if (data != null) {
                 for ( var us in data) {

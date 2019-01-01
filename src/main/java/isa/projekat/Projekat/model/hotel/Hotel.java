@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.model.hotel;
 
 import isa.projekat.Projekat.model.Rating;
+import isa.projekat.Projekat.model.rent_a_car.Location;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,13 +15,13 @@ public class Hotel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String address;
+    @ManyToOne
+    private Location address;
 
     @Column(nullable = false)
     private String description;
@@ -36,11 +37,11 @@ public class Hotel implements Serializable {
     private Set<Rating> ratings = new HashSet<>();
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -50,14 +51,6 @@ public class Hotel implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getDescription() {
@@ -75,4 +68,31 @@ public class Hotel implements Serializable {
     public void setHotelServices(Set<HotelServices> hotelServices) {
         this.hotelServices = hotelServices;
     }
+
+
+    public Location getAddress() {
+        return address;
+    }
+
+    public void setAddress(Location address) {
+        this.address = address;
+    }
+
+
+    public Set<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Set<Room> rooms) {
+        this.rooms = rooms;
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
 }

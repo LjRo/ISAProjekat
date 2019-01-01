@@ -55,7 +55,8 @@ public class User implements UserDetails {
     @ManyToMany
     private List<User> friendRequests;
 
-    private boolean enabled;
+    @Column
+    private boolean enabled = false;
 
     // Airline stuff
     @ManyToOne

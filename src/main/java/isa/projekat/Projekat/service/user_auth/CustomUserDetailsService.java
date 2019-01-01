@@ -3,11 +3,14 @@ package isa.projekat.Projekat.service.user_auth;
 import isa.projekat.Projekat.model.user.Authority;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.model.user.UserData;
+import isa.projekat.Projekat.model.user.VerificationToken;
+import isa.projekat.Projekat.repository.TokenRepository;
 import isa.projekat.Projekat.repository.UserRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,8 +20,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -35,6 +41,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	@Autowired
+	private EmailService emailService;
+
+	@Autowired
+	private TokenRepository tokenRepository;
 
 
 	// Funkcija koja na osnovu username-a iz baze vraca objekat User-a
@@ -67,28 +78,37 @@ public class CustomUserDetailsService implements UserDetailsService {
 		LOGGER.debug("Changing password for user '" + username + "'");
 
 		User user = (User) loadUserByUsername(username); //email
-
-		// pre nego sto u bazu upisemo novu lozinku, potrebno ju je hesirati
-		// ne zelimo da u bazi cuvamo lozinke u plain text formatu
 		user.setPassword(passwordEncoder.encode(newPassword));
 		userRepository.save(user);
 
 	}
 
+	public void confirm(String token){
+		VerificationToken verificationToken = tokenRepository.findByToken(token);
+
+		if (verificationToken == null)
+			throw  new BadCredentialsException("Token does not exist");
+		else {
+
+			if (verificationToken.getExpiryDate().after(new Date())) {
+				System.out.println("Expiration date OK");
+
+				User user = verificationToken.getUser();
+				user.setEnabled(true);
+				tokenRepository.delete(verificationToken);
+
+			} else {
+				throw new BadCredentialsException("Token expired");
+			}
+		}
+	}
+
 	public void register(UserData userData) {
-
-		User user = null;
-
-		user = new User();
-
+		User user = new User();
 		user.setType(0);
-
 		Authority authority = new Authority("USER");
-
-		List<Authority> list = new ArrayList<Authority>();
-
+		List<Authority> list = new ArrayList<>();
 		list.add(authority);
-
 		user.setAuthorities(list);
 
 		user.setAddress(userData.getAddress());
@@ -96,11 +116,32 @@ public class CustomUserDetailsService implements UserDetailsService {
 		user.setFirstName(userData.getFirstName());
 		user.setLastName(userData.getLastName());
 		user.setPassword(passwordEncoder.encode(userData.getPassword()));
-		user.setUsername(userData.getEmail());
 		user.setPhoneNumber(userData.getPhoneNumber());
 
 		userRepository.save(user);
-
+		sendConfirmationEmail(user);
 	}
+
+	private void sendConfirmationEmail(User user) {
+		String token = UUID.randomUUID().toString();
+		VerificationToken verificationToken = createVerificationToken(user, token);
+		try {
+			emailService.sendEmailAsync(user, verificationToken);
+		}catch (MessagingException e){
+			System.out.println("Failed to send email");
+		}
+	}
+
+	private VerificationToken createVerificationToken(User user, String token) {
+		VerificationToken myToken = new VerificationToken(token, user);
+		tokenRepository.save(myToken);
+		return myToken;
+	}
+
+
+
+
+
+
 
 }

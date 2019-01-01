@@ -1,0 +1,29 @@
+.notify {
+    display: block;
+    position: absolute;
+    top: 10%;
+    left: 35%;
+    background: palegreen;
+    width: 45%;
+    padding: 12px 18px;
+    max-width: 400px;
+    margin: 0 auto;
+    cursor: default;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: rgba(0, 0, 0, 0.3) 1px 1px 2px 1px;
+}
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.errorbox {
+    background: #D8000C;
+}
