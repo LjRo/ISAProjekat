@@ -17,5 +17,8 @@ public class RentCarsService {
         return rentCarRepository.findAll();
     }
 
+    public RentACar findById(Long id) {
+        return  rentCarRepository.findById(id).get();
+    }
 
 }

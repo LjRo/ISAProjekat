@@ -116,7 +116,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 		user.setFirstName(userData.getFirstName());
 		user.setLastName(userData.getLastName());
 		user.setPassword(passwordEncoder.encode(userData.getPassword()));
-		user.setUsername(userData.getUsername());
 		user.setPhoneNumber(userData.getPhoneNumber());
 
 		userRepository.save(user);

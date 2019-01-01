@@ -1,6 +1,6 @@
 $(document).ready(function () { //TODO modifikovati za nase korisnike i skinuti komentare u  styles.css onda
     /*$.get({
-        url: 'http://localhost:8080/Project/rest/user',
+        url: '/auth/user',
         success: function (data) {
 
             if (data != null) {

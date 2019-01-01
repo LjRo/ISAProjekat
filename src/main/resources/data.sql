@@ -89,6 +89,11 @@ VALUES ('Aleksandar', 'Bulevar Oslobodjenja, Novi Sad', 'Hotel with 5 stars in N
 INSERT INTO hotels (name, address, description)
 VALUES ('Putnik', 'Trg Trifuna Miltuića, Novi Sad', 'Cheap rooms ,Hotel with 3 stars near the center');
 
+
+INSERT INTO ratings(user_rating,user_id,type,hotel_id)
+VALUES (3,1,3,1);
+
+
 INSERT INTO locations (address_name,city,country,latitude,longitude)
 VALUES ("Buto Musilini 2, Venecia", "Venecia", "Italy", 12.144123 , 15.1414 );
 

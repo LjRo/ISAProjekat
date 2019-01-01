@@ -16,4 +16,10 @@ public class HotelService {
     public List<Hotel> findAll() {
         return hotelRepository.findAll();
     }
+
+    public Hotel findHotelById(Long id) {
+        return hotelRepository.findById(id).get();
+    }
+
+
 }
