@@ -83,11 +83,7 @@ VALUES ('AirSerbia', 'Nikola Tesle 21 , Beograd', 'Aeroport Nikole Tesle Belgrad
 INSERT INTO airlines (name, address, description)
 VALUES ('AirMontenegro', 'Sarajevos 8, Sarajevo', 'Aeroport Saint Sarevos');
 
-INSERT INTO hotels (name, address, description)
-VALUES ('Aleksandar', 'Bulevar Oslobodjenja, Novi Sad', 'Hotel with 5 stars in Novi Sad with great locations');
 
-INSERT INTO hotels (name, address, description)
-VALUES ('Putnik', 'Trg Trifuna Miltuića, Novi Sad', 'Cheap rooms ,Hotel with 3 stars near the center');
 
 
 INSERT INTO ratings(user_rating,user_id,type,hotel_id)
@@ -99,6 +95,23 @@ VALUES ("Buto Musilini 2, Venecia", "Venecia", "Italy", 12.144123 , 15.1414 );
 
 INSERT INTO locations (address_name,city,country,latitude,longitude)
 VALUES ("Albara Musafa 2, Milano", "Milano", "Italy", 42.144123 , 11.155 );
+
+
+INSERT INTO locations (address_name,city,country,latitude,longitude)
+VALUES ("Maksima Gorkog 35", "Novi Sad", "Serbia", 45.251451 , 19.850867 );
+
+INSERT INTO locations (address_name,city,country,latitude,longitude)
+VALUES ("Boulevard Tsara Lazara 1", "Novi Sad", "Serbia", 45.247637 , 19.850474);
+
+INSERT INTO hotels (name, address_id, description)
+VALUES ('Aleksandar', 3, 'Hotel with 5 stars in Novi Sad with great locations');
+
+INSERT INTO hotels (name, address_id, description)
+VALUES ('Putnik', 4 , 'Cheap rooms ,Hotel with 3 stars near the center');
+
+
+
+
 
 
 INSERT INTO rentacar (name, address_id, description,fast_discount)

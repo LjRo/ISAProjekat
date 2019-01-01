@@ -1,7 +1,13 @@
-fa-fa gear {
+fa fa gear {
     flex: 0.1
 }
 
+#map {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 #ratings {
     padding-left: 0;
 }

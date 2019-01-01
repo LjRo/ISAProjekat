@@ -1,13 +1,21 @@
 $(document).ready(function () {
+    var longitude,latitude,description,name,address;
 
     var pId = getUrlParameter('id');
     $.get({
         url : '/api/hotel/findById=' + pId,
         success : function(hotel) {
             if (hotel != null) {
-                $("#nameOfCompany").text(hotel.name);
-                $("#Address").text(hotel.address);
-                $("#Description").text(hotel.description);
+
+                address= hotel.address.addressName;
+                longitude= hotel.address.longitude;
+                latitude=hotel.address.latitude;
+                name = hotel.name;
+                description = hotel.description;
+                $("#nameOfCompany").text(name);
+                $("#Address").text(address);
+                $("#Description").text(description);
+                ymaps.ready(makeMap);
 
                /*
                 var ratings = hotel.ratings;
@@ -20,6 +28,31 @@ $(document).ready(function () {
             }
         }
     });
+
+
+
+    function makeMap(){
+        var myMap = new ymaps.Map('map', {
+                center: [latitude, longitude ],
+                zoom: 9
+            }, {
+                searchControlProvider: 'yandex#search'
+            }),
+            myPlacemark = new ymaps.Placemark(myMap.getCenter(), {
+                hintContent: name,
+                balloonContent: '<strong>' + name + '</strong>' + '<br>' + address + '<br>' + description
+            }, {
+                iconLayout: 'default#image',
+                iconImageHref: 'https://image.flaticon.com/icons/svg/252/252025.svg',
+                iconImageSize: [30, 42],
+                iconImageOffset: [-5, -38]
+            });
+        myMap.controls.remove('fullscreenControl');
+        myMap.geoObjects
+            .add(myPlacemark);
+    }
+
+
 
 });
 
