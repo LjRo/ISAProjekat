@@ -3,6 +3,7 @@ package isa.projekat.Projekat.controller;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.model.user.UserData;
 import isa.projekat.Projekat.model.user.UserTokenState;
+import isa.projekat.Projekat.model.user.VerificationToken;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.security.auth.JwtAuthenticationRequest;
 import isa.projekat.Projekat.service.user_auth.CustomUserDetailsService;
@@ -18,10 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
@@ -118,6 +116,17 @@ public class AuthenticationController {
 		return ResponseEntity.accepted().body(result);
 	}
 
+
+	@RequestMapping(value = "/confirm", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<?> confirm(@RequestBody VerificationToken verificationToken){
+		//producer.sendMessageTo(topic, message);
+		System.out.println("TOKEN:" + verificationToken.getToken());
+		userDetailsService.confirm(verificationToken.getToken());
+
+		Map<String, String> result = new HashMap<>();
+		result.put("result", "success");
+		return ResponseEntity.accepted().body(result);
+	}
 
 
 	static class PasswordChanger {
