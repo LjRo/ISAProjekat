@@ -13,6 +13,12 @@ public class Location {
     @Column(name = "addressName")
     private String addressName;
 
+    @Column (name = "country")
+    private String country;
+
+    @Column (name = "city")
+    private String city;
+
     @Column(name="latitude", nullable = false)
     private double latitude;
 

@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.model.airline;
 
+import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
@@ -26,7 +27,7 @@ public class Airline implements Serializable {
     private String description;
     //private ArrayList<Double> grades;
     @ManyToMany
-    private List<Destination> destinations;
+    private List<Location> destinations;
 
     @OneToMany
     private List<Flight> flights;
@@ -62,11 +63,11 @@ public class Airline implements Serializable {
         this.description = description;
     }
 
-    public List<Destination> getDestinations() {
+    public List<Location> getDestinations() {
         return destinations;
     }
 
-    public void setDestinations(List<Destination> destinations) {
+    public void setDestinations(List<Location> destinations) {
         this.destinations = destinations;
     }
 

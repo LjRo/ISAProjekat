@@ -8,7 +8,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +21,9 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -41,14 +47,16 @@ public class UserService {
 		return result;
 	}
 
+	@Transactional
 	public boolean updateUserData(UserData ud) {
 
 		User target = findByUsername(ud.getEmail());
-		if(target == null || ud.getFirstName() == "" || ud.getLastName() == "" || ud.getAddress() == "" || ud.getUsername() == "") {
+
+		if(target == null || ud.getFirstName() == null || ud.getLastName() == null || ud.getAddress() == null || ud.getEmail() == null) {
 			return false;
 		}
 
-		target.setUsername(ud.getUsername());
+		target.setUsername(ud.getEmail());
 		target.setFirstName(ud.getFirstName());
 		target.setLastName(ud.getLastName());
 		target.setAddress(ud.getAddress());
@@ -56,10 +64,11 @@ public class UserService {
 		target.setPhoneNumber(ud.getPhoneNumber());
 
 
-		if(ud.getPassword() != "") {
+		if(ud.getPassword() != null && ud.getPassword() != "") {
 			target.setPassword(passwordEncoder.encode(ud.getPassword()));
 		}
 
+		entityManager.persist(target);
 		return true;
 	}
 
@@ -150,7 +159,7 @@ public class UserService {
 			return null;
 		}
 
-		result.setUsername(u.getUsername());
+		result.setEmail(u.getUsername());
 		result.setAddress(u.getAddress());
 		result.setFirstName(u.getFirstName());
 		result.setLastName(u.getLastName());
