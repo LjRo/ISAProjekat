@@ -102,3 +102,6 @@ VALUES ('RentLjubomir',2, 'Profesional cars with state of the art quaility',20);
 INSERT INTO rentacar (name,address_id, description,fast_discount)
 VALUES ('RentAleksandar', 1, 'Cheap cars that will take you where you need to be.',20);
 
+/*destinations*/
+insert into airlines_destinations (airline_id, destinations_id) values (1,1);
+insert into airlines_destinations (airline_id, destinations_id) values (1,2);

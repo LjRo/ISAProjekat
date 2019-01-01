@@ -2,13 +2,11 @@ package isa.projekat.Projekat.controller.airline;
 
 import isa.projekat.Projekat.model.airline.Airline;
 import isa.projekat.Projekat.model.airline.AirlineData;
+import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.service.airline.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -29,5 +27,18 @@ public class AirlineController {
         String email = "temp";
         airlineService.updateAirlineData(ad, email);
     }
+
+    @RequestMapping(value = "api/airline/{id}/profile", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Airline findAirline(@PathVariable Long id,HttpServletRequest req){
+
+        return airlineService.findById(id);
+    }
+
+    @RequestMapping(value = "api/airline/{id}/destinations", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Location> findAirlineDestinations(@PathVariable Long id, HttpServletRequest req){
+
+        return airlineService.findAirlineDestinations(id);
+    }
+
 
 }

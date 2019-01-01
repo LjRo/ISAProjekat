@@ -26,6 +26,10 @@ public class Airline implements Serializable {
     @Column
     private String description;
     //private ArrayList<Double> grades;
+
+    @Column
+    private String pricing;
+
     @ManyToMany
     private List<Location> destinations;
 
@@ -85,5 +89,13 @@ public class Airline implements Serializable {
 
     public void setFlights(List<Flight> flights) {
         this.flights = flights;
+    }
+
+    public String getPricing() {
+        return pricing;
+    }
+
+    public void setPricing(String pricing) {
+        this.pricing = pricing;
     }
 }

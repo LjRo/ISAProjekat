@@ -43,5 +43,5 @@ function fillData(data) {
     $('input[id="address"]').val(data.address);
     $('input[id="city"]').val(data.city);
     $('input[id="phoneNumber"]').val(data.phoneNumber);
-    $('#test').text(data.firstName + " " + data.lastName);
+    $('#nameDisplay').text(data.firstName + " " + data.lastName);
 }

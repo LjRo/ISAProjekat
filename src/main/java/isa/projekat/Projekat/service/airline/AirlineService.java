@@ -3,6 +3,7 @@ package isa.projekat.Projekat.service.airline;
 import isa.projekat.Projekat.model.airline.Airline;
 import isa.projekat.Projekat.model.airline.AirlineData;
 import isa.projekat.Projekat.model.airline.Flight;
+import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.AirlineRepository;
 import isa.projekat.Projekat.repository.UserRepository;
@@ -45,6 +46,11 @@ public class AirlineService {
         return false;
 
     }
+
+    public List<Location> findAirlineDestinations(Long id) {
+        return airlineRepository.findById(id).get().getDestinations();
+    }
+
 
     public boolean addFlight(Flight fl, Long id, String username) {
         Airline target = findById(id);
