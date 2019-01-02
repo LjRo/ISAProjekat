@@ -1,3 +1,18 @@
+/* Locations */
+
+INSERT INTO locations (address_name,city,country,latitude,longitude) /*1*/
+VALUES ("Buto Musilini 2, Venecia", "Venecia", "Italy", 12.144123 , 15.1414 );
+
+INSERT INTO locations (address_name,city,country,latitude,longitude) /*2*/
+VALUES ("Albara Musafa 2, Milano", "Milano", "Italy", 42.144123 , 11.155 );
+
+
+INSERT INTO locations (address_name,city,country,latitude,longitude) /*3*/
+VALUES ("Maksima Gorkog 35", "Novi Sad", "Serbia", 45.251451 , 19.850867 );
+
+INSERT INTO locations (address_name,city,country,latitude,longitude) /*4*/
+VALUES ("Boulevard Tsara Lazara 1", "Novi Sad", "Serbia", 45.247637 , 19.850474);
+
 
 /*  car_types.sql*/
 
@@ -22,45 +37,68 @@ values ("Coupe");
 INSERT into car_type (name)
 values ("Convertible");
 
+/* rent a car*/
+
+INSERT INTO rentacar (name, address_id, description,fast_discount)
+VALUES ('RentLjubomir',2, 'Profesional cars with state of the art quaility',20);
+
+INSERT INTO rentacar (name,address_id, description,fast_discount)
+VALUES ('RentAleksandar', 1, 'Cheap cars that will take you where you need to be.',20);
+
+/* rent office*/
+
+INSERT INTO rent_office (name,location_id,rentacar_id)
+VALUES ("Prva filijala",1,1);
+
+INSERT INTO rent_office (name,location_id,rentacar_id)
+VALUES ("Druga filijala",2,1);
+
+/*
+INSERT INTO rentacar_rent_offices (rentacar_id,rent_offices_id)
+VALUES (1,1);
+
+INSERT INTO rentacar_rent_offices (rentacar_id,rent_offices_id)
+VALUES (1,2);*/
+
 /*  cars.sql  */
 
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("Ficko","Mercedes","Benz","13AC12",4,4,4,100,false,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("Ficko","Mercedes","Benz","13AC12",4,4,4,100,false,1,1);
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("Brzko","Mercedes","Benz","13QQ55",4,4,4,250,true,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("Brzko","Mercedes","Benz","13QQ55",4,4,4,250,true,1,1);
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("Spora","Mercedes","C","44WE32",4,4,4,100,false,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("Spora","Mercedes","C","44WE32",4,4,4,100,false,1,1);
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("FickoQ","Mercedes","Benz","13AC12",4,4,4,100,false,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("FickoQ","Mercedes","Benz","13AC12",4,4,4,100,false,1,1);
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("BrzkoQ","Mercedes","Benz","13QQ55",4,4,4,250,true,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("BrzkoQ","Mercedes","Benz","13QQ55",4,4,4,250,true,1,1);
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("SporaQ","Mercedes","C","44WE32",4,4,4,100,false,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("SporaQ","Mercedes","C","44WE32",4,4,4,100,false,1,1);
 
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("FickoQW","Mercedes","Benz","13AC12",4,4,4,100,false,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("FickoQW","Mercedes","Benz","13AC12",4,4,4,100,false,1,1);
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("BrzkoQW","Mercedes","Benz","13QQ55",4,4,4,250,true,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("BrzkoQW","Mercedes","Benz","13QQ55",4,4,4,250,true,1,1);
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("SporaQW","Mercedes","C","44WE32",4,4,4,100,false,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("SporaQW","Mercedes","C","44WE32",4,4,4,100,false,1,1);
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("FickoQWE","Mercedes","Benz","13AC12",4,4,4,100,false,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("FickoQWE","Mercedes","Benz","13AC12",4,4,4,100,false,1,1);
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("BrzkoQWE","Mercedes","Benz","13QQ55",4,4,4,250,true,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("BrzkoQWE","Mercedes","Benz","13QQ55",4,4,4,250,true,1,1);
 
-INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
-values ("SporaQWE","Mercedes","C","44WE32",4,4,4,100,false,1);
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("SporaQWE","Mercedes","C","44WE32",4,4,4,100,false,1,1);
 
 
 /* users.sql */
@@ -118,18 +156,7 @@ INSERT INTO ratings(user_rating,user_id,type,hotel_id)
 VALUES (3,1,3,1);
 
 
-INSERT INTO locations (address_name,city,country,latitude,longitude)
-VALUES ("Buto Musilini 2, Venecia", "Venecia", "Italy", 12.144123 , 15.1414 );
 
-INSERT INTO locations (address_name,city,country,latitude,longitude)
-VALUES ("Albara Musafa 2, Milano", "Milano", "Italy", 42.144123 , 11.155 );
-
-
-INSERT INTO locations (address_name,city,country,latitude,longitude)
-VALUES ("Maksima Gorkog 35", "Novi Sad", "Serbia", 45.251451 , 19.850867 );
-
-INSERT INTO locations (address_name,city,country,latitude,longitude)
-VALUES ("Boulevard Tsara Lazara 1", "Novi Sad", "Serbia", 45.247637 , 19.850474);
 
 INSERT INTO hotels (name, address_id, description)
 VALUES ('Aleksandar', 3, 'Hotel with 5 stars in Novi Sad with great locations');
@@ -169,11 +196,7 @@ VALUES (4, 6 , 2 ,404, 4, 3 , 1);
 
 
 
-INSERT INTO rentacar (name, address_id, description,fast_discount)
-VALUES ('RentLjubomir',2, 'Profesional cars with state of the art quaility',20);
 
-INSERT INTO rentacar (name,address_id, description,fast_discount)
-VALUES ('RentAleksandar', 1, 'Cheap cars that will take you where you need to be.',20);
 
 /*destinations*/
 insert into airlines_destinations (airline_id, destinations_id) values (1,1);
