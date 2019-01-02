@@ -12,9 +12,14 @@ public class Room implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column
+    private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER,optional = false)
     private RoomType roomType;
+
+    @Column(nullable = false)
+    private int numberOfPeople;
 
     @Column(nullable = false)
     private int numberOfBeds;
@@ -28,13 +33,14 @@ public class Room implements Serializable {
     @Column(nullable = false)
     private int floor;
 
-    @Column
+    /*@Column
     private boolean isFastReservation;
+    */ //Prebaceno u rezervacija sobe.
 
     @Column
-    private double discount;
+    private String discount;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     private Hotel hotel;
 
     public Room() {
@@ -47,6 +53,22 @@ public class Room implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getNumberOfPeople() {
+        return numberOfPeople;
+    }
+
+    public void setNumberOfPeople(int numberOfPeople) {
+        this.numberOfPeople = numberOfPeople;
     }
 
     public RoomType getRoomType() {
@@ -89,19 +111,11 @@ public class Room implements Serializable {
         this.numberOfBeds = numberOfBeds;
     }
 
-    public boolean isFastReservation() {
-        return isFastReservation;
-    }
-
-    public void setFastReservation(boolean fastReservation) {
-        isFastReservation = fastReservation;
-    }
-
-    public double getDiscount() {
+    public String getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(String discount) {
         this.discount = discount;
     }
 

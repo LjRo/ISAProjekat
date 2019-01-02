@@ -138,6 +138,33 @@ INSERT INTO hotels (name, address_id, description)
 VALUES ('Putnik', 4 , 'Cheap rooms ,Hotel with 3 stars near the center');
 
 
+INSERT INTO room_type (name)
+VALUES ("Single Bed");
+
+INSERT INTO room_type (name)
+VALUES ("Single Beds");
+
+INSERT INTO room_type (name)
+VALUES ("Couple DoubleBed + Single beds");
+
+INSERT INTO room_type (name)
+VALUES ("Couple DoubleBed + Single bed");
+
+INSERT INTO room_type (name)
+VALUES ("Couple DoubleBeds");
+
+INSERT INTO room_type (name)
+VALUES ("Couple DoubleBeds + Single bed");
+
+INSERT INTO room_type (name)
+VALUES ("Deluxe room");
+
+INSERT INTO rooms (name,number_of_beds, number_of_people, number_of_rooms,room_number,floor,room_type_id,hotel_id)
+VALUES ("Labud ljubavi" ,1, 2 , 1 ,101, 1, 7 , 2);
+
+INSERT INTO rooms (number_of_beds, number_of_people, number_of_rooms,room_number,floor,room_type_id,hotel_id)
+VALUES (4, 6 , 2 ,404, 4, 3 , 1);
+
 
 
 

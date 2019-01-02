@@ -1,17 +1,18 @@
-var longitude,latitude,description,name,address;
+var longitude, latitude, description, name, address;
 
 $(document).ready(function () {
 
 
     var pId = getUrlParameter('id');
     $.get({
-        url : '/api/hotel/findById=' + pId,
-        success : function(hotel) {
+        url: '/api/hotel/findById=' + pId,
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (hotel) {
             if (hotel != null) {
 
-                address= hotel.address.addressName + ', ' + hotel.address.city;
-                longitude= hotel.address.longitude;
-                latitude=hotel.address.latitude;
+                address = hotel.address.addressName + ', ' + hotel.address.city;
+                longitude = hotel.address.longitude;
+                latitude = hotel.address.latitude;
                 name = hotel.name;
                 description = hotel.description;
                 $("#nameOfCompany").text(name);
@@ -25,115 +26,99 @@ $(document).ready(function () {
 
 
     $.get({
-        url : '/api/rooms/findAll?page='+getUrlParameter('page')+'&pagelimit=10',
-        success : function(data) {
+        url: '/api/rooms/findAll?page=' + getUrlParameter('page') + '&pagelimit=10',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
             if (data != null && data.numberOfElements > 0) {
-                for( var i = 0; i < data.numberOfElements; i++) {
+                for (var i = 0; i < data.numberOfElements; i++) {
                     //for ( var us in data.content) {
                     addRoom(data.content[i]);
                 }
-                setPagingButtons(data.totalPages,data.totalElements);
+                setPagingButtons(data.totalPages, data.totalElements);
             }
         }
     });
 
 
-
-
 });
 
-function addRoom(car) {
-    var div = $('#addListings');
+function addRoom(room) {
 
-    var tr = $('<div class="card mb-1"></div>');
 
-    var d2 = $(' <div class="card-body"></div>');
-    var d3 = $(' <div class="row"></div>');
-    var d4 = $('<div class="col-md-3"></div>');
-    var d5 = $('<img class="card-img" src="assets/img/room.png">');
 
-    var d7 = $(' <div class="col-md-6 border-right"></div>');
-    var d8 = $(' <h5 class="text-danger" id="Mark-Model-Name">'+ car.mark+" " +  car.model + " " + car.name + '</h5>');
-    var d9 = $('<div style=" width: 33%;float:left;" style="width: auto">People:<strong><div id="numberPeople">' + car.maxPassengers + '</div></strong></div>');
-    var d10 = $('  <div style="width: 33%;float:right;" style="width: auto">Doors: <strong><div id="numberDoors">' + car.numberOfDoors +'</div></strong></div>');
-    var d11 = $(' <div style="width: 33%;float:right;" style="width: auto">Bags: <strong><div id="numberBags">' +  car.numberOfBags + '</div></strong></div>');
 
-    var d13 = $('<div class="col-md-3"></div>');
-    var d14 = $(' <h5>$'+ car.dailyPrice +'</h5>');
-    var d15 = $('<i id="star1" class="fa fa-star"></i>');
-    var d16 = $('<i id="star2" class="fa fa-star"></i>');
-    var d17 = $('<i id="star3" class="fa fa-star"></i>');
-    var d18 = $('<i id="star4" class="fa fa-star"></i>');
-    var d19 = $('<i id="star5" class="fa fa-star"></i>');
-    var d20 = $('<br>');
-    var d21 = $('<a href=""><small>more info about car</small></a>');
-    var d22 = $('<br>');
-    var d23 = $(' <button type="button" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
-    var d24 = $(' <button type="button" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">BUY</button>');
-    // var d25 = $(' </div>'); same as d6 x4
+    name = "";
+    if(room.name != null)
+        name = room.name;
+    else
+    {
+        name = room.roomType.name + ' ' + room.roomNumber;
+    }
+    var tr = $(
+        '<div class="card mb-1">' +
+        '                                                <div class="card-body">' +
+        '                                                    <div class="row">' +
+        '                                                        <div class="col-md-3">' +
+        '                                                            <img class="card-img" src="assets/img/room.png">' +
+        '                                                        </div>' +
+        '                                                        <div class="col-md-6 border-right">' +
+        '                                                            <h5 class="text-danger" id="name">' +name +    '</h5>' +
+        '                                                            <div style="max-width:100%" class="badge badge-secondary" href="#">Room Type:<span id="RoomType">' + room.roomType.name +   '</span></div>' +
+        '                                                            <br>' +
+        '                                                            <div style="height: 33%;width:25%;float:left;">People:<strong></br><div id="numberPeople" style="width:auto;float: left">' + room.numberOfPeople + '</div><img src="assets/img/people.png" style="margin-top: 5px"></strong></div>' +
+        '                                                            <div style="height: 33%;width:25%;float:right;">Rooms: <strong></br><div id="numberRooms"  style="width:auto;float: left">' + room.numberOfRooms + '</div><img height="16" src="assets/img/room.png" style="margin-top: 5px" width="16"></strong></div>' +
+        '                                                            <div style="height: 33%;width:25%;float:right;">Beds: <strong></br><div id="numberBeds"  style="width:auto;float: left">' + room.numberOfBeds  +  '</div> <img src="assets/img/bed.png" style="margin-top: 5px"></strong></div>' +
+        '                                                            <div style="height: 33%;width:25%;float:right;">No.: <strong></br><div id="roomNumber"  style="width:auto;float: left">' + room.roomNumber + '</div><img src="assets/img/roomkey.png" style="margin-top: 5px"></strong></div>' +
+        '                                                        </div>' +
+        '                                                        <div class="col-md-3">' +
+        '                                                            <h5>$' + "DUMMY PRICE"   +'</h5>' +
+        '                                                            <i class="fa fa-star"></i>' +
+        '                                                            <i class="fa fa-star"></i>' +
+        '                                                            <i class="fa fa-star"></i>' +
+        '                                                            <i class="fa fa-star"></i>' +
+        '                                                            <i class="fa fa-star"></i>' +
+        '                                                            <br>' +
+        '                                                            Floor: <strong><span id="Floor">' + room.floor + '</span></strong>' +
+        '                                                            <br>' +
+        '                                                            <button class="btn btn-primary admin-hotel btn-outline-secondary rounded-0 mb-1" type="button"> Edit </button>' +
+        '                                                            <button class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" type="button"> Reserve  </button>' +
+        '                                                        </div>' +
+        '                                                    </div>' +
+        '                                                </div>' +
+        '                                            </div>');
+    $('#addListings').append(tr);
 
-    //Picture
-    d4.append(d5); // OK
-    d3.append(d4);
 
-    //Stats
-    d7.append(d8);
-    d7.append(d9);
-    d7.append(d10);
-    d7.append(d11);
-    d3.append(d7);
-
-    //Price, stars, more info, buttons
-    d13.append(d14);
-    d13.append(d15);
-    d13.append(d16);
-    d13.append(d17);
-    d13.append(d18);
-    d13.append(d19);
-    d13.append(d20);
-    d13.append(d21);
-    d13.append(d22);
-    d13.append(d23);
-    d13.append(d24);
-
-    d3.append(d13);
-
-    // adding to div parent
-    d2.append(d3);
-    tr.append(d2);
-
-    div.append(tr);
 }
 
 
-
 function setPagingButtons(MaxPages, MaxElements) {
-    var previous = (parseInt(getUrlParameter('page'))-1);
-    var next = (parseInt(getUrlParameter('page'))+1);
+    var previous = (parseInt(getUrlParameter('page')) - 1);
+    var next = (parseInt(getUrlParameter('page')) + 1);
     var previousElement = $('#previous');
     var nextElement = $('#next');
 
-    $('#TotalPages').html("Page " +(parseInt(getUrlParameter('page'))+1) + "/"+(MaxPages) );
-    $('#TotalListings').html("Found "+ MaxElements + " cars");
+    $('#TotalPages').html("Page " + (parseInt(getUrlParameter('page')) + 1) + "/" + (MaxPages) +" ");
+    $('#TotalListings').html("Found " + MaxElements + " rooms");
 
 
     var pId = getUrlParameter('id');
 
-    var adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+next;
+    var adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id=' + pId + '&page=' + next;
     nextElement.attr("href", adr);
-    adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+previous;
-    previousElement.attr("href",adr);
+    adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id=' + pId + '&page=' + previous;
+    previousElement.attr("href", adr);
 
     if (previous < 0)
         $('#previous').attr('href', "#");
     if (next >= MaxPages)
-        $('#next').attr('href',"#");
+        $('#next').attr('href', "#");
 }
 
 
-function makeMap(){
+function makeMap() {
     var myMap = new ymaps.Map('map', {
-            center: [latitude, longitude ],
+            center: [latitude, longitude],
             zoom: 9
         }, {
             searchControlProvider: 'yandex#search'
@@ -154,13 +139,11 @@ function makeMap(){
 
 function makeStars(Rating) {
     var FullStars = Rating.toFixed(0);
-    for (var i=1;i<FullStars; i++)
-    {
+    for (var i = 1; i < FullStars; i++) {
 
     }
 
 }
-
 
 
 var getUrlParameter = function getUrlParameter(sParam) {
