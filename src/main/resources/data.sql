@@ -50,8 +50,8 @@ values (0,"normala@gmail.com","normal","normalic","$2a$10$Zz/H94PBqMWVWQlRgCw6GO
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number)
 values (0,"hotel@gmail.com","hotel","hotelic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr3","city3",b'1',"123-456-1234");
 
-INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number)
-values (0,"airline@gmail.com","airline","airlinovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr4","city4",b'1',"123-456-1234");
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,administrated_airline_id)
+values (0,"airline@gmail.com","airline","airlinovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr4","city4",b'1',"123-456-1234",1);
 
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number)
 values (0,"rent@gmail.com","rent","rentovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr5","city5",b'1',"123-456-1234");
@@ -123,3 +123,5 @@ VALUES ('RentAleksandar', 1, 'Cheap cars that will take you where you need to be
 /*destinations*/
 insert into airlines_destinations (airline_id, destinations_id) values (1,1);
 insert into airlines_destinations (airline_id, destinations_id) values (1,2);
+
+insert into airlines_admins (airline_id, admins_id) values (1,5);

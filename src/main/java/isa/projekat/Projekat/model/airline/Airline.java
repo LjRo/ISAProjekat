@@ -33,10 +33,10 @@ public class Airline implements Serializable {
     @ManyToMany
     private List<Location> destinations;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "airline")
     private List<Flight> flights;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "administratedAirline")
     private List<User> admins;
 
     public Airline() {

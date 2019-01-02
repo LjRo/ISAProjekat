@@ -2,10 +2,13 @@ package isa.projekat.Projekat.controller.airline;
 
 import isa.projekat.Projekat.model.airline.Airline;
 import isa.projekat.Projekat.model.airline.AirlineData;
+import isa.projekat.Projekat.model.airline.FlightData;
 import isa.projekat.Projekat.model.rent_a_car.Location;
+import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.airline.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
@@ -17,6 +20,9 @@ public class AirlineController {
 
     @Autowired
     private AirlineService airlineService;
+
+    @Autowired
+    private TokenUtils jwtTokenUtils;
 
     @PermitAll
     @RequestMapping(value = "api/airline/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -47,5 +53,14 @@ public class AirlineController {
         return airlineService.findAirlineDestinations(id);
     }
 
+    @RequestMapping(value = "api/airline/{id}/addFlight", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    public Boolean addFlight(@PathVariable Long id, HttpServletRequest req, @RequestBody FlightData fd){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+
+        airlineService.addFlight(fd, email);
+        return true;
+    }
 
 }

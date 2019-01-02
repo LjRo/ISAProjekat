@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.model.airline;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 
 import javax.persistence.*;
@@ -16,6 +17,10 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JsonIgnore
+    private Airline airline;
+
     @Column (nullable = false)
     private Date startTime;
 
@@ -31,14 +36,26 @@ public class Flight {
     @Column (nullable = false)
     private Integer numberOfStops;
 
+    @Column
+    private int segments;
+
+    @Column
+    private int c_columns;
+
+    @Column
+    private int c_rows;
+
     @ManyToOne
     private Location start;
 
     @ManyToOne
     private Location finish;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Location> stops;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Seat> seats;
 
     @Column (nullable = false)
     private BigDecimal price;
@@ -125,5 +142,45 @@ public class Flight {
 
     public void setStops(List<Location> stops) {
         this.stops = stops;
+    }
+
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<Seat> seats) {
+        this.seats = seats;
+    }
+
+    public int getSegments() {
+        return segments;
+    }
+
+    public void setSegments(int segments) {
+        this.segments = segments;
+    }
+
+    public Airline getAirline() {
+        return airline;
+    }
+
+    public void setAirline(Airline airline) {
+        this.airline = airline;
+    }
+
+    public int getC_columns() {
+        return c_columns;
+    }
+
+    public void setC_columns(int c_columns) {
+        this.c_columns = c_columns;
+    }
+
+    public int getC_rows() {
+        return c_rows;
+    }
+
+    public void setC_rows(int c_rows) {
+        this.c_rows = c_rows;
     }
 }

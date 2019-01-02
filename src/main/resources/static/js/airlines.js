@@ -18,7 +18,7 @@ function addArticle(airline) {
     var icon = "assets/img/travel.png";
     $('#airlineList').append('<div class="col-sm-6 col-md-5 col-lg-4 item">' +
         '<div class="box">' + '<img src="' + icon + '" style="width:80px;height:80px"/>' +
-        '<a href="/airlineprofile.html?id=' + airline.id + '">' +
+        '<a href="/airline.html?id=' + airline.id + '">' +
         '<h3 class="name">' +airline.name +'</h3>' +
         '</a>' +
         '<p class="description">Address: <span style = "color:black">'+ airline.address + '</span></p>' +

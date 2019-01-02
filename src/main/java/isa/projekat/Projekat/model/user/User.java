@@ -59,7 +59,8 @@ public class User implements UserDetails {
     private boolean enabled = false;
 
     // Airline stuff
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JsonIgnore
     private Airline administratedAirline;
 
     public Airline getAdministratedAirline() {
