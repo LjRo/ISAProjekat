@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/LoginForm.css">
     <link rel="stylesheet" href="css/styles.css">
     <script src="/js/nav.js"></script>
+    <script src="/js/addflight.js"></script>
     <title>New Flight</title>
 
 
@@ -24,14 +25,25 @@
 <hr>
 
 
-<div class="login-clean">
-    <form id="addFlightForm">
-        <h2 class="sr-only"></h2>
-        <h2>New Flight</h2>
-        <img src="assets/img/travel.png"
-             style="max-height:240px; max-width: 240px;margin-left: auto;margin-right: auto">
-        <p id="error" style="color:red;visibility: hidden;">Please create a restaurant first.</p>
-        <div class="form-group"><input class="form-control" type="datetime-local" name="startDT" required></div>
+<div class="jumbotron mx-auto" style="width:20%">
+    <form id="addFlightForm" >
+        <h2 class="sr-only "></h2>
+        <h2 style="text-align: center">New Flight</h2>
+        <img src="assets/img/airplane.png"
+             style="display: block; max-height:240px; max-width: 240px;margin-left: auto;margin-right: auto">
+        <div id="start_div" class="form-group">
+            <select class="form-control" name="start">
+                <optgroup label="Start:" id="startGrp">
+                </optgroup>
+            </select>
+        </div>
+        <div id="dest_div" class="form-group">
+            <select class="form-control" name="dest">
+                <optgroup label="Destination:" id="destGrp">
+                </optgroup>
+            </select>
+        </div>
+        <div class="form-group" ><input class="form-control" type="datetime-local" name="startDT" required></div>
         <div class="form-group"><input class="form-control" type="datetime-local" name="finishDT" required></div>
         <div class="form-group"><input class="form-control" type="number" name="length" min="0.25" step="0.25"
                                        placeholder="Duration" required></div>
@@ -39,36 +51,46 @@
                                        placeholder="Distance" required></div>
         <div class="form-group"><input class="form-control" type="number" name="price" min="1" step="0.25"
                                        placeholder="Price" required></div>
-        <div class="form-group"><select class="form-control" name="numberOfStops">
+        <div class="form-group"><input class="form-control" type="number" name="segments" min="1" step="1" max="3"
+                                       placeholder="Segments" required></div>
+        <div class="form-group"><input class="form-control" type="number" name="columns" min="1" step="1" max="3"
+                                       placeholder="Columns" required></div>
+        <div class="form-group"><input class="form-control" type="number" name="rows" min="1" step="1" max="30"
+                                       placeholder="Rows" required></div>
+        <div class="form-group"><select class="form-control" id="stopSelect" name="numberOfStops">
             <optgroup label="Number of stops">
                 <option value="0">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
-                <option value="3">4</option>
-                <option value="4">5</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
             </optgroup>
         </select>
-            <select class="form-control" name="stop1">
-                <optgroup label="Stop 1:">
-                    <option value="location1">Location 1</option>
-                </optgroup>
-            </select>
-            <select class="form-control" name="stop2">
-                <optgroup label="Stop 2:">
-                    <option value="location1">Location 1</option>
-                </optgroup>
-            </select>
-            <select class="form-control" name="stop3">
-                <optgroup label="Stop 3:">
-                    <option value="location1">Location 1</option>
-                </optgroup>
-            </select>
-            <select class="form-control" name="stop4">
-                <optgroup label="Stop 4:">
-                    <option value="location1">Location 1</option>
-                </optgroup>
-            </select>
         </div>
+            <div id="stop_div1" class="form-group" style="display:none">
+            <select class="form-control" name="stop1">
+                <optgroup label="Stop 1:" id="stopGrp1">
+                </optgroup>
+            </select>
+            </div>
+            <div id="stop_div2" class="form-group" style="display:none">
+                <select class="form-control" name="stop2">
+                    <optgroup label="Stop 1:" id="stopGrp2">
+                    </optgroup>
+                </select>
+            </div>
+            <div id="stop_div3" class="form-group" style="display:none">
+                <select class="form-control" name="stop3">
+                    <optgroup label="Stop 1:" id="stopGrp3">
+                    </optgroup>
+                </select>
+            </div>
+            <div id="stop_div4" class="form-group" style="display:none">
+                <select class="form-control" name="stop4">
+                    <optgroup label="Stop 1:" id="stopGrp4">
+                    </optgroup>
+                </select>
+            </div>
         <div class="form-group">
             <button class="btn btn-primary btn-block" type="submit">Submit</button>
         </div>

@@ -37,6 +37,8 @@ function fillData(data) {
     $('#address').html("<span class=\"float-left\"><strong>Address:</strong></span>" + data.address);
     $('#desc').text(data.description);
     $('#pricing').text(data.pricing);
+    $('#addFlight').attr("href","addFlight.html?id="+data.id);
+    $('#editAirline').attr("href","editAirline.html?id="+data.id);
 }
 
 
