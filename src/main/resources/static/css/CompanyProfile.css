@@ -8,6 +8,7 @@ fa fa gear {
     margin: 0;
     padding: 0;
 }
+
 #ratings {
     padding-left: 0;
 }
@@ -34,17 +35,59 @@ card-img {
     padding: 15px;
 }
 
-#filters{
+#filters {
     margin-bottom: 20px;
     margin-top: 10px;
 }
-input.form-control , select.form-control, div.form-group>button{
-    margin-left:5px;
+
+input.form-control, select.form-control, div.form-group > button {
+    margin-left: 5px;
 }
-button.form-group{
-    margin-left:5px;
+
+button.form-group {
+    margin-left: 5px;
 }
-img.ads{
+
+img.ads {
     width: 100%;
     height: inherit;
 }
+
+/* Tabs begin*/
+section[id='tabs'] {
+    padding: 60px 0;
+}
+
+section[id='tabs'] .section-title {
+    text-align: center;
+    color: #007b5e;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+}
+#tabs{
+    background: white;
+}
+
+
+#tabs .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: black;
+    background-color: transparent;
+    border-color: transparent transparent black;
+    border-bottom: 4px solid !important;
+    font-size: 20px;
+    font-weight: bold;
+}
+#tabs .nav-tabs .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    color: black;
+    font-size: 20px;
+}
+@media (min-width: 768px) {
+    #Listing-col-md-9 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
+/* End Tabs */

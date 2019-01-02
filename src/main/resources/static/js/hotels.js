@@ -21,7 +21,7 @@ function addArticle(hotel) {
         '<div class="col-sm-6 col-md-5 col-lg-4 item">' +
         '<div class="box">' + '<img src="' + icon + '" style="width:80px;height:80px"/>' +
         '<br>' +
-        '<a href="/hotelprofile.html?id=' + hotel.id + '">' +
+        '<a href="/hotelprofile.html?id=' + hotel.id + '&page=0">' +
         '<h3 class="name">' +hotel.name +'</h3>' +
         '</a>' +
         '<p class="description">Address: <span style = "color:black">'+ hotel.address.addressName  + ',' + hotel.address.city + '</span></p>' +

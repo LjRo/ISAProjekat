@@ -34,6 +34,34 @@ values ("Brzko","Mercedes","Benz","13QQ55",4,4,4,250,true,1);
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
 values ("Spora","Mercedes","C","44WE32",4,4,4,100,false,1);
 
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
+values ("FickoQ","Mercedes","Benz","13AC12",4,4,4,100,false,1);
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
+values ("BrzkoQ","Mercedes","Benz","13QQ55",4,4,4,250,true,1);
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
+values ("SporaQ","Mercedes","C","44WE32",4,4,4,100,false,1);
+
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
+values ("FickoQW","Mercedes","Benz","13AC12",4,4,4,100,false,1);
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
+values ("BrzkoQW","Mercedes","Benz","13QQ55",4,4,4,250,true,1);
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
+values ("SporaQW","Mercedes","C","44WE32",4,4,4,100,false,1);
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
+values ("FickoQWE","Mercedes","Benz","13AC12",4,4,4,100,false,1);
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
+values ("BrzkoQWE","Mercedes","Benz","13QQ55",4,4,4,250,true,1);
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id )
+values ("SporaQWE","Mercedes","C","44WE32",4,4,4,100,false,1);
+
 
 /* users.sql */
 /* password = 123*/
@@ -109,6 +137,33 @@ VALUES ('Aleksandar', 3, 'Hotel with 5 stars in Novi Sad with great locations');
 INSERT INTO hotels (name, address_id, description)
 VALUES ('Putnik', 4 , 'Cheap rooms ,Hotel with 3 stars near the center');
 
+
+INSERT INTO room_type (name)
+VALUES ("Single Bed");
+
+INSERT INTO room_type (name)
+VALUES ("Single Beds");
+
+INSERT INTO room_type (name)
+VALUES ("Couple DoubleBed + Single beds");
+
+INSERT INTO room_type (name)
+VALUES ("Couple DoubleBed + Single bed");
+
+INSERT INTO room_type (name)
+VALUES ("Couple DoubleBeds");
+
+INSERT INTO room_type (name)
+VALUES ("Couple DoubleBeds + Single bed");
+
+INSERT INTO room_type (name)
+VALUES ("Deluxe room");
+
+INSERT INTO rooms (name,number_of_beds, number_of_people, number_of_rooms,room_number,floor,room_type_id,hotel_id)
+VALUES ("Labud ljubavi" ,1, 2 , 1 ,101, 1, 7 , 2);
+
+INSERT INTO rooms (number_of_beds, number_of_people, number_of_rooms,room_number,floor,room_type_id,hotel_id)
+VALUES (4, 6 , 2 ,404, 4, 3 , 1);
 
 
 

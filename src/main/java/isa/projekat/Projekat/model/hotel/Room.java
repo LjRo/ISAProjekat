@@ -2,7 +2,6 @@ package isa.projekat.Projekat.model.hotel;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 // Model for room in hotels
 @Entity
@@ -13,28 +12,36 @@ public class Room implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
-    private BigDecimal cost;
-
-    @Column(nullable = false)
-    private int beds;
-
     @Column
+    private String name;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER,optional = false)
+    private RoomType roomType;
+
+    @Column(nullable = false)
+    private int numberOfPeople;
+
+    @Column(nullable = false)
+    private int numberOfBeds;
+
+    @Column(nullable = false)
+    private int numberOfRooms;
+
+    @Column(nullable = false)
+    private int roomNumber;
+
+    @Column(nullable = false)
+    private int floor;
+
+    /*@Column
     private boolean isFastReservation;
+    */ //Prebaceno u rezervacija sobe.
 
     @Column
-    private double discount;
+    private String discount;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     private Hotel hotel;
-
-    /*
-    @ManyToMany
-    @JoinTable(name = "reservation_room",
-            joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "rezervacijaHotel_id", referencedColumnName = "id"))
-    private Set<RezervacijaHotel> rezervacije = new HashSet<RezervacijaHotel>();
-    */
 
     public Room() {
         super();
@@ -48,35 +55,67 @@ public class Room implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getCost() {
-        return cost;
+    public String getName() {
+        return name;
     }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getBeds() {
-        return beds;
+    public int getNumberOfPeople() {
+        return numberOfPeople;
     }
 
-    public void setBeds(int beds) {
-        this.beds = beds;
+    public void setNumberOfPeople(int numberOfPeople) {
+        this.numberOfPeople = numberOfPeople;
     }
 
-    public boolean isFastReservation() {
-        return isFastReservation;
+    public RoomType getRoomType() {
+        return roomType;
     }
 
-    public void setFastReservation(boolean fastReservation) {
-        isFastReservation = fastReservation;
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
     }
 
-    public double getDiscount() {
+    public int getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(int roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
+    public int getNumberOfBeds() {
+        return numberOfBeds;
+    }
+
+    public void setNumberOfBeds(int numberOfBeds) {
+        this.numberOfBeds = numberOfBeds;
+    }
+
+    public String getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(String discount) {
         this.discount = discount;
     }
 
