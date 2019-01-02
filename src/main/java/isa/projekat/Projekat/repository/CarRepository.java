@@ -11,5 +11,7 @@ public interface CarRepository extends JpaRepository<Cars, Long> {
     @Override
     Page<Cars> findAll(Pageable pageable);
 
-    //Page<Cars> findBy
+
+    //Page<Cars> findAllById(Long id, Pageable pageable);
+    Page<Cars> findByRentACarId(Long RentACar, Pageable pageable);
 }

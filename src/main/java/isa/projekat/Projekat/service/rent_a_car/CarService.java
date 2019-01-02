@@ -18,4 +18,5 @@ public class CarService {
         return carRepository.findAll(pageRequest);
     }
 
+    public Page<Cars> findByRentACarId( Long id,PageRequest pageRequest) { return carRepository.findByRentACarId(id,pageRequest);}
 }

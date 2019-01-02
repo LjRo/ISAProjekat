@@ -1,6 +1,8 @@
 package isa.projekat.Projekat.model.rent_a_car;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -45,7 +47,9 @@ public class Cars {
     @Column(name = "isFastReserved", nullable = false)
     private Boolean isFastReserved;
 
-
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonBackReference
+    private RentACar rentACar;
 
 
     //TODO SET LIST OF REVIEWS
@@ -54,7 +58,7 @@ public class Cars {
     public Cars() {
     }
 
-    public Cars(CarType type, String name, String mark, String model, String registrationNumber, int numberOfBags, int maxPassengers, int numberOfDoors, BigDecimal dailyPrice, Boolean isFastReserved) {
+    public Cars(CarType type, String name, String mark, String model, String registrationNumber, int numberOfBags, int maxPassengers, int numberOfDoors, BigDecimal dailyPrice, Boolean isFastReserved, RentACar rentACar) {
         this.type = type;
         this.name = name;
         this.mark = mark;
@@ -65,6 +69,15 @@ public class Cars {
         this.numberOfDoors = numberOfDoors;
         this.dailyPrice = dailyPrice;
         this.isFastReserved = isFastReserved;
+        this.rentACar = rentACar;
+    }
+
+    public RentACar getRentACar() {
+        return rentACar;
+    }
+
+    public void setRentACar(RentACar rentACar) {
+        this.rentACar = rentACar;
     }
 
     public String getName() {

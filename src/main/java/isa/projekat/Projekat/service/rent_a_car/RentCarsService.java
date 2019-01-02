@@ -1,8 +1,10 @@
 package isa.projekat.Projekat.service.rent_a_car;
 
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
+import isa.projekat.Projekat.model.rent_a_car.RentOffice;
 import isa.projekat.Projekat.repository.RentCarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,5 +22,7 @@ public class RentCarsService {
     public RentACar findById(Long id) {
         return  rentCarRepository.findById(id).get();
     }
+
+
 
 }

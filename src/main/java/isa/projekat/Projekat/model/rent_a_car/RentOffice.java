@@ -1,5 +1,8 @@
 package isa.projekat.Projekat.model.rent_a_car;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -14,11 +17,8 @@ public class RentOffice {
     @Column(name = "name", nullable = false)
     private String name;
 
-
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
-
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonBackReference
     private RentACar rentACar;
 
     @ManyToOne
@@ -43,14 +43,6 @@ public class RentOffice {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     public RentACar getRentACar() {

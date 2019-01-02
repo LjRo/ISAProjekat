@@ -1,5 +1,7 @@
 package isa.projekat.Projekat.model.rent_a_car;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +24,11 @@ public class RentACar {
     private String description;
 
     @OneToMany
+    @JsonManagedReference
     private List<RentOffice> rentOffices = new ArrayList<>();
 
     @OneToMany
+    @JsonManagedReference
     private List<Cars> cars = new ArrayList<>();
 
     //@OneToMany moved to car offices

@@ -18,6 +18,11 @@ fa fa gear {
     margin-left: 15%;
 }
 
+#profileImage {
+    max-height: 200px;
+    max-width: 200px;
+}
+
 img {
     float: left;
 }

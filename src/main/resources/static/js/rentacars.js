@@ -14,10 +14,10 @@ $(document).ready(function () {
 });
 
 function addArticle(rentacar) {
-    var icon = "assets/img/rentacar.png";
+    var icon = "assets/img/rent-a-car.svg";
     $('#carsList').append('<div class="col-sm-6 col-md-5 col-lg-4 item">' +
         '<div class="box">' + '<img src="' + icon + '" style="width:80px;height:80px"/>' +
-        '<a href="/rentacarprofile.html?id=' + rentacar.id + '&page=0">' +
+        '<a href="/rentacarprofile.html?id=' + rentacar.id + '&page=0&pageLocation=0">' +
         '<h3 class="name">' +rentacar.name +'</h3>' +
         '</a>' +
         '<p class="description">Address: <span style = "color:black">'+ 'Click to see google maps' + '</span></p>' +

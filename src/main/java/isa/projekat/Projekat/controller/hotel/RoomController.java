@@ -2,6 +2,7 @@ package isa.projekat.Projekat.controller.hotel;
 
 import isa.projekat.Projekat.model.hotel.Room;
 import isa.projekat.Projekat.service.hotel.RoomService;
+import isa.projekat.Projekat.utils.PageRequestProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,19 +20,14 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
-    @SuppressWarnings("Duplicates")
+    @Autowired
+    private PageRequestProvider pageRequestProvider;
+
+
     @PermitAll
     @RequestMapping(value = "api/rooms/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Room> findAll(@RequestParam String page) {
-        int pageNumber;
-        try {
-            pageNumber = Integer.parseInt(page);
-        } catch (Exception e){
-            pageNumber = 0;
-        }
-        PageRequest pageRequest = PageRequest.of(pageNumber,10);
-
-        return roomService.findAll(pageRequest);
+        return roomService.findAll(pageRequestProvider.provideRequest(page));
     }
 
 
