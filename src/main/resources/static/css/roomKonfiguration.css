@@ -1,0 +1,53 @@
+[id^=draggable] {
+    width: 40px;
+    height: 40px;
+    padding: 0.5em;
+}
+
+[id^=draggable] p {
+    text-align: center;
+    margin: 0;
+    display: block;
+    margin-top: 5px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[id^=draggable] {
+    z-index: 20
+}
+
+[id^=droppable] {
+    width: 200px;
+    height: 200px
+}
+
+.floorplan,
+.room {
+    border: 1px solid #ee7538;
+}
+
+.floorplan {
+    background: #ebecec;
+    height: 350px;
+    position: relative;
+    width: 350px;
+}
+
+.room {
+    background: #fff;
+    color: #000;
+    display: block;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+}
+
+
+.room:hover {
+    background: #ee7538;
+    color: #fff;
+    resize: both;
+}

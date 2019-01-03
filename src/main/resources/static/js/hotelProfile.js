@@ -26,7 +26,7 @@ $(document).ready(function () {
 
 
     $.get({
-        url: '/api/rooms/findAll?page=' + getUrlParameter('page') + '&pagelimit=10',
+        url: '/api/rooms/findByIdAll?id=' + pId + '&page=' + getUrlParameter('page') + '&pagelimit=10',
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (data) {
             if (data != null && data.numberOfElements > 0) {
@@ -39,14 +39,17 @@ $(document).ready(function () {
         }
     });
 
-
+    /*
+    var dateToday = new Date();
+        $('#checkIn, #checkOut').datepicker({
+            numberOfMonths: 3,
+            showButtonPanel: true,
+            minDate: dateToday
+        });
+        */
 });
 
 function addRoom(room) {
-
-
-
-
     name = "";
     if(room.name != null)
         name = room.name;
@@ -104,9 +107,9 @@ function setPagingButtons(MaxPages, MaxElements) {
 
     var pId = getUrlParameter('id');
 
-    var adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id=' + pId + '&page=' + next;
+    var adr = window.location.href.match(/^.*\//) + 'hotelProfile.html?id=' + pId + '&page=' + next;
     nextElement.attr("href", adr);
-    adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id=' + pId + '&page=' + previous;
+    adr = window.location.href.match(/^.*\//) + 'hotelProfile.html?id=' + pId + '&page=' + previous;
     previousElement.attr("href", adr);
 
     if (previous < 0)

@@ -10,4 +10,6 @@ import org.springframework.stereotype.Component;
 public interface RoomRepository extends JpaRepository<Room, Long> {
     @Override
     Page<Room> findAll(Pageable pageable);
+
+    Page<Room> findByHotelId(Long Hotel, Pageable pageable);
 }

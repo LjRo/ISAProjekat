@@ -5,7 +5,6 @@ import isa.projekat.Projekat.service.hotel.RoomService;
 import isa.projekat.Projekat.utils.PageRequestProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +27,12 @@ public class RoomController {
     @RequestMapping(value = "api/rooms/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Room> findAll(@RequestParam String page) {
         return roomService.findAll(pageRequestProvider.provideRequest(page));
+    }
+
+    @PermitAll
+    @RequestMapping(value = "api/rooms/findByIdAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Page<Room> findById(@RequestParam long id,@RequestParam String page) {
+        return roomService.findByHotelId(id,pageRequestProvider.provideRequest(page));
     }
 
 
