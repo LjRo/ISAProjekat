@@ -1,7 +1,9 @@
 package isa.projekat.Projekat.model.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import isa.projekat.Projekat.model.airline.Airline;
+import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import org.joda.time.DateTime;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -63,12 +65,26 @@ public class User implements UserDetails {
     @JsonIgnore
     private Airline administratedAirline;
 
+
+    // RentACar stuff
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JsonBackReference
+    private RentACar administratedRent;
+
     public Airline getAdministratedAirline() {
         return administratedAirline;
     }
 
     public void setAdministratedAirline(Airline administratedAirline) {
         this.administratedAirline = administratedAirline;
+    }
+
+    public RentACar getAdministratedRent() {
+        return administratedRent;
+    }
+
+    public void setAdministratedRent(RentACar administratedRent) {
+        this.administratedRent = administratedRent;
     }
 
     //

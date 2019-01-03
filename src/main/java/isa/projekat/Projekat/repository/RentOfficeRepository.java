@@ -19,4 +19,6 @@ public interface RentOfficeRepository  extends JpaRepository<RentOffice, Long> {
     Page<RentOffice> findAllByRentACarId(Long id, Pageable pageable);
 
 
+    RentOffice findByIdAndRentACarId(Long id, Long rentacar);
+
 }

@@ -4,6 +4,17 @@ $(document).ready(function () {
     $("#carsList").load("/carList.html");
 
     var pId = getUrlParameter('id');
+
+    $('#addCarButton').append('<button style="flex:0.2" type="button" class="btn btn-primary rentacar-admin"><span class="fa fa-gear"></span> add Car</button>');
+    $('#addOfficeButton').append('<button style="flex:0.2" type="button" class="btn btn-primary rentacar-admin"><span class="fa fa-gear"></span> add office</button>');
+
+
+
+    $('#addOfficeButton>button').click(function () {
+       window.location.href = window.location.href.match(/^.*\//)+ "addOffice.html?idrent=" + pId;
+    });
+
+
     $.get({
         url : '/api/rentacar/findById=' + pId,
         success : function(data) {

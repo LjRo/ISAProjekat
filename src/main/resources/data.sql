@@ -39,11 +39,12 @@ values ("Convertible");
 
 /* rent a car*/
 
-INSERT INTO rentacar (name, address_id, description,fast_discount)
-VALUES ('RentLjubomir',2, 'Profesional cars with state of the art quaility',20);
 
-INSERT INTO rentacar (name,address_id, description,fast_discount)
-VALUES ('RentAleksandar', 1, 'Cheap cars that will take you where you need to be.',20);
+INSERT INTO rentacar (name, address_id, description,fast_discount, bronze_discount, silver_discount, gold_discount)
+VALUES ('RentLjubomir',2, 'Profesional cars with state of the art quaility',20,0,0,0);
+
+INSERT INTO rentacar (name,address_id, description,fast_discount, bronze_discount, silver_discount, gold_discount)
+VALUES ('RentAleksandar', 1, 'Cheap cars that will take you where you need to be.',20,0,0,0);
 
 /* rent office*/
 
@@ -119,8 +120,8 @@ values (0,"hotel@gmail.com","hotel","hotelic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,administrated_airline_id)
 values (0,"airline@gmail.com","airline","airlinovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr4","city4",b'1',"123-456-1234",1);
 
-INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number)
-values (0,"rent@gmail.com","rent","rentovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr5","city5",b'1',"123-456-1234");
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number, administrated_rent_id)
+values (0,"rent@gmail.com","rent","rentovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr5","city5",b'1',"123-456-1234", 1);
 
 
 /* authorities */
@@ -202,4 +203,4 @@ VALUES (4, 6 , 2 ,404, 4, 3 , 1);
 insert into airlines_destinations (airline_id, destinations_id) values (1,1);
 insert into airlines_destinations (airline_id, destinations_id) values (1,2);
 
-insert into airlines_admins (airline_id, admins_id) values (1,5);
+/*insert into airlines_admins (airline_id, admins_id) values (1,5); Commented because of An illegal reflective access operation has occurred*/

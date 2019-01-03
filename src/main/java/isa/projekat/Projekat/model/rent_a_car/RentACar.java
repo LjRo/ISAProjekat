@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.model.rent_a_car;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class RentACar {
     @Column
     private String description;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<RentOffice> rentOffices = new ArrayList<>();
 
@@ -31,11 +32,59 @@ public class RentACar {
     @JsonManagedReference
     private List<Cars> cars = new ArrayList<>();
 
+   // @OneToMany(cascade = CascadeType.ALL, mappedBy = "administratedRent")
+    @OneToMany(mappedBy = "administratedRent", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<User> admins = new ArrayList<>();
+
+    //private  User admin;
+
     //@OneToMany moved to car offices
     //private List<Location> branches = new ArrayList<>();
 
+    @Column
+    private int bronzeDiscount = 0;
+
+    @Column
+    private int silverDiscount = 0;
+
+    @Column
+    private int goldDiscount = 0;
+
     @Column(nullable = false)
     private int fastDiscount;
+
+    public List<User> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(List<User> admins) {
+        this.admins = admins;
+    }
+
+    public int getBronzeDiscount() {
+        return bronzeDiscount;
+    }
+
+    public void setBronzeDiscount(int bronzeDiscount) {
+        this.bronzeDiscount = bronzeDiscount;
+    }
+
+    public int getSilverDiscount() {
+        return silverDiscount;
+    }
+
+    public void setSilverDiscount(int silverDiscount) {
+        this.silverDiscount = silverDiscount;
+    }
+
+    public int getGoldDiscount() {
+        return goldDiscount;
+    }
+
+    public void setGoldDiscount(int goldDiscount) {
+        this.goldDiscount = goldDiscount;
+    }
 
     public RentACar() {
         super();
