@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/NavigationWithButton.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/ProjectsHorizontal.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/SeatChart.css">
+    <link rel="stylesheet" href="css/SeatStyle.css">
+    <script src="/js/nav.js"></script>
+    <script src="/js/SeatCharts.js"></script>
+    <script src="/js/bookflight.js"></script>
+    <title>New Flight</title>
+
+
+</head>
+
+<body>
+
+<div id="navbar-frame" style="font-size:15px"></div>
+<hr>
+
+
+
+
+<div class="jumbotron mx-auto container" style="width:40%;height: 600px">
+    <div class="wrapper">
+        <div class="seatContainer">
+            <div id="seat-map">
+                <div class="front-indicator">Front</div>
+            </div>
+            <div class="booking-details">
+                <h2>Booking Details</h2>
+
+                <h3> Selected Seats (<span id="counter">0</span>):</h3>
+                <ul id="selected-seats"></ul>
+
+                Total: <b>$<span id="total">0</span></b>
+
+                <button class="checkout-button">Checkout &raquo;</button>
+
+                <div id="legend"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

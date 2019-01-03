@@ -36,17 +36,20 @@ public class AirlineController {
 
 
     @RequestMapping(value = "api/airline/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
     public void updateInfo(@RequestBody AirlineData ad, HttpServletRequest req){
         String email = "temp";
         airlineService.updateAirlineData(ad, email);
     }
 
+    @PermitAll
     @RequestMapping(value = "api/airline/{id}/profile", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Airline findAirline(@PathVariable Long id,HttpServletRequest req){
 
         return airlineService.findById(id);
     }
 
+    @PermitAll
     @RequestMapping(value = "api/airline/{id}/destinations", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Location> findAirlineDestinations(@PathVariable Long id, HttpServletRequest req){
 
