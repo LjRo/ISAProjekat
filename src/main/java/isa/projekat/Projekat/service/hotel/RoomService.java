@@ -17,4 +17,6 @@ public class RoomService {
         return roomRepository.findAll(pageRequest);
     }
 
+    public Page<Room> findByHotelId( Long id,PageRequest pageRequest) { return roomRepository.findByHotelId(id,pageRequest);}
+
 }

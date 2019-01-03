@@ -26,7 +26,7 @@ public class Hotel implements Serializable {
     @Column(nullable = false)
     private String description;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<HotelServices> hotelServices = new HashSet<>();
 
     //mappedBy = "hotel"
@@ -36,6 +36,8 @@ public class Hotel implements Serializable {
     @OneToMany
     private Set<Rating> ratings = new HashSet<>();
 
+    @OneToMany
+    private Set<Floor> floors = new HashSet<>();
 
     public Long getId() {
         return id;

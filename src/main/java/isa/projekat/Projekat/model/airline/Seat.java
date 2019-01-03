@@ -39,11 +39,11 @@ public class Seat {
         this.quick = quick;
     }
 
-    public int getRow() {
+    public int getC_row() {
         return c_row;
     }
 
-    public void setRow(int row) {
+    public void setC_row(int row) {
         this.c_row = row;
     }
 

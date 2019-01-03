@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Floor maker</title>
+  <link rel="stylesheet" href="css/stylesMaker.css">
+  <link rel="stylesheet" href="css/jquery-ui.css">
+  <link rel="stylesheet" href="css/roomKonfiguration.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="assets/js/jquery-ui.min.js"></script>
+  <script src="js/createFloor.js"></script>
+</head>
+<body>
+ <div id="selected"></div>
+ <div id="iterator">5</div>
+
+<input id="createNew" type="button" value="Add Room" onclick="addNewRoom('Room')"/> 
+<input id="createNewStairs" type="button" value="Add Stairs" onclick="addNewStairs()"/> 
+<input id="changeText" type="text" value="Name of room" onchange="changeText(value)"/>  
+<br>                        
+<input id="rotate" type="button" value="Rotate" onclick="rotateElement()"/> 
+<input id="deleteSelected" type="button" value="Delete Selected" onclick="functionDel()"  />
+<input type="button" value="Save" onclick="saveFLoor()">
+
+<div id="save">
+	<div id="droppable" style="z-index:1;" class="floorplan">
+	</div>
+</div>
+</body>
+</html>
