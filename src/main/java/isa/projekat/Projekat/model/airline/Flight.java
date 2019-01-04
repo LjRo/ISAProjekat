@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.model.airline;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 
@@ -17,7 +18,7 @@ public class Flight {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference(value = "list_flights")
     private Airline airline;
 
     @Column (nullable = false)
@@ -54,6 +55,7 @@ public class Flight {
     private List<Location> stops;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonBackReference(value = "list_seats")
     private List<Seat> seats;
 
     @Column (nullable = false)

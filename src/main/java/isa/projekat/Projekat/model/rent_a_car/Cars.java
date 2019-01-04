@@ -49,7 +49,7 @@ public class Cars implements Serializable {
     private Boolean isFastReserved;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonBackReference(value = "list_cars")
     private RentACar rentACar;
 
 

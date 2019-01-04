@@ -63,17 +63,17 @@ public class User implements UserDetails {
 
     // Airline stuff
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JsonBackReference
+    @JsonBackReference(value = "airline_admins")
     private Airline administratedAirline;
 
     // Hotel stuff
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JsonBackReference
+    @JsonBackReference(value = "hotel_admins")
     private Hotel administratedHotel;
 
     // RentACar stuff
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JsonBackReference
+    @JsonBackReference(value = "rent_admins")
     private RentACar administratedRent;
 
     public Airline getAdministratedAirline() {

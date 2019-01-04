@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.model.airline;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import isa.projekat.Projekat.model.user.User;
 
@@ -20,7 +21,7 @@ public class Seat {
     @Column
     private BigDecimal price;
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference(value = "list_seats")
     private User customer;
     @Column
     private boolean taken;

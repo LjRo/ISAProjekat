@@ -16,7 +16,12 @@ $(document).ready(function () {
                 localStorage.setItem('expiresIn',data['expiresIn']);
 
 
-                window.location.replace("http://localhost:8080/index.html");
+                setTimeout(function () {
+
+                    window.open("index.html", "_self");
+                }, 500);
+
+               // window.location.replace("http://localhost:8080/index.html");
             },
             error: function() {
                 console.log("Error");

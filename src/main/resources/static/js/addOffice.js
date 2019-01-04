@@ -25,7 +25,7 @@ $(function () {
         });
     }
 
-    $('#addOfficeForm').on('submit', function(e) {
+    $('#addForm').on('submit', function(e) {
         e.preventDefault();
 
         var officeName = $("input[name='officeName']").val();
@@ -42,7 +42,7 @@ $(function () {
             var idLocation = $("input[name='idLocation']").val();
 
             $.post({
-                url: "api/office/" + rentId + "/edit/"+id,
+                url: "api/office/"+rentId+"/edit",
                 data: JSON.stringify({
                     id : id,
                     name: officeName,

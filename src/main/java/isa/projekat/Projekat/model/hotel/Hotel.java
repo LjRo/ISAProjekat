@@ -36,7 +36,7 @@ public class Hotel implements Serializable {
 
     //mappedBy = "hotel"
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hotel")
-    @JsonManagedReference(value="hotel-rooms")
+    @JsonManagedReference(value="hotel_rooms")
     private Set<Room> rooms = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -49,7 +49,7 @@ public class Hotel implements Serializable {
     private Set<RoomType> roomTypes = new HashSet<>();
 
     @OneToMany(mappedBy = "administratedHotel", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "hotel_admins")
     private List<User> admins = new ArrayList<>();
 
     public Hotel() {

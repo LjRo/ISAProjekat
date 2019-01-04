@@ -17,7 +17,7 @@ public class RentOffice implements Serializable {
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonBackReference(value = "list_offices")
     private RentACar rentACar;
 
     @ManyToOne

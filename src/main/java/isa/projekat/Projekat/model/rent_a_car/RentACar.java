@@ -26,16 +26,16 @@ public class RentACar implements Serializable {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "list_offices")
     private List<RentOffice> rentOffices = new ArrayList<>();
 
     @OneToMany
-    @JsonManagedReference
+    @JsonManagedReference(value = "list_cars")
     private List<Cars> cars = new ArrayList<>();
 
    // @OneToMany(cascade = CascadeType.ALL, mappedBy = "administratedRent")
     @OneToMany(mappedBy = "administratedRent", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "rent_admins")
     private List<User> admins = new ArrayList<>();
 
     //private  User admin;

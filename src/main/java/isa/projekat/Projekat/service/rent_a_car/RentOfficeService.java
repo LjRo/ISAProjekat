@@ -4,6 +4,7 @@ package isa.projekat.Projekat.service.rent_a_car;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import isa.projekat.Projekat.model.rent_a_car.RentOffice;
 import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.repository.LocationRepository;
 import isa.projekat.Projekat.repository.RentCarRepository;
 import isa.projekat.Projekat.repository.RentOfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
+import java.util.Optional;
 
 
 @Service
@@ -28,8 +29,11 @@ public class RentOfficeService {
     @Autowired
     private RentCarRepository rentCarRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+  //  @PersistenceContext
+  //  private EntityManager entityManager;
+
+    @Autowired
+    private LocationRepository locationRepository;
 
     public Page<RentOffice> findAll(PageRequest pageRequest) { return rentOfficeRepository.findAll(pageRequest);}
 
@@ -65,10 +69,55 @@ public class RentOfficeService {
 
         rentACar.getRentOffices().add(rentOffice);
 
-        entityManager.persist(location);
-        entityManager.persist(rentACar);
+       // entityManager.persist(location);
+       // entityManager.persist(rentACar);
+
+        locationRepository.save(location);
+
+        rentCarRepository.save(rentACar);
+
 
         return true;
 
     }
+
+    @Transactional
+    public boolean editOffice(RentOffice office, User user, Long id){
+
+        Optional<RentOffice> rentOffice = rentOfficeRepository.findById(office.getId());
+
+        Optional<RentACar> rentACar = rentCarRepository.findById(id);
+
+
+
+        if (!rentOffice.isPresent() || !rentACar.isPresent())
+            return  false;
+
+        if (!rentACar.get().getAdmins().contains(user)) // is not a admin on the rentacar
+            return  false;
+
+        RentOffice fromDatabase = rentOffice.get();
+
+        fromDatabase.getLocation().setCountry(office.getLocation().getCountry());
+        fromDatabase.getLocation().setCity(office.getLocation().getCity());
+        fromDatabase.getLocation().setLongitude(office.getLocation().getLongitude());
+        fromDatabase.getLocation().setLatitude(office.getLocation().getLatitude());
+        fromDatabase.getLocation().setAddressName(office.getLocation().getAddressName());
+
+        //fromDatabase.getLocation().setId(office.getLocation().getId()); // id should not be changed, but will leave this in case for future...
+
+        fromDatabase.setName(office.getName());
+
+       // entityManager.persist(fromDatabase.getLocation());
+       // entityManager.persist(fromDatabase);
+
+        locationRepository.save(fromDatabase.getLocation());
+
+        rentOfficeRepository.save(fromDatabase);
+
+
+
+        return  true;
+    }
+
 }

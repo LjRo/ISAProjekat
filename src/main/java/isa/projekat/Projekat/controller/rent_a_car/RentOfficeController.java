@@ -47,12 +47,12 @@ public class RentOfficeController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
-    @RequestMapping(value = "api/office/{id}/edit", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public  boolean changed(@PathVariable long id, @RequestBody RentOffice changed) {
-
-
-
-            return  true;
+    @RequestMapping(value = "api/office/{idrent}/edit", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public  boolean changed(@RequestBody RentOffice changed, @PathVariable Long idrent, HttpServletRequest httpServletRequest) {
+        String authToken = jwtTokenUtils.getToken(httpServletRequest);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return rentOfficeService.editOffice(changed, user,idrent);
     }
 
     @RequestMapping(value = "api/office/{idrent}/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -60,7 +60,7 @@ public class RentOfficeController {
         return rentOfficeService.findByIdAndRentACarId(id,idrent);
     }
 
-    @PermitAll
+    @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @RequestMapping(value = "api/office/{rentid}/add",method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> addOffice(@PathVariable long rentid, @RequestBody RentOffice rentOffice, HttpServletRequest httpServletRequest) {
 
@@ -73,13 +73,8 @@ public class RentOfficeController {
             result.put("result", "success");
             return ResponseEntity.accepted().body(result);
         }else {
-            Map<String, String> result = new HashMap<>();
-            result.put("result", "error");
-            result.put("body","401, Unauthorized access");
-            return ResponseEntity.accepted().body(result);
+            return ResponseEntity.status(401).build();
         }
-
-
 
     }
 

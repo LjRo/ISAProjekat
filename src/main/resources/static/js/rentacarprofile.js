@@ -14,6 +14,10 @@ $(document).ready(function () {
        window.location.href = window.location.href.match(/^.*\//)+ "addOffice.html?idrent=" + pId;
     });
 
+    $('#editRentACar').click(function () {
+       window.location.href =  window.location.href.match(/^.*\//)+ "editRentACar.html?id=" + pId;
+    });
+
 
     $.get({
         url : '/api/rentacar/findById=' + pId,
@@ -159,7 +163,9 @@ function addLocation(location) {
     //var d20 = $('<br>');
     //var d21 = $('<a href=""><small>more info about car</small></a>');
     //var d22 = $('<br>');
-    var d23 = $(' <button type="button" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
+    var d23 = $(' <button type="button" id="editButtonLocation'+ location.id +'" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
+
+
     //var d24 = $(' <button type="button" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">BUY</button>');
     // var d25 = $(' </div>'); same as d6 x4
 
@@ -194,6 +200,13 @@ function addLocation(location) {
     tr.append(d2);
 
     div.append(tr);
+    var pId = getUrlParameter('id');
+    $('#'+ "editButtonLocation" + location.id).click(function () {
+        window.location.href = window.location.href.match(/^.*\//)+ "addOffice.html?idrent=" + pId + "&edit=true&id=" + location.id;
+    });
+
+
+
 }
 
 

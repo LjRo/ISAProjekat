@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.model.airline;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
 
@@ -35,10 +36,11 @@ public class Airline implements Serializable {
     private List<Location> destinations;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "airline")
+    @JsonManagedReference(value = "list_flights")
     private List<Flight> flights;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "administratedAirline")
-
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "administratedAirline")
+    @JsonManagedReference(value = "airline_admins")
     private List<User> admins;
 
     public Airline() {
