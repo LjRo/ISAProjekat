@@ -46,7 +46,9 @@ $(document).ready(function () {
    $('#addRoomType').click(function () {
         window.location.href = "addRoomType.html?id=" + pId;
     });
-
+    $('#manageFloors').click(function () {
+        window.location.href = "manageFloors.html?id=" + pId;
+    });
 
 
 

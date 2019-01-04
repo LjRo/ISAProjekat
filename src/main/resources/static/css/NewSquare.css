@@ -13,13 +13,13 @@ input, select{
 }
 @media (max-width: 1000px)
 {
-    form#addForm
+    #addForm
     {
         margin: 0 !important;
     }
 
 }
-form#addForm {
+#addForm {
     margin: 0 150px 0 150px;
     background-color: #e9ecef;
     padding-bottom: 20px;

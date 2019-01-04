@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.controller.hotel;
 
 
+import isa.projekat.Projekat.model.hotel.FloorPlan;
 import isa.projekat.Projekat.model.hotel.Hotel;
 import isa.projekat.Projekat.model.hotel.RoomData;
 import isa.projekat.Projekat.model.hotel.RoomType;
@@ -54,38 +55,58 @@ public class HotelController {
     @RequestMapping(value = "api/hotel/{id}/addRoom", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     public ResponseEntity<?> addRoom(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody RoomData room){
-        Map<String, String> result = new HashMap<>();
-        String authToken = jwtTokenUtils.getToken(httpServletRequest);
-        String email = jwtTokenUtils.getUsernameFromToken(authToken);
-        User user = userService.findByUsername(email);
 
-
-        if (hotelService.addRoom(room,id,user)){
-            result.put("result", "success");
-            return ResponseEntity.accepted().body(result);
-        }else {
-            result.put("result", "error");
-            result.put("body","401, Unauthorized access");
-            return ResponseEntity.accepted().body(result);
-        }
+        User user =  getUser(httpServletRequest);
+        return  responseTransaction(hotelService.addRoom(room,id,user));
     }
 
     @RequestMapping(value = "api/hotel/{id}/addRoomType", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     public ResponseEntity<?> addRoomType(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody RoomType room){
 
-        String authToken = jwtTokenUtils.getToken(httpServletRequest);
-        String email = jwtTokenUtils.getUsernameFromToken(authToken);
-        User user = userService.findByUsername(email);
-        Map<String, String> result = new HashMap<>();
+        User user =  getUser(httpServletRequest);
+        return  responseTransaction(hotelService.addRoomType(room,id,user));
+    }
+    @RequestMapping(value = "api/hotel/{id}/addNewFloor", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    public ResponseEntity<?> addRoomType(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody FloorPlan floorPlan){
+        User user =  getUser(httpServletRequest);
+        return  responseTransaction(hotelService.addFloorPlan(floorPlan,id,user));
+    }
 
-        if (hotelService.addRoomType(room,id,user)){
+
+    // /api/hotel/1/removeFloor:1 Failed to load resource: the server responded with a status of 404 ()
+ 
+    @RequestMapping(value = "api/hotel/{id}/removeFloor?id={idFloor}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    public ResponseEntity<?> addRoomType(@PathVariable Long id,@PathVariable Long idFloor, HttpServletRequest httpServletRequest){
+
+        User user =  getUser(httpServletRequest);
+        return responseTransaction(hotelService.removeFloorPlan(idFloor,id,user));
+    }
+
+
+    private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){
+        Map<String, String> result = new HashMap<>();
+        if(resultOfTransaction )
+        {
             result.put("result", "success");
             return ResponseEntity.accepted().body(result);
-        }else {
+        }
+        else
+        {
             result.put("result", "error");
             result.put("body","401, Unauthorized access");
             return ResponseEntity.accepted().body(result);
         }
     }
+
+    private User getUser(HttpServletRequest httpServletRequest){
+        String authToken = jwtTokenUtils.getToken(httpServletRequest);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return user;
+    }
+
+
 }

@@ -1,17 +1,20 @@
 package isa.projekat.Projekat.model.hotel;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "FloorPlane")
-public class FloorPlane implements Serializable {
+@Table(name = "FloorPlan")
+public class FloorPlan implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false)
+    @JsonBackReference(value = "floors")
     private Hotel hotel;
 
     @Column(columnDefinition = "TEXT")
@@ -20,7 +23,7 @@ public class FloorPlane implements Serializable {
     @Column(nullable = false)
     private int floorNumber;
 
-    public FloorPlane() {
+    public FloorPlan() {
     }
 
     public Long getId() {

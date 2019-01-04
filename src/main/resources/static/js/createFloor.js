@@ -17,6 +17,10 @@ $( function() {
   }
 
   function addNewRoom(name){
+  	if(name === "")
+	{
+		name =  Math.floor(Math.random() * 100)+100;
+	}
   	idCount = 1 + parseInt($('#iterator').html());
   	$('#iterator').html(idCount);
   	$('#droppable').append(
@@ -61,6 +65,7 @@ $( function() {
 		$(this).css({'transform' : 'rotate('+ degrees +'deg)'});
 		return $(this);
 	};
+  	/*
 		rotation= 0;
 	function rotateElement(){
 		selectedID = $('#selected').text();
@@ -82,6 +87,4 @@ $( function() {
 	   
 	   
 	}
-	function saveFLoor(){
-		floorPlan = $('#save').html();
-	}
+	*/

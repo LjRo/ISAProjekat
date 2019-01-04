@@ -42,8 +42,9 @@ public class Hotel implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Rating> ratings = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<FloorPlane> floorPlanes = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hotel", fetch = FetchType.EAGER)
+    @JsonManagedReference(value = "floors")
+    private Set<FloorPlan> floorPlans = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
     private Set<RoomType> roomTypes = new HashSet<>();
@@ -119,12 +120,12 @@ public class Hotel implements Serializable {
         this.ratings = ratings;
     }
 
-    public Set<FloorPlane> getFloorPlanes() {
-        return floorPlanes;
+    public Set<FloorPlan> getFloorPlans() {
+        return floorPlans;
     }
 
-    public void setFloorPlanes(Set<FloorPlane> floorPlanes) {
-        this.floorPlanes = floorPlanes;
+    public void setFloorPlans(Set<FloorPlan> floorPlans) {
+        this.floorPlans = floorPlans;
     }
 
     public Set<RoomType> getRoomTypes() {
