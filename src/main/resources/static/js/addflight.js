@@ -55,7 +55,7 @@ $(function() {
         }
     });
 
-    $('#addFlightForm').on('submit', function(e) {
+    $('#addform').on('submit', function(e) {
         e.preventDefault();
         var start = $('select[name="start"]').val();
         var dest = $('select[name="dest"]').val();

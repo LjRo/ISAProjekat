@@ -5,7 +5,6 @@ import isa.projekat.Projekat.model.rent_a_car.Location;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -112,9 +111,9 @@ public class Flight {
         return stops;
     }
 
-    public void setStops(ArrayList<Location> stops) {
+   /* public void setStops(ArrayList<Location> stops) {
         this.stops = stops;
-    }
+    } // Conflict with setter  */
 
     public BigDecimal getPrice() {
         return price;

@@ -10,7 +10,7 @@ public class ReservationHotel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column
     private Date arrivalDate;
@@ -33,6 +33,9 @@ public class ReservationHotel implements Serializable {
     //TODO Zavrsiti
     //cena?
     //sobe?
+
+
+
 
 
 }

@@ -1,11 +1,15 @@
 package isa.projekat.Projekat.model.hotel;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import isa.projekat.Projekat.model.Rating;
 import isa.projekat.Projekat.model.rent_a_car.Location;
+import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 // Model for hotel
@@ -29,15 +33,27 @@ public class Hotel implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<HotelServices> hotelServices = new HashSet<>();
 
+
     //mappedBy = "hotel"
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hotel")
+    @JsonManagedReference(value="hotel-rooms")
     private Set<Room> rooms = new HashSet<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Rating> ratings = new HashSet<>();
 
-    @OneToMany
-    private Set<Floor> floors = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<FloorPlane> floorPlanes = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
+    private Set<RoomType> roomTypes = new HashSet<>();
+
+    @OneToMany(mappedBy = "administratedHotel", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<User> admins = new ArrayList<>();
+
+    public Hotel() {
+    }
 
     public Long getId() {
         return id;
@@ -53,6 +69,14 @@ public class Hotel implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<User> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(List<User> admins) {
+        this.admins = admins;
     }
 
     public String getDescription() {
@@ -71,7 +95,6 @@ public class Hotel implements Serializable {
         this.hotelServices = hotelServices;
     }
 
-
     public Location getAddress() {
         return address;
     }
@@ -79,7 +102,6 @@ public class Hotel implements Serializable {
     public void setAddress(Location address) {
         this.address = address;
     }
-
 
     public Set<Room> getRooms() {
         return rooms;
@@ -97,4 +119,19 @@ public class Hotel implements Serializable {
         this.ratings = ratings;
     }
 
+    public Set<FloorPlane> getFloorPlanes() {
+        return floorPlanes;
+    }
+
+    public void setFloorPlanes(Set<FloorPlane> floorPlanes) {
+        this.floorPlanes = floorPlanes;
+    }
+
+    public Set<RoomType> getRoomTypes() {
+        return roomTypes;
+    }
+
+    public void setRoomTypes(Set<RoomType> roomTypes) {
+        this.roomTypes = roomTypes;
+    }
 }

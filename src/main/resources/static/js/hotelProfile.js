@@ -39,6 +39,17 @@ $(document).ready(function () {
         }
     });
 
+    $('#addRoom').click(function () {
+        window.location.href = "addRoom.html?id=" + pId;
+    });
+
+   $('#addRoomType').click(function () {
+        window.location.href = "addRoomType.html?id=" + pId;
+    });
+
+
+
+
     /*
     var dateToday = new Date();
         $('#checkIn, #checkOut').datepicker({
@@ -62,14 +73,14 @@ function addRoom(room) {
         '                                                <div class="card-body">' +
         '                                                    <div class="row">' +
         '                                                        <div class="col-md-3">' +
-        '                                                            <img class="card-img" src="assets/img/room.png">' +
+        '                                                            <img class="card-img" src="assets/img/room.svg">' +
         '                                                        </div>' +
         '                                                        <div class="col-md-6 border-right">' +
         '                                                            <h5 class="text-danger" id="name">' +name +    '</h5>' +
         '                                                            <div style="max-width:100%" class="badge badge-secondary" href="#">Room Type:<span id="RoomType">' + room.roomType.name +   '</span></div>' +
         '                                                            <br>' +
         '                                                            <div style="height: 33%;width:25%;float:left;">People:<strong></br><div id="numberPeople" style="width:auto;float: left">' + room.numberOfPeople + '</div><img src="assets/img/people.png" style="margin-top: 5px"></strong></div>' +
-        '                                                            <div style="height: 33%;width:25%;float:right;">Rooms: <strong></br><div id="numberRooms"  style="width:auto;float: left">' + room.numberOfRooms + '</div><img height="16" src="assets/img/room.png" style="margin-top: 5px" width="16"></strong></div>' +
+        '                                                            <div style="height: 33%;width:25%;float:right;">Rooms: <strong></br><div id="numberRooms"  style="width:auto;float: left">' + room.numberOfRooms + '</div><img height="16" src="assets/img/room.svg" style="margin-top: 5px" width="16"></strong></div>' +
         '                                                            <div style="height: 33%;width:25%;float:right;">Beds: <strong></br><div id="numberBeds"  style="width:auto;float: left">' + room.numberOfBeds  +  '</div> <img src="assets/img/bed.png" style="margin-top: 5px"></strong></div>' +
         '                                                            <div style="height: 33%;width:25%;float:right;">No.: <strong></br><div id="roomNumber"  style="width:auto;float: left">' + room.roomNumber + '</div><img src="assets/img/roomkey.png" style="margin-top: 5px"></strong></div>' +
         '                                                        </div>' +

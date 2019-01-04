@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/NavigationWithButton.css">
+    <link rel="stylesheet" href="css/HighlightPhone.css">
+    <link rel="stylesheet" href="css/ProjectsHorizontal.css">
+    <link rel="stylesheet" href="css/LoginForm.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/NewSquare.css">
+    <script src="js/nav.js"></script>
+    <script src="js/loggedCheck.js"></script>
+    <script src="js/addRoomType.js"></script>
+    <title>New RoomType</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+
+<div id="navbar-frame" style="font-size:15px"></div>
+<hr>
+<div class="">
+    <div class="container">
+        <div class="col-md-12" style="align-self: center">
+            <div id="addNewRoom" class="col-md">
+                <form id="addForm">
+                    <h2 class="sr-only "></h2>
+                    <h2 style="text-align: center">New Type</h2>
+                    <img src="assets/img/room.svg"
+                         style="display: block; max-height:240px; max-width: 240px;margin-left: auto;margin-right: auto">
+                    <div class="form-group col-md">
+                        <input class="form-control" type="text" name="name" placeholder="Name for room type">
+                    </div>
+                    <div class="form-group">
+                        <button id="toSubmit" class="btn btn-primary btn-block" type="submit">Submit</button>
+                        <div id="error"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+#addForm > div.form-group {
+    width: 60%;
+    margin: 10px auto;
+}
+
+@media (max-width:991px) {
+    #addForm > div.form-group {
+        width: 100%;
+    }
+}
+input, select{
+    margin: 10px auto;
+}
+@media (max-width: 1000px)
+{
+    form#addForm
+    {
+        margin: 0 !important;
+    }
+
+}
+form#addForm {
+    margin: 0 150px 0 150px;
+    background-color: #e9ecef;
+    padding-bottom: 20px;
+
+}
+#error{
+    color:red;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 5px;
+}

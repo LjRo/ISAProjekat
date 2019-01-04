@@ -3,6 +3,7 @@ package isa.projekat.Projekat.model.user;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import isa.projekat.Projekat.model.airline.Airline;
+import isa.projekat.Projekat.model.hotel.Hotel;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import org.joda.time.DateTime;
 import org.springframework.security.core.GrantedAuthority;
@@ -62,9 +63,13 @@ public class User implements UserDetails {
 
     // Airline stuff
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JsonIgnore
+    @JsonBackReference
     private Airline administratedAirline;
 
+    // Hotel stuff
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JsonBackReference
+    private Hotel administratedHotel;
 
     // RentACar stuff
     @OneToOne(cascade = CascadeType.PERSIST)
@@ -77,6 +82,14 @@ public class User implements UserDetails {
 
     public void setAdministratedAirline(Airline administratedAirline) {
         this.administratedAirline = administratedAirline;
+    }
+
+public Hotel getAdministratedHotel() {
+        return administratedHotel;
+    }
+
+    public void setAdministratedHotel(Hotel administratedHotel) {
+        this.administratedHotel = administratedHotel;
     }
 
     public RentACar getAdministratedRent() {

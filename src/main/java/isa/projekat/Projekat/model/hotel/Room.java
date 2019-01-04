@@ -1,5 +1,7 @@
 package isa.projekat.Projekat.model.hotel;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -10,12 +12,12 @@ public class Room implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER,optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private RoomType roomType;
 
     @Column(nullable = false)
@@ -33,25 +35,23 @@ public class Room implements Serializable {
     @Column(nullable = false)
     private int floor;
 
-    /*@Column
-    private boolean isFastReservation;
-    */ //Prebaceno u rezervacija sobe.
-
     @Column
     private String discount;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonBackReference(value="hotel-rooms")
     private Hotel hotel;
 
     public Room() {
         super();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,6 +63,14 @@ public class Room implements Serializable {
         this.name = name;
     }
 
+    public RoomType getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
+    }
+
     public int getNumberOfPeople() {
         return numberOfPeople;
     }
@@ -71,12 +79,12 @@ public class Room implements Serializable {
         this.numberOfPeople = numberOfPeople;
     }
 
-    public RoomType getRoomType() {
-        return roomType;
+    public int getNumberOfBeds() {
+        return numberOfBeds;
     }
 
-    public void setRoomType(RoomType roomType) {
-        this.roomType = roomType;
+    public void setNumberOfBeds(int numberOfBeds) {
+        this.numberOfBeds = numberOfBeds;
     }
 
     public int getNumberOfRooms() {
@@ -101,14 +109,6 @@ public class Room implements Serializable {
 
     public void setFloor(int floor) {
         this.floor = floor;
-    }
-
-    public int getNumberOfBeds() {
-        return numberOfBeds;
-    }
-
-    public void setNumberOfBeds(int numberOfBeds) {
-        this.numberOfBeds = numberOfBeds;
     }
 
     public String getDiscount() {

@@ -1,10 +1,11 @@
 package isa.projekat.Projekat.model.hotel;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "Floor")
-public class Floor {
+@Table(name = "FloorPlane")
+public class FloorPlane implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +19,9 @@ public class Floor {
 
     @Column(nullable = false)
     private int floorNumber;
+
+    public FloorPlane() {
+    }
 
     public Long getId() {
         return id;

@@ -4,12 +4,13 @@ package isa.projekat.Projekat.model.rent_a_car;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 
 @Entity
 @Table(name = "Cars")
-public class Cars {
+public class Cars implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

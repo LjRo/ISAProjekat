@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "RentACar")
-public class RentACar {
+public class RentACar implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
