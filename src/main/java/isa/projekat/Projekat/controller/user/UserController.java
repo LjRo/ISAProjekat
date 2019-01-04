@@ -7,11 +7,9 @@ import isa.projekat.Projekat.service.user_auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -44,7 +42,7 @@ public class UserController {
 
     @RequestMapping(value = "api/user/findAllFriends", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public List<User> findAllFriends(HttpServletRequest req) {
+    public List<UserData> findAllFriends(HttpServletRequest req) {
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
         return userService.findAllFriends(email);
@@ -60,7 +58,7 @@ public class UserController {
 
     @RequestMapping(value = "api/user/findAllFriendRequests", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public List<User> findAllFriendRequests(HttpServletRequest req) {
+    public List<UserData> findAllFriendRequests(HttpServletRequest req) {
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
         return userService.findAllFriendRequests(email);
@@ -68,39 +66,59 @@ public class UserController {
 
     @RequestMapping(value = "api/user/sendFriendRequest", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public void sendFriendRequest(@RequestBody String targetEmail, HttpServletRequest req){
+    public void sendFriendRequest(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
-        userService.addFriendRequest(email, targetEmail);
-
+        userService.addFriendRequest(email, ud.getId());
     }
 
     @RequestMapping(value = "api/user/acceptFriendRequest", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public void acceptFriendRequest(@RequestBody String targetEmail, HttpServletRequest req){
+    public void acceptFriendRequest(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
-        userService.confirmRequest(email, targetEmail);
+        userService.confirmRequest(email, ud.getId());
 
     }
 
     @RequestMapping(value = "api/user/denyFriendRequest", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public void denyFriendRequest(@RequestBody String targetEmail, HttpServletRequest req){
+    public void denyFriendRequest(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
-        userService.denyRequest(email, targetEmail);
+        userService.denyRequest(email, ud.getId());
 
     }
 
     @RequestMapping(value = "api/user/removeFriend", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public void removeFriend(@RequestBody String targetEmail, HttpServletRequest req){
+    public void removeFriend(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
-        userService.removeFriend(email, targetEmail);
+        userService.removeFriend(email, ud.getId());
 
     }
 
+    @RequestMapping(value = "api/user/{id}/friendStatus", method = RequestMethod.GET, produces = {MediaType.TEXT_PLAIN_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public String getUserFriendStatus(@PathVariable Long id, HttpServletRequest req){
+
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+
+        return userService.getFriendStatus(email,id);
+    }
+    @RequestMapping(value = "api/user/{id}/friends", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PermitAll
+    public List<UserData> getUserFriends(@PathVariable Long id, HttpServletRequest req){
+        return userService.findAllFriendsById(id);
+    }
+
+    @RequestMapping(value = "api/user/{id}/profile", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PermitAll
+    public UserData getUserData(@PathVariable Long id, HttpServletRequest req){
+
+        return userService.getUserData(id);
+    }
 
 }

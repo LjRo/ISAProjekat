@@ -1,10 +1,14 @@
 <head>
-  <title>My Profile</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>My Profile</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <link rel="stylesheet" href="css/NavigationWithButton.css">
     <link rel="stylesheet" href="css/HighlightPhone.css">
     <link rel="stylesheet" href="css/ProjectsHorizontal.css">
@@ -20,116 +24,158 @@
 
 <div class="container bootstrap snippet">
     <div class="row">
-  		<div class="col-sm-10"><h1 id="nameDisplay"></h1></div>
+        <div class="col-sm-10"><h1 id="nameDisplay"></h1></div>
     </div>
     <div class="row">
-  		<div class="col-sm-3"><!--left col-->
+        <div class="col-sm-3"><!--left col-->
 
 
-      <div class="text-center">
-        <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
-      </div></hr><br>
+            <div class="text-center">
+                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
+                     alt="avatar">
+            </div>
+            </hr><br>
 
+            <ul class="list-group">
+                <li class="list-group-item text-muted">Overview <i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-right">
+                    <span class="d-flex justify-content-center"><button type="button" class="btn btn-success" id="addBtn" style="display:none">Add Friend</button></span>
+                    <span class="d-flex justify-content-center"><button type="button" class="btn btn-secondary" id="rqsBtn" style="display:none" disabled>Request Sent</button></span>
+                    <span class="d-flex justify-content-center"><button type="button" class="btn btn-danger" id="rmvBtn" style="display:none">Remove Friend</button></span>
+                    <span class="d-flex justify-content-center"><button type="button" class="btn btn-success" id="accBtn" style="display:none">Accept Friend</button></span>
+                    <span class="d-flex justify-content-center"><button type="button" class="btn btn-danger" id="decBtn" style="display:none">Decline Friend</button></span>
+                </li>
+
+            </ul>
 
         </div><!--/col-3-->
-    	<div class="col-sm-9">
+        <div class="col-sm-9">
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#home">Edit</a></li>&nbsp;&nbsp;&nbsp;
-                <li><a data-toggle="tab" href="#messages">Friends</a></li>&nbsp;&nbsp;&nbsp;
-                <li><a data-toggle="tab" href="#settings">Friend Requests</a></li>&nbsp;&nbsp;&nbsp;
-              </ul>
+                <li class="active" id="friendPage" ><a data-toggle="tab" href="#friends">Friends</a></li>&nbsp;&nbsp;&nbsp;
+                <li id="requestPage" style="display:none"><a data-toggle="tab" href="#requests">Friend Requests</a></li>&nbsp;&nbsp;&nbsp;
+                <li id="editPage" style="display:none"><a data-toggle="tab"  href="#edit">Edit</a></li>&nbsp;&nbsp;&nbsp;
+            </ul>
 
 
-          <div class="tab-content">
-            <div class="tab-pane active" id="home">
-                <hr>
-                  <form class="form" action="##" method="post" id="registrationForm">
-                      <div class="form-group">
+            <div class="tab-content">
+                <div class="tab-pane" id="edit">
+                    <hr>
+                    <form class="form" action="##" method="post" id="registrationForm">
+                        <div class="form-group">
 
-                          <div class="col-xs-6">
-                              <label ><h4>First name</h4></label>
-                              <input type="text" class="form-control" name="first_name" id="name" placeholder="first name" title="enter your first name if any.">
-                          </div>
-                      </div>
-                      <div class="form-group">
-
-                          <div class="col-xs-6">
-                            <label ><h4>Last name</h4></label>
-                              <input type="text" class="form-control" name="last_name" id="surname" placeholder="last name" title="enter your last name if any.">
-                          </div>
-                      </div>
-
-                      <div class="form-group">
-
-                          <div class="col-xs-6">
-                              <label ><h4>Phone</h4></label>
-                              <input type="text" class="form-control" name="phone" id="phoneNumber" placeholder="enter phone" title="enter your phone number if any.">
-                          </div>
-                      </div>
-
-                      <div class="form-group">
-                          <div class="col-xs-6">
-                             <label ><h4>City</h4></label>
-                              <input type="text" class="form-control" name="city" id="city" placeholder="city" title="enter your mobile number if any.">
-                          </div>
-                      </div>
-                      <div class="form-group">
-
-                          <div class="col-xs-6">
-                              <label ><h4>Email</h4></label>
-                              <input type="email" class="form-control" name="email" id="email" placeholder="you@email.com" title="enter your email." disabled="true">
-                          </div>
-                      </div>
-                      <div class="form-group">
-
-                          <div class="col-xs-6">
-                              <label ><h4>Address</h4></label>
-                              <input type="text" class="form-control" id="address" placeholder="address" title="enter a location">
-                          </div>
-                      </div>
-                      <div class="form-group">
-
-                          <div class="col-xs-6">
-                              <label for="password"><h4>Password</h4></label>
-                              <input type="password" class="form-control" name="password" id="password" placeholder="password" title="enter your password.">
-                          </div>
-                      </div>
-                      <div class="form-group">
-
-                          <div class="col-xs-6">
-                            <label for="password2"><h4>Verify</h4></label>
-                              <input type="password" class="form-control" name="password2" id="password2" placeholder="password2" title="enter your password2.">
-                          </div>
-                      </div>
-                      <div class="form-group">
-                           <div class="col-xs-12">
-                                <br>
-                              	<button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
-                               	<button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                            <div class="col-xs-6">
+                                <label><h4>First name</h4></label>
+                                <input type="text" class="form-control" name="first_name" id="name"
+                                       placeholder="first name" title="enter your first name if any.">
                             </div>
-                      </div>
-              	</form>
+                        </div>
+                        <div class="form-group">
 
-              <hr>
+                            <div class="col-xs-6">
+                                <label><h4>Last name</h4></label>
+                                <input type="text" class="form-control" name="last_name" id="surname"
+                                       placeholder="last name" title="enter your last name if any.">
+                            </div>
+                        </div>
 
-             </div><!--/tab-pane-->
-             <div class="tab-pane" id="messages">
+                        <div class="form-group">
 
-               <h2></h2>
+                            <div class="col-xs-6">
+                                <label><h4>Phone</h4></label>
+                                <input type="text" class="form-control" name="phone" id="phoneNumber"
+                                       placeholder="enter phone" title="enter your phone number if any.">
+                            </div>
+                        </div>
 
-               <hr>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label><h4>City</h4></label>
+                                <input type="text" class="form-control" name="city" id="city" placeholder="city"
+                                       title="enter your mobile number if any.">
+                            </div>
+                        </div>
+                        <div class="form-group">
 
-             </div><!--/tab-pane-->
-             <div class="tab-pane" id="settings">
+                            <div class="col-xs-6">
+                                <label><h4>Email</h4></label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                       placeholder="you@email.com" title="enter your email." disabled="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
 
+                            <div class="col-xs-6">
+                                <label><h4>Address</h4></label>
+                                <input type="text" class="form-control" id="address" placeholder="address"
+                                       title="enter a location">
+                            </div>
+                        </div>
+                        <div class="form-group">
 
-                  <hr>
+                            <div class="col-xs-6">
+                                <label for="password"><h4>Password</h4></label>
+                                <input type="password" class="form-control" name="password" id="password"
+                                       placeholder="password" title="enter your password.">
+                            </div>
+                        </div>
+                        <div class="form-group">
 
-              </div>
+                            <div class="col-xs-6">
+                                <label for="password2"><h4>Verify</h4></label>
+                                <input type="password" class="form-control" name="password2" id="password2"
+                                       placeholder="password2" title="enter your password2.">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <br>
+                                <button class="btn btn-lg btn-success" type="submit"><i
+                                        class="glyphicon glyphicon-ok-sign"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </form>
 
-              </div><!--/tab-pane-->
-          </div><!--/tab-content-->
+                    <hr>
 
-        </div><!--/col-9-->
-    </div><!--/row-->
-                                                      d
+                </div><!--/tab-pane-->
+                <div class="tab-pane active" id="friends">
+
+                    <h2>Friends</h2>
+                    <table id="friendsTable" class="display responsive dataTable dtr-inline collapsed table table-striped table-hover table-bordered" role="grid" style="width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>Name:</th>
+                            <th>Last Name:</th>
+                            <!--<th> Address:</th>-->
+                        </tr>
+                        </thead>
+                        <tbody id="friendsTableBody">
+                        </tbody>
+                    </table>
+                    <hr>
+
+                </div><!--/tab-pane-->
+                <div class="tab-pane" id="requests">
+                    <h2>Friend Requests</h2>
+                    <table id="requestsTable" class="display responsive dataTable dtr-inline collapsed table table-striped table-hover table-bordered" role="grid" style="width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>Name:</th>
+                            <th>Last Name:</th>
+                            <!--<th> Address:</th>-->
+                        </tr>
+                        </thead>
+                        <tbody id="requestsTableBody">
+                        </tbody>
+                    </table>
+
+                    <hr>
+
+                </div>
+
+            </div><!--/tab-pane-->
+        </div><!--/tab-content-->
+
+    </div><!--/col-9-->
+</div><!--/row-->
