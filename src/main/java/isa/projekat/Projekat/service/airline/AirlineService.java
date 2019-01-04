@@ -72,16 +72,12 @@ public class AirlineService {
     @Transactional
     public boolean addFlight(FlightData flightData, String email) {
         User admin = userRepository.findByUsername(email);
-        System.out.print("PART 1");
 
         if(admin.getAdministratedAirline() == null) {
             return false;
         }
 
         Airline target = admin.getAdministratedAirline();
-
-        System.out.print("PART 2");
-
 
         Flight fl = new Flight();
         fl.setStart(findLocationById(target.getId(),flightData.getStartID()));

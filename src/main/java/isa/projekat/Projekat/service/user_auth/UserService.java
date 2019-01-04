@@ -72,15 +72,32 @@ public class UserService {
 		return true;
 	}
 
-	public List<User> findAllFriends(String email) throws AccessDeniedException {
-		List<User> result = userRepository.findByUsername(email).getFriends();
-		return result;
+	public List<UserData> findAllFriends(String email) throws AccessDeniedException {
+		List<User> fList = userRepository.findByUsername(email).getFriends();
+        return getUserDataFromList(fList);
 	}
 
-	public List<User> findAllFriendRequests(String email) throws AccessDeniedException {
-		List<User> result = userRepository.findByUsername(email).getFriendRequests();
-		return result;
+    public List<UserData> findAllFriendsById(Long id) throws AccessDeniedException {
+        List<User> fList = userRepository.findById(id).get().getFriends();
+        return getUserDataFromList(fList);
+    }
+
+	public List<UserData> findAllFriendRequests(String email) throws AccessDeniedException {
+		List<User> fList = userRepository.findByUsername(email).getFriendRequests();
+        return getUserDataFromList(fList);
 	}
+
+	private List<UserData> getUserDataFromList(List<User> uList) {
+        ArrayList<UserData> result = new ArrayList<>();
+        for(User u : uList) {
+            UserData ud = new UserData();
+            ud.setFirstName(u.getFirstName());
+            ud.setLastName(u.getLastName());
+            ud.setId(u.getId());
+            result.add(ud);
+        }
+        return result;
+    }
 
 	public List<User> findSpecificFriends(String email, String searchString) throws AccessDeniedException {
 		List<User> result =  new ArrayList<>();
@@ -97,55 +114,60 @@ public class UserService {
 		return result;
 	}
 
-	public boolean addFriendRequest(String user, String friendUsername) {
+	public boolean addFriendRequest(String user, Long id) {
 		User firstUser = findByUsername(user);
-		User friendUser = findByUsername(friendUsername);
-
-		if(friendUser != null && firstUser != null && !firstUser.equals(friendUser) && !friendUser.getFriendRequests().contains(firstUser) && friendUser.getFriends().contains(firstUser) && !firstUser.getFriendRequests().contains(friendUser)) {
+		User friendUser = findById(id);
+		if(friendUser != null && firstUser != null && !firstUser.equals(friendUser) && !friendUser.getFriendRequests().contains(firstUser) && !friendUser.getFriends().contains(firstUser) && !firstUser.getFriendRequests().contains(friendUser)) {
 			friendUser.getFriendRequests().add(firstUser);
+			userRepository.save(friendUser);
 			return true;
 		}
 
 		return false;
 	}
 
-	public boolean confirmRequest(String user, String friendEmail) {
+	public boolean confirmRequest(String user, Long id) {
 		User firstUser = findByUsername(user);
-		User friendUser = findByUsername(friendEmail);
+		User friendUser = findById(id);
 
 		if(friendUser != null && firstUser != null) {
 			if(firstUser.getFriendRequests().contains(friendUser)) {
 				firstUser.getFriendRequests().remove(friendUser);
 				firstUser.getFriends().add(friendUser);
 				friendUser.getFriends().add(firstUser);
-				return true;
+                userRepository.save(friendUser);
+                userRepository.save(firstUser);
+                return true;
 			}
 		}
 
 		return false;
 	}
 
-	public boolean denyRequest(String user, String friendEmail) {
+	public boolean denyRequest(String user, Long id) {
 		User firstUser = findByUsername(user);
-		User friendUser = findByUsername(friendEmail);
+		User friendUser = findById(id);
 
 		if(friendUser != null && firstUser != null) {
 			if(firstUser.getFriendRequests().contains(friendUser)) {
 				firstUser.getFriendRequests().remove(friendUser);
+                userRepository.save(firstUser);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean removeFriend(String user, String friendEmail) {
+	public boolean removeFriend(String user, Long id) {
 		User firstUser = findByUsername(user);
-		User friendUser = findByUsername(friendEmail);
+		User friendUser = findById(id);
 
 		if(friendUser != null && firstUser != null) {
 			if(firstUser.getFriends().contains(friendUser)) {
-				firstUser.getFriendRequests().remove(friendUser);
-				friendUser.getFriendRequests().remove(firstUser);
+				firstUser.getFriends().remove(friendUser);
+				friendUser.getFriends().remove(firstUser);
+                userRepository.save(friendUser);
+                userRepository.save(firstUser);
 				return true;
 			}
 		}
@@ -171,5 +193,36 @@ public class UserService {
 
 	}
 
+    public String getFriendStatus(String email, Long targetId) {
+	    User reqUser = findByUsername(email);
+	    User target = findById(targetId);
 
+	    if(reqUser.getFriends().contains(target)) {
+	        return "FRIEND";
+        }
+
+	    if(target.getFriendRequests().contains(reqUser)) {
+	        return "REQUEST_SENT";
+        }
+
+	    if(reqUser.getFriendRequests().contains(target)) {
+	        return "REQUEST_RECEIVED";
+        }
+
+	    if(target.equals(reqUser)) {
+	        return "IGNORE";
+        }
+	    return "NOT_FRIEND";
+    }
+
+    public UserData getUserData(Long id) {
+	    UserData result = new UserData();
+	    User target = findById(id);
+
+        result.setLastName(target.getLastName());
+        result.setFirstName(target.getFirstName());
+        result.setAddress(target.getAddress());
+
+        return result;
+    }
 }

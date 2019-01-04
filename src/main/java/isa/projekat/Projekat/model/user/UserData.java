@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.model.user;
 
 public class UserData {
+    private Long id;
     private String email;
     private String firstName;
     private String lastName;
@@ -66,5 +67,13 @@ public class UserData {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
