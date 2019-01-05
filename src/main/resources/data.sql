@@ -123,6 +123,12 @@ values (0,"airline@gmail.com","airline","airlinovic","$2a$10$Zz/H94PBqMWVWQlRgCw
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number, administrated_rent_id)
 values (0,"rent@gmail.com","rent","rentovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr5","city5",b'1',"123-456-1234", 1);
 
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number)
+values (0,"normalb@gmail.com","Mika","Mikic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234");
+
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number)
+values (0,"normalc@gmail.com","Neko","Nekic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234");
+
 
 /* authorities */
 /*0 - Normal, 1 - Admin, 2 - Airline Admin, 3 - Hotel Admin, 4 - RentACar Admin */
@@ -141,6 +147,8 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (3, 1);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (4, 4);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (5, 3);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (6, 5);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (7, 1);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (8, 1);
 
 /*companies.sql*/
 
@@ -209,5 +217,71 @@ VALUES('<div id="save" style="width: 100%;"><div id="droppable" style="z-index: 
 /*destinations*/
 insert into airlines_destinations (airline_id, destinations_id) values (1,1);
 insert into airlines_destinations (airline_id, destinations_id) values (1,2);
+
+insert into users_friends(user_id,friends_id) values (2,3);
+insert into users_friends(user_id,friends_id) values (3,2);
+insert into users_friends(user_id,friends_id) values (2,7);
+insert into users_friends(user_id,friends_id) values (7,2);
+insert into users_friends(user_id,friends_id) values (2,8);
+insert into users_friends(user_id,friends_id) values (8,2);
+
+insert into flights (c_columns, c_rows, distance, duration, land_time, number_of_stops, price, segments, start_time, airline_id, finish_id, start_id)
+values (2,2,100,2,'2019-1-2 23:59:59',0,100,2,'2019-1-1 23:59:59',1,2,1);
+
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (0,0,100,true,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (1,0,100,true,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (2,0,100,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (3,0,100,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (0,1,100,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (1,1,100,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (2,1,100,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (3,1,100,false,false,null);
+
+insert into flights_seats(flight_id,seats_id) values(1,1);
+insert into flights_seats(flight_id,seats_id) values(1,2);
+insert into flights_seats(flight_id,seats_id) values(1,3);
+insert into flights_seats(flight_id,seats_id) values(1,4);
+insert into flights_seats(flight_id,seats_id) values(1,5);
+insert into flights_seats(flight_id,seats_id) values(1,6);
+insert into flights_seats(flight_id,seats_id) values(1,7);
+insert into flights_seats(flight_id,seats_id) values(1,8);
+
+insert into flights (c_columns, c_rows, distance, duration, land_time, number_of_stops, price, segments, start_time, airline_id, finish_id, start_id)
+values (2,2,100,2,'2019-1-2 23:59:59',0,50,2,'2019-1-1 23:59:59',1,2,1);
+
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (0,0,50,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (1,0,50,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (2,0,50,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (3,0,50,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (0,1,50,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (1,1,50,false,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (2,1,50,true,false,null);
+insert into seats (c_column, c_row, price, quick, taken, reservation_id)
+values (3,1,50,true,false,null);
+
+insert into flights_seats(flight_id,seats_id) values(2,9);
+insert into flights_seats(flight_id,seats_id) values(2,10);
+insert into flights_seats(flight_id,seats_id) values(2,11);
+insert into flights_seats(flight_id,seats_id) values(2,12);
+insert into flights_seats(flight_id,seats_id) values(2,13);
+insert into flights_seats(flight_id,seats_id) values(2,14);
+insert into flights_seats(flight_id,seats_id) values(2,15);
+insert into flights_seats(flight_id,seats_id) values(2,16);
+
 
 /*insert into airlines_admins (airline_id, admins_id) values (1,5); Commented because of An illegal reflective access operation has occurred*/
