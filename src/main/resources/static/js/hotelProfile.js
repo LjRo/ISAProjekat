@@ -1,8 +1,14 @@
 var longitude, latitude, description, name, address;
 
+function SortByFloor(a, b){
+    var aFloor = a.floorNumber;
+    var bFloor = b.floorNumber;
+    return ((aFloor < bFloor) ? -1 : ((aFloor > bFloor) ? 1 : 0));
+}
+
 $(document).ready(function () {
 
-
+    var scroll = 0;
     var pId = getUrlParameter('id');
     $.get({
         url: '/api/hotel/findById=' + pId,
@@ -15,6 +21,36 @@ $(document).ready(function () {
                 latitude = hotel.address.latitude;
                 name = hotel.name;
                 description = hotel.description;
+
+
+                var floorPlansUS = hotel.floorPlans;
+                floorPlansUS.sort(SortByFloor);
+                var i = 1;
+                floorPlansUS.forEach(function(entry) {
+                    if(i==1)
+                    {
+                        $('#loadPlan').append(entry.configuration);
+                        i=0;
+                    }
+                    $( "#floors" ).append( '<option value= "' + entry.id + '">'+entry.floorNumber+'</option>' );
+                });
+
+                /*
+                $.get({
+                    url: 'api/floor/findAllByHotelId?id=' + pId,
+                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                    success: function (floorPlans) {
+                        var i = 1;
+                        floorPlans.forEach(function(entry) {
+                            if(i==1)
+                                $('#loadPlan').append(entry.configuration);
+                            else
+                                i=0;
+                            $( "#floors" ).append( '<option value= "' + entry.id + '">'+entry.floorNumber+'</option>' );
+                        });
+                    }
+                });
+                */
                 $("#nameOfCompany").text(name);
                 $("#Address").text(address);
                 $("#Description").text(description);
@@ -51,15 +87,19 @@ $(document).ready(function () {
     });
 
 
+    $('select[name="chooseFloor"]').on('change', function() {
+        $('#loadPlan').html("");
 
-    /*
-    var dateToday = new Date();
-        $('#checkIn, #checkOut').datepicker({
-            numberOfMonths: 3,
-            showButtonPanel: true,
-            minDate: dateToday
+        $.get({
+            url: '/api/floor/findById?id=' + this.value,
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            success: function (floorPlan) {
+                $('#loadPlan').append(floorPlan.configuration);
+            }
         });
-        */
+    });
+
+
 });
 
 function addRoom(room) {

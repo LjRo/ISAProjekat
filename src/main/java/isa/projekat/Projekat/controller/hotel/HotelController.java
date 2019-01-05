@@ -76,8 +76,8 @@ public class HotelController {
 
 
     // /api/hotel/1/removeFloor:1 Failed to load resource: the server responded with a status of 404 ()
- 
-    @RequestMapping(value = "api/hotel/{id}/removeFloor?id={idFloor}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+
+    @RequestMapping(value = "api/hotel/{id}/{idFloor}/removeFloor", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     public ResponseEntity<?> addRoomType(@PathVariable Long id,@PathVariable Long idFloor, HttpServletRequest httpServletRequest){
 

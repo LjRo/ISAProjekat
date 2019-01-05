@@ -111,7 +111,7 @@ public class HotelService {
         FloorPlan selected = floorRepository.findById(idFloor).get();
 
         target.getFloorPlans().remove(selected);
-        floorRepository.deleteById(idFloor);
+        floorRepository.delete(selected);
 
         entityManager.persist(target);
         return true;
