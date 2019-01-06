@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import isa.projekat.Projekat.security.TokenUtils;
 import javax.annotation.security.PermitAll;
@@ -46,6 +47,7 @@ public class RentOfficeController {
         return rentOfficeService.findAllByRentACarId(id,pageRequestProvider.provideRequest(page));
     }
 
+    @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @RequestMapping(value = "api/office/{idrent}/edit", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     public  boolean changed(@RequestBody RentOffice changed, @PathVariable Long idrent, HttpServletRequest httpServletRequest) {
@@ -60,6 +62,7 @@ public class RentOfficeController {
         return rentOfficeService.findByIdAndRentACarId(id,idrent);
     }
 
+    @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @RequestMapping(value = "api/office/{rentid}/add",method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> addOffice(@PathVariable long rentid, @RequestBody RentOffice rentOffice, HttpServletRequest httpServletRequest) {
@@ -77,6 +80,42 @@ public class RentOfficeController {
         }
 
     }
+
+
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @RequestMapping(value = "api/office/{idrent}/remove", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> removeOffice(@PathVariable Long idrent,@RequestParam long id ,HttpServletRequest httpServletRequest){
+        User user = getUser(httpServletRequest);
+        return responseTransaction(rentOfficeService.removeOffice(id,idrent,user));
+    }
+
+
+
+
+    @SuppressWarnings("Duplicates")
+    private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){
+        Map<String, String> result = new HashMap<>();
+        if(resultOfTransaction )
+        {
+            result.put("result", "success");
+            return ResponseEntity.accepted().body(result);
+        }
+        else
+        {
+            result.put("result", "error");
+            result.put("body","401, Unauthorized access");
+            return ResponseEntity.accepted().body(result);
+        }
+    }
+
+    private User getUser(HttpServletRequest httpServletRequest){
+        String authToken = jwtTokenUtils.getToken(httpServletRequest);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return user;
+    }
+
 
 
 }

@@ -6,7 +6,7 @@ $(document).ready(function () {
     var pId = getUrlParameter('id');
 
     $('#addCarButton').append('<button style="flex:0.2" type="button" class="btn btn-primary rentacar-admin"><span class="fa fa-gear"></span> add Car</button>');
-    $('#addOfficeButton').append('<button style="flex:0.2" type="button" class="btn btn-primary rentacar-admin"><span class="fa fa-gear"></span> add office</button>');
+    $('#addOfficeButton').append('<button style="flex:0.2" type="button" class="btn btn-primary rentacar-admin"><span class="fa fa-gear"></span> add Office</button>');
 
 
 
@@ -18,6 +18,9 @@ $(document).ready(function () {
        window.location.href =  window.location.href.match(/^.*\//)+ "editRentACar.html?id=" + pId;
     });
 
+    $('#addCarButton>button').click(function () {
+        window.location.href = window.location.href.match(/^.*\//)+ "addCar.html?idrent=" + pId;
+    });
 
     $.get({
         url : '/api/rentacar/findById=' + pId,
@@ -166,6 +169,7 @@ function addLocation(location) {
     var d23 = $(' <button type="button" id="editButtonLocation'+ location.id +'" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
 
 
+
     //var d24 = $(' <button type="button" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">BUY</button>');
     // var d25 = $(' </div>'); same as d6 x4
 
@@ -221,6 +225,11 @@ function addCar(car) {
     var d5 = $(' <img class ="card-img" src="assets/img/carlisting.svg">');
 
     var d7 = $(' <div class="col-md-6 border-right"></div>');
+
+    var d55 = $('<div style="max-width:100%" class="badge badge-secondary" href="#">Car Type: <span id="CarType">'+ car.type.name + '</span></div><br>');
+
+
+
     var d8 = $(' <h5 class="text-danger" id="Mark-Model-Name">'+ car.mark+" " +  car.model + " " + car.name + '</h5>');
     var d9 = $('<div style=" width: 33%;float:left;" style="width: auto">People:<strong><div id="numberPeople">' + car.maxPassengers + '</div></strong></div>');
     var d10 = $('  <div style="width: 33%;float:right;" style="width: auto">Doors: <strong><div id="numberDoors">' + car.numberOfDoors +'</div></strong></div>');
@@ -236,7 +245,7 @@ function addCar(car) {
     var d20 = $('<br>');
     var d21 = $('<a href=""><small>more info about car</small></a>');
     var d22 = $('<br>');
-    var d23 = $(' <button type="button" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
+    var d23 = $(' <button type="button" id="editButtonCar'+ car.id +'" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
     var d24 = $(' <button type="button" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">BUY</button>');
    // var d25 = $(' </div>'); same as d6 x4
 
@@ -246,6 +255,7 @@ function addCar(car) {
 
     //Stats
     d7.append(d8);
+    d7.append(d55);
     d7.append(d9);
     d7.append(d10);
     d7.append(d11);
@@ -271,6 +281,13 @@ function addCar(car) {
     tr.append(d2);
 
     div.append(tr);
+
+    var pId = getUrlParameter('id');
+    $('#'+ "editButtonCar" + car.id).click(function () {
+        window.location.href = window.location.href.match(/^.*\//)+ "addCar.html?idrent=" + pId + "&edit=true&id=" + car.id;
+    });
+
+
 }
 
 

@@ -2,12 +2,24 @@
 
 $(function () {
     $('#hideThis').hide();
-  //  $( "input[name*='id']").hide();
+    //  $( "input[name*='id']").hide();
     var changing = getUrlParameter("edit");
     $('#success-message').hide();
-
     $('#deleteButton').hide();
 
+    $.get({
+        url: 'api/cartypes/',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function(data) {
+            if (data != null)
+                data.forEach(function(entry){
+                    $( "#types" ).append( '<option value= "' + entry.id + '">'+entry.name+'</option>' );
+            });
+        }
+    });
+    
+    
+    
     var id = getUrlParameter('id');
     var idrent = getUrlParameter('idrent');
     if (changing !== undefined && changing === "true") {
@@ -15,24 +27,22 @@ $(function () {
         $('#submitButton').html("Update");
         $('#title').html("Update Car");
         $.get({
-            url: '/api/office/' +idrent + '/' +id,
+            url: '/api/cars/' +id,
             headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
             success: function(data) {
 
-               if (data != null)
-                   fillData(data);
+                if (data != null)
+                    fillData(data);
             }
         });
     }
-
-
     if (changing !== undefined && changing === "true") {
         $('#deleteButton').show();
         $('#deleteButton').click(function (e) {
             e.preventDefault();
             var idrent = getUrlParameter('idrent');
             $.post({
-                url: "api/office/" + idrent + "/remove?id=" + id,
+                url: "api/cars/" + idrent + "/remove?id=" + id,
                 headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
                 contentType: 'application/json',
                 success: function () {
@@ -53,36 +63,49 @@ $(function () {
             });
         });
     }
+    });
 
 
     $('#addForm').on('submit', function(e) {
         e.preventDefault();
 
-        var officeName = $("input[name='officeName']").val();
-        var addressName = $("input[name='addressName']").val();
-        var country = $("input[name='country']").val();
-        var city = $("input[name='city']").val();
-        var latitude = $("input[name='latitude']").val();
-        var longitude = $("input[name='longitude']").val();
-        var rentId = getUrlParameter('idrent');
-        var changing = getUrlParameter("edit");
+
+        // $("input[name='id']").val();
+
+        var mark  =   $("input[name='carMark']").val();
+        var model =  $("input[name='carModel']").val();
+        var name =    $("input[name='carName']").val();
+        var regNumber =   $("input[name='regNumber']").val();
+        var numDoors =   $("input[name='numDoors']").val();
+        var numBags =   $("input[name='numBags']").val();
+        var max =  $("input[name='max']").val();
+        var dailyPrice =   $("input[name='dailyPrice']").val();
+       // var fastReserved =  $("input[name='fastReserved']").val() === "on" ? true : false;
+        var fastReserved =  $("input[name='fastReserved']").is(':checked') == true;
+
+        var selectedType=  $("select[name='type']").val();
+
+
         // Already exists
         if (changing !== undefined && changing === "true") {
             var id = $("input[name='id']").val();
-            var idLocation = $("input[name='idLocation']").val();
+
 
             $.post({
-                url: "api/office/"+rentId+"/edit",
+                url: "api/cars/edit",
                 data: JSON.stringify({
                     id : id,
-                    name: officeName,
-                    location: {
-                        id : idLocation,
-                        addressName: addressName,
-                        country: country,
-                        city: city,
-                        latitude: latitude,
-                        longitude: longitude
+                    mark: mark,
+                    model: model,
+                    name: name,
+                    registrationNumber: regNumber,
+                    numberOfDoors : numDoors,
+                    numberOfBags : numBags,
+                    maxPassengers: max,
+                    dailyPrice : dailyPrice,
+                    fastReserved : fastReserved,
+                    type: {
+                        id : selectedType
                     }
                 }),
                 headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
@@ -93,8 +116,8 @@ $(function () {
                     //  window.location.replace("http://localhost:8080/index.html");
 
                     setTimeout(function () {
+
                         window.open("rentacarprofile.html?id="+ idrent+"&page=0&pageLocation=0", "_self");
-                        //window.open("index.html", "_self");
                     }, 2000);
                 },
                 error: function () {
@@ -108,15 +131,19 @@ $(function () {
         } else { // Does not exist
             var idrent = getUrlParameter('idrent');
             $.post({
-                url: "api/office/"+ idrent+"/add",
+                url: "api/cars/"+ idrent+"/add",
                 data: JSON.stringify({
-                    name: officeName,
-                    location: {
-                        addressName: addressName,
-                        country: country,
-                        city: city,
-                        latitude: latitude,
-                        longitude: longitude
+                    mark: mark,
+                    model: model,
+                    name: name,
+                    registrationNumber: regNumber,
+                    numberOfDoors : numDoors,
+                    numberOfBags : numBags,
+                    maxPassengers: max,
+                    dailyPrice : dailyPrice,
+                    fastReserved : fastReserved,
+                    type: {
+                        id : selectedType
                     }
                 }),
                 headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
@@ -127,8 +154,8 @@ $(function () {
                     //  window.location.replace("http://localhost:8080/index.html");
 
                     setTimeout(function () {
+
                         window.open("rentacarprofile.html?id="+ idrent+"&page=0&pageLocation=0", "_self");
-                        //window.open("index.html", "_self");
                     }, 2000);
                 },
                 error: function () {
@@ -140,23 +167,32 @@ $(function () {
 
 
         }
-    });
+
 
 
 
 });
 
-
 function fillData(data) {
-    $( "input[name*='id']" ).val(data.id);
-    $( "input[name*='idLocation']" ).val(data.location.id);
-    $( "input[name*='officeName']" ).val(data.name);
-    $( "input[name*='addressName']" ).val(data.location.addressName);
-    $( "input[name*='country']" ).val(data.location.country);
-    $( "input[name*='city']" ).val(data.location.city);
-    $( "input[name*='latitude']" ).val(data.location.latitude);
-    $( "input[name*='longitude']" ).val(data.location.longitude);
+
+    $("input[name='id']").val(data.id);
+
+   $("input[name='carMark']").val(data.mark);
+   $("input[name='carModel']").val(data.model);
+   $("input[name='carName']").val(data.name);
+   $("input[name='regNumber']").val(data.registrationNumber);
+   $("input[name='numDoors']").val(data.numberOfDoors);
+   $("input[name='numBags']").val(data.numberOfBags);
+   $("input[name='max']").val(data.maxPassengers);
+   $("input[name='dailyPrice']").val(data.dailyPrice);
+   $("input[name='fastReserved']").val(data.fastReserved);
+
+   $("select[name='type']").val(data.type.id);
+
+
 }
+
+
 
 
 var getUrlParameter = function getUrlParameter(sParam) {

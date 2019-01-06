@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 import java.util.Optional;
 
 
@@ -81,6 +80,7 @@ public class RentOfficeService {
 
     }
 
+    @SuppressWarnings("Duplicates")
     @Transactional
     public boolean editOffice(RentOffice office, User user, Long id){
 
@@ -118,6 +118,29 @@ public class RentOfficeService {
 
 
         return  true;
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Transactional
+    public boolean removeOffice(Long id, Long idrent, User user){
+
+        Optional<RentACar> optionalRentACar = rentCarRepository.findById(idrent);
+        Optional<RentOffice> optionalRentOffice = rentOfficeRepository.findById(id);
+
+        if (!optionalRentACar.isPresent() || !optionalRentOffice.isPresent()){
+            return  false;
+        }
+
+        if (!optionalRentACar.get().getAdmins().contains(user))
+            return  false;
+
+        RentOffice toRemove = optionalRentOffice.get();
+
+        optionalRentACar.get().getCars().remove(toRemove);
+
+        rentOfficeRepository.delete(toRemove);
+
+        return true;
     }
 
 }

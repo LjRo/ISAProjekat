@@ -17,7 +17,7 @@ public class Cars implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private CarType type;
 
 
@@ -48,7 +48,7 @@ public class Cars implements Serializable {
     @Column(name = "isFastReserved", nullable = false)
     private Boolean isFastReserved;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference(value = "list_cars")
     private RentACar rentACar;
 
