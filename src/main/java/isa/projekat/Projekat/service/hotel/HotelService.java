@@ -117,8 +117,24 @@ public class HotelService {
         return true;
     }
 
+    @Transactional
+    public boolean editHotel(Hotel hotel, User user) {
+        if(!checkIfAdminAndCorrectAdmin(hotel.getId(),user))
+            return false;
+        Hotel foundHotel = hotelRepository.findById(hotel.getId()).get();
+        foundHotel.setAddress(hotel.getAddress());
+        foundHotel.setFastDiscount(hotel.getFastDiscount());
+        foundHotel.setDescription(hotel.getDescription());
+        foundHotel.setName(hotel.getName());
 
 
+        hotelRepository.save(foundHotel);
+       // entityManager.persist(foundHotel);
+        return true;
+    }
+
+
+    @SuppressWarnings("Duplicates")
     private boolean checkIfAdminAndCorrectAdmin(Long id,User adminToCheck){
         if(adminToCheck.getAdministratedHotel() == null) {
             return false;

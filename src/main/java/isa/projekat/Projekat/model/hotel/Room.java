@@ -39,7 +39,7 @@ public class Room implements Serializable {
     private String discount;
 
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference(value="hotel_rooms")
     private Hotel hotel;
 

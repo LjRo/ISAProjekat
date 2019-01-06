@@ -1,5 +1,7 @@
 package isa.projekat.Projekat.model.hotel;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,7 +15,8 @@ public class HotelPriceList implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference(value="hotel_prices")
     private Hotel hotel;
 
     @ManyToOne

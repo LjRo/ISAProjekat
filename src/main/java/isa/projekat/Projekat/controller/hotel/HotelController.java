@@ -86,6 +86,14 @@ public class HotelController {
     }
 
 
+    @RequestMapping(value = "api/hotel/editHotel", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    public  ResponseEntity<?> editHotel(@RequestBody Hotel hotel,HttpServletRequest httpServletRequest) {
+        User user =  getUser(httpServletRequest);
+        return responseTransaction(hotelService.editHotel(hotel,user));
+    }
+
+    @SuppressWarnings("Duplicates")
     private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){
         Map<String, String> result = new HashMap<>();
         if(resultOfTransaction )

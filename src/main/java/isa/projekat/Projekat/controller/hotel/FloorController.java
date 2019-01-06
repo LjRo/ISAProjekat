@@ -1,15 +1,20 @@
 package isa.projekat.Projekat.controller.hotel;
 
 import isa.projekat.Projekat.model.hotel.FloorPlan;
+import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.hotel.FloorService;
+import isa.projekat.Projekat.service.user_auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -18,6 +23,12 @@ public class FloorController {
 
     @Autowired
     private FloorService floorService;
+
+    @Autowired
+    private TokenUtils jwtTokenUtils;
+
+    @Autowired
+    private UserService userService;
 
     @PermitAll
     @RequestMapping(value = "api/floor/findById", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -32,6 +43,43 @@ public class FloorController {
         return floorService.findByHotelIdOrderedByFloorNumberAsc(id);
     }
 
+    @RequestMapping(value = "api/floor/{id}/editFloor", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    public ResponseEntity<?> addRoomType(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody FloorPlan floorPlan){
+        User user =  getUser(httpServletRequest);
+        return  responseTransaction(floorService.editFloorPlan(floorPlan,id,user));
+    }
 
+
+
+
+
+
+
+
+
+
+    @SuppressWarnings("Duplicates")
+    private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){
+        Map<String, String> result = new HashMap<>();
+        if(resultOfTransaction )
+        {
+            result.put("result", "success");
+            return ResponseEntity.accepted().body(result);
+        }
+        else
+        {
+            result.put("result", "error");
+            result.put("body","401, Unauthorized access");
+            return ResponseEntity.accepted().body(result);
+        }
+    }
+
+    private User getUser(HttpServletRequest httpServletRequest){
+        String authToken = jwtTokenUtils.getToken(httpServletRequest);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return user;
+    }
 
 }
