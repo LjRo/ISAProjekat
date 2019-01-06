@@ -18,6 +18,10 @@ $(function () {
         }
     });
 
+    $('addForm').on('submit',function () {
+
+    });
+
 });
 
 
