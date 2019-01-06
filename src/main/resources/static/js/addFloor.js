@@ -3,6 +3,11 @@ $(function () {
     var floorNumber= getUrlParameter("number");
 
     $('#saveFloor').click(function () {
+
+
+        var width = $('#droppable').css('width');
+        var height = $('#droppable').css('height');
+
         floorPlanHtml = $('#save').html();
 
         $.post({

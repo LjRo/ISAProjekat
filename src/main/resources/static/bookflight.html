@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="css/NavigationWithButton.css">
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
@@ -16,7 +18,7 @@
     <script src="/js/nav.js"></script>
     <script src="/js/SeatCharts.js"></script>
     <script src="/js/bookflight.js"></script>
-    <title>New Flight</title>
+    <title>Book Flight</title>
 
 
 </head>
@@ -29,9 +31,9 @@
 
 
 
-<div class="jumbotron mx-auto container" style="width:40%;height: 600px">
-    <div class="wrapper">
-        <div class="seatContainer">
+<div id="mainBG" class="jumbotron mx-auto container" style="width:40%;height: 600px">
+    <div class="wrapper" id = "seatChooser" style="display:block">
+        <div class="seatContainer" >
             <div id="seat-map">
                 <div class="front-indicator">Front</div>
             </div>
@@ -41,14 +43,44 @@
                 <h3> Selected Seats (<span id="counter">0</span>):</h3>
                 <ul id="selected-seats"></ul>
 
-                Total: <b>$<span id="total">0</span></b>
+                <p style="font-size:18px">Total: <b>$<span id="total">0</span></b></p>
 
-                <button class="checkout-button">Checkout &raquo;</button>
 
                 <div id="legend"></div>
             </div>
         </div>
+        <br><br><br>
+        <button id="confirm1" class="btn btn-info float-right">Confirm &raquo;</button>
+
     </div>
+    <div id="friendChooser" style="display:none" >
+        <table id="friendsTable"
+               class="display responsive dataTable dtr-inline collapsed table table-striped table-hover table-bordered"
+               role="grid" style="width: 100%;">
+            <thead>
+            <tr>
+                <th>Name:</th>
+                <th>Last Name:</th>
+                <!--<th> Address:</th>-->
+            </tr>
+            </thead>
+            <tbody id="friendsTableBody">
+            </tbody>
+        </table>
+        <br>
+        <button id="confirm2" class="btn btn-info float-right" style="display:block">Confirm &raquo;</button>
+    </div>
+    <div id="dataInput" style="display:none">
+        <h2>Reservation information:</h2>
+        <form id="userData">
+            <input type="text" class="form-control" id="user1Name" placeholder="Name">
+            <input type="text" class="form-control" id="user1LastName" placeholder="Surname">
+            <input type="text" class="form-control" id="user1Passport" placeholder="Passport">
+        </form>
+        <br>
+        <button id="confirm3" class="btn btn-info float-right" style="display:block">Confirm &raquo;</button>
+    </div>
+
 </div>
 </body>
 

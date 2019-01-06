@@ -89,7 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// TokenAuthenticationFilter ce ignorisati sve ispod navedene putanje
 		web.ignoring().antMatchers(HttpMethod.POST, "/auth/login","/auth/refresh","/auth/loginToken");
 		web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js");
-		web.ignoring().antMatchers(HttpMethod.GET, "/api/cars/findAll**", "/api/airline/findAll" , "/api/hotel/findAll" , "/api/rentacar/findAll","/api/rooms/findAll**");
+		web.ignoring().antMatchers(HttpMethod.GET, "/api/cars/findAll**", "/api/airline/findAll" , "/api/hotel/findAll" , "/api/rentacar/findAll","/api/rooms/findAll**", "/api/floor/findById**" , "/api/floor/findAllByHotelId?id=**");
 		web.ignoring().antMatchers(HttpMethod.GET,"*.css");
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/hotel/findById=**", "/api/rentacar/findById=**" , "/api/airline/findById=**" );
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/office/find**", "/api/cars/findByIdAll**" , "/api/rooms/findByIdAll**" , "/api/hotel/*/roomTypes" );

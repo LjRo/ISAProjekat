@@ -31,11 +31,11 @@
 
 .floorplan {
     background: #ebecec;
-    height: 350px;
     position: relative;
-    width: 100%;
     max-width: 100%;
     max-height: 700px;
+    min-width: 150px;
+    min-height: 150px;
 }
 
 .room {

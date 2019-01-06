@@ -4,6 +4,7 @@ $(function () {
     var id = getUrlParameter("id");
 
     $('#error').hide();
+    /*
     $.get({
         url : 'api/hotel/findById=' + id,
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
@@ -16,7 +17,17 @@ $(function () {
                 }
             }
         }
+    });*/
+
+    $.get({
+        url: 'api/floor/findAllByHotelId?id=' + id,
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (floorPlans) {
+            fillFloors(floorPlans.sort(SortByFloor));
+        }
     });
+
+
 
     $('#deleteSelectedFloor').click(function () {
         var floorSelected = $('select[name="floor"]').val();
@@ -25,7 +36,7 @@ $(function () {
             return ;
         }
         $.post({
-            url : 'api/hotel/' +id +'/removeFloor?id=' + floorSelected,
+            url : 'api/hotel/' +id +'/' + floorSelected +'/removeFloor' ,
             headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
             success : function(message) {
                 $.get({
@@ -95,3 +106,10 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+
+function SortByFloor(a, b){
+    var aFloor = a.floorNumber;
+    var bFloor = b.floorNumber;
+    return ((aFloor < bFloor) ? -1 : ((aFloor > bFloor) ? 1 : 0));
+}
+

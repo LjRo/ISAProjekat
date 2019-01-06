@@ -18,6 +18,7 @@
     <link href="css/FeaturesBoxed.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <link href="css/CompanyProfile.css" rel="stylesheet">
+    <link href="css/roomKonfiguration.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script crossorigin="anonymous"
@@ -184,8 +185,24 @@
                     <!-- TAB WITH ROOMS end -->
 
                     <div aria-labelledby="nav-layout-tab" class="tab-pane fade" id="nav-layout" role="tabpanel">
-                        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat ex.
-                        <p style=" visibility: hidden;">Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur </p>
+
+                        <div id="addNewRoom" class="col-md">
+                            <div id="addForm">
+                                <div id="save" style="width: 100%;">
+                                    <select style="width: 50%;margin: 0 auto 5px auto;display: block;" name="chooseFloor">
+                                        <optgroup label="Floors:" id="floors"> <!-- id=startGrp -->
+                                        </optgroup>
+                                    </select>
+                                    <div id="loadPlan" style="width: 100%;text-align: center;">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                         <p style=" visibility: hidden;">Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur </p>
                     </div>
 
                     <div aria-labelledby="nav-admin-tab" class="tab-pane fade" id="nav-admin" role="tabpanel">
@@ -193,9 +210,9 @@
                                         <input  class="btn btn-primary" type="button" id="addRoom" value="Add room">
                                         <input  class="btn btn-primary" type="button" id="addRoomType" value="Add roomType">
                                         <input  class="btn btn-primary" type="button" id="manageFloors" value="Manage floors">
-                                        <br>
-                                        <iframe src="floormaker.html" style=" height: 500px;margin: 0 auto;display: block;width: 100%;" class="demo-frame"></iframe>
-                                    </div>
+                                        <!--<br>
+                                        <iframe src="floormaker.html" style=" height: 500px;margin: 0 auto;display: block;width: 100%;" class="demo-frame"></iframe> -->
+                                      </div>
                         <p style=" visibility: hidden;">Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur </p>
 
                     </div>
