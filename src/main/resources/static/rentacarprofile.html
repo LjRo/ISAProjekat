@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iTravelIT</title>
+    <title>eJourney</title>
 
     <!-- <link rel="icon" type="image/png" href="https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/briefcase-512.png" sizes="32x32" /> -->
 
@@ -51,11 +51,15 @@
             <div class="col-md-8">
                 <div class="well profile">
                     <h2 id="nameOfCompany">Company Name</h2>
-                    <div  id="companyImg">
+                    <div id="companyImg">
                         <img id="profileImage" src="assets/img/rent-a-car.svg" alt="" class="img-circle img-responsive">
                         <div id="companyDetails">
-                            <p><strong>Address: </strong> <div id="Address">Address</div> </p>
-                            <p ><strong>Description: </strong> <div id="Description">Description</div>  </p>
+                            <p><strong>Address: </strong>
+                            <div id="Address">Address</div>
+                            </p>
+                            <p><strong>Description: </strong>
+                            <div id="Description">Description</div>
+                            </p>
                         </div>
 
                     </div>
@@ -98,7 +102,6 @@
 </div>
 
 
-
 <section id="tabs">
     <div class="container">
         <div class="row">
@@ -120,29 +123,34 @@
                                 <div class="intro">
                                     <h2 class="text-center">Car Filter</h2>
                                 </div>
-                                <form class="form-inline" method="get" action="airlines.html"><div class="form-group">
-                                    <input style="margin-left: 0" id="search-name" class="form-control" type="text" name="name" placeholder="Article Name" />
-                                    <input id="search-minPrice" class="form-control" type="number" min="0.01" step="0.01" name="minPrice" placeholder="Min Price" />
-                                    <input id="search-maxPrice" class="form-control" type="number" min="0.01" step="0.01" name="maxPrice" placeholder="Max Price" />
-                                    <div class="form-group"><select id="search-restaurant" class="form-control" name="restaurant">
-                                        <optgroup id="restaurantOptions" label="Restaurant">
+                                <form class="form-inline" method="get" action="airlines.html">
+                                    <div class="form-group" style="width: 100%;">
+                                        <input style="margin-left: 0" id="search-name" class="form-control" type="text" name="name" placeholder="Article Name"/>
+                                        <input id="search-minPrice" class="form-control" type="number" min="0.01" step="0.01" name="minPrice" placeholder="Min Price"/>
+                                        <input id="search-maxPrice" class="form-control" type="number" min="0.01" step="0.01" name="maxPrice" placeholder="Max Price"/>
+                                        <div class="form-group">
+                                            <select id="search-restaurant" class="form-control" name="restaurant">
+                                                <optgroup id="restaurantOptions" label="Restaurant">
+                                                    <option value="">Any</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <select id="search-type" class="form-control" name="type">
                                             <option value="">Any</option>
-                                        </optgroup>
-                                    </select>
-                                    </div>    <select id="search-type" class="form-control" name="type">
-                                    <option value="">Any</option>
-                                    <option value="MEAL">Meal</option>
-                                    <option value="DRINK">Drink</option>
-                                </select>
-                                </div>
+                                            <option value="MEAL">Meal</option>
+                                            <option value="DRINK">Drink</option>
+                                        </select>
+                                    </div>
 
-                                    <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Search</button></div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary btn-block" type="submit">Search</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
                         <!-- Filters end -->
                         <!-- Navigation buttons begin -->
-                        <div class="newsletter-subscribe" >
+                        <div class="newsletter-subscribe">
                             <div class="container">
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
@@ -182,73 +190,77 @@
                     <!-- TAB WITH CARS END -->
                     <!-- TAB WITH OFFICES -->
                     <div class="tab-pane fade" id="nav-offices" role="tabpanel" aria-labelledby="nav-offices-tab">
-                            <!-- Filters begin -->
-                            <div class="newsletter-subscribe" id="filtersLocation">
-                                <div class="container">
-                                    <div class="intro">
-                                        <h2 class="text-center">Car Filter</h2>
-                                    </div>
-                                    <form class="form-inline" method="get" action="airlines.html"><div class="form-group">
-                                        <input style="margin-left: 0" id="search-nameLocation" class="form-control" type="text" name="name" placeholder="Article Name" />
-                                        <input id="search-minPriceLocation" class="form-control" type="number" min="0.01" step="0.01" name="minPrice" placeholder="Min Price" />
-                                        <input id="search-maxPriceLocation" class="form-control" type="number" min="0.01" step="0.01" name="maxPrice" placeholder="Max Price" />
+                        <!-- Filters begin -->
+                        <div class="newsletter-subscribe" id="filtersLocation">
+                            <div class="container">
+                                <div class="intro">
+                                    <h2 class="text-center">Car Filter</h2>
+                                </div>
+                                <form class="form-inline" method="get" action="airlines.html">
+                                    <div class="form-group">
+                                        <input style="margin-left: 0" id="search-nameLocation" class="form-control" type="text" name="name" placeholder="Article Name"/>
+                                        <input id="search-minPriceLocation" class="form-control" type="number" min="0.01" step="0.01" name="minPrice" placeholder="Min Price"/>
+                                        <input id="search-maxPriceLocation" class="form-control" type="number" min="0.01" step="0.01" name="maxPrice" placeholder="Max Price"/>
                                         <div class="form-group"><select id="search-restaurantLocation" class="form-control" name="restaurant">
                                             <optgroup id="restaurantOptionsLocation" label="Restaurant">
                                                 <option value="">Any</option>
                                             </optgroup>
                                         </select>
-                                        </div>    <select id="search-type-location" class="form-control" name="type">
-                                        <option value="">Any</option>
-                                        <option value="MEAL">Meal</option>
-                                        <option value="DRINK">Drink</option>
-                                    </select>
-                                    </div>
-
-                                        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Search</button></div>
-                                    </form>
-                                </div>
-                            </div>
-                            <!-- Filters end -->
-
-                            <!-- Navigation buttons begin -->
-                            <div class="newsletter-subscribe" >
-                                <div class="container">
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
-                                            <li class="page-item"><a class="page-link" id="previousLocation" href="#">Previous</a></li>
-                                            <li id="TotalPagesLocation" class="infoText">Test</li>
-                                            <li id="TotalListingsLocation" class="infoText">Test</li>
-                                            <li class="page-item"><a class="page-link" id="nextLocation" href="#">Next</a></li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                            <!-- Navigation buttons end -->
-
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-9">
-                                        <div class="row">
-                                            <div id="addListingsLocation" class="col-md-12">
-                                                <!-- One listing begin-->
-
-                                                <!-- One listing end-->
-                                            </div>
                                         </div>
+                                        <select id="search-type-location" class="form-control" name="type">
+                                            <option value="">Any</option>
+                                            <option value="MEAL">Meal</option>
+                                            <option value="DRINK">Drink</option>
+                                        </select>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="card">
-                                            <div id="addOfficeButton" class="card-body">
-                                               <!-- <img class="ads" style="object-fit: cover;" src="assets/img/ads.png"> -->
-                                            </div>
-                                        </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-primary btn-block" type="submit">Search</button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
-                        <p style=" visibility: hidden;">Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur </p>
                         </div>
+                        <!-- Filters end -->
 
-                        <!-- TAB WITH OFFICES END -->
+                        <!-- Navigation buttons begin -->
+                        <div class="newsletter-subscribe">
+                            <div class="container">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                        <li class="page-item"><a class="page-link" id="previousLocation" href="#">Previous</a></li>
+                                        <li id="TotalPagesLocation" class="infoText">Test</li>
+                                        <li id="TotalListingsLocation" class="infoText">Test</li>
+                                        <li class="page-item"><a class="page-link" id="nextLocation" href="#">Next</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <!-- Navigation buttons end -->
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div id="addListingsLocation" class="col-md-12">
+                                            <!-- One listing begin-->
+
+                                            <!-- One listing end-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div id="addOfficeButton" class="card-body">
+                                            <!-- <img class="ads" style="object-fit: cover;" src="assets/img/ads.png"> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p style=" visibility: hidden;">Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur </p>
+                    </div>
+
+                    <!-- TAB WITH OFFICES END -->
                     <div class="tab-pane fade" id="nav-admin" role="tabpanel" aria-labelledby="nav-admin-tab">
 
 

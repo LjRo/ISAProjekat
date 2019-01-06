@@ -17,12 +17,12 @@ $(function () {
             headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
             contentType: 'application/json',
             success: function (article) {
-                window.location.replace("hotelProfile.html?id=" + id);
+                window.location.replace("hotelProfile.html?id=" + id + "&page=0");
             },
             error: function (message) {
                 if(message.status == 401)
                 {
-                    $('#toSubmit').attr("disabled", "disabled")
+                    $('#toSubmit').attr("disabled", "disabled");
                     $('#error').text("Unauthorized access").fadeIn().delay(4000).fadeOut();
                 }
             },

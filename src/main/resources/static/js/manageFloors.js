@@ -1,23 +1,8 @@
-
 $(function () {
 
     var id = getUrlParameter("id");
 
     $('#error').hide();
-    /*
-    $.get({
-        url : 'api/hotel/findById=' + id,
-        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-        success : function(hotel) {
-            if (hotel != null) {
-                var plans = hotel.floorPlans;
-                if(plans != null)
-                {
-                    fillFloors(plans);
-                }
-            }
-        }
-    });*/
 
     $.get({
         url: 'api/floor/findAllByHotelId?id=' + id,
@@ -28,66 +13,65 @@ $(function () {
     });
 
 
+    $('#addNewFloor').click(function () {
+        var number = $('input[name="number"]').val();
+        if (number === "") {
+            $('#error').text("Must input floor number for floor plan").fadeIn().delay(4000).fadeOut();
+        } else {
+            window.location.href = "addFloor.html?id=" + id + "&number=" + number;
+        }
+    });
+
+    $('#editSelectedFloor').click(function () {
+        var floorSelected = $('select[name="floor"]').val();
+        window.location.href = "addFloor.html?id=" + id + "&number=" + floorSelected + "&edit=1";
+    });
+
 
     $('#deleteSelectedFloor').click(function () {
         var floorSelected = $('select[name="floor"]').val();
-        if(floorSelected === "")
-        {
-            return ;
+        if (floorSelected === "") {
+            return;
         }
         $.post({
-            url : 'api/hotel/' +id +'/' + floorSelected +'/removeFloor' ,
+            url: 'api/hotel/' + id + '/' + floorSelected + '/removeFloor',
             headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-            success : function(message) {
+            success: function (message) {
                 $.get({
-                    url : 'api/hotel/findById=' + id,
+                    url: 'api/hotel/findById=' + id,
                     headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                    success : function(hotel) {
+                    success: function (hotel) {
                         if (hotel != null) {
                             var plans = hotel.floorPlans;
-                            if(plans != null && plans != undefined)
-                            {
+                            if (plans != null && plans != undefined) {
                                 $('#floors').html("");
                                 fillFloors(plans);
                             }
                         }
                     },
-                    error: function(message){
-                         var a  = message;
+                    error: function (message) {
+                        var a = message;
                         alert("FWTF");
                     }
                 });
             },
-            error: function(message) {
-                if(message.status == 401)
-                {
+            error: function (message) {
+                if (message.status == 401) {
                     $('#toSubmit').attr("disabled", "disabled")
                     $('#error').text("Unauthorized access").fadeIn().delay(4000).fadeOut();
                 }
             },
         });
 
-        
-        
     });
 
-    $('#addNewFloor').click(function () {
-        number = $('input[name="number"]').val();
-        if(number === "")
-        {
-            $('#error').text("Must input floor number for floor plan").fadeIn().delay(4000).fadeOut();
-        }
-        else {
-            window.location.href="addFloor.html?id=" + id +"&number=" + number ;
-        }
-    });
 
 });
 
 function fillFloors(plans) {
 
-    plans.forEach(function(entry) {
-        $( "#floors" ).append( '<option value= "' + entry.id + '">'+entry.floorNumber+'</option>' );
+    plans.forEach(function (entry) {
+        $("#floors").append('<option value= "' + entry.id + '">' + entry.floorNumber + '</option>');
     });
 
 }
@@ -107,7 +91,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
 };
 
-function SortByFloor(a, b){
+function SortByFloor(a, b) {
     var aFloor = a.floorNumber;
     var bFloor = b.floorNumber;
     return ((aFloor < bFloor) ? -1 : ((aFloor > bFloor) ? 1 : 0));

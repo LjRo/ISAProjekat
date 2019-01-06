@@ -902,7 +902,6 @@ body .ui-tooltip {
 }
 .ui-widget-content {
 	border: 1px solid #dddddd;
-	/*background: #eeeeee url("/../assets/img/ui-bg_highlight-soft_100_eeeeee_1x100.png") 50% top repeat-x;*/
 	color: #333333;
 }
 .ui-widget-content a {
@@ -910,7 +909,6 @@ body .ui-tooltip {
 }
 .ui-widget-header {
 	border: 1px solid #e78f08;
-	/*background: #f6a828 url("/../assets/img/ui-bg_gloss-wave_35_f6a828_500x100.png") 50% 50% repeat-x;*/
 	color: #ffffff;
 	font-weight: bold;
 }
@@ -930,7 +928,6 @@ works properly when clicked or hovered */
 html .ui-button.ui-state-disabled:hover,
 html .ui-button.ui-state-disabled:active {
 	border: 1px solid #cccccc;
-	/*background: #f6f6f6 url("/../assets/img/ui-bg_glass_100_f6f6f6_1x400.png") 50% 50% repeat-x;*/
 	font-weight: bold;
 	color: #1c94c4;
 }
@@ -953,7 +950,6 @@ a:visited.ui-button,
 .ui-button:hover,
 .ui-button:focus {
 	border: 1px solid #fbcb09;
-	/*background: #fdf5ce url("/../assets/img/ui-bg_glass_100_fdf5ce_1x400.png") 50% 50% repeat-x;*/
 	font-weight: bold;
 	color: #c77405;
 }
@@ -981,7 +977,6 @@ a.ui-button:active,
 .ui-button:active,
 .ui-button.ui-state-active:hover {
 	border: 1px solid #fbd850;
-	/*background: #ffffff url("/../assets/img/ui-bg_glass_65_ffffff_1x400.png") 50% 50% repeat-x;*/
 	font-weight: bold;
 	color: #eb8f00;
 }
@@ -1003,7 +998,6 @@ a.ui-button:active,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
 	border: 1px solid #fed22f;
-	/*background: #ffe45c url("/../assets/img/ui-bg_highlight-soft_75_ffe45c_1x100.png") 50% top repeat-x;*/
 	color: #363636;
 }
 .ui-state-checked {
@@ -1019,7 +1013,6 @@ a.ui-button:active,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
 	border: 1px solid #cd0a0a;
-	/*background: #b81900 url("/../assets/img/ui-bg_diagonals-thick_18_b81900_40x40.png") 50% 50% repeat;*/
 	color: #ffffff;
 }
 .ui-state-error a,

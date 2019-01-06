@@ -35,22 +35,6 @@ $(document).ready(function () {
                     $( "#floors" ).append( '<option value= "' + entry.id + '">'+entry.floorNumber+'</option>' );
                 });
 
-                /*
-                $.get({
-                    url: 'api/floor/findAllByHotelId?id=' + pId,
-                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                    success: function (floorPlans) {
-                        var i = 1;
-                        floorPlans.forEach(function(entry) {
-                            if(i==1)
-                                $('#loadPlan').append(entry.configuration);
-                            else
-                                i=0;
-                            $( "#floors" ).append( '<option value= "' + entry.id + '">'+entry.floorNumber+'</option>' );
-                        });
-                    }
-                });
-                */
                 $("#nameOfCompany").text(name);
                 $("#Address").text(address);
                 $("#Description").text(description);
@@ -68,7 +52,7 @@ $(document).ready(function () {
             if (data != null && data.numberOfElements > 0) {
                 for (var i = 0; i < data.numberOfElements; i++) {
                     //for ( var us in data.content) {
-                    addRoom(data.content[i]);
+                    addRoom(data.content[i],pId);
                 }
                 setPagingButtons(data.totalPages, data.totalElements);
             }
@@ -85,6 +69,14 @@ $(document).ready(function () {
     $('#manageFloors').click(function () {
         window.location.href = "manageFloors.html?id=" + pId;
     });
+    $('#editHotel').click(function(){
+        window.location.href="editHotel.html?id=" + pId;
+    });
+
+    $('#managePrices').click(function(){
+        window.location.href="hotelPrices.html?id=" + pId;
+    });
+
 
 
     $('select[name="chooseFloor"]').on('change', function() {
@@ -102,7 +94,7 @@ $(document).ready(function () {
 
 });
 
-function addRoom(room) {
+function addRoom(room,hotelId) {
     name = "";
     if(room.name != null)
         name = room.name;
@@ -136,14 +128,16 @@ function addRoom(room) {
         '                                                            <br>' +
         '                                                            Floor: <strong><span id="Floor">' + room.floor + '</span></strong>' +
         '                                                            <br>' +
-        '                                                            <button class="btn btn-primary admin-hotel btn-outline-secondary rounded-0 mb-1" type="button"> Edit </button>' +
+        '                                                            <button id="editRoom' + room.id +'" class="btn btn-primary admin-hotel btn-outline-secondary rounded-0 mb-1" type="button"> Edit </button>' +
         '                                                            <button class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" type="button"> Reserve  </button>' +
         '                                                        </div>' +
         '                                                    </div>' +
         '                                                </div>' +
         '                                            </div>');
     $('#addListings').append(tr);
-
+    $('#' + 'editRoom' +  room.id).click(function () {
+        window.location.href = "addRoom.html?id=" + hotelId +"&room="+ room.id + "&edit=1";
+    });
 
 }
 
@@ -155,7 +149,7 @@ function setPagingButtons(MaxPages, MaxElements) {
     var nextElement = $('#next');
 
     $('#TotalPages').html("Page " + (parseInt(getUrlParameter('page')) + 1) + "/" + (MaxPages) +" ");
-    $('#TotalListings').html("Found " + MaxElements + " rooms");
+    $('#TotalListings').html("| Found " + MaxElements + "<strong> Rooms</strong>");
 
 
     var pId = getUrlParameter('id');

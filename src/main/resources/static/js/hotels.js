@@ -15,7 +15,7 @@ $(document).ready(function () {
 
 
 function addArticle(hotel) {
-    var icon = "assets/img/hotel.png";
+    var icon = "assets/img/hotel.svg";
     $('#hotelList').append(
 
         '<div class="col-sm-6 col-md-5 col-lg-4 item">' +

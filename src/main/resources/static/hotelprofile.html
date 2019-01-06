@@ -3,13 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Hotel Profile</title>
-
-    <!-- <link rel="icon" type="image/png" href="https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/briefcase-512.png" sizes="32x32" /> -->
-
+    <title>eJourney</title>
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" rel="stylesheet">
-   <!-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <!-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link href="css/NavigationWithButton.css" rel="stylesheet">
 
@@ -43,7 +40,7 @@
                 <div class="well profile">
                     <h2 id="nameOfCompany">Company Name</h2>
                     <div id="companyImg">
-                        <img alt="" class="img-circle img-responsive" id="profileImage" src="assets/img/hotel.png">
+                        <img alt="" class="img-circle img-responsive" id="profileImage" src="assets/img/hotel.svg">
                         <div id="companyDetails">
                             <p><strong>Address: </strong>
                             <div id="Address">Address</div>
@@ -79,7 +76,7 @@
                 </div>
                 <div class="col-xs-12 divider text-center">
                     <div class="btn-group dropup btn-block">
-                        <button class="btn btn-primary airline-admin" style="flex:0.1" type="button"><span
+                        <button id="editHotel" class="btn btn-primary airline-admin" style="flex:0.1" type="button"><span
                                 class="fa fa-gear"></span> Edit
                         </button>
                     </div>
@@ -110,6 +107,14 @@
                 <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
                     <!-- TAB WITH ROOMS BEGIN -->
                     <div aria-labelledby="nav-rooms-tab" class="tab-pane fade show active" id="nav-rooms" role="tabpanel">
+                        <!-- Hotel services begin -->
+
+                        <div class="container" style="border-radius: 15px;height: 200px;background-color: #eef4f7;padding: 10px;">
+                            <div id="header" style="height: 20%;text-align: center;"><h4>Hotel Services</h4></div>
+                            <div id="hotelServices" style="height:60%;width:100%;display: block;"></div>
+                            <div id="hotelServicesCheckBoxes" style="height: 20%;"></div>
+                        </div>
+                        <!-- Hotel services end -->
                         <!-- Filters begin -->
                         <div class="newsletter-subscribe" id="filters">
                             <div class="container">
@@ -117,11 +122,11 @@
                                     <h2 class="text-center">Article Filter</h2>
                                 </div>
                                 <form action="airlines.html" class="form-inline" method="get">
-                                    <div class="form-group">
-                                        <input  class="form-control datepicker" id="checkIn" type="datetime-local">
+                                    <div class="form-group" style="width: 100%">
+                                        <input class="form-control datepicker" id="checkIn" type="datetime-local">
                                         <input class="form-control datepicker" id="checkOut" type="datetime-local">
-                                        <input class="form-control" id="search-minPrice" min="0.01" name="minPrice" placeholder="Min Price" step="0.01"type="number"/>
-                                        <input class="form-control" id="search-maxPrice" min="0.01" name="maxPrice" placeholder="Max Price" step="0.01"type="number"/>
+                                        <input class="form-control" id="search-minPrice" min="0.01" name="minPrice" placeholder="Min Price" step="0.01" type="number"/>
+                                        <input class="form-control" id="search-maxPrice" min="0.01" name="maxPrice" placeholder="Max Price" step="0.01" type="number"/>
                                         <div class="form-group"><select class="form-control" id="search-restaurant" name="restaurant">
                                             <optgroup id="restaurantOptions" label="Restaurant">
                                                 <option value="">Any</option>
@@ -143,19 +148,22 @@
                         </div>
                         <!-- Filters end -->
                         <!-- Navigation buttons begin -->
-                        <div class="newsletter-subscribe" >
+                        <div class="newsletter-subscribe">
                             <div class="container">
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
-                                        <li class="page-item"><a class="page-link" href="#" id="previous">Previous</a></li>
-                                        <li class="infoText" id="TotalPages">Test</li>
-                                        <li class="infoText" id="TotalListings">Test</li>
-                                        <li class="page-item"><a class="page-link" href="#" id="next">Next</a></li>
+                                        <li style="margin: 0 0 0 auto;" class="page-item"><a class="page-link" href="#" id="previous">Previous</a></li>
+                                        <li style="margin: auto 0 auto 0;" class="infoText" id="TotalPages">1/1</li>
+                                        <li  style="margin: auto 0 auto 0;" class="infoText" id="TotalListings">| Found 0 <strong>Rooms</strong></li>
+                                        <li style="margin: 0 auto 0 0;" class="page-item"><a class="page-link" href="#" id="next">Next</a></li>
                                     </ul>
                                 </nav>
                             </div>
                         </div>
                         <!-- Navigation buttons end -->
+
+
+
                         <!-- Listing begins -->
                         <div class="container">
                             <div class="row">
@@ -202,24 +210,27 @@
                         </div>
 
 
-                         <p style=" visibility: hidden;">Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur </p>
+                        <p style=" visibility: hidden;">Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur </p>
                     </div>
 
                     <div aria-labelledby="nav-admin-tab" class="tab-pane fade" id="nav-admin" role="tabpanel">
-                                      <div class="col-md">
-                                        <input  class="btn btn-primary" type="button" id="addRoom" value="Add room">
-                                        <input  class="btn btn-primary" type="button" id="addRoomType" value="Add roomType">
-                                        <input  class="btn btn-primary" type="button" id="manageFloors" value="Manage floors">
-                                        <!--<br>
-                                        <iframe src="floormaker.html" style=" height: 500px;margin: 0 auto;display: block;width: 100%;" class="demo-frame"></iframe> -->
-                                      </div>
+                        <div class="col-md">
+                            <input class="btn btn-primary" type="button" id="addRoom" value="Add room">
+                            <input class="btn btn-primary" type="button" id="addRoomType" value="Add roomType">
+                            <input class="btn btn-primary" type="button" id="manageFloors" value="Manage floors">
+                            <input class="btn btn-primary" type="button" id="managePrices" value="Manage Prices">
+                            <!--<br>
+                            <iframe src="floormaker.html" style=" height: 500px;margin: 0 auto;display: block;width: 100%;" class="demo-frame"></iframe> -->
+                        </div>
                         <p style=" visibility: hidden;">Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur </p>
 
                     </div>
 
 
                     <div aria-labelledby="nav-about-tab" class="tab-pane fade" id="nav-about" role="tabpanel">
-                        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat ex.
+                        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim.
+                        Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet duis do nisi duis veniam non est eiusmod tempor incididunt tempor
+                        dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat ex.
                         <p style=" visibility: hidden;">Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur </p>
 
                     </div>
