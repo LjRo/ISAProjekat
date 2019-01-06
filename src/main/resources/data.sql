@@ -40,11 +40,11 @@ values ("Convertible");
 /* rent a car*/
 
 
-INSERT INTO rentacar (name, address_id, description,fast_discount, bronze_discount, silver_discount, gold_discount)
-VALUES ('RentLjubomir',2, 'Profesional cars with state of the art quaility',20,0,0,0);
+INSERT INTO rentacar (name, address_id, description,fast_discount)
+VALUES ('RentLjubomir',2, 'Profesional cars with state of the art quaility',20);
 
-INSERT INTO rentacar (name,address_id, description,fast_discount, bronze_discount, silver_discount, gold_discount)
-VALUES ('RentAleksandar', 1, 'Cheap cars that will take you where you need to be.',20,0,0,0);
+INSERT INTO rentacar (name,address_id, description,fast_discount)
+VALUES ('RentAleksandar', 1, 'Cheap cars that will take you where you need to be.',20);
 
 /* rent office*/
 
