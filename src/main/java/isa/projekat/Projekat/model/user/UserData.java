@@ -9,6 +9,7 @@ public class UserData {
     private String password;
     private String city;
     private String phoneNumber;
+    private Double points;
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -75,5 +76,13 @@ public class UserData {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Double getPoints() {
+        return points;
+    }
+
+    public void setPoints(Double points) {
+        this.points = points;
     }
 }

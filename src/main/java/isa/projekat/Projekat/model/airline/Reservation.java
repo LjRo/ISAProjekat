@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name="Reservations")
@@ -24,6 +25,12 @@ public class Reservation {
 
     @Column
     private String passport;
+
+    @Column
+    private Double pointsUsed;
+
+    @Column
+    private BigDecimal totalCost;
 
     @OneToOne
     @JsonBackReference(value = "seat_reservation")
@@ -67,5 +74,29 @@ public class Reservation {
 
     public void setSeat(Seat seat) {
         this.seat = seat;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Double getPointsUsed() {
+        return pointsUsed;
+    }
+
+    public void setPointsUsed(Double pointsUsed) {
+        this.pointsUsed = pointsUsed;
+    }
+
+    public BigDecimal getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(BigDecimal totalCost) {
+        this.totalCost = totalCost;
     }
 }

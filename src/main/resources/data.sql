@@ -105,14 +105,14 @@ values ("SporaQWE","Mercedes","C","44WE32",4,4,4,100,false,1,1);
 /* users.sql */
 /* password = 123*/
 
-INSERT into Users (type, username,first_name, last_name, password, address, city, enabled, phone_number)
-values (1,"admin@gmail.com","admin","adminovic","$2a$10$CItG2LPX2aHLCzm9LMud8e05QoLTM1rxEd/WdfZJKHAbE0miu23/e","adr2","city2",b'1',"123-456-1234");
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,points)
+values (1,"admin@gmail.com","admin","adminovic","$2a$10$CItG2LPX2aHLCzm9LMud8e05QoLTM1rxEd/WdfZJKHAbE0miu23/e","adr2","city2",b'1',"123-456-1234",0);
 
-INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number)
-values (0,"normal@gmail.com","pera","peric","$2a$10$KzK60SLUUU8UKH/rtkZsYuRjc.9D1G.HJgmDnRzJDVl6y3V4/X64u","adr1","city1",b'1',"123-456-1234");
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,points)
+values (0,"normal@gmail.com","pera","peric","$2a$10$KzK60SLUUU8UKH/rtkZsYuRjc.9D1G.HJgmDnRzJDVl6y3V4/X64u","adr1","city1",b'1',"123-456-1234",0);
 
-INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number)
-values (0,"normala@gmail.com","normal","normalic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234");
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,points)
+values (0,"normala@gmail.com","normal","normalic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234",0);
 
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,administrated_hotel_id)
 values (0,"hotel@gmail.com","hotel","hotelic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr3","city3",b'1',"123-456-1234",1);
@@ -123,11 +123,11 @@ values (0,"airline@gmail.com","airline","airlinovic","$2a$10$Zz/H94PBqMWVWQlRgCw
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number, administrated_rent_id)
 values (0,"rent@gmail.com","rent","rentovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr5","city5",b'1',"123-456-1234", 1);
 
-INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number)
-values (0,"normalb@gmail.com","Mika","Mikic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234");
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,points)
+values (0,"normalb@gmail.com","Mika","Mikic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234",0);
 
-INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number)
-values (0,"normalc@gmail.com","Neko","Nekic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234");
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,points)
+values (0,"normalc@gmail.com","Neko","Nekic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234",0);
 
 
 /* authorities */

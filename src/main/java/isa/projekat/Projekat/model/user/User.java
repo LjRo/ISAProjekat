@@ -47,6 +47,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Column
+    private Double points = 0.0;
 
     @Column
     private String address;
@@ -198,6 +200,22 @@ public Hotel getAdministratedHotel() {
         Timestamp now = new Timestamp(DateTime.now().getMillis());
         this.setLastPasswordResetDate( now );
         this.password = password;
+    }
+
+    public Double getPoints() {
+        return points;
+    }
+
+    public void setPoints(Double points) {
+        this.points = points;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 
     public Integer getType() {
