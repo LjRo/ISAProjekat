@@ -52,6 +52,7 @@ public class RentCarController {
         return rentACar;
     }
 
+    @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @RequestMapping(value = "api/rentacar/edit", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> editRentACar(@RequestBody RentACar rentACar,  HttpServletRequest httpServletRequest){

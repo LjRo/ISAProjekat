@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/NavigationWithButton.css">
+    <link rel="stylesheet" href="css/HighlightPhone.css">
+    <link rel="stylesheet" href="css/ProjectsHorizontal.css">
+    <link rel="stylesheet" href="css/LoginForm.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/register.css">
+    <link rel="stylesheet" href="css/NewSquare.css" >
+    <link rel="stylesheet" href="css/flipswitch.css">
+
+    <script src="/js/nav.js"></script>
+    <script src="/js/addCar.js"></script>
+    <script src="/js/flipswitch.js"></script>
+    <title>Edit Car</title>
+
+
+</head>
+
+<body>
+
+<div id="navbar-frame" style="font-size:15px"></div>
+
+
+<div id="success-message" >
+    <!-- Icons source http://dribbble.com/shots/913555-Flat-Web-Elements -->
+    <div class="notify successbox unselectable">
+        <h1>Success!</h1>
+        <p>Operation was a success!</p>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="col-md-12" style="align-self: center">
+        <form id="addForm" method="post">
+            <h2 class="sr-only "></h2>
+            <h2 id="title" style="text-align: center">New Car</h2>
+            <img src="assets/img/carlisting.svg"
+                 style="display: block; max-height:240px; max-width: 240px;margin-left: auto;margin-right: auto">
+              <div id="type_div" class="form-group">
+                <select class="form-control" name="type">
+                    <optgroup label="Type:" id="types">
+                    </optgroup>
+                </select></div>
+            <div class="form-group" id="hideThis" hidden><input class="form-control" type="text" name="id"></div>
+            <div class="form-group" ><input class="form-control" type="text" name="carMark" required placeholder="Car model (e.g. Mercedes-Benz)"></div>
+            <div class="form-group" ><input class="form-control" type="text" name="carModel" required placeholder="Car Model (e.g. S400L)"></div>
+            <div class="form-group" ><input class="form-control" type="text" name="carName" required placeholder="Name of the car (e.g. Speedy)"></div>
+            <div class="form-group" ><input class="form-control" type="text" name="regNumber" required placeholder="Registration number (e.g. RX58QW01 "></div>
+
+            <div class="form-group" ><input class="form-control" type="text" name="numDoors" required placeholder="Number of doors"></div>
+            <div class="form-group" ><input class="form-control" type="text" name="numBags" required placeholder="Number of bags"></div>
+            <div class="form-group" ><input class="form-control" type="text" name="max" required placeholder="Maximum number of passengers"></div>
+
+            <div class="form-group" ><input class="form-control" type="text" name="dailyPrice" required placeholder="Daily price in $"></div>
+
+           <!-- <div class="form-group" >Fast reserved : <input class="form-control" type="checkbox" name="fastReserved" required placeholder="Daily price in $"></div> -->
+            <div class="form-group"><p>Fast Reserved:</p></div>
+            <div class="form-group"> <input  type="checkbox" name="fastReserved"  class="flipswitch" ></input> </div>
+
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary btn-block" id="deleteButton">Delete</button>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" id="submitButton" type="submit">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>

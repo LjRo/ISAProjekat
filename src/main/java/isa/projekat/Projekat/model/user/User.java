@@ -2,7 +2,9 @@ package isa.projekat.Projekat.model.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import isa.projekat.Projekat.model.airline.Airline;
+import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.hotel.Hotel;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import org.joda.time.DateTime;
@@ -70,6 +72,11 @@ public class User implements UserDetails {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonBackReference(value = "hotel_admins")
     private Hotel administratedHotel;
+
+
+    @OneToMany
+    @JsonManagedReference(value = "user_reservation")
+    private List<Reservation> reservations;
 
     // RentACar stuff
     @OneToOne(cascade = CascadeType.PERSIST)

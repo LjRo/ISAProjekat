@@ -29,9 +29,9 @@ $(function () {
                     // Already exists
 
                     var fastDiscount = $( "input[name='discountFast']" ).val();
-                    var bronzeDiscount = $( "input[name='discountBronze']" ).val();
-                    var silverDiscount = $( "input[name='discountSilver']" ).val();
-                    var goldDiscount = $( "input[name='discountGold']" ).val();
+                   // var bronzeDiscount = $( "input[name='discountBronze']" ).val();
+                   // var silverDiscount = $( "input[name='discountSilver']" ).val();
+                   // var goldDiscount = $( "input[name='discountGold']" ).val();
 
                     var idLocation = $("input[name='idLocation']").val();
 
@@ -116,9 +116,9 @@ function fillData(data) {
 
     $( "#description" ).val(data.description);
     $( "input[name='discountFast']" ).val(data.discountFast);
-    $( "input[name='discountBronze']" ).val(data.discountBronze);
-    $( "input[name='discountSilver']" ).val(data.discountSilver);
-    $( "input[name='discountGold']" ).val(data.discountGold);
+ //   $( "input[name='discountBronze']" ).val(data.discountBronze);
+ //   $( "input[name='discountSilver']" ).val(data.discountSilver);
+  //  $( "input[name='discountGold']" ).val(data.discountGold);
 
 
 }

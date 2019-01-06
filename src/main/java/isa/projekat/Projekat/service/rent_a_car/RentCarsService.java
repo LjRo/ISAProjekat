@@ -40,10 +40,10 @@ public class RentCarsService {
             return  false;
 
         rent.setFastDiscount(rentACar.getFastDiscount());
-        rent.setBronzeDiscount(rentACar.getBronzeDiscount());
+       /* rent.setBronzeDiscount(rentACar.getBronzeDiscount());
         rent.setSilverDiscount(rentACar.getSilverDiscount());
         rent.setGoldDiscount(rentACar.getGoldDiscount());
-
+        */
         rent.getAddress().setAddressName(rentACar.getAddress().getAddressName());
         rent.getAddress().setLatitude(rentACar.getAddress().getLatitude());
         rent.getAddress().setLongitude(rentACar.getAddress().getLongitude());

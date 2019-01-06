@@ -1,8 +1,6 @@
 package isa.projekat.Projekat.model.airline;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import isa.projekat.Projekat.model.user.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,28 +12,34 @@ public class Seat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private int c_row;
+
     @Column
     private int c_column;
+
     @Column
     private BigDecimal price;
+
     @ManyToOne
-    @JsonBackReference(value = "list_seats")
-    private User customer;
+    @JsonManagedReference(value = "seat_reservation")
+    private Reservation reservation;
+
     @Column
     private boolean taken;
+
     @Column
     private boolean quick;
 
     public Seat() {
     }
 
-    public Seat(int row, int column, BigDecimal price, User customer, boolean taken, boolean quick) {
+    public Seat(int row, int column, BigDecimal price, Reservation reservation, boolean taken, boolean quick) {
         this.c_row = row;
         this.c_column = column;
         this.price = price;
-        this.customer = customer;
+        this.reservation = reservation;
         this.taken = taken;
         this.quick = quick;
     }
@@ -64,12 +68,12 @@ public class Seat {
         this.price = price;
     }
 
-    public User getCustomer() {
-        return customer;
+    public Reservation getReservation() {
+        return reservation;
     }
 
-    public void setCustomer(User customer) {
-        this.customer = customer;
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 
     public boolean isTaken() {

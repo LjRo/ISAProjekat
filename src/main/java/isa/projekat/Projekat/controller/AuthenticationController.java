@@ -25,6 +25,9 @@ import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +51,7 @@ public class AuthenticationController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
                                                        HttpServletResponse response) throws AuthenticationException, IOException {
-		System.out.println("USAOOOOO");
+
 		final Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(
 						authenticationRequest.getUsername(),
@@ -65,6 +68,27 @@ public class AuthenticationController {
 		// Vrati token kao odgovor na uspesno autentifikaciju
 		return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
 	}
+
+	@RequestMapping(value = "/loginToken", method = RequestMethod.POST)
+	public ResponseEntity<?> loginWithToken(HttpServletRequest request) throws AuthenticationException, ParseException {
+		String token = tokenUtils.getToken(request);
+		String username = this.tokenUtils.getUsernameFromToken(token);
+		User user = (User) this.userDetailsService.loadUserByUsername(username);
+		//Date expiresIn = tokenUtils.getExpirationDateFromToken(token);
+
+		final Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(
+						user.getUsername(),
+						user.getPassword()));
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		Long expireIn = (long)tokenUtils.getExpiredIn();
+
+		return ResponseEntity.ok(new UserTokenState(token,expireIn));
+
+	}
+
 
 	@RequestMapping(value = "/refresh", method = RequestMethod.POST)
 	public ResponseEntity<?> refreshAuthenticationToken(HttpServletRequest request) {

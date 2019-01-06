@@ -16,7 +16,7 @@ public class RentOffice implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JsonBackReference(value = "list_offices")
     private RentACar rentACar;
 

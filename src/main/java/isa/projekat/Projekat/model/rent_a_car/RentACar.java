@@ -42,7 +42,7 @@ public class RentACar implements Serializable {
 
     //@OneToMany moved to car offices
     //private List<Location> branches = new ArrayList<>();
-
+    /*
     @Column
     private int bronzeDiscount = 0;
 
@@ -52,6 +52,7 @@ public class RentACar implements Serializable {
     @Column
     private int goldDiscount = 0;
 
+    */
     @Column(nullable = false)
     private int fastDiscount;
 
@@ -63,29 +64,7 @@ public class RentACar implements Serializable {
         this.admins = admins;
     }
 
-    public int getBronzeDiscount() {
-        return bronzeDiscount;
-    }
 
-    public void setBronzeDiscount(int bronzeDiscount) {
-        this.bronzeDiscount = bronzeDiscount;
-    }
-
-    public int getSilverDiscount() {
-        return silverDiscount;
-    }
-
-    public void setSilverDiscount(int silverDiscount) {
-        this.silverDiscount = silverDiscount;
-    }
-
-    public int getGoldDiscount() {
-        return goldDiscount;
-    }
-
-    public void setGoldDiscount(int goldDiscount) {
-        this.goldDiscount = goldDiscount;
-    }
 
     public RentACar() {
         super();
