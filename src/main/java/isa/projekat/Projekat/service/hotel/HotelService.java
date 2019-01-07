@@ -3,6 +3,7 @@ package isa.projekat.Projekat.service.hotel;
 import isa.projekat.Projekat.model.hotel.*;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.FloorRepository;
+import isa.projekat.Projekat.repository.HotelPricesRepository;
 import isa.projekat.Projekat.repository.HotelRepository;
 import isa.projekat.Projekat.repository.RoomTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HotelService {
@@ -25,8 +29,13 @@ public class HotelService {
     @Autowired
     private FloorRepository floorRepository;
 
+    @Autowired
+    private HotelPricesRepository hotelPricesRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
+
+
 
     public List<Hotel> findAll() {
         List<Hotel> returning =  hotelRepository.findAll();
@@ -74,6 +83,15 @@ public class HotelService {
         roomType.setName(roomTypeData.getName());
         Hotel target = user.getAdministratedHotel();
         target.getRoomTypes().add(roomType);
+
+        HotelPriceList hotelPriceList = new HotelPriceList();
+        hotelPriceList.setPrice(new BigDecimal(0));
+        hotelPriceList.setHotel(target);
+        hotelPriceList.setRoomType(roomType);
+        hotelPriceList.setStarts(new Date());
+
+        hotelPricesRepository.save(hotelPriceList);
+        target.getHotelPriceList().add(hotelPriceList);
 
         entityManager.persist(roomType);
         entityManager.persist(target);
@@ -130,6 +148,20 @@ public class HotelService {
 
         hotelRepository.save(foundHotel);
        // entityManager.persist(foundHotel);
+        return true;
+    }
+
+    @Transactional
+    public boolean editHotelList(HotelPriceList hotelPriceList, User user) {
+        if(!checkIfAdminAndCorrectAdmin(hotelPriceList.getHotel().getId(),user))
+            return false;
+        Optional<HotelPriceList> foundHotelPrice = hotelPricesRepository.findById(hotelPriceList.getId());
+        if(!foundHotelPrice.isPresent())
+            return false;
+        HotelPriceList exact = foundHotelPrice.get();
+        exact.setStarts(new Date());
+        exact.setPrice(hotelPriceList.getPrice());
+        // entityManager.persist(foundHotel);
         return true;
     }
 

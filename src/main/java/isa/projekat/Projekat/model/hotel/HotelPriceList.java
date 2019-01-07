@@ -23,7 +23,7 @@ public class HotelPriceList implements Serializable {
     private RoomType roomType;
 
     @Column
-    private BigDecimal cost;
+    private BigDecimal price;
 
     @Column
     private Date starts;
@@ -55,12 +55,12 @@ public class HotelPriceList implements Serializable {
         this.roomType = roomType;
     }
 
-    public BigDecimal getCost() {
-        return cost;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public Date getStarts() {

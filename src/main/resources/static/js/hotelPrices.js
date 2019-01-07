@@ -1,3 +1,8 @@
+function SortBy(a, b) {
+    return ('' + a.name).localeCompare(b.name);
+}
+
+
 $(function () {
 
     var id = getUrlParameter("id");
@@ -8,9 +13,27 @@ $(function () {
         url: '/api/hotel/' + id + '/roomTypes',
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (data) {
+            var i = 0;
             if (data != null) {
+
+                data = data.sort(SortBy);
                 for (var us in data) {
+                    if (i == 0) {
+                        i=1;
+                        $.get({
+                            url: '/api/hotel/' + id + '/PriceLists',
+                            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                            success: function (hotelPriceLists) {
+                                hotelPriceLists.forEach(function (hotelPrice) {
+                                    if (hotelPrice.roomType.id == data[us].id) {
+                                        $('input[name="price"]').val(hotelPrice.price);
+                                    }
+                                });
+                            }
+                        });
+                    }
                     fillRoomType(data[us]);
+
                 }
             } else {
 
@@ -18,7 +41,45 @@ $(function () {
         }
     });
 
-    $('addForm').on('submit',function () {
+
+    $('select[name="roomTypeSelected"]').on('change', function () {
+        $.get({
+            url: '/api/hotel/' + id + '/PriceLists',
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            success: function (hotelPriceLists) {
+                var idRoomType = $('select[name="roomTypeSelected"]').val();
+                hotelPriceLists.forEach(function (hotelPrice) {
+                    if (hotelPrice.roomType.id == idRoomType) {
+                        $('input[name="price"]').val(hotelPrice.price);
+                    }
+                });
+            }
+        });
+    });
+
+
+    $('#toSubmit').on('click', function (e) {
+        e.preventDefault();
+        var newValue = $('input[name="price"]').val();
+        var idField = $('select[name="roomTypeSelected"]').val();
+        $.post({
+            url: 'api/hotel/editPriceList',
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            contentType: 'application/json',
+            data: JSON.stringify(
+                {
+                    id: idField,
+                    price: newValue
+                }),
+            success: function (hotelPriceLists) {
+                var idRoomType = $('select[name="roomTypeSelected"]').val();
+                hotelPriceLists.forEach(function (hotelPrice) {
+                    if (hotelPrice.roomType.id == idRoomType) {
+                        $('input[name="price"]').val(hotelPrice.price);
+                    }
+                });
+            }
+        });
 
     });
 

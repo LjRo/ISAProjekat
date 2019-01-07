@@ -33,26 +33,23 @@
     <div class="container">
         <div class="col-md-12" style="align-self: center">
             <div id="addNewRoom" class="col-md">
-                <form id="addForm">
+                <div id="addForm">
                     <h2 class="sr-only "></h2>
                     <h2 style="text-align: center">Hotel Prices</h2>
                     <img src="assets/img/room.svg"
                          style="display: block; max-height:240px; max-width: 240px;margin-left: auto;margin-right: auto">
                     <div id="start_div" class="form-group"> <!-- id=start_div -->
-                        <select class="form-control" name="roomTypeSelected">
+                        <select size="3" class="form-control" name="roomTypeSelected">
                             <optgroup label="roomType:" id="roomType"> <!-- id=startGrp -->
                             </optgroup>
                         </select>
                     </div>
-                    <div class="form-group col-md">
-                        <input class="form-control" type="text" name="id">
-                    </div>
                     <div class="form-group">
-                        <!--<button id="delete" class="btn btn-primary btn-block" type="button">Delete</button> -->
-                        <button id="toSubmit" class="btn btn-primary btn-block" type="submit">Submit</button>
+                        <input class="form-control" type="number" name="price" min="0" step="1" placeholder="Price" required>
+                        <button id="toSubmit" class="btn btn-primary btn-block" type="button">Submit</button>
                         <div id="error"></div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
