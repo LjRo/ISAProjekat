@@ -9,6 +9,9 @@ $(function () {
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (floorPlans) {
             fillFloors(floorPlans.sort(SortByFloor));
+
+            var idOfFloorPlan = $('#floors').children(0).val();
+            $('select[name="floor"]').val(idOfFloorPlan);
         }
     });
 

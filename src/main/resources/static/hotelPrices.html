@@ -7,9 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
             integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
             crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-            crossorigin="anonymous"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -33,26 +31,24 @@
     <div class="container">
         <div class="col-md-12" style="align-self: center">
             <div id="addNewRoom" class="col-md">
-                <form id="addForm">
+                <div id="addForm">
                     <h2 class="sr-only "></h2>
                     <h2 style="text-align: center">Hotel Prices</h2>
                     <img src="assets/img/room.svg"
                          style="display: block; max-height:240px; max-width: 240px;margin-left: auto;margin-right: auto">
                     <div id="start_div" class="form-group"> <!-- id=start_div -->
-                        <select class="form-control" name="roomTypeSelected">
+                        <select size="3" class="form-control" name="roomTypeSelected">
                             <optgroup label="roomType:" id="roomType"> <!-- id=startGrp -->
                             </optgroup>
                         </select>
                     </div>
-                    <div class="form-group col-md">
-                        <input class="form-control" type="text" name="id">
-                    </div>
                     <div class="form-group">
-                        <!--<button id="delete" class="btn btn-primary btn-block" type="button">Delete</button> -->
-                        <button id="toSubmit" class="btn btn-primary btn-block" type="submit">Submit</button>
+                        <input class="form-control" type="number" name="price" min="0" step="1" placeholder="Price" required>
+                        <button id="toSubmit" class="btn btn-primary btn-block" type="button">Submit</button>
                         <div id="error"></div>
+                        <div id="success"></div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

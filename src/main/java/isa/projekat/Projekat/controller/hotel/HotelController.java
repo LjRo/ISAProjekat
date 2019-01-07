@@ -1,10 +1,7 @@
 package isa.projekat.Projekat.controller.hotel;
 
 
-import isa.projekat.Projekat.model.hotel.FloorPlan;
-import isa.projekat.Projekat.model.hotel.Hotel;
-import isa.projekat.Projekat.model.hotel.RoomData;
-import isa.projekat.Projekat.model.hotel.RoomType;
+import isa.projekat.Projekat.model.hotel.*;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.hotel.HotelService;
@@ -52,6 +49,16 @@ public class HotelController {
         return hotelService.findHotelById(id).getRoomTypes();
     }
 
+
+    @PermitAll
+    @RequestMapping(value = "api/hotel/{id}/PriceLists", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Set<HotelPriceList> findPriceLists(@PathVariable Long id, HttpServletRequest req)
+    {
+        return hotelService.findHotelById(id).getHotelPriceList();
+    }
+
+
+
     @RequestMapping(value = "api/hotel/{id}/addRoom", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     public ResponseEntity<?> addRoom(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody RoomData room){
@@ -92,6 +99,14 @@ public class HotelController {
         User user =  getUser(httpServletRequest);
         return responseTransaction(hotelService.editHotel(hotel,user));
     }
+
+    @RequestMapping(value = "api/hotel/editPriceList", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    public  ResponseEntity<?> editPriceList(@RequestBody HotelPriceList hotelPriceList,HttpServletRequest httpServletRequest) {
+        User user =  getUser(httpServletRequest);
+        return responseTransaction(hotelService.editHotelList(hotelPriceList,user));
+    }
+
 
     @SuppressWarnings("Duplicates")
     private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){

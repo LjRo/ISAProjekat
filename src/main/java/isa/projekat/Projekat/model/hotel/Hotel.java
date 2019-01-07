@@ -33,9 +33,9 @@ public class Hotel implements Serializable {
     @Column(nullable = false)
     private int fastDiscount;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference(value="hotel_prices")
-    private HotelPriceList hotelPriceList;
+    private Set<HotelPriceList> hotelPriceList;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<HotelServices> hotelServices = new HashSet<>();
@@ -82,11 +82,11 @@ public class Hotel implements Serializable {
         this.fastDiscount = fastDiscount;
     }
 
-    public HotelPriceList getHotelPriceList() {
+    public Set<HotelPriceList> getHotelPriceList() {
         return hotelPriceList;
     }
 
-    public void setHotelPriceList(HotelPriceList hotelPriceList) {
+    public void setHotelPriceList(Set<HotelPriceList> hotelPriceList) {
         this.hotelPriceList = hotelPriceList;
     }
 
