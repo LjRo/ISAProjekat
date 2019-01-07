@@ -35,6 +35,9 @@ $(document).ready(function () {
                     $( "#floors" ).append( '<option value= "' + entry.id + '">'+entry.floorNumber+'</option>' );
                 });
 
+                var idOfFloorPlan = $('#floors').children(0).val();
+                $('select[name="chooseFloor"]').val(idOfFloorPlan);
+
                 $("#nameOfCompany").text(name);
                 $("#Address").text(address);
                 $("#Description").text(description);
@@ -50,6 +53,18 @@ $(document).ready(function () {
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (data) {
             if (data != null && data.numberOfElements > 0) {
+
+                var hotelPricesLists = undefined;
+
+                $.get({
+                    url: '/api/hotel/' + pId + '/PriceLists',
+                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                    success: function (arrivedPrices) {
+                        hotelPricesLists = arrivedPrices;
+                        }
+
+                });
+
                 for (var i = 0; i < data.numberOfElements; i++) {
                     //for ( var us in data.content) {
                     addRoom(data.content[i],pId);
@@ -75,6 +90,10 @@ $(document).ready(function () {
 
     $('#managePrices').click(function(){
         window.location.href="hotelPrices.html?id=" + pId;
+    });
+
+    $('#manageHotelServices').click(function(){
+        window.location.href="hotelEditServices.html?id=" + pId;
     });
 
 

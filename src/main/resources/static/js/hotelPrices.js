@@ -8,6 +8,8 @@ $(function () {
     var id = getUrlParameter("id");
 
     $('#error').hide();
+    $('#success').hide();
+
 
     $.get({
         url: '/api/hotel/' + id + '/roomTypes',
@@ -15,26 +17,27 @@ $(function () {
         success: function (data) {
             var i = 0;
             if (data != null) {
-
                 data = data.sort(SortBy);
                 for (var us in data) {
-                    if (i == 0) {
-                        i=1;
-                        $.get({
-                            url: '/api/hotel/' + id + '/PriceLists',
-                            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                            success: function (hotelPriceLists) {
-                                hotelPriceLists.forEach(function (hotelPrice) {
-                                    if (hotelPrice.roomType.id == data[us].id) {
-                                        $('input[name="price"]').val(hotelPrice.price);
-                                    }
-                                });
+                    fillRoomType(data[us]);
+                }
+
+
+                var idOfHotelPrice = $('#roomType').children(0).val();
+                $('select[name="roomTypeSelected"]').val(idOfHotelPrice);
+                $.get({
+                    url: '/api/hotel/' + id + '/PriceLists',
+                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                    success: function (hotelPriceLists) {
+                        hotelPriceLists.forEach(function (hotelPrice) {
+                            if (hotelPrice.roomType.id == idOfHotelPrice) {
+                                $('input[name="price"]').val(hotelPrice.price);
                             }
                         });
                     }
-                    fillRoomType(data[us]);
+                });
 
-                }
+
             } else {
 
             }
@@ -69,15 +72,22 @@ $(function () {
             data: JSON.stringify(
                 {
                     id: idField,
-                    price: newValue
-                }),
-            success: function (hotelPriceLists) {
-                var idRoomType = $('select[name="roomTypeSelected"]').val();
-                hotelPriceLists.forEach(function (hotelPrice) {
-                    if (hotelPrice.roomType.id == idRoomType) {
-                        $('input[name="price"]').val(hotelPrice.price);
+                    price: newValue,
+                    hotel:{
+                        id:id
                     }
-                });
+                }),
+            success: function (message) {
+                $('#success').text('Successfully changed price to ' + newValue ).fadeIn().delay(10000).fadeOut();
+            },
+            error: function (message) {
+                if (message.status == 401) {
+                    $('#toSubmit').attr("disabled", "disabled");
+                    $('#error').text("Unauthorized access").fadeIn().delay(5000).fadeOut();
+                }
+                else if(message.status == 500) {
+                    $('#error').text("Server error cause bad parameters sent").fadeIn().delay(5000).fadeOut();
+                }
             }
         });
 
