@@ -6,4 +6,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface FlightRepository extends JpaRepository<Flight, Long> {
+
 }

@@ -340,9 +340,9 @@ function confirmInput() {
     }
 
     for (var j = friendsSelected+1; j < seatsSelected; j++) {
-        var selF = '#user' + (j) + 'Passport';
-        var selL = '#user' + (j) + 'Passport';
-        var selP = '#user' + (j) + 'Passport';
+        var selF = '#user' + (j+1) + 'Passport';
+        var selL = '#user' + (j+1) + 'Passport';
+        var selP = '#user' + (j+1) + 'Passport';
         var res = {
             userId: null,
             passport: $(selP).val(),
@@ -352,6 +352,7 @@ function confirmInput() {
             pointsUsed: 0,
             totalCost: 0
         };
+        airlineReservations.push(res);
     }
 
 

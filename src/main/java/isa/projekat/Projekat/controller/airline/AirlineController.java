@@ -2,6 +2,7 @@ package isa.projekat.Projekat.controller.airline;
 
 import isa.projekat.Projekat.model.airline.Airline;
 import isa.projekat.Projekat.model.airline.AirlineData;
+import isa.projekat.Projekat.model.airline.Flight;
 import isa.projekat.Projekat.model.airline.FlightData;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.security.TokenUtils;
@@ -34,6 +35,11 @@ public class AirlineController {
     @RequestMapping(value = "api/airline/findById={id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Airline findHotelById(@PathVariable("id") Long id) { return  airlineService.findById(id);}
 
+    @PermitAll
+    @RequestMapping(value = "api/airline/{id}/flights", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Flight> findAllActiveFlights(@PathVariable Long id,HttpServletRequest req){
+        return airlineService.findAllActiveFlights(id);
+    }
 
     @RequestMapping(value = "api/airline/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")

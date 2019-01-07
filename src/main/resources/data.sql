@@ -226,7 +226,7 @@ insert into users_friends(user_id,friends_id) values (2,8);
 insert into users_friends(user_id,friends_id) values (8,2);
 
 insert into flights (c_columns, c_rows, distance, duration, land_time, number_of_stops, price, segments, start_time, airline_id, finish_id, start_id)
-values (2,2,100,2,'2019-1-2 23:59:59',0,100,2,'2019-1-1 23:59:59',1,2,1);
+values (2,2,100,2,'2019-2-20 23:59:59',0,100,2,'2019-2-15 23:59:59',1,2,1);
 
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
 values (0,0,100,true,false,null);

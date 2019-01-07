@@ -6,6 +6,7 @@ import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.AirlineRepository;
 import isa.projekat.Projekat.repository.FlightRepository;
 import isa.projekat.Projekat.repository.UserRepository;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,4 +123,15 @@ public class AirlineService {
         return false;
     }
 
+    public List<Flight> findAllActiveFlights(Long id) {
+        List<Flight> allFlights = airlineRepository.findById(id).get().getFlights();
+        ArrayList<Flight> result = new ArrayList<>();
+        DateTime current = new DateTime();
+        for(Flight fl : allFlights) {
+            if(current.isBefore(fl.getStartTime().getTime())) {
+                result.add(fl);
+            }
+        }
+        return result;
+    }
 }
