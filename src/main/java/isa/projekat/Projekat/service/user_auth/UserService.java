@@ -181,6 +181,7 @@ public class UserService {
 			return null;
 		}
 
+		result.setId(u.getId());
 		result.setEmail(u.getUsername());
 		result.setAddress(u.getAddress());
 		result.setFirstName(u.getFirstName());
@@ -188,6 +189,8 @@ public class UserService {
 		result.setCity(u.getCity());
 		result.setPhoneNumber(u.getPhoneNumber());
 		result.setPassword("");
+		result.setPoints(u.getPoints());
+
 
 		return result;
 
@@ -219,9 +222,11 @@ public class UserService {
 	    UserData result = new UserData();
 	    User target = findById(id);
 
+	    result.setId(target.getId());
         result.setLastName(target.getLastName());
         result.setFirstName(target.getFirstName());
         result.setAddress(target.getAddress());
+        result.setPoints(target.getPoints());
 
         return result;
     }

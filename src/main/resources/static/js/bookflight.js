@@ -1,7 +1,11 @@
+var userData;
 var friendsSelected = 0;
 var seatsSelected = 0;
 var friendIds = [];
 var friendData;
+var airlineReservations = [];
+var seatDict = new Object();
+var selectedSeats = [];
 
 $(function () {
 
@@ -28,9 +32,9 @@ $(function () {
         success: function (data) {
 
             if (data != null) {
-                friendData=data;
+                friendData = data;
                 for (var us in data) {
-                    fillFriends(data[us],us);
+                    fillFriends(data[us], us);
                 }
             } else {
 
@@ -45,6 +49,7 @@ $(function () {
 
             if (data != null) {
                 fillData(data);
+                userData = data;
             } else {
 
             }
@@ -122,6 +127,7 @@ function fillSeats(data) {
                     $counter.text(sc.find('selected').length + 1);
                     seatsSelected = sc.find('selected').length + 1;
                     $total.text(recalculateTotal(sc) + this.data().price);
+                    selectedSeats.push(this.settings.id);
 
                     return 'selected';
                 } else if (this.status() == 'selected') {
@@ -133,6 +139,8 @@ function fillSeats(data) {
 
                     //remove the item from our cart
                     $('#cart-item-' + this.settings.id).remove();
+                    var index = selectedSeats.indexOf(this.settings.id);
+                    if (index !== -1) selectedSeats.splice(index, 1);
 
                     //seat has been vacated
                     return 'available';
@@ -154,10 +162,12 @@ function fillSeats(data) {
     //let's pretend some seats have already been booked
     //sc.get(['1_2', '4_1', '7_1', '7_2']).status('unavailable');
     for (var k in seatData) {
+        var segOffset = Math.floor(seatData[k].c_column / columns)
         if (seatData[k].taken == true || seatData[k].quick == true) {
-            var segOffset = Math.floor(seatData[k].c_column / columns)
             sc.get([seatData[k].c_row + 1 + "_" + (seatData[k].c_column + 1 + segOffset)]).status('unavailable');
         }
+        var sId = (seatData[k].c_row + 1 + "_" + (seatData[k].c_column + 1 + segOffset));
+        seatDict[sId] = seatData[k];
     }
 
 
@@ -187,7 +197,23 @@ function fillSeats(data) {
 
     $('#confirm3').on('click', function (event) {
         event.preventDefault();
-        $("#dataInput").css("display", "none");
+
+        var valid = true;
+        for (var i = 0; i < seatsSelected; i++) {
+            var sel = '#user' + (i + 1) + 'Name';
+            var sel2 = '#user' + (i + 1) + 'LastName';
+            var sel3 = '#user' + (i + 1) + 'Passport';
+            if (!$(sel).val() || !$(sel2).val() || !$(sel3).val()) {
+                valid = false;
+                break
+            }
+        }
+        if (!valid) {
+            alert("Please fill out all fields");
+        } else {
+            confirmInput();
+            $("#dataInput").css("display", "none");
+        }
     });
 
 
@@ -219,7 +245,7 @@ function recalculateTotal(sc) {
     return total;
 }
 
-function fillFriends(data,us) {
+function fillFriends(data, us) {
     var table = $('#friendsTable').DataTable();
 
     var tr = $('<tr id="' + data.id + '"></tr>');
@@ -231,12 +257,12 @@ function fillFriends(data,us) {
 
     $('.friendCheckBox').change(function (event) {
         friendsSelected = $('.friendCheckBox:checkbox:checked').length;
-        if (friendsSelected == (seatsSelected-1)) {
-            $('.friendCheckBox:checkbox:not(:checked)').attr('disabled',true);
+        if (friendsSelected == (seatsSelected - 1)) {
+            $('.friendCheckBox:checkbox:not(:checked)').attr('disabled', true);
         }
 
-        if (friendsSelected < (seatsSelected-1)) {
-            $('.friendCheckBox:checkbox:not(:checked)').attr('disabled',false);
+        if (friendsSelected < (seatsSelected - 1)) {
+            $('.friendCheckBox:checkbox:not(:checked)').attr('disabled', false);
         }
 
     });
@@ -244,35 +270,106 @@ function fillFriends(data,us) {
 
 function fillData(data) {
     $('#user1Name').val(data.firstName);
-    $('#user1Name').attr('disabled','true');
+    $('#user1Name').attr('disabled', 'true');
     $('#user1LastName').val(data.lastName);
-    $('#user1LastName').attr('disabled','true');
+    $('#user1LastName').attr('disabled', 'true');
+    $('#user1PointsUsed').attr('placeholder', 'Use bonus points | Max:10, (Available: ' + data.points + ')');
 }
 
 function generateInputFields() {
-    var heightVal = seatsSelected*200+100;
-    $('#mainBG').css("height",heightVal);
+    var heightVal = seatsSelected * 200 + 100;
+    $('#mainBG').css("height", heightVal);
 
     var checkedBoxes = $('.friendCheckBox:checkbox:checked');
-    for(var k in checkedBoxes) {
+    for (var k in checkedBoxes) {
         friendIds.push(parseInt(checkedBoxes[k].name));
     }
 
     var dis = "";
 
-    for(var i = 2; i <= seatsSelected; i++) {
+    for (var i = 2; i <= seatsSelected; i++) {
         var row1 = '<br><hr>';
-        var row2 = '<input type="text" class="form-control" id="user'+i+'Name" placeholder="Name">';
-        var row3 = '<input type="text" class="form-control" id="user'+i+'LastName" placeholder="Surname">';
-        var row4 = '<input type="text" class="form-control" id="user'+i+'Passport" placeholder="Passport">';
+        var row2 = '<input type="text" class="form-control" id="user' + i + 'Name" placeholder="Name" required>';
+        var row3 = '<input type="text" class="form-control" id="user' + i + 'LastName" placeholder="Surname" required>';
+        var row4 = '<input type="text" class="form-control" id="user' + i + 'Passport" placeholder="Passport" required>';
         $('#userData').append(row1).append(row2).append(row3).append(row4);
     }
-    for(var i = 1; i <= friendsSelected; i++) {
-        var sel = '#user'+(i+1)+'Name';
-        var sel2 = '#user'+(i+1)+'LastName';
-        $(sel).val(friendData[friendIds[i-1]].firstName);
-        $(sel).attr('disabled','true');
-        $(sel2).val(friendData[friendIds[i-1]].lastName);
-        $(sel2).attr('disabled','true');
+    for (var i = 1; i <= friendsSelected; i++) {
+        var sel = '#user' + (i + 1) + 'Name';
+        var sel2 = '#user' + (i + 1) + 'LastName';
+        $(sel).val(friendData[friendIds[i - 1]].firstName);
+        $(sel).attr('disabled', 'true');
+        $(sel2).val(friendData[friendIds[i - 1]].lastName);
+        $(sel2).attr('disabled', 'true');
     }
+}
+
+function confirmInput() {
+
+
+    var userRes = {
+        userId: userData.id,
+        passport: $('#user1Passport').val(),
+        pointsUsed: $('#user1PointsUsed').val(),
+        firstName: "",
+        lastName: "",
+        seatId: seatDict[selectedSeats[0]].id,
+        totalCost: 0
+    };
+
+
+    if (!userRes.pointsUsed) {
+        userRes.pointsUsed = 0;
+    }
+
+    airlineReservations.push(userRes);
+
+    for (var k = 0; k < friendsSelected; k++) {
+        var sel = '#user' + (k + 2) + 'Passport';
+        var res = {
+            userId: friendData[friendIds[k]].id,
+            passport: $(sel).val(),
+            seatId: seatDict[selectedSeats[k+1]].id,
+            firstName: "",
+            lastName: "",
+            pointsUsed: 0,
+            totalCost: 0
+
+        };
+        airlineReservations.push(res);
+    }
+
+    for (var j = friendsSelected+1; j < seatsSelected; j++) {
+        var selF = '#user' + (j) + 'Passport';
+        var selL = '#user' + (j) + 'Passport';
+        var selP = '#user' + (j) + 'Passport';
+        var res = {
+            userId: null,
+            passport: $(selP).val(),
+            seatId: seatDict[selectedSeats[j]].id,
+            firstName: $(selF).val(),
+            lastName: $(selL).val(),
+            pointsUsed: 0,
+            totalCost: 0
+        };
+    }
+
+
+    $.ajax({
+        url: "api/flight/book",
+        type: 'POST',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        data: JSON.stringify({
+            airlineReservations: airlineReservations
+        }),
+        contentType: 'application/json',
+        success: function (data) {
+            alert("All is well!");
+
+        },
+        error: function (data) {
+            alert("Something went wrong...");
+        },
+    });
+
 }

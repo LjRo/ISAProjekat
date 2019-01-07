@@ -38,7 +38,8 @@ public class AirlineController {
     @RequestMapping(value = "api/airline/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
     public void updateInfo(@RequestBody AirlineData ad, HttpServletRequest req){
-        String email = "temp";
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
         airlineService.updateAirlineData(ad, email);
     }
 
