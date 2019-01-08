@@ -49,7 +49,7 @@ public class FlightService {
 
         User requester = userRepository.findByUsername(email);
 
-        if(!requester.getId().equals(bd.getAirlineReservations().get(0).getUserId())) {
+        if (!requester.getId().equals(bd.getAirlineReservations().get(0).getUserId())) {
             return false;
         }
 
@@ -58,7 +58,7 @@ public class FlightService {
             Seat targetSeat = seatRepository.findById(resData.getSeatId()).get();
             User targetUser;
 
-            if(resData.getUserId() == null) {
+            if (resData.getUserId() == null) {
                 targetUser = null;
             } else {
                 targetUser = userRepository.findById(resData.getUserId()).get();
@@ -71,24 +71,24 @@ public class FlightService {
                 return false;
             }
 
-            if(resData.getPassport() == null || resData.getPassport() == "") {
+            if (resData.getPassport() == null || resData.getPassport() == "") {
                 return false;
             }
 
             if (resData.getPointsUsed() > 10.0)
                 resData.setPointsUsed(10.0);
-            if(resData.getPointsUsed() < 0.0)
+            if (resData.getPointsUsed() < 0.0)
                 resData.setPointsUsed(0.0);
 
             resData.setTotalCost(targetSeat.getPrice());
 
             Reservation newRes = new Reservation();
-            if(targetUser==null) {
+            if (targetUser == null) {
 
-                if(resData.getFirstName() == null || resData.getFirstName() == "") {
+                if (resData.getFirstName() == null || resData.getFirstName() == "") {
                     return false;
                 }
-                if(resData.getLastName() == null || resData.getLastName() == "") {
+                if (resData.getLastName() == null || resData.getLastName() == "") {
                     return false;
                 }
 
@@ -96,15 +96,23 @@ public class FlightService {
                 newRes.setLastName(resData.getLastName());
                 newRes.setPointsUsed(0.0);
                 newRes.setTotalCost(targetSeat.getPrice());
+                newRes.setConfirmed(true);
             } else {
+
+                if (targetUser.getId() == requester.getId()) {
+                    newRes.setConfirmed(true);
+                } else {
+                    newRes.setConfirmed(false);
+                }
+
                 newRes.setName(targetUser.getFirstName());
                 newRes.setLastName(targetUser.getLastName());
                 newRes.setUser(targetUser);
                 BigDecimal priceFactor = new BigDecimal(1);
-                if(targetUser.getPoints() >= resData.getPointsUsed()) {
-                    targetUser.setPoints(targetUser.getPoints()- resData.getPointsUsed());
+                if (targetUser.getPoints() >= resData.getPointsUsed()) {
+                    targetUser.setPoints(targetUser.getPoints() - resData.getPointsUsed());
                     newRes.setPointsUsed(resData.getPointsUsed());
-                    priceFactor = (new BigDecimal(1.0 - (resData.getPointsUsed()/10 * 0.05)));
+                    priceFactor = (new BigDecimal(1.0 - (resData.getPointsUsed() / 10 * 0.05)));
                 } else {
                     newRes.setPointsUsed(0.0);
                 }
@@ -113,12 +121,50 @@ public class FlightService {
             }
 
 
-
             newRes.setPassport(resData.getPassport());
             newRes.setSeat(targetSeat);
+            targetSeat.setReservation(newRes);
             targetSeat.setTaken(true);
             reservationRespository.save(newRes);
         }
         return true;
     }
+
+    public Boolean quickBookFlight(QuickTicketData qTD, String email) {
+
+        User requester = userRepository.findByUsername(email);
+
+        if (requester == null) {
+            return false;
+        }
+
+        Seat targetSeat = seatRepository.findById(qTD.getSeatId()).get();
+
+        if (targetSeat == null || targetSeat.isTaken()) {
+            return false;
+        }
+        if (qTD.getPassport() == null || qTD.getPassport() == "") {
+            return false;
+        }
+        if(!targetSeat.isQuick()) {
+            return false;
+        }
+
+        Reservation newRes = new Reservation();
+
+        newRes.setName(requester.getFirstName());
+        newRes.setLastName(requester.getLastName());
+        newRes.setPointsUsed(0.0);
+        newRes.setTotalCost(targetSeat.getPrice().multiply(new BigDecimal(0.95)));
+        newRes.setConfirmed(true);
+        newRes.setUser(requester);
+
+        newRes.setPassport(qTD.getPassport());
+        newRes.setSeat(targetSeat);
+        targetSeat.setTaken(true);
+        targetSeat.setReservation(newRes);
+        reservationRespository.save(newRes);
+
+        return true;
+}
 }

@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.controller.airline;
 
 import isa.projekat.Projekat.model.airline.BookingData;
+import isa.projekat.Projekat.model.airline.QuickTicketData;
 import isa.projekat.Projekat.model.airline.SeatData;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.airline.FlightService;
@@ -30,13 +31,21 @@ public class FlightController {
 
     @RequestMapping(value = "api/flight/book", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public void updateInfo(@RequestBody BookingData bookingData, HttpServletRequest req){
+    public void bookFlight(@RequestBody BookingData bookingData, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
 
         flightService.bookFlight(bookingData,email);
     }
 
+    @RequestMapping(value = "api/flight/quickBook", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public void quickBook(@RequestBody QuickTicketData quickTicketData, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+
+        flightService.quickBookFlight(quickTicketData,email);
+    }
     
 
 

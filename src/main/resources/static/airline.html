@@ -44,7 +44,7 @@
                     Moonstreet 201/3
                 </li>
                 <li id="rating" class="list-group-item text-right"><span class="float-left"><strong>Rating:</strong></span> 5/5</li>
-                <li class="list-group-item text-right"><span class="d-flex justify-content-center"><button type="button" class="btn btn-success">Quick Reservation</button></span>
+                <li class="list-group-item text-right"><span class="d-flex justify-content-center"><a href="#quickFlightsTab"><button type="button" class="btn btn-success">Quick Reservation</button></a></span>
 
                 </li>
 
@@ -64,8 +64,9 @@
         <div class="col-sm-9">
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#home">Home</a></li>&nbsp;&nbsp;&nbsp;
-                <li><a data-toggle="tab" href="#messages">Destinations</a></li>&nbsp;&nbsp;&nbsp;
-                <li><a data-toggle="tab" href="#settings">Flights</a></li>&nbsp;&nbsp;&nbsp;
+                <li><a data-toggle="tab" href="#destinationsTab">Destinations</a></li>&nbsp;&nbsp;&nbsp;
+                <li><a data-toggle="tab" href="#flightsTab">Flights</a></li>&nbsp;&nbsp;&nbsp;
+                <li><a data-toggle="tab" href="#quickFlightsTab">Quick Flights</a></li>&nbsp;&nbsp;&nbsp;
             </ul>
 
 
@@ -92,8 +93,8 @@
 
 
                 </div><!--/tab-pane-->
-                <div class="tab-pane" id="messages">
-
+                <div class="tab-pane" id="destinationsTab">
+                    <br>
                     <h2>Available Destinations:</h2>
                     <div style="margin-left:auto;margin-right:auto;width:80%;">
                         <table id="destinations" class="display responsive dataTable dtr-inline collapsed table table-striped table-hover table-bordered" role="grid" style="width: 100%;">
@@ -111,8 +112,9 @@
                     <hr>
 
                 </div><!--/tab-pane-->
-                <div class="tab-pane" id="settings">
-
+                <div class="tab-pane" id="flightsTab">
+                    <br>
+                    <h2>Available Flights:</h2>
                     <table id="flights" class="display responsive dataTable dtr-inline collapsed table table-striped table-hover table-bordered" role="grid" style="width: 100%;">
                         <thead>
                         <tr>
@@ -120,6 +122,23 @@
                         </tr>
                         </thead>
                         <tbody id="flightTableBody">
+                        </tbody>
+                    </table>
+                    <hr>
+
+                </div>
+                <div class="tab-pane" id="quickFlightsTab">
+                    <br>
+                    <h2>Available Quick Tickets:</h2>
+                    <b>Your passport:</b> <input type="text" class="form-control" id="userPassport" placeholder="Passport" style="width:40%">
+                    <br>
+                    <table id="quickFlights" class="display responsive dataTable dtr-inline collapsed table table-striped table-hover table-bordered" role="grid" style="width: 100%;">
+                        <thead>
+                        <tr>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="quickFlightTableBody">
                         </tbody>
                     </table>
                     <hr>

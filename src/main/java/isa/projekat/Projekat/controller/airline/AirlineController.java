@@ -1,9 +1,6 @@
 package isa.projekat.Projekat.controller.airline;
 
-import isa.projekat.Projekat.model.airline.Airline;
-import isa.projekat.Projekat.model.airline.AirlineData;
-import isa.projekat.Projekat.model.airline.Flight;
-import isa.projekat.Projekat.model.airline.FlightData;
+import isa.projekat.Projekat.model.airline.*;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.airline.AirlineService;
@@ -39,6 +36,12 @@ public class AirlineController {
     @RequestMapping(value = "api/airline/{id}/flights", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Flight> findAllActiveFlights(@PathVariable Long id,HttpServletRequest req){
         return airlineService.findAllActiveFlights(id);
+    }
+
+    @PermitAll
+    @RequestMapping(value = "api/airline/{id}/quickFlights", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<QuickTicketData> findAllActiveFlightsWithQuickReservation(@PathVariable Long id, HttpServletRequest req){
+        return airlineService.findAllActiveFlightsWithQuickReservation(id);
     }
 
     @RequestMapping(value = "api/airline/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})

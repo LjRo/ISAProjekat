@@ -32,6 +32,9 @@ public class Reservation {
     @Column
     private BigDecimal totalCost;
 
+    @Column
+    private Boolean confirmed = false;
+
     @OneToOne
     @JsonBackReference(value = "seat_reservation")
     private Seat seat;
@@ -98,5 +101,13 @@ public class Reservation {
 
     public void setTotalCost(BigDecimal totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public Boolean getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
     }
 }

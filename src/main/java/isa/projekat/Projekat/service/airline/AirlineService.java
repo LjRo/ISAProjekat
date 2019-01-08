@@ -134,4 +134,33 @@ public class AirlineService {
         }
         return result;
     }
+
+    public List<QuickTicketData> findAllActiveFlightsWithQuickReservation(Long id) {
+        List<Flight> allFlights = airlineRepository.findById(id).get().getFlights();
+        ArrayList<QuickTicketData> result = new ArrayList<>();
+        DateTime current = new DateTime();
+        for(Flight fl : allFlights) {
+            if(current.isBefore(fl.getStartTime().getTime())) {
+                for(Seat st : fl.getSeats()) {
+                    if(st.isQuick() && !st.isTaken()) {
+                        QuickTicketData qTicket = new QuickTicketData();
+                        qTicket.setId(fl.getId());
+                        qTicket.setStartTime(fl.getStartTime());
+                        qTicket.setLandTime(fl.getLandTime());
+                        qTicket.setDuration(fl.getDuration());
+                        qTicket.setDistance(fl.getDistance());
+                        qTicket.setNumberOfStops(fl.getNumberOfStops());
+                        qTicket.setC_column(st.getC_column());
+                        qTicket.setC_row(st.getC_row());
+                        qTicket.setPrice(st.getPrice());
+                        qTicket.setStart(fl.getStart());
+                        qTicket.setFinish(fl.getFinish());
+                        qTicket.setSeatId(st.getId());
+                        result.add(qTicket);
+                    }
+                }
+            }
+        }
+        return result;
+    }
 }
