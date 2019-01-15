@@ -96,3 +96,18 @@ section[id='tabs'] .section-title {
     }
 }
 /* End Tabs */
+
+ul#hotelServicesList>li
+{
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: silver;
+    display:block;
+    float:left;
+    width:fit-content;
+    heigh:40px;
+    padding: 5px;
+}
+#hotelServices {
+    overflow: scroll;
+}

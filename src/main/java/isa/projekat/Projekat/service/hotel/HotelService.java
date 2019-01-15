@@ -2,10 +2,7 @@ package isa.projekat.Projekat.service.hotel;
 
 import isa.projekat.Projekat.model.hotel.*;
 import isa.projekat.Projekat.model.user.User;
-import isa.projekat.Projekat.repository.FloorRepository;
-import isa.projekat.Projekat.repository.HotelPricesRepository;
-import isa.projekat.Projekat.repository.HotelRepository;
-import isa.projekat.Projekat.repository.RoomTypeRepository;
+import isa.projekat.Projekat.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +29,9 @@ public class HotelService {
     @Autowired
     private HotelPricesRepository hotelPricesRepository;
 
+    @Autowired
+    private HotelServicesRepository hotelServicesRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -45,9 +45,23 @@ public class HotelService {
     }
 
     public Hotel findHotelById(Long id) {
-        Hotel returning = hotelRepository.findById(id).get();
+        Optional<Hotel> item = hotelRepository.findById(id);
+        if(!item.isPresent())
+            return null;
+        Hotel returning = item.get();
         returning.setAdmins(null);
         return returning;
+    }
+
+    public HotelServices findHotelServiceById(Long id){
+        Optional<HotelServices> item = hotelServicesRepository.findById(id);
+        if(!item.isPresent())
+        {
+            return  null;
+        }
+        HotelServices hotelServices = item.get();
+        hotelServices.getHotel().setAdmins(null);
+        return hotelServices;
     }
 
     @Transactional
@@ -163,6 +177,57 @@ public class HotelService {
         exact.setPrice(hotelPriceList.getPrice());
         // entityManager.persist(foundHotel);
         return true;
+    }
+
+    @Transactional
+    public boolean addHotelServices(HotelServices hotelServices, Long id, User user) {
+
+        if(!checkIfAdminAndCorrectAdmin(id,user))
+            return false;
+        Hotel target = user.getAdministratedHotel();
+        HotelServices newHotelService = new HotelServices();
+        newHotelService.setName(hotelServices.getName());
+        newHotelService.setPrice(hotelServices.getPrice());
+        target.getHotelServices().add(newHotelService);
+        hotelServicesRepository.save(newHotelService);
+        //entityManager.persist(newFloorPlan);
+        //entityManager.persist(target);
+        return true;
+    }
+
+    @Transactional
+    public boolean editHotelServices(HotelServices hotelServices, User user) {
+        if(!checkIfAdminAndCorrectAdmin(hotelServices.getHotel().getId(),user))
+            return false;
+        Optional<HotelServices> foundHotelServices = hotelServicesRepository.findById(hotelServices.getId());
+        if(foundHotelServices.isPresent())
+        {
+            HotelServices edited = foundHotelServices.get();
+            edited.setName(hotelServices.getName());
+            edited.setPrice(hotelServices.getPrice());
+            hotelServicesRepository.save(edited);
+            return true;
+        }
+        // entityManager.persist(foundHotel);
+        return false;
+    }
+
+    @Transactional
+public boolean removeHotelService(HotelServices hotelServices, User user) {
+        if(!checkIfAdminAndCorrectAdmin(hotelServices.getHotel().getId(),user))
+            return false;
+        Optional<HotelServices> foundHotelServices = hotelServicesRepository.findById(hotelServices.getId());
+        if(foundHotelServices.isPresent())
+        {
+            HotelServices removing = foundHotelServices.get();
+            Hotel target = hotelRepository.findById(hotelServices.getHotel().getId()).get();
+            target.getHotelServices().remove(removing);
+            removing.setHotel(null);
+            hotelServicesRepository.delete(removing);
+            return true;
+        }
+        // entityManager.persist(foundHotel);
+        return false;
     }
 
 

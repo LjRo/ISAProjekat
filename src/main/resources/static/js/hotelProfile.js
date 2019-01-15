@@ -10,6 +10,9 @@ $(document).ready(function () {
 
     var scroll = 0;
     var pId = getUrlParameter('id');
+
+    var hotelPrices = undefined;
+
     $.get({
         url: '/api/hotel/findById=' + pId,
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
@@ -22,6 +25,7 @@ $(document).ready(function () {
                 name = hotel.name;
                 description = hotel.description;
 
+                hotelPrices = hotel.hotelPriceList;
 
                 var floorPlansUS = hotel.floorPlans;
                 floorPlansUS.sort(SortByFloor);
@@ -43,36 +47,47 @@ $(document).ready(function () {
                 $("#Description").text(description);
                 ymaps.ready(makeMap);
 
-            }
-        }
-    });
-
-
-    $.get({
-        url: '/api/rooms/findByIdAll?id=' + pId + '&page=' + getUrlParameter('page') + '&pagelimit=10',
-        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-        success: function (data) {
-            if (data != null && data.numberOfElements > 0) {
-
-                var hotelPricesLists = undefined;
 
                 $.get({
-                    url: '/api/hotel/' + pId + '/PriceLists',
+                    url: '/api/hotel/' + pId + '/HotelServicesForHotel',
                     headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                    success: function (arrivedPrices) {
-                        hotelPricesLists = arrivedPrices;
-                        }
+                    success: function (arrivedHotelServices) {
+                        addService(arrivedHotelServices);
+                    }
 
                 });
 
-                for (var i = 0; i < data.numberOfElements; i++) {
-                    //for ( var us in data.content) {
-                    addRoom(data.content[i],pId);
-                }
-                setPagingButtons(data.totalPages, data.totalElements);
+
+                $.get({
+                    url: '/api/rooms/findByIdAll?id=' + pId + '&page=' + getUrlParameter('page') + '&pagelimit=10',
+                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                    success: function (data) {
+                        if (data != null && data.numberOfElements > 0) {
+                            var selRoomType;
+                            for (var i = 0; i < data.numberOfElements; i++) {
+                                if(hotelPrices!=undefined && hotelPrices !=null)
+                                {
+                                    for(var j=0; j< hotelPrices.length; ++j)
+                                    {
+                                        if(data.content[i].roomType.id == hotelPrices[j].roomType.id)
+                                        {
+                                            selRoomType = hotelPrices[j].price;
+                                        }
+                                    }
+                                }
+                                addRoom(data.content[i],pId,selRoomType);
+                            }
+                            setPagingButtons(data.totalPages, data.totalElements);
+                        }
+                    }
+                });
+
             }
         }
     });
+
+
+
 
     $('#addRoom').click(function () {
         window.location.href = "addRoom.html?id=" + pId;
@@ -113,14 +128,16 @@ $(document).ready(function () {
 
 });
 
-function addRoom(room,hotelId) {
-    name = "";
-    if(room.name != null)
-        name = room.name;
-    else
-    {
-        name = room.roomType.name + ' ' + room.roomNumber;
-    }
+function addService(services) {
+    services.forEach(function (entry) {
+        $("#hotelServicesList").append('<li value= "' + entry.id + '">'  + entry.name + ' ' + entry.price +  '</li>');
+    });
+}
+
+
+function addRoom(room,hotelId,price) {
+    var pricing = (price==undefined)?"Unknown":price;
+    var name = (room.name !=null)? room.name : room.roomType.name + ' ' + room.roomNumber ;
     var tr = $(
         '<div class="card mb-1">' +
         '                                                <div class="card-body">' +
@@ -138,7 +155,7 @@ function addRoom(room,hotelId) {
         '                                                            <div style="height: 33%;width:25%;float:right;">No.: <strong></br><div id="roomNumber"  style="width:auto;float: left">' + room.roomNumber + '</div><img src="assets/img/roomkey.png" style="margin-top: 5px"></strong></div>' +
         '                                                        </div>' +
         '                                                        <div class="col-md-3">' +
-        '                                                            <h5>$' + "DUMMY PRICE"   +'</h5>' +
+        '                                                            <h5>$' + pricing  +'</h5>' +
         '                                                            <i class="fa fa-star"></i>' +
         '                                                            <i class="fa fa-star"></i>' +
         '                                                            <i class="fa fa-star"></i>' +

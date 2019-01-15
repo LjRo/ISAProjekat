@@ -54,7 +54,7 @@ public class HotelController {
     @RequestMapping(value = "api/hotel/{id}/PriceLists", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Set<HotelPriceList> findPriceLists(@PathVariable Long id, HttpServletRequest req)
     {
-        return hotelService.findHotelById(id).getHotelPriceList();
+        return  hotelService.findHotelById(id).getHotelPriceList();
     }
 
 
@@ -76,17 +76,17 @@ public class HotelController {
     }
     @RequestMapping(value = "api/hotel/{id}/addNewFloor", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
-    public ResponseEntity<?> addRoomType(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody FloorPlan floorPlan){
+    public ResponseEntity<?> addNewFloor(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody FloorPlan floorPlan){
         User user =  getUser(httpServletRequest);
         return  responseTransaction(hotelService.addFloorPlan(floorPlan,id,user));
     }
 
 
-    // /api/hotel/1/removeFloor:1 Failed to load resource: the server responded with a status of 404 ()
+
 
     @RequestMapping(value = "api/hotel/{id}/{idFloor}/removeFloor", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
-    public ResponseEntity<?> addRoomType(@PathVariable Long id,@PathVariable Long idFloor, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> removeFloor(@PathVariable Long id,@PathVariable Long idFloor, HttpServletRequest httpServletRequest){
 
         User user =  getUser(httpServletRequest);
         return responseTransaction(hotelService.removeFloorPlan(idFloor,id,user));
@@ -105,6 +105,43 @@ public class HotelController {
     public  ResponseEntity<?> editPriceList(@RequestBody HotelPriceList hotelPriceList,HttpServletRequest httpServletRequest) {
         User user =  getUser(httpServletRequest);
         return responseTransaction(hotelService.editHotelList(hotelPriceList,user));
+    }
+
+    //-- HOTEL SERVICES
+
+    @RequestMapping(value = "api/hotel/{id}/addHotelServices", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    public ResponseEntity<?> addHotelServices(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody HotelServices hotelServices){
+        User user =  getUser(httpServletRequest);
+        return  responseTransaction(hotelService.addHotelServices(hotelServices,id,user));
+    }
+
+    @RequestMapping(value = "api/hotel/editHotelServices", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    public  ResponseEntity<?> editHotelServices(@RequestBody HotelServices services,HttpServletRequest httpServletRequest) {
+        User user =  getUser(httpServletRequest);
+        return responseTransaction(hotelService.editHotelServices(services,user));
+    }
+
+    @RequestMapping(value = "api/hotel/removeHotelServices", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    public ResponseEntity<?> removeHotelServices(@RequestBody HotelServices hotelServices, HttpServletRequest httpServletRequest){
+        User user =  getUser(httpServletRequest);
+        return responseTransaction(hotelService.removeHotelService(hotelServices,user));
+    }
+
+    @PermitAll
+    @RequestMapping(value = "api/hotel/{id}/HotelServicesForHotel", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Set<HotelServices> findHotelServicesList(@PathVariable Long id, HttpServletRequest req)
+    {
+        return  hotelService.findHotelById(id).getHotelServices();
+    }
+
+    @PermitAll
+    @RequestMapping(value = "api/hotel/{id}/HotelServices", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public HotelServices findHotelService(@PathVariable Long id, HttpServletRequest req)
+    {
+        return  hotelService.findHotelServiceById(id);
     }
 
 

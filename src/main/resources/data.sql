@@ -193,6 +193,35 @@ VALUES (1,5);
 INSERT INTO hotels_room_types(hotel_id,room_types_id)
 VALUES (1,6);
 
+INSERT INTO hotel_services(id,name,price,hotel_id)
+VALUES (1,'WiFi',20,1);
+INSERT INTO hotel_services(id,name,price,hotel_id)
+VALUES (2,'Pool',100,1);
+INSERT INTO hotel_services(id,name,price,hotel_id)
+VALUES (3,'Parking',150,1);
+INSERT INTO hotel_services(id,name,price,hotel_id)
+VALUES (4,'Restaurant',200,1);
+INSERT INTO hotel_services(id,name,price,hotel_id)
+VALUES (5,'Wellness',250,1);
+INSERT INTO hotel_services(id,name,price,hotel_id)
+VALUES (6,'Spa center',400,1);
+INSERT INTO hotel_services(id,name,price,hotel_id)
+VALUES (7,'Transport to Airport',100,1);
+
+INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
+VALUES (1,1);
+INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
+VALUES (1,2);
+INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
+VALUES (1,3);
+INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
+VALUES (1,4);
+INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
+VALUES (1,5);
+INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
+VALUES (1,6);
+INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
+VALUES (1,7);
 
 
 INSERT INTO room_type (name)

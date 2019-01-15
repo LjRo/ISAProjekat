@@ -33,11 +33,12 @@ public class Hotel implements Serializable {
     @Column(nullable = false)
     private int fastDiscount;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference(value="hotel_prices")
     private Set<HotelPriceList> hotelPriceList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference(value="hotel_services")
     private Set<HotelServices> hotelServices = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hotel")

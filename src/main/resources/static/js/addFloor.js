@@ -61,10 +61,12 @@ $(function () {
         $('.ui-resizable-s').remove();
         $('.ui-resizable-se').remove();
         var floorPlanHtml = $('#save').append();
+        var changed = $('#save').html().replaceAll('  ', '');
+        changed = changed.replaceAll('\n', '');
+
         $('#save').html(saveBack);
 
-        var changed = floorPlanHtml.replaceAll('  ', '');
-        changed = changed.replaceAll('\n', '');
+
 
         if (edit == undefined) {
             $.post({
@@ -79,7 +81,7 @@ $(function () {
                 success: function () {
                     window.location.href = 'manageFloors.html?id=' + id;
                 },
-                error: function () {
+                error: function (message) {
                     //console.log("Error");
                     if (message.status == 401) {
                         $('#toSubmit').attr("disabled", "disabled");
