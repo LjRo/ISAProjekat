@@ -7,6 +7,7 @@ import isa.projekat.Projekat.model.airline.Airline;
 import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.hotel.Hotel;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
+import isa.projekat.Projekat.model.rent_a_car.RentReservation;
 import org.joda.time.DateTime;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -79,6 +80,12 @@ public class User implements UserDetails {
     @OneToMany
     @JsonManagedReference(value = "user_reservation")
     private List<Reservation> reservations;
+
+    @OneToMany
+    @JsonManagedReference(value = "user_rent_reservation")
+    private List<RentReservation> rentReservations;
+
+
 
     // RentACar stuff
     @OneToOne(cascade = CascadeType.PERSIST)

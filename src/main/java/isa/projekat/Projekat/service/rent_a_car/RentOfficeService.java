@@ -16,6 +16,7 @@ import isa.projekat.Projekat.model.rent_a_car.Location;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -39,6 +40,10 @@ public class RentOfficeService {
     public Page<RentOffice> findAllByRentACarId(Long id, PageRequest pageRequest) { return rentOfficeRepository.findAllByRentACarId(id, pageRequest);}
 
     public RentOffice findByIdAndRentACarId(Long id, Long idrent){ return rentOfficeRepository.findByIdAndRentACarId(id,idrent);}
+
+    public List<RentOffice> findAllByRentACarIdList(Long id) { return rentOfficeRepository.findAllByRentACarId(id);}
+
+
 
     @Transactional
     public boolean addOffice(RentOffice office,Long id, User user) {

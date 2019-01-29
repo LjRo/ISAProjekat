@@ -1,17 +1,26 @@
 package isa.projekat.Projekat.service.rent_a_car;
 
+import isa.projekat.Projekat.model.airline.Reservation;
+import isa.projekat.Projekat.model.rent_a_car.CarType;
 import isa.projekat.Projekat.model.rent_a_car.Cars;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
+import isa.projekat.Projekat.model.rent_a_car.RentReservation;
 import isa.projekat.Projekat.model.user.User;
-import isa.projekat.Projekat.repository.CarRepository;
-import isa.projekat.Projekat.repository.CarTypeRepository;
-import isa.projekat.Projekat.repository.RentCarRepository;
+import isa.projekat.Projekat.repository.*;
+import isa.projekat.Projekat.service.airline.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Page;
 
+import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +34,12 @@ public class CarService {
 
     @Autowired
     private CarTypeRepository carTypeRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
+    private RentReservationRepository rentReservationRepository;
 
     public Page<Cars> findAll(PageRequest pageRequest){
         return carRepository.findAll(pageRequest);
@@ -59,12 +74,8 @@ public class CarService {
         Optional<Cars> optionalCars = carRepository.findById(cars.getId());
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(optionalCars.get().getId());
 
-
-        if ( !optionalRentACar.isPresent() && !optionalCars.isPresent())
-            return  false; // rent a car doesnt exist nor the car in the database
-
-        if (!optionalRentACar.get().getAdmins().contains(user))
-            return  false; // no permission
+        if (!everythingPresent(optionalRentACar, optionalCars, user, true))
+            return false;
 
         Cars fromDatabase = optionalCars.get();
 
@@ -74,19 +85,14 @@ public class CarService {
         return  true;
     }
 
-    @SuppressWarnings("Duplicates")
+
     public boolean removeCar(Long id, Long idrent, User user){
 
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(idrent);
         Optional<Cars> optionalCars = carRepository.findById(id);
 
-        if (!optionalRentACar.isPresent() || !optionalCars.isPresent()){
-            return  false;
-        }
-
-        if (!optionalRentACar.get().getAdmins().contains(user))
-            return  false;
-
+        if (!everythingPresent(optionalRentACar, optionalCars, user, true))
+            return false;
 
         Cars toRemove = optionalCars.get();
 
@@ -100,6 +106,67 @@ public class CarService {
 
         return true;
     }
+
+
+    public boolean reserveCar(Long id, Long idrent, User user, RentReservation rentReservation, Long idAirlineReservation){
+
+        Optional<RentACar> optionalRentACar = rentCarRepository.findById(idrent);
+        Optional<Cars> optionalCars = carRepository.findById(id);
+
+        if (!everythingPresent(optionalRentACar, optionalCars, user, false))
+            return false;
+
+        RentReservation newReservation = new RentReservation();
+
+        Reservation reservation = reservationRepository.getOne(idAirlineReservation);
+
+        // not same user
+        if (!reservation.getUser().equals(user))
+            return false;
+
+        List<RentReservation> list = rentReservationRepository.findAllByRentedCarId(rentReservation.getRentedCar().getId());
+
+       /* if (!canBeReserved(rentReservation.getRentedCar().getId(),rentReservation.getStartDate(), rentReservation.getEndDate())){
+            return  false;
+        }*/
+
+
+
+        newReservation.setAirlineReservation(reservation);
+        newReservation.setEndDate(rentReservation.getEndDate());
+        newReservation.setEndLocation(rentReservation.getEndLocation());
+        newReservation.setStartDate(rentReservation.getStartDate());
+        newReservation.setStartLocation(rentReservation.getStartLocation());
+        newReservation.setNumberOfPeople(rentReservation.getNumberOfPeople());
+        newReservation.setUser(user);
+        newReservation.setRentedCar(newReservation.getRentedCar());
+
+        rentReservationRepository.save(newReservation);
+
+        return true;
+    }
+
+    public Page<Cars> listAvailableWithDateOnly(Long idrent, PageRequest pageRequest, Long carType, String start, String end, Integer passengers){
+        return listAvailableWithDate(idrent,pageRequest, carType, BigDecimal.valueOf(0),BigDecimal.valueOf(200000), start, end, passengers);
+    }
+
+
+
+    public  Page<Cars> listAvailableWithDate(Long idrent, PageRequest pageRequest, Long carType, BigDecimal min, BigDecimal max, String start, String end, Integer passengers){
+        return carRepository.filterCars(carType,passengers,start,end,idrent,min,max,pageRequest);
+        }
+
+    // Checks that the Rent a car object and Car object is present as well as the does the person have privileges
+    public Boolean everythingPresent(Optional<RentACar> optionalRentACar, Optional<Cars> optionalCars, User user, boolean neededAdmin){
+        if (!optionalRentACar.isPresent() || !optionalCars.isPresent()){
+            return  false;
+        }
+        if (neededAdmin)
+            if (!optionalRentACar.get().getAdmins().contains(user))
+                return  false;
+        return true;
+    }
+
 
 
     private void setCar(Cars toSet, Cars dataFrom){

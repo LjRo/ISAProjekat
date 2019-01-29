@@ -33,7 +33,7 @@ public class RentCarController {
     @Autowired
     private UserService userService;
 
-    @PermitAll
+    @Transactional(readOnly = true)
     @RequestMapping(value = "api/rentacar/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RentACar> findAll() {
         List<RentACar> list = rentCarsService.findAll();
@@ -44,7 +44,20 @@ public class RentCarController {
     }
 
 
-    @PermitAll
+    @Transactional(readOnly = true)
+    @RequestMapping(value = "api/rentacar/filtered")
+    public List<RentACar> findFilteredRentACar(@RequestBody Integer type, @RequestBody String search, @RequestBody String start, @RequestBody String end){
+
+        if (type == 0){
+            return rentCarsService.findAllByName(search,start,end);
+        }else {
+            return rentCarsService.findAllByLocation(search,start,end);
+        }
+
+    }
+
+
+    @Transactional(readOnly = true)
     @RequestMapping(value = "api/rentacar/findById={id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public RentACar findRentACarById(@PathVariable("id") long id) {
         RentACar rentACar = rentCarsService.findById(id);

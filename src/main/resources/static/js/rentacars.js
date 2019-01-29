@@ -11,6 +11,13 @@ $(document).ready(function () {
         }
     });
 
+    $('#searchForm').on('submit',function (e) {
+        e.preventDefault();
+
+
+
+    })
+
 });
 
 function addArticle(rentacar) {

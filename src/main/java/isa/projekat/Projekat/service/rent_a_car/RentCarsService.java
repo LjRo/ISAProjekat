@@ -61,4 +61,8 @@ public class RentCarsService {
         return  true;
     }
 
+    public List<RentACar> findAllByName(String name, String startDate, String endDate){return rentCarRepository.findAllByName(name,startDate,endDate);}
+
+    public List<RentACar> findAllByLocation(String city, String startDate, String endDate){return  rentCarRepository.findAllByCity(city,startDate,endDate);}
+
 }

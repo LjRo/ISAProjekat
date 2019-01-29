@@ -16,6 +16,7 @@ import isa.projekat.Projekat.security.TokenUtils;
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -61,6 +62,12 @@ public class RentOfficeController {
     public RentOffice findByIdAndRentACarId(@PathVariable long id,@PathVariable long idrent){
         return rentOfficeService.findByIdAndRentACarId(id,idrent);
     }
+
+    @RequestMapping(value ="api/office/all", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<RentOffice> findAllLocations(@RequestParam Long id){
+        return rentOfficeService.findAllByRentACarIdList(id);
+    }
+
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")

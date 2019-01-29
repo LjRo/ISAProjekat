@@ -69,9 +69,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/auth/**").permitAll()
 			.antMatchers("/h2-console/**").permitAll()
 			.antMatchers("/assets/img/**").permitAll()
-
-
-
+			.antMatchers("/api/office/all**").permitAll()
+			.antMatchers("/api/cartypes").permitAll()
+			.antMatchers("/api/cars/**/availablePrice**").permitAll()
 				//.antMatchers("/**/**").permitAll()
 
 				// svaki zahtev mora biti autorizovan

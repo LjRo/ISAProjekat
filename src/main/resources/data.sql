@@ -54,6 +54,12 @@ VALUES ("Prva filijala",1,1);
 INSERT INTO rent_office (name,location_id,rentacar_id)
 VALUES ("Druga filijala",2,1);
 
+INSERT INTO rent_office (name,location_id,rentacar_id)
+VALUES ("QQ filijala",3,2);
+
+INSERT INTO rent_office (name,location_id,rentacar_id)
+VALUES ("WW filijala",4,2);
+
 /*
 INSERT INTO rentacar_rent_offices (rentacar_id,rent_offices_id)
 VALUES (1,1);
@@ -101,6 +107,12 @@ values ("BrzkoQWE","Mercedes","Benz","13QQ55",4,4,4,250,true,1,1);
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
 values ("SporaQWE","Mercedes","C","44WE32",4,4,4,100,false,1,1);
 
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("EW","Mercedes","C","44WE32",4,4,4,100,false,2,2);
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ("WE","Mercedes","C","44WE32",4,4,4,100,false,2,1);
 
 /* users.sql */
 /* password = 123*/
@@ -373,3 +385,10 @@ insert into flights_seats(flight_id,seats_id) values(2,16);
 
 
 /*insert into airlines_admins (airline_id, admins_id) values (1,5); Commented because of An illegal reflective access operation has occurred*/
+
+/* Rent Reservations*/
+
+INSERT INTO rent_reservation (user_id,start_date, end_date, end_location, start_location, number_of_people, airline_reservation_id, rented_car_id) VALUES (2,'2019-01-01','2019-01-10', 1,3,3,null,1);
+INSERT INTO rent_reservation (user_id,start_date, end_date, end_location, start_location, number_of_people, airline_reservation_id, rented_car_id) VALUES (2,'2019-01-15','2019-01-23', 1,3,3,null,1);
+INSERT INTO rent_reservation (user_id,start_date, end_date, end_location, start_location, number_of_people, airline_reservation_id, rented_car_id) VALUES (2,'2019-01-01','2019-01-02', 1,3,3,null,14);
+INSERT INTO rent_reservation (user_id,start_date, end_date, end_location, start_location, number_of_people, airline_reservation_id, rented_car_id) VALUES (2,'2019-01-05','2019-01-08', 1,3,3,null,14);
