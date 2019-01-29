@@ -50,8 +50,8 @@ $(document).ready(function () {
                             var locStart = $("#locationOptionStart option:selected").val();
                             var locEnd = $("#locationOptionEnd option:selected").val();
 
-                            var minPrice = $("#search-minPrice").val()  ;
-                            var maxPrice = $("#search-maxPrice").val() ;
+                            var minPrice = $("#search-minPrice").val();
+                            var maxPrice = $("#search-maxPrice").val();
 
                             minPrice = minPrice == '' ? 0 : minPrice;
                             maxPrice = maxPrice == '' ? 0 : maxPrice;

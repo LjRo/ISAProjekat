@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
+import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -45,8 +46,8 @@ public class RentCarController {
 
 
     @Transactional(readOnly = true)
-    @RequestMapping(value = "api/rentacar/filtered")
-    public List<RentACar> findFilteredRentACar(@RequestBody Integer type, @RequestBody String search, @RequestBody String start, @RequestBody String end){
+    @RequestMapping(value = "api/rentacar/filtered", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<RentACar> findFilteredRentACar(@RequestParam Integer type, @RequestParam String search, @RequestParam String start, @RequestParam String end){
 
         if (type == 0){
             return rentCarsService.findAllByName(search,start,end);
