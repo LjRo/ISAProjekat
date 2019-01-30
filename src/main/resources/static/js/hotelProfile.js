@@ -96,6 +96,15 @@ $(document).ready(function () {
                                     $(".hotel-admin").remove();
                                 }
                             });
+                            $.get({
+                                url: '/api/user/user',
+                                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                                success: function (data) {
+                                },
+                                error : function (e) {
+                                    $(".user").remove();
+                                }
+                            });
                         }
                     });
                 }
@@ -167,6 +176,15 @@ $(document).ready(function () {
                                     },
                                     error : function (e) {
                                         $(".hotel-admin").remove();
+                                    }
+                                });
+                                $.get({
+                                    url: '/api/user/user',
+                                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                                    success: function (data) {
+                                    },
+                                    error : function (e) {
+                                        $(".user").remove();
                                     }
                                 });
                             }
@@ -323,7 +341,7 @@ function addRoom(room,hotelId,price) {
         '                                                            Floor: <strong><span id="Floor">' + room.floor + '</span></strong>' +
         '                                                            <br>' +
         '                                                            <button id="editRoom' + room.id +'" class="btn btn-primary hotel-admin btn-outline-secondary rounded-0 mb-1" type="button"> Edit </button>' +
-        '                                                            <button class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" type="button"> Reserve  </button>' +
+        '                                                            <button class="btn btn-primary user  btn-outline-secondary rounded-0 mb-1" type="button"> Reserve  </button>' +
         '                                                        </div>' +
         '                                                    </div>' +
         '                                                </div>' +
