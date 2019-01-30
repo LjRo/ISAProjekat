@@ -7,11 +7,9 @@ import isa.projekat.Projekat.model.user.VerificationToken;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.security.auth.JwtAuthenticationRequest;
 import isa.projekat.Projekat.service.user_auth.CustomUserDetailsService;
-//import isa.projekat.Projekat.utils.DeviceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.mobile.device.Device;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,17 +17,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+//import isa.projekat.Projekat.utils.DeviceProvider;
+//import org.springframework.mobile.device.Device;
 
 //Kontroler zaduzen za autentifikaciju korisnika
 @RestController
@@ -68,6 +69,7 @@ public class AuthenticationController {
 		// Vrati token kao odgovor na uspesno autentifikaciju
 		return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
 	}
+
 
 	@RequestMapping(value = "/loginToken", method = RequestMethod.POST)
 	public ResponseEntity<?> loginWithToken(HttpServletRequest request) throws AuthenticationException, ParseException {

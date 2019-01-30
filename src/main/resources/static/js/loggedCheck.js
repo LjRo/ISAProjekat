@@ -5,9 +5,11 @@ $(document).ready(function () { //TODO modifikovati za nase korisnike i skinuti 
         success: function (data) {
             $(".not-logged").css("display", "none");
             $(".logged").css("display", "inherit");
+            $('a.logged').css("display", "inline-block")
         },
         error : function (e) {
             $(".not-logged").css("display", "inherit");
+            $('a.not-logged').css("display", "inline-block")
             $(".logged").css("display", "none");
         }
     });
@@ -17,6 +19,7 @@ $(document).ready(function () { //TODO modifikovati za nase korisnike i skinuti 
         success: function (data) {
             $(".not-logged").css("display", "none");
             $(".logged").css("display", "inherit");
+            $('a.logged').css("display", "inline-block")
         },
         error : function (e) {
             $(".hotel-admin").remove();
@@ -29,6 +32,7 @@ $(document).ready(function () { //TODO modifikovati za nase korisnike i skinuti 
         success: function (data) {
             $(".not-logged").css("display", "none");
             $(".logged").css("display", "inherit");
+            $('a.logged').css("display", "inline-block")
         },
         error : function (e) {
             $(".admin-airline").remove();
@@ -42,10 +46,20 @@ $(document).ready(function () { //TODO modifikovati za nase korisnike i skinuti 
         success: function (data) {
             $(".not-logged").css("display", "none");
             $(".logged").css("display", "inherit");
+            $('a.logged').css("display", "inline-block")
         },
         error : function (e) {
             $(".rentacar-admin").remove();
             $('.rentacar-admin').remove();
         }
     });
+
+
 });
+
+function logout() {
+    localStorage.setItem('accessToken', null);
+    localStorage.setItem('expiresIn', null);
+    var url = window.location.href.match(/^.*\//) + 'login.html';
+    window.location.replace(url);
+}
