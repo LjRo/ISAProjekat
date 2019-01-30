@@ -21,13 +21,13 @@ public class UserRolesController {
     }
 
     @RequestMapping(value = "api/user/rentAdmin", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     public boolean checkUserRent(){
         return true;
     }
 
     @RequestMapping(value = "api/user/airlineAdmin", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
     public boolean checkUserAirline(){
         return true;
     }

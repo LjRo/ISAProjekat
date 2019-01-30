@@ -151,7 +151,13 @@ $(document).ready(function () {
                                             }
                                         }
                                     }
-                                    addRoom(data.content[i],pId,selRoomType);
+
+                                    var date1 = new Date(arrival);
+                                    var date2 = new Date(departure);
+                                    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                                    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                                    diffDays= (diffDays==0)?1:diffDays;
+                                    addRoom(data.content[i],pId,diffDays*selRoomType);
                                 }
                                 setPagingButtons(data.totalPages, data.totalElements);
                                 $.get({
