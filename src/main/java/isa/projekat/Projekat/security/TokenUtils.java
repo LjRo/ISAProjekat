@@ -7,7 +7,6 @@ import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.utils.TimeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +22,7 @@ public class TokenUtils {
 	@Value("somesecret")
 	public String SECRET;
 
-	@Value("300")
+	@Value("86400000")
 	private int EXPIRES_IN;
 
 	@Value("600")

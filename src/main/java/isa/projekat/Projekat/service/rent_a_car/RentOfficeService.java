@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.service.rent_a_car;
 
 
+import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import isa.projekat.Projekat.model.rent_a_car.RentOffice;
 import isa.projekat.Projekat.model.user.User;
@@ -8,14 +9,12 @@ import isa.projekat.Projekat.repository.LocationRepository;
 import isa.projekat.Projekat.repository.RentCarRepository;
 import isa.projekat.Projekat.repository.RentOfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import isa.projekat.Projekat.model.rent_a_car.Location;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import java.util.List;
 import java.util.Optional;
 
 
@@ -39,6 +38,10 @@ public class RentOfficeService {
     public Page<RentOffice> findAllByRentACarId(Long id, PageRequest pageRequest) { return rentOfficeRepository.findAllByRentACarId(id, pageRequest);}
 
     public RentOffice findByIdAndRentACarId(Long id, Long idrent){ return rentOfficeRepository.findByIdAndRentACarId(id,idrent);}
+
+    public List<RentOffice> findAllByRentACarIdList(Long id) { return rentOfficeRepository.findAllByRentACarId(id);}
+
+
 
     @Transactional
     public boolean addOffice(RentOffice office,Long id, User user) {

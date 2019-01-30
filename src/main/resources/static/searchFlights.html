@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eJourney</title>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/FeaturesBoxed.css">
+    <link rel="stylesheet" href="css/NewsletterSubscriptionForm.css">
+    <link rel="stylesheet" href="css/NavigationWithButton.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="js/nav.js"></script>
+    <script type="text/javascript" src="js/searchFlight.js"></script>
+    <script type="text/javascript" src="js/loggedCheck.js"></script>
+
+
+</head>
+<body>
+
+<div id="navbar-frame"></div>
+
+
+<div class="newsletter-subscribe" id="filters">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Article Filter</h2>
+        </div>
+        <form class="form-inline" >
+            <div class="form-group" style="width: 100%">
+                <input class="form-control" id="from" name="fromLoc" placeholder="From" type="text"/>
+                <input class="form-control" id="to" name="toLoc" placeholder="Destination" type="text"/>
+                <input class="form-control datepicker" id="fromDate" type="date">
+                <input class="form-control datepicker" id="toDate" type="date">
+            </div>
+            <br><br>
+
+        </form>
+        <div class="form-group" style="width: 15%">
+            <button class="btn btn-primary btn-block" id="searchBtn">Search</button>
+        </div>
+    </div>
+</div>
+
+<div class="features-boxed">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Flights</h2>
+        </div>
+        <div class="row justify-content-center features" id="airlineList">
+            <table id="flights" class="display responsive dataTable dtr-inline collapsed table table-striped table-hover table-bordered" role="grid" style="width: 100%;">
+                <thead>
+                <tr>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="flightTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

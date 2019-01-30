@@ -1,16 +1,11 @@
 package isa.projekat.Projekat.service.rent_a_car;
 
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
-import isa.projekat.Projekat.model.rent_a_car.RentOffice;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.RentCarRepository;
-import isa.projekat.Projekat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +54,26 @@ public class RentCarsService {
         //entityManager.persist(rent);
 
         return  true;
+    }
+
+    public List<RentACar> findAllByName(String name, String startDate, String endDate){
+        List<RentACar> list = rentCarRepository.findAllByName(name,startDate,endDate);
+
+        for (RentACar a: list) {
+            a.setAdmins(null);
+        }
+
+        return list;
+    }
+
+    public List<RentACar> findAllByLocation(String city, String startDate, String endDate){
+        List<RentACar> list =  rentCarRepository.findAllByCity(city,startDate,endDate);
+
+        for (RentACar a: list) {
+            a.setAdmins(null);
+        }
+
+        return list;
     }
 
 }

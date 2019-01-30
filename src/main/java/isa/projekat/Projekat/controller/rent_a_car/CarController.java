@@ -1,7 +1,7 @@
 package isa.projekat.Projekat.controller.rent_a_car;
 
 import isa.projekat.Projekat.model.rent_a_car.Cars;
-import isa.projekat.Projekat.model.rent_a_car.RentACar;
+import isa.projekat.Projekat.model.rent_a_car.RentReservation;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.rent_a_car.CarService;
@@ -9,15 +9,15 @@ import isa.projekat.Projekat.service.user_auth.UserService;
 import isa.projekat.Projekat.utils.PageRequestProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.MediaType;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,6 +80,38 @@ public class CarController {
         User user = getUser(httpServletRequest);
         return responseTransaction(carService.removeCar(id,idrent,user));
     }
+
+
+
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "api/cars/{idrent}/{idAir}/reserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> reserveCar(@PathVariable Long idrent, @PathVariable Long idAir, @RequestParam Long id, HttpServletRequest httpServletRequest,@RequestBody RentReservation rentReservation){
+        User user = getUser(httpServletRequest);
+        return responseTransaction(carService.reserveCar(id,idrent,user,rentReservation,idAir));
+    }
+
+   /* @Transactional(readOnly = true)
+   // @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "api/cars/{idrent}/available", method = RequestMethod.GET)
+    public Page<Cars> listAvailable(@PathVariable Long idrent, @RequestParam String page,@RequestParam Long carTypeId, @RequestParam String start, @RequestParam String end, @RequestParam Integer passengers) throws java.text.ParseException{
+
+        //SimpleDateFormat  format =new SimpleDateFormat("yyyy-MM-dd");
+
+        return carService.listAvailableWithDateOnly(idrent,pageRequestProvider.provideRequest(page),carTypeId,start,end,passengers);
+    }*/
+
+    @Transactional(readOnly = true)
+    //@PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "api/cars/{idrent}/availablePrice", method = RequestMethod.GET)
+    public Page<Cars> listAvailablePrice(@PathVariable Long idrent, @RequestParam String page, @RequestParam Long carTypeId, @RequestParam String start, @RequestParam String end,
+                                         @RequestParam Integer passengers, @RequestParam BigDecimal minPrice, @RequestParam BigDecimal maxPrice){
+        if (minPrice.equals(BigDecimal.valueOf(0)) && minPrice.equals(maxPrice)){
+            maxPrice = BigDecimal.valueOf(20000);
+        }
+        return carService.listAvailableWithDate(idrent,pageRequestProvider.provideRequest(page),carTypeId,  minPrice, maxPrice,start,end,passengers);
+    }
+
 
 
 

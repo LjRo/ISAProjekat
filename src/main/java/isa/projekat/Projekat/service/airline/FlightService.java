@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -166,5 +168,34 @@ public class FlightService {
         reservationRespository.save(newRes);
 
         return true;
-}
+    }
+
+    public List<Flight> searchFlights(FlightSearchData data) {
+        ArrayList<Flight> res = new ArrayList<>();
+        //List<Flight> locFlights = flightRepository.findFlights(data.getCityFrom(),data.getCityTo());
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        List<Flight> locFlights = flightRepository.findAll();
+
+
+            for(Flight fl : locFlights) {
+                if(!fl.getStart().getCity().equals(data.getCityFrom())) {
+                    continue;
+                }
+                if(!fl.getFinish().getCity().equals(data.getCityTo())) {
+                    continue;
+                }
+                if(fmt.format(fl.getStartTime()).equals(fmt.format(data.getStartDate()))) {
+                    if (data.getLandDate() != null) {
+                        if (fmt.format(fl.getLandTime()).equals(fmt.format(data.getLandDate()))) {
+                            res.add(fl);
+                        }
+                    } else {
+                        res.add(fl);
+                    }
+                }
+            }
+
+
+        return res;
+    }
 }

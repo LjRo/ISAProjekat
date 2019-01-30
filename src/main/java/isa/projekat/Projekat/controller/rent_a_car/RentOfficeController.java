@@ -2,6 +2,7 @@ package isa.projekat.Projekat.controller.rent_a_car;
 
 import isa.projekat.Projekat.model.rent_a_car.RentOffice;
 import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.rent_a_car.RentOfficeService;
 import isa.projekat.Projekat.service.user_auth.UserService;
 import isa.projekat.Projekat.utils.PageRequestProvider;
@@ -12,10 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import isa.projekat.Projekat.security.TokenUtils;
+
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -61,6 +63,12 @@ public class RentOfficeController {
     public RentOffice findByIdAndRentACarId(@PathVariable long id,@PathVariable long idrent){
         return rentOfficeService.findByIdAndRentACarId(id,idrent);
     }
+
+    @RequestMapping(value ="api/office/all", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<RentOffice> findAllLocations(@RequestParam Long id){
+        return rentOfficeService.findAllByRentACarIdList(id);
+    }
+
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")

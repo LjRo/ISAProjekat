@@ -11,6 +11,37 @@ $(document).ready(function () {
         }
     });
 
+    $("#checkIn").val(new Date().toISOString().split('T')[0]);
+    $("#checkOut").val(new Date().toISOString().split('T')[0]);
+
+    $('#searchForm').on('submit',function (e) {
+        e.preventDefault();
+
+         var type = $("#search-options option:selected").val();
+         var search = $("#search-name").val();
+
+        var start = new Date($("#checkIn").val());
+        var end = new Date($("#checkOut").val());
+
+        start = start.toISOString().split('T')[0];
+        end = end.toISOString().split('T')[0];
+
+        $.get({
+            url : '/api/rentacar/filtered?type='+ type+'&search='+ search + '&start=' + start + '&end=' + end,
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            success : function(data) {
+                if (data != null ) {
+                    $('#carsList').html("");
+                    for ( var i in data) {
+                        addArticle(data[i]);
+                    }
+                   
+                }
+            }
+        });
+
+    })
+
 });
 
 function addArticle(rentacar) {

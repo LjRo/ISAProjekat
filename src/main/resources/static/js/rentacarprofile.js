@@ -22,6 +22,105 @@ $(document).ready(function () {
         window.location.href = window.location.href.match(/^.*\//)+ "addCar.html?idrent=" + pId;
     });
 
+
+    $.get({
+        url : 'api/office/all?id='+ getUrlParameter('id'),
+        success : function(data) {
+            data.forEach(function (element) {
+                fillLocation(element.location,'#locationOptionStart');
+                fillLocation(element.location,'#locationOptionEnd');
+            });
+
+
+            $.get({
+                url : 'api/cartypes',
+                success : function(data) {
+                    data.forEach(function (element) {
+                        fillTypes(element);
+
+                    });
+                        // FILL Data
+
+                        var exists = getUrlParameter("carTypeId");
+
+                        if ( exists != undefined){
+
+                            setFilter();
+
+                            var locStart = $("#locationOptionStart option:selected").val();
+                            var locEnd = $("#locationOptionEnd option:selected").val();
+
+                            var minPrice = $("#search-minPrice").val();
+                            var maxPrice = $("#search-maxPrice").val();
+
+                            minPrice = minPrice == '' ? 0 : minPrice;
+                            maxPrice = maxPrice == '' ? 0 : maxPrice;
+
+                            var pass = $("#search-minPassengers").val();
+
+
+                            var nesto = $("#search-options option:selected").val();
+                            var start = new Date($("#checkIn").val());
+                            var end = new Date($("#checkOut").val());
+
+                            start = start.toISOString().split('T')[0];
+                            end = end.toISOString().split('T')[0];
+                            $.get({
+                                url : window.location.href.match(/^.*\//) + 'api/cars/'+ getUrlParameter('id') +'/availablePrice?page='+getUrlParameter('page')+"&carTypeId="+nesto+"&start="+start+"&end="+ end+ "&passengers="+ pass+"&minPrice=" + minPrice + "&maxPrice=" + maxPrice,
+                                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                                success : function(data) {
+                                    if (data != null && data.numberOfElements > 0) {
+                                        for( var i = 0; i < data.numberOfElements; i++) {
+                                            //for ( var us in data.content) {
+                                            addCar(data.content[i]);
+                                        }
+                                        setPagingButtons(data.totalPages,data.totalElements);
+                                    }
+                                }
+                            });
+
+                        }else {
+
+                            $.get({
+                                url : '/api/cars/findByIdAll?id='+ getUrlParameter('id') +'&page='+getUrlParameter('page')+'&pagelimit=10',
+                                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                                success : function(data) {
+                                    if (data != null && data.numberOfElements > 0) {
+                                        for( var i = 0; i < data.numberOfElements; i++) {
+                                            //for ( var us in data.content) {
+                                            addCar(data.content[i]);
+                                        }
+                                        setPagingButtons(data.totalPages,data.totalElements);
+                                    }
+                                }
+                            });
+                        }
+
+                        $.get({
+                            url : '/api/office/findByIdAll?id='+ getUrlParameter('id') +'&page='+getUrlParameter('pageLocation')+'&pagelimit=10',
+                            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                            success : function(data) {
+                                if (data != null && data.numberOfElements > 0) {
+                                    for( var i = 0; i < data.numberOfElements; i++) {
+                                        //for ( var us in data.content) {
+                                        addLocation(data.content[i],i);
+
+                                    }
+                                    setPagingButtonsLocation(data.totalPages,data.totalElements);
+                                }
+                            }
+                        });
+
+
+                }
+            });
+
+
+        }
+    });
+
+
+
     $.get({
         url : '/api/rentacar/findById=' + pId,
         success : function(data) {
@@ -39,32 +138,44 @@ $(document).ready(function () {
             }
         }
     });
-    $.get({
-        url : '/api/cars/findByIdAll?id='+ getUrlParameter('id') +'&page='+getUrlParameter('page')+'&pagelimit=10',
-        success : function(data) {
-            if (data != null && data.numberOfElements > 0) {
-                for( var i = 0; i < data.numberOfElements; i++) {
-                    //for ( var us in data.content) {
-                    addCar(data.content[i]);
-                }
-                setPagingButtons(data.totalPages,data.totalElements);
-            }
-        }
+
+    //$('#srcSubmit').on('click',function (e) {
+    $('#formSearch').on('submit', function(e) {
+
+        e.preventDefault();
+        var locStart = $("#locationOptionStart option:selected").val();
+        var locEnd = $("#locationOptionEnd option:selected").val();
+
+        var minPrice = $("#search-minPrice").val()  ;
+        var maxPrice = $("#search-maxPrice").val() ;
+
+        minPrice = minPrice == '' ? 0 : minPrice;
+        maxPrice = maxPrice == '' ? 0 : maxPrice;
+
+        var pass = $("#search-minPassengers").val();
+
+
+        var nesto = $("#carOptions option:selected").val();
+        var start = new Date($("#checkIn").val());
+        var end = new Date($("#checkOut").val());
+
+        start = start.toISOString().split('T')[0];
+        end = end.toISOString().split('T')[0];
+
+        //window.location.href = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page=0' + '&pageLocation=' +  getUrlParameter('pageLocation')
+       // + "&carTypeId ="+ nesto + "&start=" + start + "&end=" + end + "&minPrice=" + minPrice + "&maxPrice="+ maxPrice + "&locStart=" + locStart + "&locEnd=" + locEnd;
+
+        window.location.replace(window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page=0' + '&pageLocation=' +  getUrlParameter('pageLocation')
+            + "&carTypeId="+ nesto + "&start=" + start + "&end=" + end + "&minPrice=" + minPrice + "&maxPrice="+ maxPrice + "&locStart=" + locStart + "&locEnd=" + locEnd + "&passengers=" + pass);
+        //  window.location.reload(true);
+
     });
 
-    $.get({
-        url : '/api/office/findByIdAll?id='+ getUrlParameter('id') +'&page='+getUrlParameter('pageLocation')+'&pagelimit=10',
-        success : function(data) {
-            if (data != null && data.numberOfElements > 0) {
-                for( var i = 0; i < data.numberOfElements; i++) {
-                    //for ( var us in data.content) {
-                    addLocation(data.content[i],i);
 
-                }
-                setPagingButtonsLocation(data.totalPages,data.totalElements);
-            }
-        }
-    });
+
+
+
+
 
 });
 
@@ -98,14 +209,50 @@ function setPagingButtons(MaxPages, MaxElements) {
 
     $('#TotalPages').html("Page " +(parseInt(getUrlParameter('page'))+1) + "/"+(MaxPages) );
     $('#TotalListings').html("Found "+ MaxElements + " cars");
-
-
     var pId = getUrlParameter('id');
 
-    var adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+next + '&pageLocation=' +  getUrlParameter('pageLocation');
-    nextElement.attr("href", adr);
-    adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+previous +'&pageLocation=' + getUrlParameter('pageLocation');
-    previousElement.attr("href",adr);
+
+
+    if (getUrlParameter("carTypeId") != undefined){
+
+
+        var locStart = $("#locationOptionStart option:selected").val();
+        var locEnd = $("#locationOptionEnd option:selected").val();
+
+        var minPrice = $("#search-minPrice").val()  ;
+        var maxPrice = $("#search-maxPrice").val() ;
+
+        minPrice = minPrice == '' ? 0 : minPrice;
+        maxPrice = maxPrice == '' ? 0 : maxPrice;
+
+        var pass = $("#search-minPassengers").val();
+
+
+        var nesto = $("#search-options option:selected").val();
+        var start = new Date($("#checkIn").val());
+        var end = new Date($("#checkOut").val());
+
+        start = start.toISOString().split('T')[0];
+        end = end.toISOString().split('T')[0];
+
+
+        var adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page=' + next + '&pageLocation=' +  getUrlParameter('pageLocation')
+            + "&carTypeId="+ nesto + "&start=" + start + "&end=" + end + "&minPrice=" + minPrice + "&maxPrice="+ maxPrice + "&locStart=" + locStart + "&locEnd=" + locEnd + "&passengers=" + pass;
+        nextElement.attr("href", adr);
+        adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page=' + previous + '&pageLocation=' +  getUrlParameter('pageLocation')
+            + "&carTypeId="+ nesto + "&start=" + start + "&end=" + end + "&minPrice=" + minPrice + "&maxPrice="+ maxPrice + "&locStart=" + locStart + "&locEnd=" + locEnd + "&passengers=" + pass;
+        previousElement.attr("href",adr);
+
+    }else {
+
+        var adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+next + '&pageLocation=' +  getUrlParameter('pageLocation');
+        nextElement.attr("href", adr);
+        adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+previous +'&pageLocation=' + getUrlParameter('pageLocation');
+        previousElement.attr("href",adr);
+    }
+
+
+
 
     if (previous < 0)
         previousElement.attr('href', "");
@@ -126,10 +273,44 @@ function setPagingButtonsLocation(MaxPages, MaxElements) {
 
     var pId = getUrlParameter('id');
 
-    var adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+getUrlParameter('page')+'&pageLocation=' + next;
-    nextElement.attr("href", adr);
-    adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+getUrlParameter('page')+'&pageLocation='+previous;
-    previousElement.attr("href",adr);
+    if (getUrlParameter("carTypeId") != undefined){
+
+
+        var locStart = $("#locationOptionStart option:selected").val();
+        var locEnd = $("#locationOptionEnd option:selected").val();
+
+        var minPrice = $("#search-minPrice").val()  ;
+        var maxPrice = $("#search-maxPrice").val() ;
+
+        minPrice = minPrice == '' ? 0 : minPrice;
+        maxPrice = maxPrice == '' ? 0 : maxPrice;
+
+        var pass = $("#search-minPassengers").val();
+
+
+        var nesto = $("#search-options option:selected").val();
+        var start = new Date($("#checkIn").val());
+        var end = new Date($("#checkOut").val());
+
+        start = start.toISOString().split('T')[0];
+        end = end.toISOString().split('T')[0];
+
+
+        var adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page=' + getUrlParameter('page') + '&pageLocation=' +  next
+            + "&carTypeId="+ nesto + "&start=" + start + "&end=" + end + "&minPrice=" + minPrice + "&maxPrice="+ maxPrice + "&locStart=" + locStart + "&locEnd=" + locEnd + "&passengers=" + pass;
+        nextElement.attr("href", adr);
+        adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page=' + getUrlParameter('page') + '&pageLocation=' +  previous
+            + "&carTypeId="+ nesto + "&start=" + start + "&end=" + end + "&minPrice=" + minPrice + "&maxPrice="+ maxPrice + "&locStart=" + locStart + "&locEnd=" + locEnd + "&passengers=" + pass;
+        previousElement.attr("href",adr);
+
+    }else {
+        var adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+getUrlParameter('page')+'&pageLocation=' + next;
+        nextElement.attr("href", adr);
+        adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+getUrlParameter('page')+'&pageLocation='+previous;
+        previousElement.attr("href",adr);
+    }
+
+
 
     if (previous < 0)
         previousElement.attr('href', "");
@@ -141,14 +322,12 @@ function addLocation(location) {
     var div = $('#addListingsLocation');
 
     var tr = $('<div class="card mb-1"></div>');
-    // var d1 = $('<div class="card mb-1">');
+
     var d2 = $(' <div class="card-body"></div>');
     var d3 = $(' <div class="row"></div>');
     var d4 = $('<div class="col-md-3"></div>');
    var d5 = $(' <img class ="card-img" src="assets/img/map.svg">');
-   // var d5 = $('<div id="map'+ location.id +'" class="d-none d-md-block iphone-mockup">\n' +
-   //     '\n' +
-   //     '</div>');
+
 
     var d7 = $(' <div class="col-md-6 border-right"></div>');
     var d8 = $(' <h5 class="text-danger" id="OfficeName'+location.id+'">'+ location.name + '</h5>');
@@ -157,21 +336,8 @@ function addLocation(location) {
     var d11 = $(' <div style="width: 33%;float:right;" style="width: auto">Country: <strong><div id="country'+location.id+'">' +  location.location.country + '</div></strong></div>');
 
     var d13 = $('<div class="col-md-3"></div>');
-    //var d14 = $(' <h5>$'+ car.dailyPrice +'</h5>');
-    //var d15 = $('<i id="star1" class="fa fa-star"></i>');
-    //var d16 = $('<i id="star2" class="fa fa-star"></i>');
-    //var d17 = $('<i id="star3" class="fa fa-star"></i>');
-    //var d18 = $('<i id="star4" class="fa fa-star"></i>');
-    //var d19 = $('<i id="star5" class="fa fa-star"></i>');
-    //var d20 = $('<br>');
-    //var d21 = $('<a href=""><small>more info about car</small></a>');
-    //var d22 = $('<br>');
+
     var d23 = $(' <button type="button" id="editButtonLocation'+ location.id +'" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
-
-
-
-    //var d24 = $(' <button type="button" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">BUY</button>');
-    // var d25 = $(' </div>'); same as d6 x4
 
     //Picture
     d4.append(d5);
@@ -184,22 +350,12 @@ function addLocation(location) {
     d7.append(d11);
     d3.append(d7);
 
-    //Price, stars, more info, buttons
-    /*d13.append(d14);
-    d13.append(d15);
-    d13.append(d16);
-    d13.append(d17);
-    d13.append(d18);
-    d13.append(d19);
-    d13.append(d20);
-    d13.append(d21);
-    d13.append(d22);*/
+
     d13.append(d23);
-   // d13.append(d24);
+
 
     d3.append(d13);
 
-    // adding to div parent
     d2.append(d3);
     tr.append(d2);
 
@@ -307,3 +463,35 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+
+function setFilter(){
+    var carTypeId =  getUrlParameter('carTypeId')
+    var start = getUrlParameter('start');
+    var end = getUrlParameter('end');
+    var pass = getUrlParameter('passengers');
+    var locStart = getUrlParameter('locStart');
+    var locEnd = getUrlParameter('locEnd');
+
+    $('#search-options').val(carTypeId);
+
+    $('#search-location-start').val(locStart);
+    $('#search-location-end').val(locEnd);
+
+
+    $('#checkIn').val(start);
+    $('#checkOut').val(end);
+
+    $('#search-minPassengers').val(pass);
+
+    $("#search-minPrice").val(getUrlParameter('minPrice'))  ;
+    $("#search-maxPrice").val(getUrlParameter('maxPrice')) ;
+
+}
+
+function fillTypes(data) {
+    $('#carOptions').append('<option value= "' + data.id + '">' + data.name + '</option>');
+}
+
+function fillLocation(data,selector) {
+    $(selector).append('<option value= "' + data.id + '">' + data.addressName + '</option>');
+}
