@@ -26,8 +26,13 @@ $(function () {
                 });
                 $('.room').each(function (i, obj) {
 
-                    var WhatisIt = $(this);
-                    var whatobjectIsIt = obj;
+                   //var WhatisIt = $(this);
+                   // var whatobjectIsIt = obj;
+                    var selectedIDCheck = $(this).attr("id").toString();
+                    selectedIDCheck  = selectedIDCheck.replace("draggable", "");
+                    var idCount = parseInt($('#iterator').html());
+                    if(idCount<selectedIDCheck)
+                        $('#iterator').html(selectedIDCheck);
 
                     $(this).draggable({containment: "parent"});
                     $(this).draggable({

@@ -228,16 +228,16 @@ INSERT INTO room_type (name)
 VALUES ("Single Beds");
 
 INSERT INTO room_type (name)
-VALUES ("Couple DoubleBed + Single beds");
+VALUES ("Couple DoubleBed + 2 Single beds");
 
 INSERT INTO room_type (name)
 VALUES ("Couple DoubleBed + Single bed");
 
 INSERT INTO room_type (name)
-VALUES ("Couple DoubleBeds");
+VALUES ("2 Couple DoubleBeds");
 
 INSERT INTO room_type (name)
-VALUES ("Couple DoubleBeds + Single bed");
+VALUES ("2 Couple DoubleBeds + Single bed");
 
 INSERT INTO room_type (name)
 VALUES ("Deluxe room");
@@ -293,7 +293,11 @@ INSERT INTO hotels_hotel_price_list(hotel_id,hotel_price_list_id)
 VALUES (2,7);
 
 
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,hotel_id,room_id)
+VALUES (3, '2019-01-01', '2019-01-15' ,14, '2019-01-01', 1 , 3 );
 
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,hotel_id,room_id,airline_reservation_id)
+VALUES (5, '2019-01-10', '2019-01-15' ,14, '2019-01-01', 1 ,4, null );
 
 
 INSERT INTO floor_plan (configuration, floor_number, hotel_id)

@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Set;
 
 @Service
@@ -21,9 +19,6 @@ public class FloorService {
 
     @Autowired
     private FloorRepository floorRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     public FloorPlan findById(Long id) {
         return floorRepository.findById(id).get();

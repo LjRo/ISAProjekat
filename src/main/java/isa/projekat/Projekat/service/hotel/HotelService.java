@@ -32,6 +32,9 @@ public class HotelService {
     @Autowired
     private HotelServicesRepository hotelServicesRepository;
 
+    @Autowired
+    private HotelReservationRepository hotelReservationRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -51,6 +54,9 @@ public class HotelService {
         Hotel returning = item.get();
         returning.setAdmins(null);
         return returning;
+    }
+    public List<Hotel> findAvailableByHotelId(String arrival,String departure, String location ,String name) {
+        return hotelRepository.returnAvailableHotels(arrival,departure,location,name);
     }
 
     public HotelServices findHotelServiceById(Long id){
@@ -213,22 +219,24 @@ public class HotelService {
     }
 
     @Transactional
-public boolean removeHotelService(HotelServices hotelServices, User user) {
-        if(!checkIfAdminAndCorrectAdmin(hotelServices.getHotel().getId(),user))
+    public boolean removeHotelService(HotelServices hotelServices, User user) {
+            if(!checkIfAdminAndCorrectAdmin(hotelServices.getHotel().getId(),user))
+                return false;
+            Optional<HotelServices> foundHotelServices = hotelServicesRepository.findById(hotelServices.getId());
+            if(foundHotelServices.isPresent())
+            {
+                HotelServices removing = foundHotelServices.get();
+                Hotel target = hotelRepository.findById(hotelServices.getHotel().getId()).get();
+                target.getHotelServices().remove(removing);
+                removing.setHotel(null);
+                hotelServicesRepository.delete(removing);
+                return true;
+            }
+            // entityManager.persist(foundHotel);
             return false;
-        Optional<HotelServices> foundHotelServices = hotelServicesRepository.findById(hotelServices.getId());
-        if(foundHotelServices.isPresent())
-        {
-            HotelServices removing = foundHotelServices.get();
-            Hotel target = hotelRepository.findById(hotelServices.getHotel().getId()).get();
-            target.getHotelServices().remove(removing);
-            removing.setHotel(null);
-            hotelServicesRepository.delete(removing);
-            return true;
         }
-        // entityManager.persist(foundHotel);
-        return false;
-    }
+
+
 
 
     @SuppressWarnings("Duplicates")

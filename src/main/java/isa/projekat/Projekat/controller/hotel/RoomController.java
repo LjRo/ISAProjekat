@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.controller.hotel;
 
 import isa.projekat.Projekat.model.hotel.Room;
+import isa.projekat.Projekat.model.hotel.RoomSearchData;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.hotel.RoomService;
@@ -51,6 +52,13 @@ public class RoomController {
     public Page<Room> findById(@RequestParam long id,@RequestParam String page) {
         return roomService.findByHotelId(id,pageRequestProvider.provideRequest(page));
     }
+
+    @PermitAll
+    @RequestMapping(value = "api/rooms/findByIdAvailable", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Page<Room> findByIdAvailable(@RequestBody RoomSearchData roomSearchData) {
+        return roomService.findAvailableByHotelId(roomSearchData,pageRequestProvider.provideRequest(roomSearchData.getPage()));
+    }
+
 
     @RequestMapping(value = "api/rooms/{id}/editRoom", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")

@@ -34,11 +34,14 @@
 <div class="newsletter-subscribe">
     <div class="container">
         <div class="intro">
-            <h2 class="text-center">Article Filter</h2>
+            <h2 class="text-center">Hotels Filter</h2>
         </div>
-        <form class="form-inline" method="get" action="airlines.html">
+        <form class="form-inline" id="search_hotel">
             <div class="form-group">
-                <input id="search-name" class="form-control" type="text" name="name" placeholder="Article Name"/>
+                <input id="search-name" class="form-control" type="text" name="name" placeholder="Hotel Name"/>
+                <input id="search-location" class="form-control" type="text" name="location" placeholder="Location"/>
+                <input class="form-control datepicker" id="checkIn" type="date">
+                <input class="form-control datepicker" id="checkOut" type="date">
             </div>
 
             <div class="form-group">
@@ -51,7 +54,7 @@
 <div class="features-boxed">
     <div class="container">
         <div class="intro">
-            <h2 class="text-center">Articles</h2>
+            <h2 class="text-center">Hotels</h2>
         </div>
         <div class="row justify-content-center features" id="hotelList">
 

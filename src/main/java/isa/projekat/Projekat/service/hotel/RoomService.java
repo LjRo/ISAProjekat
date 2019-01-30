@@ -2,9 +2,11 @@ package isa.projekat.Projekat.service.hotel;
 
 import isa.projekat.Projekat.model.hotel.Hotel;
 import isa.projekat.Projekat.model.hotel.Room;
+import isa.projekat.Projekat.model.hotel.RoomSearchData;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.HotelRepository;
 import isa.projekat.Projekat.repository.RoomRepository;
+import isa.projekat.Projekat.repository.RoomTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,12 +24,21 @@ public class RoomService {
     @Autowired
     private HotelRepository hotelRepository;
 
+    @Autowired
+    private RoomTypeRepository roomTypeRepository;
 
     public Page<Room> findAll(PageRequest pageRequest){
         return roomRepository.findAll(pageRequest);
     }
 
     public Page<Room> findByHotelId( Long id,PageRequest pageRequest) { return roomRepository.findByHotelId(id,pageRequest);}
+
+    //(roomSearchData.getHotelId(),roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate(),roomSearchData.getType(),pageRequestProvider.provideRequest(roomSearchData.getPage()));
+    public Page<Room> findAvailableByHotelId(RoomSearchData roomSearchData, PageRequest pageRequest) {
+            return roomRepository.returnRoomsThatAreAvailable(roomSearchData.getHotelId(),roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate(),roomSearchData.getType(),roomSearchData.getNumberOfPeople(),roomSearchData.getNumberOfRooms(),roomSearchData.getNumberOfBeds(),roomSearchData.getMinPrice(),roomSearchData.getMaxPrice(),pageRequest);
+                   //roomRepository.returnRoomsThatAreAvailable(roomSearchData.getHotelId(),roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate(),roomSearchData.getType(),pageRequest,roomSearchData.getNumberOfPeople(),roomSearchData.getNumberOfRooms(),roomSearchData.getNumberOfBeds(),roomSearchData.getMinPrice(),roomSearchData.getMaxPrice());
+    }
+
 
     public Room findById( Long id) {
         Optional<Room> oRoom = roomRepository.findById(id);

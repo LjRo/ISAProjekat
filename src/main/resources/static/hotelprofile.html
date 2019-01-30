@@ -31,7 +31,7 @@
 <body>
 <div id="navbar-frame"></div>
 
-<div class="highlight-phone not-logged">
+<div class="highlight-phone">
     <div class="container">
         <div class="row">
             <div class="col-md-8">
@@ -74,7 +74,7 @@
                 </div>
                 <div class="col-xs-12 divider text-center">
                     <div class="btn-group dropup btn-block">
-                        <button id="editHotel" class="btn btn-primary airline-admin" style="flex:0.1" type="button"><span
+                        <button id="editHotel" class="btn btn-primary hotel-admin" style="flex:0.1" type="button"><span
                                 class="fa fa-gear"></span> Edit
                         </button>
                     </div>
@@ -98,7 +98,7 @@
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                         <a aria-controls="nav-rooms" aria-selected="true" class="nav-item nav-link active" data-toggle="tab" href="#nav-rooms" id="nav-rooms-tab" role="tab">Rooms</a>
                         <a aria-controls="nav-layout" aria-selected="false" class="nav-item nav-link" data-toggle="tab" href="#nav-layout" id="nav-layout-tab" role="tab">Layout</a>
-                        <a aria-controls="nav-admin" aria-selected="false" class="nav-item nav-link" data-toggle="tab" href="#nav-admin" id="nav-admin-tab" role="tab">Admin</a>
+                        <a aria-controls="nav-admin" aria-selected="false" class="nav-item nav-link hotel-admin" data-toggle="tab" href="#nav-admin" id="nav-admin-tab" role="tab">Admin</a>
                         <a aria-controls="nav-about" aria-selected="false" class="nav-item nav-link" data-toggle="tab" href="#nav-about" id="nav-about-tab" role="tab">About</a>
                     </div>
                 </nav>
@@ -120,25 +120,24 @@
                         <div class="newsletter-subscribe" id="filters">
                             <div class="container">
                                 <div class="intro">
-                                    <h2 class="text-center">Article Filter</h2>
+                                    <h2 class="text-center">Room Filter</h2>
                                 </div>
-                                <form action="airlines.html" class="form-inline" method="get">
+                                <form class="form-inline" id="Search">
                                     <div class="form-group" style="width: 100%">
-                                        <input class="form-control datepicker" id="checkIn" type="datetime-local">
-                                        <input class="form-control datepicker" id="checkOut" type="datetime-local">
-                                        <input class="form-control" id="search-minPrice" min="0.01" name="minPrice" placeholder="Min Price" step="0.01" type="number"/>
-                                        <input class="form-control" id="search-maxPrice" min="0.01" name="maxPrice" placeholder="Max Price" step="0.01" type="number"/>
-                                        <div class="form-group"><select class="form-control" id="search-restaurant" name="restaurant">
-                                            <optgroup id="restaurantOptions" label="Restaurant">
-                                                <option value="">Any</option>
+                                        <input class="form-control datepicker" id="checkIn" type="date">
+                                        <input class="form-control datepicker" id="checkOut" type="date">
+                                        <input class="form-control" id="search-minPrice" min="0" name="minPrice" placeholder="Min Price" step="1" type="number"/>
+                                        <input class="form-control" id="search-maxPrice" min="1" name="maxPrice" placeholder="Max Price" step="1" type="number"/>
+                                        <input class="form-control" id="search-People" min="1" name="sPeople" placeholder="Can fit people" step="1" type="number"/>
+                                        <input class="form-control" id="search-Rooms" min="0" name="sRooms" placeholder="Rooms" step="1" type="number"/>
+                                        <input class="form-control" id="search-Beds" min="0" name="sBeds" placeholder="Beds" step="1" type="number"/>
+                                        <div class="form-group">
+                                            <select class="form-control" id="search-hotel" name="hotel">
+                                            <optgroup size="2" id="hotelOptions" label="Room types">
+                                                <option value="0">Any</option>
                                             </optgroup>
                                         </select>
                                         </div>
-                                        <select class="form-control" id="search-type" name="type">
-                                            <option value="">Any</option>
-                                            <option value="MEAL">Meal</option>
-                                            <option value="DRINK">Drink</option>
-                                        </select>
                                     </div>
 
                                     <div class="form-group">

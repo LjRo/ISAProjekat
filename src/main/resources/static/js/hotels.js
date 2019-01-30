@@ -1,14 +1,47 @@
 $(document).ready(function () {
 
-    $.get({
-        url : '/api/hotel/findAll',
-        success : function(data) {
-            if (data != null) {
-                for ( var i in data) {
-                    addArticle(data[i]);
+
+    var search = getUrlParameter('search');
+    if(search == undefined || search == '') {
+        $.get({
+            url: '/api/hotel/findAll',
+            success: function (data) {
+                if (data != null) {
+                    for (var i in data) {
+                        addArticle(data[i]);
+                    }
                 }
             }
-        }
+        });
+    }
+    else
+    {
+        var nameFilter = getUrlParameter('name');
+        var location = getUrlParameter('location');
+        var arrival = getUrlParameter('arrival');
+        var departure  = getUrlParameter('departure');
+
+        $.get({
+            url: '/api/hotel/findAvailable?name=' + nameFilter +'&arrival=' + arrival +'&location=' + location +'&departure=' + departure,
+            success: function (data) {
+                if (data != null) {
+                    for (var i in data) {
+                            addArticle(data[i]);
+                    }
+                }
+            }
+        });
+    }
+
+    $('#search_hotel').on('submit' , function (e) {
+        e.preventDefault();
+
+        var name =  $('#search-name').val();
+        var location =  $('#search-location').val();
+        var arrival =  $('#checkIn').val();
+        var departure =  $('#checkOut').val();
+        var start_url = window.location.href.match(/^.*\//) + 'hotels.html?name=' + name + '&location='+location+'&arrival=' + arrival + '&departure='+departure + '&search=true';
+        window.location.replace(start_url);
     });
 
 });
@@ -30,3 +63,19 @@ function addArticle(hotel) {
         '<a id="' + hotel.id + '" class="delete-hotel admin" href="hotels.html"><img src="assets/img/delete.png" style="height:16px;width16px;"></a> '+
         '</div>');
 }
+
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1].replace(/\+/g, ' '));
+        }
+    }
+};

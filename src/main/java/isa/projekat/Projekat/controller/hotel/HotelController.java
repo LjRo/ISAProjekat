@@ -39,6 +39,17 @@ public class HotelController {
     }
 
     @PermitAll
+    @RequestMapping(value = "api/hotel/findAvailable", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Hotel> findAvailable(@RequestParam String name,@RequestParam String location,@RequestParam String arrival,@RequestParam String departure)
+    {
+        return hotelService.findAvailableByHotelId(arrival,departure,location,name);
+    }
+
+
+
+
+
+    @PermitAll
     @RequestMapping(value = "api/hotel/findById={id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Hotel findHotelById(@PathVariable("id") long id) { return  hotelService.findHotelById(id);}
 

@@ -1,29 +1,51 @@
 $(document).ready(function () { //TODO modifikovati za nase korisnike i skinuti komentare u  styles.css onda
-    /*$.get({
-        url: '/auth/user',
+    $.get({
+        url: '/api/user/user',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (data) {
-
-            if (data != null) {
-                $("#home-page").html(data.username);
-                $(".not-logged").remove();
-                $(".logged").css("visibility", "visible");
-                if (data.type == "ADMIN") {
-                    $(".admin").css("visibility", "visible");
-                    $(".distributor").remove();
-                    $(".customer").remove();
-                } else {
-                    $(".admin").remove();
-                    if (data.type == "DISTRIBUTOR") {
-                        $(".customer").remove();
-                        $(".distributor").css("visibility", "visible");
-                    } else {
-                        $(".distributor").remove();
-                        $(".customer").css("visibility", "visible");
-                    }
-                }
-            } else {
-                $(".not-logged").css("visibility", "visible");
-            }
+            $(".not-logged").css("display", "none");
+            $(".logged").css("display", "inherit");
+        },
+        error : function (e) {
+            $(".not-logged").css("display", "inherit");
+            $(".logged").css("display", "none");
         }
-    }); */
+    });
+    $.get({
+        url: '/api/user/hotelAdmin',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
+            $(".not-logged").css("display", "none");
+            $(".logged").css("display", "inherit");
+        },
+        error : function (e) {
+            $(".hotel-admin").remove();
+        }
+    });
+
+    $.get({
+        url: 'api/user/airlineAdmin',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
+            $(".not-logged").css("display", "none");
+            $(".logged").css("display", "inherit");
+        },
+        error : function (e) {
+            $(".admin-airline").remove();
+            $('.airline-admin').remove();
+        }
+    });
+
+    $.get({
+        url: 'api/user/rentAdmin',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
+            $(".not-logged").css("display", "none");
+            $(".logged").css("display", "inherit");
+        },
+        error : function (e) {
+            $(".rentacar-admin").remove();
+            $('.rentacar-admin').remove();
+        }
+    });
 });
