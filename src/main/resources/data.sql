@@ -394,5 +394,6 @@ insert into flights_seats(flight_id,seats_id) values(2,16);
 
 INSERT INTO rent_reservation (user_id,start_date, end_date, end_location, start_location, number_of_people, airline_reservation_id, rented_car_id) VALUES (2,'2019-01-01','2019-01-10', 1,3,3,null,1);
 INSERT INTO rent_reservation (user_id,start_date, end_date, end_location, start_location, number_of_people, airline_reservation_id, rented_car_id) VALUES (2,'2019-01-15','2019-01-23', 1,3,3,null,1);
+INSERT INTO rent_reservation (user_id,start_date, end_date, end_location, start_location, number_of_people, airline_reservation_id, rented_car_id) VALUES (2,'2019-01-27','2019-02-23', 1,3,3,null,1);
 INSERT INTO rent_reservation (user_id,start_date, end_date, end_location, start_location, number_of_people, airline_reservation_id, rented_car_id) VALUES (2,'2019-01-01','2019-01-02', 1,3,3,null,14);
 INSERT INTO rent_reservation (user_id,start_date, end_date, end_location, start_location, number_of_people, airline_reservation_id, rented_car_id) VALUES (2,'2019-01-05','2019-01-08', 1,3,3,null,14);

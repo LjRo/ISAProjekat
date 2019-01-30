@@ -41,4 +41,15 @@ public interface CarRepository extends JpaRepository<Cars, Long> {
             nativeQuery = true)
     Page<Cars> filterCars(Long type, int passengers, String pickUp, String  dropOff, Long idrent, BigDecimal minCen, BigDecimal maxCena, Pageable pageable);
 
+
+    @Query(value = "SELECT * FROM cars c WHERE c.rentacar_id = ?1 AND c.id = ?2 AND c.id NOT IN" +
+            "(SELECT r.rented_car_id FROM rent_reservation r \n" +
+            "         WHERE r.rented_car_id = c.id AND ((r.start_date >= ?3 AND r.end_date <= ?4) OR\n" +
+            "          (r.start_date >= ?3 AND r.start_date <= ?4) OR\n" +
+            "          (r.end_date >= ?3 AND r.end_date <= ?4) )) \nGROUP BY c.id"
+            ,nativeQuery = true)
+    Cars isTheCarRentedInTheFuture(Long idrent, Long id, String start, String end);
+
+
+
 }

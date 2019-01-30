@@ -337,7 +337,22 @@ function addLocation(location) {
 
     var d13 = $('<div class="col-md-3"></div>');
 
-    var d23 = $(' <button type="button" id="editButtonLocation'+ location.id +'" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
+
+
+
+    $.get({
+        url: '/api/user/rentAdmin',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
+            var d23 = $(' <button type="button" id="editButtonLocation'+ location.id +'" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
+            d13.append(d23);
+        },
+        error : function (e) {
+
+        }
+    });
+
+
 
     //Picture
     d4.append(d5);
@@ -351,7 +366,7 @@ function addLocation(location) {
     d3.append(d7);
 
 
-    d13.append(d23);
+
 
 
     d3.append(d13);
@@ -368,7 +383,7 @@ function addLocation(location) {
 
 
 }
-
+var resId = localStorage.getItem('reservation');
 
 function addCar(car) {
     var div = $('#addListings');
@@ -399,10 +414,13 @@ function addCar(car) {
     var d18 = $('<i id="star4" class="fa fa-star"></i>');
     var d19 = $('<i id="star5" class="fa fa-star"></i>');
     var d20 = $('<br>');
-    var d21 = $('<a href=""><small>more info about car</small></a>');
+   // var d21 = $('<a href=""><small>more info about car</small></a>');
     var d22 = $('<br>');
-    var d23 = $(' <button type="button" id="editButtonCar'+ car.id +'" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
-    var d24 = $(' <button type="button" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">BUY</button>');
+
+
+
+    var d23 = $(' <button type="button" id="editButtonCar'+ car.id +'" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1 admin-rentacar">Edit</button>');
+    var d24 = $(' <button type="button" id="buyButtonCar' + car.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">BUY</button>');
    // var d25 = $(' </div>'); same as d6 x4
 
     //Picture
@@ -425,10 +443,10 @@ function addCar(car) {
     d13.append(d18);
     d13.append(d19);
     d13.append(d20);
-    d13.append(d21);
+   // d13.append(d21);
     d13.append(d22);
     d13.append(d23);
-    d13.append(d24);
+
 
     d3.append(d13);
 
@@ -443,6 +461,61 @@ function addCar(car) {
         window.location.href = window.location.href.match(/^.*\//)+ "addCar.html?idrent=" + pId + "&edit=true&id=" + car.id;
     });
 
+    if (resId != null && getUrlParameter("carTypeId") != undefined){
+        d13.append(d24);
+
+        $('#'+ "buyButtonCar" + car.id).click(function () {
+
+            /* @RequestMapping(value = "api/cars/{idrent}/{idAir}/reserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> reserveCar(@PathVariable Long idrent, @PathVariable Long idAir, @RequestParam Long id, HttpServletRequest httpServletRequest,@RequestBody RentReservation rentReservation){
+   */
+            $.post({
+                url:  "api/cars/" + pId + "/" + resId + "/reserve",
+                data: JSON.stringify(
+                    {
+                        rentReservation: {
+                            airlineReservation : {
+                                id : resId
+                            },
+                            user: null,
+                            startDate : getUrlParameter('start'),
+                            endDate : getUrlParameter('end'),
+                            startLocation: {
+                                id: getUrlParameter('locStart')
+                            },
+                            endLocation: {
+                                id: getUrlParameter('locEnd')
+                            },
+                            numberOfPeople:  getUrlParameter('passengers'),
+                            rentedCar : car,
+                            fastReservation: false
+                        }
+                    }),
+                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                contentType: 'application/json',
+                success: function (data) {
+                },
+                error : function (e) {
+                    $(".admin-rentacar").remove();
+                }
+            });
+            //window.location.href = window.location.href.match(/^.*\//)+ "addCar.html?idrent=" + pId + "&edit=true&id=" + car.id;
+        });
+    }
+
+
+
+
+
+    $.get({
+        url: '/api/user/rentAdmin',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
+        },
+        error : function (e) {
+            $(".admin-rentacar").remove();
+        }
+    });
 
 }
 

@@ -37,18 +37,19 @@ public class CarController {
     @Autowired
     private UserService userService;
 
-    @PermitAll
+    @Transactional(readOnly = true)
     @RequestMapping(value = "api/cars/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Cars> findAll(@RequestParam String page) {
         return carService.findAll(pageRequestProvider.provideRequest(page));
     }
 
-    @PermitAll
+    @Transactional(readOnly = true)
     @RequestMapping(value = "api/cars/findByIdAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Cars> findById(@RequestParam long id,@RequestParam String page) {
         return carService.findByRentACarId(id,pageRequestProvider.provideRequest(page));
     }
 
+    @Transactional(readOnly = true)
     @RequestMapping(value = "api/cars/{id}",method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Cars findCarById(@PathVariable Long id){
 
@@ -86,20 +87,14 @@ public class CarController {
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "api/cars/{idrent}/{idAir}/reserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> reserveCar(@PathVariable Long idrent, @PathVariable Long idAir, @RequestParam Long id, HttpServletRequest httpServletRequest,@RequestBody RentReservation rentReservation){
+    public ResponseEntity<?> reserveCar(@PathVariable Long idrent, @PathVariable Long idAir, @RequestBody RentReservation rentReservation, HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
-        return responseTransaction(carService.reserveCar(id,idrent,user,rentReservation,idAir));
+        return responseTransaction(carService.reserveCar(rentReservation.getRentedCar().getId(),idrent,user,rentReservation,idAir));
     }
 
-   /* @Transactional(readOnly = true)
-   // @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "api/cars/{idrent}/available", method = RequestMethod.GET)
-    public Page<Cars> listAvailable(@PathVariable Long idrent, @RequestParam String page,@RequestParam Long carTypeId, @RequestParam String start, @RequestParam String end, @RequestParam Integer passengers) throws java.text.ParseException{
 
-        //SimpleDateFormat  format =new SimpleDateFormat("yyyy-MM-dd");
 
-        return carService.listAvailableWithDateOnly(idrent,pageRequestProvider.provideRequest(page),carTypeId,start,end,passengers);
-    }*/
+
 
     @Transactional(readOnly = true)
     //@PreAuthorize("hasRole('ROLE_USER')")
@@ -113,7 +108,12 @@ public class CarController {
     }
 
 
-
+    @Transactional(readOnly = true)
+    //@PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @RequestMapping(value = "api/cars/{idrent}/check", method = RequestMethod.GET)
+    public Boolean checkEdibility(@PathVariable Long idrent, @RequestParam Long id){
+        return carService.checkEdibility(idrent, id);
+    }
 
     @SuppressWarnings("Duplicates")
     private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){

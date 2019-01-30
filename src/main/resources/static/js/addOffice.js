@@ -13,7 +13,7 @@ $(function () {
     if (changing !== undefined && changing === "true") {
 
         $('#submitButton').html("Update");
-        $('#title').html("Update Car");
+        $('#title').html("Update Office");
         $.get({
             url: '/api/office/' +idrent + '/' +id,
             headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},

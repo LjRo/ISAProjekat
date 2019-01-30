@@ -12,6 +12,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,7 +119,7 @@ public class CarService {
         if (!reservation.getUser().equals(user))
             return false;
 
-        List<RentReservation> list = rentReservationRepository.findAllByRentedCarId(rentReservation.getRentedCar().getId());
+        //List<RentReservation> list = rentReservationRepository.findAllByRentedCarId(rentReservation.getRentedCar().getId());
 
        /* if (!canBeReserved(rentReservation.getRentedCar().getId(),rentReservation.getStartDate(), rentReservation.getEndDate())){
             return  false;
@@ -143,10 +146,33 @@ public class CarService {
     }
 
 
+    public Boolean checkEdibility(Long idrent, Long id){
+
+        SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
+
+        String strDate = sm.format(new Date());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.YEAR, 10);
+        String endDate = sm.format(calendar.getTime());
+
+        if (carRepository.isTheCarRentedInTheFuture(idrent,id,strDate, endDate) != null){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
+
 
     public  Page<Cars> listAvailableWithDate(Long idrent, PageRequest pageRequest, Long carType, BigDecimal min, BigDecimal max, String start, String end, Integer passengers){
         return carRepository.filterCars(carType,passengers,start,end,idrent,min,max,pageRequest);
         }
+
+
+
 
     // Checks that the Rent a car object and Car object is present as well as the does the person have privileges
     public Boolean everythingPresent(Optional<RentACar> optionalRentACar, Optional<Cars> optionalCars, User user, boolean neededAdmin){
