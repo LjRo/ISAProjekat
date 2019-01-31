@@ -1,6 +1,6 @@
 package isa.projekat.Projekat.model.rent_a_car;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.user.User;
 
@@ -19,7 +19,7 @@ public class RentReservation {
     private Reservation airlineReservation;
 
     @ManyToOne
-    @JsonManagedReference(value = "user_rent_reservation")
+    @JsonBackReference(value = "user_rent_reservation")
     private User user;
 
     @Column

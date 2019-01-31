@@ -46,6 +46,12 @@ public class FlightService {
         return result;
     }
 
+    public List<Reservation> findReservationsByUserId(Long userId){
+        List<Reservation> reservations = reservationRespository.returnAllReservationByUser(userId);
+        return reservations;
+    }
+
+
     public Boolean bookFlight(BookingData bd, String email) {
         List<ReservationData> reservations = bd.getAirlineReservations();
 
@@ -85,6 +91,8 @@ public class FlightService {
             resData.setTotalCost(targetSeat.getPrice());
 
             Reservation newRes = new Reservation();
+            Flight flight = flightRepository.findById(resData.getFlight()).get();
+            newRes.setFlight(flight);
             if (targetUser == null) {
 
                 if (resData.getFirstName() == null || resData.getFirstName() == "") {
@@ -93,7 +101,6 @@ public class FlightService {
                 if (resData.getLastName() == null || resData.getLastName() == "") {
                     return false;
                 }
-
                 newRes.setName(resData.getFirstName());
                 newRes.setLastName(resData.getLastName());
                 newRes.setPointsUsed(0.0);

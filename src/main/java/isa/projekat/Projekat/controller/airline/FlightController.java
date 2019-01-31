@@ -1,8 +1,10 @@
 package isa.projekat.Projekat.controller.airline;
 
 import isa.projekat.Projekat.model.airline.*;
+import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.airline.FlightService;
+import isa.projekat.Projekat.service.user_auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,12 +22,20 @@ public class FlightController {
     @Autowired
     private TokenUtils jwtTokenUtils;
 
+    @Autowired
+    private UserService userService;
+
 
     @RequestMapping(value = "api/flight/{id}/seatData", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
     public SeatData findFlightSeatData(@PathVariable Long id, HttpServletRequest req){
 
         return flightService.findSeatDataById(id);
+    }
+
+    @RequestMapping(value = "api/flight/{id}/", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Flight findFlightById(@PathVariable Long id, HttpServletRequest req){
+        return flightService.findById(id);
     }
 
     @RequestMapping(value = "api/flight/book", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -55,6 +65,14 @@ public class FlightController {
         return flightService.searchFlights(searchData);
     }
 
+    @RequestMapping(value = "api/flight/reservations", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public List<Reservation> findUserReservations(HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return flightService.findReservationsByUserId(user.getId());
+    }
 
 
 

@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.model.hotel;
 
 import isa.projekat.Projekat.model.airline.Reservation;
+import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +15,9 @@ public class ReservationHotel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User user;
 
     @Column(nullable = false)
     private Date arrivalDate;
@@ -45,6 +49,14 @@ public class ReservationHotel implements Serializable {
 
     public ReservationHotel(){
 
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getId() {

@@ -11,8 +11,18 @@ public class ReservationData {
     private Long seatId;
     private Double pointsUsed;
     private BigDecimal totalCost;
+    private Long flight;
+
 
     public ReservationData() {
+    }
+
+    public Long getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Long flight) {
+        this.flight = flight;
     }
 
     public Long getUserId() {

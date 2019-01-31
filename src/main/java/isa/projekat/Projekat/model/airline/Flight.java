@@ -1,7 +1,6 @@
 package isa.projekat.Projekat.model.airline;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 
 import javax.persistence.*;
@@ -60,6 +59,10 @@ public class Flight {
 
     @Column (nullable = false)
     private BigDecimal price;
+
+    public Flight(){
+
+    }
 
     public Long getId() {
         return id;

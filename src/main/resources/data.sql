@@ -8,7 +8,7 @@ VALUES ("Albara Musafa 2, Milano", "Milano", "Italy", 42.144123 , 11.155 );
 
 
 INSERT INTO locations (address_name,city,country,latitude,longitude) /*3*/
-VALUES ("Maksima Gorkog 35", "Novi Sad", "Serbia", 45.251451 , 19.850867 );
+VALUES ("Maksima Gorkog 35", "Milano", "Italiy", 45.4642 , 9.1900 );
 
 INSERT INTO locations (address_name,city,country,latitude,longitude) /*4*/
 VALUES ("Boulevard Tsara Lazara 1", "Novi Sad", "Serbia", 45.247637 , 19.850474);
@@ -180,7 +180,7 @@ VALUES (3,1,3,1);
 
 
 INSERT INTO hotels (name, address_id, description,fast_discount)
-VALUES ('Aleksandar', 3, 'Hotel with 5 stars in Novi Sad with great locations',15);
+VALUES ('Aleksandar', 3, 'Hotel with 5 stars in Milano with great locations',15);
 
 INSERT INTO hotels (name, address_id, description,fast_discount)
 VALUES ('Putnik', 4 , 'Cheap rooms ,Hotel with 3 stars near the center',15);
@@ -305,11 +305,11 @@ INSERT INTO hotels_hotel_price_list(hotel_id,hotel_price_list_id)
 VALUES (2,7);
 
 
-INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,hotel_id,room_id)
-VALUES (3, '2019-01-01', '2019-01-15' ,14, '2019-01-01', 1 , 3 );
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,hotel_id,room_id,user_id,airline_reservation_id)
+VALUES (3, '2019-01-01', '2019-01-15' ,14, '2019-01-01', 1 , 3 ,2, null );
 
-INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,hotel_id,room_id,airline_reservation_id)
-VALUES (5, '2019-01-10', '2019-01-15' ,14, '2019-01-01', 1 ,4, null );
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,hotel_id,room_id,user_id,airline_reservation_id)
+VALUES (5, '2019-01-10', '2019-01-15' ,14, '2019-01-01', 1 ,4,3, null );
 
 
 INSERT INTO floor_plan (configuration, floor_number, hotel_id)
