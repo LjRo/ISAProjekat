@@ -57,6 +57,7 @@ $(function () {
     });
 
 
+
 });
 
 
@@ -306,9 +307,10 @@ function generateInputFields() {
 
 function confirmInput() {
 
-
+    var idFlight = getUrlParameter("id");
     var userRes = {
         userId: userData.id,
+        flight: idFlight ,
         passport: $('#user1Passport').val(),
         pointsUsed: $('#user1PointsUsed').val(),
         firstName: "",
@@ -328,6 +330,7 @@ function confirmInput() {
         var sel = '#user' + (k + 2) + 'Passport';
         var res = {
             userId: friendData[friendIds[k]].id,
+            flight: idFlight ,
             passport: $(sel).val(),
             seatId: seatDict[selectedSeats[k+1]].id,
             firstName: "",
@@ -345,6 +348,7 @@ function confirmInput() {
         var selP = '#user' + (j+1) + 'Passport';
         var res = {
             userId: null,
+            flight: idFlight ,
             passport: $(selP).val(),
             seatId: seatDict[selectedSeats[j]].id,
             firstName: $(selF).val(),
@@ -365,12 +369,54 @@ function confirmInput() {
         }),
         contentType: 'application/json',
         success: function (data) {
-            alert("All is well!");
 
+                    $.get({
+                        url: '/api/flight/'+idFlight+'/',
+                        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                        success: function (data) {
+                            if (data != null) {
+                                var today = new Date(data.landTime);
+                                var tomorrow = new Date();
+                                tomorrow.setDate(today.getDate()+1);
+                                var a = getStringFromDate(today);
+                                var d = getStringFromDate(tomorrow);
+
+                                $('#addRoom').click(function () {
+                                    var url = window.location.href.match(/^.*\//) + 'hotels.html?name=&location=' + data.finish.city +   '&arrival=' + a + '&departure=' + d + '&search=true';
+                                    window.location.replace(url);
+                                });
+
+                                $('#addCar').click(function () {
+                                    var url = window.location.href.match(/^.*\//) + 'rentacar.html';
+                                    window.location.replace('');
+                                });
+                                $('#finishReservation').click(function () {
+                                    var url = window.location.href.match(/^.*\//) + 'checkout.html';
+                                    window.location.replace('');
+                                });
+                            }
+                        }
+                    });
+
+
+                $("#chooseMore").css("display", "block");
         },
         error: function (data) {
             alert("Something went wrong...");
         },
     });
 
+}
+
+function getStringFromDate(date) {
+    var dd = date.getDate();
+    var mm = date.getMonth() + 1; //January is 0!
+    var yyyy = date.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    return yyyy  + '-' + mm + '-' + dd ;
 }

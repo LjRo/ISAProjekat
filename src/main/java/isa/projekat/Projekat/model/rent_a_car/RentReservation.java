@@ -1,7 +1,6 @@
 package isa.projekat.Projekat.model.rent_a_car;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.user.User;
 

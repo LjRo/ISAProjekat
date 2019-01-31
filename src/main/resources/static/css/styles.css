@@ -28,3 +28,20 @@
 /*.not-logged {
 	visibility: hidden;
 }*/
+
+.state-icon {
+	left: -5px;
+}
+.list-group-item-primary {
+	color: rgb(255, 255, 255);
+	background-color: rgb(66, 139, 202);
+}
+
+.well .list-group {
+	margin-bottom: 0px;
+}
+
+li.list-group-item>input[type=checkbox] {
+	float: left;
+	margin: 5px auto;
+}

@@ -341,7 +341,7 @@ function addRoom(room,hotelId,price) {
         '                                                            Floor: <strong><span id="Floor">' + room.floor + '</span></strong>' +
         '                                                            <br>' +
         '                                                            <button id="editRoom' + room.id +'" class="btn btn-primary hotel-admin btn-outline-secondary rounded-0 mb-1" type="button"> Edit </button>' +
-        '                                                            <button class="btn btn-primary user  btn-outline-secondary rounded-0 mb-1" type="button"> Reserve  </button>' +
+        '                                                            <button id="reserveRoom' + room.id +'" class="btn btn-primary user  btn-outline-secondary rounded-0 mb-1" type="button"> Reserve  </button>' +
         '                                                        </div>' +
         '                                                    </div>' +
         '                                                </div>' +
@@ -349,6 +349,9 @@ function addRoom(room,hotelId,price) {
     $('#addListings').append(tr);
     $('#' + 'editRoom' +  room.id).click(function () {
         window.location.href = "addRoom.html?id=" + hotelId +"&room="+ room.id + "&edit=1";
+    });
+    $('#' + 'reserveRoom' +  room.id).click(function () {
+        window.location.href = "hotelReservation.html?id=" + hotelId +"&room="+ room.id; // + "&edit=1";
     });
 
 }

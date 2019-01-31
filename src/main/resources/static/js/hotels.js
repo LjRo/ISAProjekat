@@ -21,6 +21,11 @@ $(document).ready(function () {
         var arrival = getUrlParameter('arrival');
         var departure  = getUrlParameter('departure');
 
+        $('#search-name').val(nameFilter);
+        $('#search-location').val(location);
+        $('#checkIn').val(arrival);
+        $('#checkOut').val(departure);
+
         $.get({
             url: '/api/hotel/findAvailable?name=' + nameFilter +'&arrival=' + arrival +'&location=' + location +'&departure=' + departure,
             success: function (data) {

@@ -6,6 +6,9 @@ public class BookingData {
     private List<ReservationData> airlineReservations;
     //TODO: add Hotel and Car data
 
+    public BookingData(){
+
+    }
 
     public List<ReservationData> getAirlineReservations() {
         return airlineReservations;

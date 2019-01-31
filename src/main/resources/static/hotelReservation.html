@@ -34,22 +34,33 @@
             <div class="col-md">
                 <form id="addForm">
                     <h2 class="sr-only "></h2>
-                    <h2 style="text-align: center">Hotel Services manager</h2>
-                    <img src="assets/img/services.svg"
+                    <h2 style="text-align: center">Hotel Room Reservation</h2>
+                    <img src="assets/img/room.svg"
                          style="display: block; max-height:240px; max-width: 240px;margin-left: auto;margin-right: auto">
                     <div id="start_div" class="form-group">
-                        <select class="form-control" name="selectServices">
-                            <optgroup label="Hotel Services:" id="listServices">
+                        <select size="3" class="form-control" name="selectAirlineReservations">
+                            <optgroup label="Airline Reservations:" id="listReservations">
                             </optgroup>
                         </select>
-                        <input style="width: 100%" class="btn btn-primary" type="button" id="editSelectedService" value="Edit selected">
-                        <input style="width: 100%" class="btn btn-primary" type="button" id="deleteSelectedService" value="Delete selected">
+
+                        <div class="col-xs-6">
+                            <h3 class="text-center">Using Hotel Services</h3>
+                            <div class="well" style="max-height: 300px;overflow: auto;">
+                                <ul class="list-group checked-list-box">
+                                    <li value="100" class="list-group-item" data-style="button">Cras justo odio</li>
+                                    <li value="200" class="list-group-item" data-style="button" data-color="success">Dapibus ac facilisis in</li>
+                                    <li value="300" class="list-group-item" data-style="button" data-color="info">Morbi leo risus</li>
+                                    <li value="400" class="list-group-item" data-style="button" data-color="warning">Porta ac consectetur ac</li>
+                                    <li value="500" class="list-group-item" data-style="button" data-color="danger">Vestibulum at eros</li>
+                                </ul>
+                            </div>
+                            <pre id="display-json"></pre>
+                        </div>
+
+                        <input class="form-control datepicker" id="checkIn" type="date">
+                        <input class="form-control datepicker" id="checkOut" type="date">
                         <hr>
-                        <h4 style="text-align: center">Add new hotel service</h4>
-                        <input class="form-control" type="text" name="name" placeholder="Name of service" required>
-                        <input class="form-control" type="text" name="editId">
-                        <input class="form-control" type="number" min="1" step="1"  name="price" placeholder="Price" required>
-                        <input style="width: 100%" class="btn btn-primary" type="button" id="addNewService" value="Add new Service">
+                        <input style="width: 100%" class="btn btn-primary" type="button" id="addNewService" value="Confirm purchase">
                         <div id="error"></div>
                         <div id="success"></div>
                     </div>

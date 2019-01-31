@@ -20,6 +20,9 @@ public class Reservation {
     @Column
     private String name;
 
+    @ManyToOne
+    private Flight flight;
+
     @Column
     private String lastName;
 
@@ -35,9 +38,22 @@ public class Reservation {
     @Column
     private Boolean confirmed = false;
 
+    @Column
+    private Boolean finished = false;
+
     @OneToOne
     @JsonBackReference(value = "seat_reservation")
     private Seat seat;
+
+
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
 
     public User getUser() {
         return user;
@@ -69,6 +85,14 @@ public class Reservation {
 
     public void setPassport(String passport) {
         this.passport = passport;
+    }
+
+    public Boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(Boolean finished) {
+        this.finished = finished;
     }
 
     public Seat getSeat() {
