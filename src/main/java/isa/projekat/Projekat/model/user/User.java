@@ -85,7 +85,13 @@ public class User implements UserDetails {
     @JsonManagedReference(value = "user_rent_reservation")
     private List<RentReservation> rentReservations;
 
+    public List<RentReservation> getRentReservations() {
+        return rentReservations;
+    }
 
+    public void setRentReservations(List<RentReservation> rentReservations) {
+        this.rentReservations = rentReservations;
+    }
 
     // RentACar stuff
     @OneToOne(cascade = CascadeType.PERSIST)

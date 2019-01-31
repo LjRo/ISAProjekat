@@ -2,6 +2,7 @@
 
 $(function () {
     $('#hideThis').hide();
+    $('#error').hide();
     //  $( "input[name*='id']").hide();
     var changing = getUrlParameter("edit");
     $('#success-message').hide();
@@ -22,46 +23,59 @@ $(function () {
     
     var id = getUrlParameter('id');
     var idrent = getUrlParameter('idrent');
-    if (changing !== undefined && changing === "true") {
+    if (changing !== undefined && changing === "true" ) {
 
         $('#submitButton').html("Update");
         $('#title').html("Update Car");
-        $.get({
-            url: '/api/cars/' +id,
-            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-            success: function(data) {
 
-                if (data != null)
-                    fillData(data);
-            }
-        });
+
+            $.get({
+                url: '/api/cars/' + id,
+                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                success: function (data) {
+
+                    if (data != null)
+                        fillData(data);
+                }
+            });
+
     }
     if (changing !== undefined && changing === "true") {
         $('#deleteButton').show();
-        $('#deleteButton').click(function (e) {
-            e.preventDefault();
-            var idrent = getUrlParameter('idrent');
-            $.post({
-                url: "api/cars/" + idrent + "/remove?id=" + id,
-                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                contentType: 'application/json',
-                success: function () {
-                    $('#success-message').fadeIn(500).delay(1500).fadeOut(500);
 
-                    //  window.location.replace("http://localhost:8080/index.html");
+        if (!isPossibleToEdit(id)){
+            $('#deleteButton').attr("disabled", "disabled");
+            $('#error').show();
+            $('#submitButton').attr('disabled',"disabled");
+        } else {
 
-                    setTimeout(function () {
 
-                        window.open("rentacarprofile.html?id="+ idrent+"&page=0&pageLocation=0", "_self");
-                    }, 2000);
-                },
-                error: function (message) {
-                    console.log("Error");
-                    $('#error').css("visibility", "visible");
-                },
+            $('#deleteButton').click(function (e) {
+                e.preventDefault();
 
+                var idrent = getUrlParameter('idrent');
+                $.post({
+                    url: "api/cars/" + idrent + "/remove?id=" + id,
+                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                    contentType: 'application/json',
+                    success: function () {
+                        $('#success-message').fadeIn(500).delay(1500).fadeOut(500);
+
+                        //  window.location.replace("http://localhost:8080/index.html");
+
+                        setTimeout(function () {
+
+                            window.open("rentacarprofile.html?id=" + idrent + "&page=0&pageLocation=0", "_self");
+                        }, 2000);
+                    },
+                    error: function (message) {
+                        console.log("Error");
+                        $('#error').css("visibility", "visible");
+                    },
+
+                });
             });
-        });
+        }
     }
     });
 
@@ -69,7 +83,9 @@ $(function () {
     $('#addForm').on('submit', function(e) {
         e.preventDefault();
 
-
+        if (!isPossibleToEdit(getUrlParameter('id'))){
+            return;
+        }
         // $("input[name='id']").val();
 
         var mark  =   $("input[name='carMark']").val();
@@ -188,6 +204,20 @@ function fillData(data) {
    $("input[name='fastReserved']").val(data.fastReserved);
 
    $("select[name='type']").val(data.type.id);
+
+
+}
+
+var isPossibleToEdit = function possible(param){
+
+
+    $.get({
+        url: 'api/cars/'+ getUrlParameter('idrent')+'/check?id='+ param,
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function(data) {
+            return data;
+        }
+    });
 
 
 }

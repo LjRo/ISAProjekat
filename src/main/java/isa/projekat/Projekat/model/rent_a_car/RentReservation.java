@@ -18,7 +18,7 @@ public class RentReservation {
     @ManyToOne
     private Reservation airlineReservation;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonBackReference(value = "user_rent_reservation")
     private User user;
 
