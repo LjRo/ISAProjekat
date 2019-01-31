@@ -1,48 +1,84 @@
 $(document).ready(function () {
 
-    $.get({
-        url : '/api/rentacar/findAll',
-        success : function(data) {
-            if (data != null) {
-                for ( var i in data) {
-                    addArticle(data[i]);
-                }
-            }
-        }
-    });
 
-    $("#checkIn").val(new Date().toISOString().split('T')[0]);
-    $("#checkOut").val(new Date().toISOString().split('T')[0]);
+    if (getUrlParameter('search') != null){
 
-    $('#searchForm').on('submit',function (e) {
-        e.preventDefault();
+        var start = getUrlParameter('start');
+        var end = getUrlParameter('end');
+        var type = getUrlParameter('type');
+        var search = getUrlParameter('search');
 
-         var type = $("#search-options option:selected").val();
-         var search = $("#search-name").val();
+        $('#search-options').val(type);
+        $("#search-name").val(search);
+        $('#checkIn').val(start);
+        $('#checkOut').val(end);
+        sendSearch();
 
-        var start = new Date($("#checkIn").val());
-        var end = new Date($("#checkOut").val());
-
-        start = start.toISOString().split('T')[0];
-        end = end.toISOString().split('T')[0];
-
+    }else {
         $.get({
-            url : '/api/rentacar/filtered?type='+ type+'&search='+ search + '&start=' + start + '&end=' + end,
-            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            url : '/api/rentacar/findAll',
             success : function(data) {
-                if (data != null ) {
-                    $('#carsList').html("");
+                if (data != null) {
                     for ( var i in data) {
                         addArticle(data[i]);
                     }
-                   
                 }
             }
         });
 
+        $("#checkIn").val(new Date().toISOString().split('T')[0]);
+        $("#checkOut").val(new Date().toISOString().split('T')[0]);
+    }
+    $('#searchForm').on('submit',function (e) {
+        e.preventDefault();
+
+        sendSearch();
+
     })
 
 });
+
+
+function sendSearch(){
+    var type = $("#search-options option:selected").val();
+    var search = $("#search-name").val();
+
+    var start = new Date($("#checkIn").val());
+    var end = new Date($("#checkOut").val());
+
+    start = start.toISOString().split('T')[0];
+    end = end.toISOString().split('T')[0];
+
+    $.get({
+        url : '/api/rentacar/filtered?type='+ type+'&search='+ search + '&start=' + start + '&end=' + end,
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+            if (data != null ) {
+                $('#carsList').html("");
+                for ( var i in data) {
+                    addArticle(data[i]);
+                }
+
+            }
+        }
+    });
+}
+
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1].replace(/\+/g, ' '));
+        }
+    }
+};
 
 function addArticle(rentacar) {
     var icon = "assets/img/rent-a-car.svg";
