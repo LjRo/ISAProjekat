@@ -16,4 +16,10 @@ public interface RentReservationRepository extends JpaRepository<RentReservation
     public List<RentReservation> findAllByRentedCarId(Long id);
 
 
+
+    List<RentReservation> findAllByRentedCarIdAndFastReservationIsTrue(Long idrent);
+
+
+
+
 }

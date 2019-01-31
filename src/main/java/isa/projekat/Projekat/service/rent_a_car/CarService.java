@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -139,6 +140,13 @@ public class CarService {
 
         return true;
     }
+
+
+    public List<RentReservation> listQuickReservations(Long idrent){
+
+        return rentReservationRepository.findAllByRentedCarIdAndFastReservationIsTrue(idrent);
+    }
+
 
     public Page<Cars> listAvailableWithDateOnly(Long idrent, PageRequest pageRequest, Long carType, String start, String end, Integer passengers){
         return listAvailableWithDate(idrent,pageRequest, carType, BigDecimal.valueOf(0),BigDecimal.valueOf(200000), start, end, passengers);

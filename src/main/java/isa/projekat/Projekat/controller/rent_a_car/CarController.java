@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -92,7 +93,12 @@ public class CarController {
     }
 
 
-
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "api/cars/{idrent}/quick", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public List<RentReservation> listQuickReservations(@PathVariable Long idrent){
+        return carService.listQuickReservations(idrent);
+    }
 
 
     @Transactional(readOnly = true)
