@@ -10,6 +10,7 @@ $(document).ready(function () {
                     for (var i in data) {
                         addArticle(data[i]);
                     }
+                    checkUserType();
                 }
             }
         });
@@ -33,6 +34,7 @@ $(document).ready(function () {
                     for (var i in data) {
                             addArticle(data[i]);
                     }
+                    checkUserType();
                 }
             }
         });
@@ -50,7 +52,37 @@ $(document).ready(function () {
     });
 
 });
+function checkUserType() {
+    $.get({
+        url: '/api/user/userType',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
+            if (data == 1)            {
+                $('.admin').show();
+            } else if (data == 3) {
+                $(".hotel-admin").show();
+                $('a.hotel-admin').attr("display",'inherit');
+            }
+            if(data!= 1){
+                $('.admin').remove();
+            }
+            if (data != 3) {
+                $(".hotel-admin").remove();
+            }
+            if(data != 2){
+                $(".admin-airline").remove();
+                $('.airline-admin').remove();
+            }
+            if(data != 4){
+                $(".rentacar-admin").remove();
+                $('.admin-rentacar').remove();
+            }
+        },
+        error: function (e) {
 
+        }
+    });
+}
 
 function addArticle(hotel) {
     var icon = "assets/img/hotel.svg";
@@ -75,7 +107,7 @@ function addArticle(hotel) {
         '<p class="description">Address: <span style = "color:black">'+ hotel.address.addressName  + ',' + hotel.address.city + '</span></p>' +
         '<p class="description">'+ hotel.description +'</p>' +
         '<a class="edit-hotel hotel-admin" href="edithotel.html?id=' + hotel.id +'&name='+ hotel.name + '"><img src="/../assets/img/edit.png" style="height:16px;width16px;"></a> ' +
-        '<a id="' + hotel.id + '" class="delete-hotel" href="hotels.html"><img src="assets/img/delete.png" style="display:none;height:16px;width16px;"></a> '+
+        '<a id="' + hotel.id + '" class="delete-hotel hotel-admin" href="hotels.html"><img src="assets/img/delete.png" style="height:16px;width16px;"></a> '+
         '</div>');
 }
 

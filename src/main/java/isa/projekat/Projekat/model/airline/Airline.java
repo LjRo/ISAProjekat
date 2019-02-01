@@ -1,6 +1,5 @@
 package isa.projekat.Projekat.model.airline;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
@@ -22,8 +21,8 @@ public class Airline implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
-    private String address;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Location address;
 
     @Column
     private String description;
@@ -64,11 +63,11 @@ public class Airline implements Serializable {
         this.name = name;
     }
 
-    public String getAddress() {
+    public Location getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Location address) {
         this.address = address;
     }
 

@@ -48,3 +48,6 @@ div[name="error"]{
 div[name="success"]{
 	color:green;
 }
+.admin-airline, .airline-admin , admin, .hotel-admin, .rentacar-admin .admin-rentacar{
+	display: none;
+}

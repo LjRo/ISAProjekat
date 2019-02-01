@@ -66,7 +66,7 @@ $(function() {
 
 function fillData(data) {
     $('#nameDisplay').text(data.name);
-    $('#address').html("<span class=\"float-left\"><strong>Address:</strong></span>" + data.address);
+    $('#address').html("<span class=\"float-left\"><strong>Address:</strong></span>" + data.address.addressName + ', ' + data.address.city + ', ' + data.address.country);
     $('#desc').text(data.description);
     $('#pricing').text(data.pricing);
     $('#addFlight').attr("href","addFlight.html?id="+data.id);

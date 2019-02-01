@@ -52,6 +52,12 @@ public class AirlineController {
         airlineService.updateAirlineData(ad, email);
     }
 
+    @RequestMapping(value = "api/airline/add", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void addAirline(@RequestBody Airline ad, HttpServletRequest req){
+        airlineService.addAirline(ad);
+    }
+
     @PermitAll
     @RequestMapping(value = "api/airline/{id}/profile", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Airline findAirline(@PathVariable Long id,HttpServletRequest req){

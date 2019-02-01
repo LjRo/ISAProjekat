@@ -29,6 +29,14 @@ public class Location implements Serializable {
     public Location() {
     }
 
+    public Location(String addressName, String country, String city, double latitude, double longitude) {
+        this.addressName = addressName;
+        this.country = country;
+        this.city = city;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public String getCountry() {
         return country;
     }

@@ -67,8 +67,7 @@ public class AirlineService {
             found.setCity(ad.getAddress().getCity());
             found.setLongitude(ad.getAddress().getLongitude());
             found.setAddressName(ad.getAddress().getAddressName());
-
-
+            locationRepository.save(found);
             target.setDescription(ad.getDescription());
             target.setName(ad.getName());
             return true;
@@ -80,33 +79,16 @@ public class AirlineService {
     }
 
     public boolean addAirline(Airline ad) {
-
-
         if(ad.getAddress() == null || ad.getDescription() == "" || ad.getName() == ""){
             return false;
         }
-
-        int size = ad.getDestinations().size();
-        List<Location> locationList = new ArrayList<>();
-        for(int i=0;i<size;++i){
-            Location location = new Location();
-            location.setCountry(ad.getDestinations().get(i).getCountry());
-            location.setLatitude(ad.getDestinations().get(i).getLatitude());
-            location.setCity(ad.getDestinations().get(i).getCity());
-            location.setLongitude(ad.getDestinations().get(i).getLongitude());
-            location.setAddressName(ad.getDestinations().get(i).getAddressName());
-            locationList.add(location);
-            locationRepository.save(location);
-        }
-
+        Location location = new Location(ad.getAddress().getAddressName(),ad.getAddress().getCountry(),ad.getAddress().getCity(),ad.getAddress().getLatitude(),ad.getAddress().getLongitude());
+        locationRepository.save(location);
         Airline target = new Airline();
-        target.setDestinations(locationList);
-        target.setAddress(ad.getAddress());
-        target.setDescription(ad.getDescription());
+        target.setAddress(location);
         target.setName(ad.getName());
-
+        target.setDescription(ad.getDescription());
         airlineRepository.save(target);
-
         return true;
     }
 
