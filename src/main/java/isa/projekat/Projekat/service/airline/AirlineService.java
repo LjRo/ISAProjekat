@@ -5,6 +5,7 @@ import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.AirlineRepository;
 import isa.projekat.Projekat.repository.FlightRepository;
+import isa.projekat.Projekat.repository.LocationRepository;
 import isa.projekat.Projekat.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AirlineService {
@@ -27,6 +29,8 @@ public class AirlineService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private LocationRepository locationRepository;
 
     public List<Airline> findAll(){
         return airlineRepository.findAll();
@@ -49,13 +53,22 @@ public class AirlineService {
         Airline target = findById(ad.getId());
         User admin = userRepository.findByUsername(username);
 
-        if(target == null || ad.getAddress() == "" || ad.getDescription() == "" || ad.getName() == ""){
+        if(target == null || ad.getAddress() == null || ad.getDescription() == "" || ad.getName() == ""){
             return false;
         }
 
         if(target.getAdmins().contains(admin)) {
+            Optional<Location> optionalLocation = locationRepository.findById(ad.getAddress().getId());
+            Location found  = (optionalLocation.isPresent())?optionalLocation.get():null;
+            if(found==null)
+                return false;
+            found.setCountry(ad.getAddress().getCountry());
+            found.setLatitude(ad.getAddress().getLatitude());
+            found.setCity(ad.getAddress().getCity());
+            found.setLongitude(ad.getAddress().getLongitude());
+            found.setAddressName(ad.getAddress().getAddressName());
 
-            target.setAddress(ad.getAddress());
+
             target.setDescription(ad.getDescription());
             target.setName(ad.getName());
             return true;
@@ -64,6 +77,37 @@ public class AirlineService {
 
         return false;
 
+    }
+
+    public boolean addAirline(Airline ad) {
+
+
+        if(ad.getAddress() == null || ad.getDescription() == "" || ad.getName() == ""){
+            return false;
+        }
+
+        int size = ad.getDestinations().size();
+        List<Location> locationList = new ArrayList<>();
+        for(int i=0;i<size;++i){
+            Location location = new Location();
+            location.setCountry(ad.getDestinations().get(i).getCountry());
+            location.setLatitude(ad.getDestinations().get(i).getLatitude());
+            location.setCity(ad.getDestinations().get(i).getCity());
+            location.setLongitude(ad.getDestinations().get(i).getLongitude());
+            location.setAddressName(ad.getDestinations().get(i).getAddressName());
+            locationList.add(location);
+            locationRepository.save(location);
+        }
+
+        Airline target = new Airline();
+        target.setDestinations(locationList);
+        target.setAddress(ad.getAddress());
+        target.setDescription(ad.getDescription());
+        target.setName(ad.getName());
+
+        airlineRepository.save(target);
+
+        return true;
     }
 
     public List<Location> findAirlineDestinations(Long id) {

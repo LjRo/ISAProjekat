@@ -1,18 +1,19 @@
 package isa.projekat.Projekat.service.hotel;
 
-import isa.projekat.Projekat.model.hotel.Hotel;
-import isa.projekat.Projekat.model.hotel.Room;
-import isa.projekat.Projekat.model.hotel.RoomSearchData;
+import isa.projekat.Projekat.model.airline.Reservation;
+import isa.projekat.Projekat.model.hotel.*;
 import isa.projekat.Projekat.model.user.User;
-import isa.projekat.Projekat.repository.HotelRepository;
-import isa.projekat.Projekat.repository.RoomRepository;
-import isa.projekat.Projekat.repository.RoomTypeRepository;
+import isa.projekat.Projekat.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,15 @@ public class RoomService {
     private HotelRepository hotelRepository;
 
     @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
+    private HotelReservationRepository hotelReservationRepository;
+
+    @Autowired
+    private HotelServicesRepository hotelServicesRepository;
+
+    @Autowired
     private RoomTypeRepository roomTypeRepository;
 
     public Page<Room> findAll(PageRequest pageRequest){
@@ -35,10 +45,24 @@ public class RoomService {
 
     //(roomSearchData.getHotelId(),roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate(),roomSearchData.getType(),pageRequestProvider.provideRequest(roomSearchData.getPage()));
     public Page<Room> findAvailableByHotelId(RoomSearchData roomSearchData, PageRequest pageRequest) {
-            return roomRepository.returnRoomsThatAreAvailable(roomSearchData.getHotelId(),roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate(),roomSearchData.getType(),roomSearchData.getNumberOfPeople(),roomSearchData.getNumberOfRooms(),roomSearchData.getNumberOfBeds(),roomSearchData.getMinPrice(),roomSearchData.getMaxPrice(),pageRequest);
-                   //roomRepository.returnRoomsThatAreAvailable(roomSearchData.getHotelId(),roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate(),roomSearchData.getType(),pageRequest,roomSearchData.getNumberOfPeople(),roomSearchData.getNumberOfRooms(),roomSearchData.getNumberOfBeds(),roomSearchData.getMinPrice(),roomSearchData.getMaxPrice());
+            return roomRepository.returnRoomsThatAreAvailable(roomSearchData.getHotelId(),roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate(),roomSearchData.getType(),roomSearchData.getNumberOfPeople(),roomSearchData.getNumberOfRooms(),roomSearchData.getNumberOfBeds(),roomSearchData.getMinPrice(),roomSearchData.getMaxPrice(), findDaysInBetween(roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate()),pageRequest);
+
     }
 
+    private int findDaysInBetween(String arrivalString,String departureString){
+        Date arrival;
+        Date departure;
+        try {
+            arrival=new SimpleDateFormat("yyyy-MM-dd").parse(arrivalString);
+            departure=new SimpleDateFormat("yyyy-MM-dd").parse(departureString);
+        } catch (Exception e){
+            return -1;
+        }
+        long diff = Math.abs(departure.getTime() - arrival.getTime());
+        long days = (diff / (1000*60*60*24));
+        int idays = (int) days;
+        return (idays==0)?1:idays;
+    }
 
     public Room findById( Long id) {
         Optional<Room> oRoom = roomRepository.findById(id);
@@ -65,6 +89,71 @@ public class RoomService {
         return true;
     }
 
+    @Transactional
+    public int reserveRoom(ReservationHotelData reservationHotelData, User user) {
+        ReservationHotel reservationHotel = hotelReservationRepository.findByAirlineReservation_Id(reservationHotelData.getReservationId());
+        if(reservationHotel != null)
+            return 2;
+        Room room = roomRepository.checkIfAvailableStill(reservationHotelData.getRoomId(),reservationHotelData.getArrivalDate(),reservationHotelData.getDepartureDate());
+        Optional<Room> exists  = roomRepository.findById(reservationHotelData.getRoomId());
+        Optional<Reservation> reservation = reservationRepository.findById(reservationHotelData.getReservationId());
+        Date arrival;
+        Date departure;
+        try {
+            arrival=new SimpleDateFormat("yyyy-MM-dd").parse(reservationHotelData.getArrivalDate());
+            departure=new SimpleDateFormat("yyyy-MM-dd").parse(reservationHotelData.getDepartureDate());
+        } catch (Exception e){
+            return -1;
+        }
+        long diff = Math.abs(departure.getTime() - arrival.getTime());
+        long days = (diff / (1000*60*60*24));
+
+        String services = reservationHotelData.getServices();
+        List<HotelServices> servicesList = new ArrayList<>();
+        if(services!="")
+        {
+            if(services.contains(","))
+            {
+                String[] list = services.split(",");
+                for (int i=0; i < list.length ; ++i)
+                {
+                    Long tmp = Long.parseLong(list[i]);
+                    Optional<HotelServices> optional = hotelServicesRepository.findById(tmp);
+                    if(optional.isPresent())
+                        servicesList.add(optional.get());
+                }
+            }
+            else {
+                Long tmp = Long.parseLong(services);
+                Optional<HotelServices> optional = hotelServicesRepository.findById(tmp);
+                if(optional.isPresent())
+                    servicesList.add(optional.get());
+            }
+        }
+
+
+        if(!exists.isPresent() || !reservation.isPresent())
+            return 3;
+        if(room != null)
+        {
+            Room roomFound = exists.get();
+            ReservationHotel newReservation = new ReservationHotel();
+            newReservation.setNightsStaying((int)days);
+            newReservation.setHotel(roomFound.getHotel());
+            newReservation.setAirlineReservation(reservation.get());
+            newReservation.setArrivalDate(arrival);
+            newReservation.setPeople(roomFound.getNumberOfPeople());
+            newReservation.setDepartureDate(departure);
+            newReservation.setServices(servicesList);
+            newReservation.setReservationDate(new Date());
+            newReservation.setUser(user);
+            newReservation.setRoom(roomFound);
+            hotelReservationRepository.save(newReservation);
+            return 0;
+        }
+        else
+            return 4;
+    }
 
 
     @Transactional

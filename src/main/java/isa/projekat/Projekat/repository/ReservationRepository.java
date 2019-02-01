@@ -11,6 +11,10 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
 
-    @Query(value ="Select * from reservations r where r.user_id = ?1 ",nativeQuery = true)
-    public List<Reservation> returnAllReservationByUser(Long userId);
+    @Query(value ="Select * from reservations r where r.user_id = ?1 AND r.finished is not true ",nativeQuery = true)
+    public List<Reservation> getAllByUser(Long userId);
+
+    @Query(value ="Select * from reservations r where r.user_id = ?1 AND  r.flight_id in " +
+            "(select f.id from flights f  where f.start_time > ?2 ) ",nativeQuery = true)
+    public List<Reservation> returnAllFutureReservationsByUser(Long userId,String todayDate);
 }

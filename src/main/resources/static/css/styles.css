@@ -13,10 +13,6 @@
 	background:#eb3b60;
 }
 
-.admin {
-	visibility: hidden;
-}
-
 .customer {
 	visibility: hidden;
 }
@@ -44,4 +40,11 @@
 li.list-group-item>input[type=checkbox] {
 	float: left;
 	margin: 5px auto;
+}
+
+div[name="error"]{
+	color:red;
+}
+div[name="success"]{
+	color:green;
 }

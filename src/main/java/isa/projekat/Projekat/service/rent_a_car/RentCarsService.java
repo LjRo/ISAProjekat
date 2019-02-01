@@ -1,10 +1,13 @@
 package isa.projekat.Projekat.service.rent_a_car;
 
+import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.repository.LocationRepository;
 import isa.projekat.Projekat.repository.RentCarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +17,9 @@ public class RentCarsService {
 
     @Autowired
     private RentCarRepository rentCarRepository;
+
+    @Autowired
+    private LocationRepository locationRepository;
 
     public List<RentACar> findAll(){
         return rentCarRepository.findAll();
@@ -55,6 +61,27 @@ public class RentCarsService {
 
         return  true;
     }
+
+    @Transactional
+    public boolean addRentacar(RentACar rentACar){
+        RentACar rent = new RentACar();
+        rent.setFastDiscount(rentACar.getFastDiscount());
+
+        Location location = new Location();
+        location.setAddressName(rentACar.getAddress().getAddressName());
+        location.setCity(rentACar.getAddress().getCity());
+        location.setLongitude(rentACar.getAddress().getLongitude());
+        location.setLatitude(rentACar.getAddress().getLatitude());
+        location.setCountry(rentACar.getAddress().getCountry());
+
+        locationRepository.save(location);
+        rent.setDescription(rentACar.getDescription());
+        rent.setName(rentACar.getName());
+        rentCarRepository.save(rent);
+        return  true;
+    }
+
+
 
     public List<RentACar> findAllByName(String name, String startDate, String endDate){
         List<RentACar> list = rentCarRepository.findAllByName(name,startDate,endDate);

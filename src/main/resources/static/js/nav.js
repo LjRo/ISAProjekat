@@ -6,7 +6,7 @@ $(document).ready(function () {
     $(".logged").css("display", "none");
     setTimeout(function () {
         checkLogged();
-    },10);
+    },2);
 
 });
 
@@ -14,63 +14,69 @@ $(document).ready(function () {
 
 });
 
-function checkAdmins() {
-    $.get({
-        url: '/api/user/hotelAdmin',
-        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-        success: function (data) {
-            hideNotLogged();
-        },
-        error : function (e) {
-            $(".hotel-admin").remove();
-        }
-    });
+function logout() {
+    localStorage.setItem('accessToken', null);
+    localStorage.setItem('expiresIn', null);
+    var url = window.location.href.match(/^.*\//) + 'login.html';
+    window.location.replace(url);
+}
 
+//0 - Normal, 1 - Admin, 2 - Airline Admin, 3 - Hotel Admin, 4 - RentACar Admin
+function checkLogged() {
     $.get({
-        url: 'api/user/airlineAdmin',
+        url: '/api/user/userType',
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (data) {
-            hideNotLogged();
-        },
-        error : function (e) {
-            $(".admin-airline").remove();
-            $('.airline-admin').remove();
-        }
-    });
+            if (data == -1) {
+                hideLogged();
+                removeAdmin();
+            } else if (data == 0) {
+                hideNotLogged();
+            } else if (data == 1)            {
+                hideNotLogged();
+                $('.admin').show();
+            } else if (data == 3) {
+                hideNotLogged();
+                $(".hotel-admin").show();
+            } else if (data == 2){
+                hideNotLogged();
+                $(".admin-airline").show();
+                $('.airline-admin').show();
+            } else  if (data == 4){
+                hideNotLogged();
+                $(".rentacar-admin").show();
+                $('.admin-rentacar').show();
+            };
 
-    $.get({
-        url: 'api/user/rentAdmin',
-        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-        success: function (data) {
-            hideNotLogged();
+            if(data!= 1){
+                $('.admin').remove();
+            }
+            if (data != 3) {
+                $(".hotel-admin").remove();
+            }
+            if(data != 2){
+                $(".admin-airline").remove();
+                $('.airline-admin').remove();
+            }
+            if(data != 4){
+               $(".rentacar-admin").remove();
+               $('.admin-rentacar').remove();
+            }
+
+
         },
-        error : function (e) {
-            $(".rentacar-admin").remove();
-            $('.admin-rentacar').remove();
+        error: function (e) {
 
         }
     });
 }
-
-function checkLogged (){
-    $.get({
-        url: '/api/user/user',
-        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-        success: function (data) {
-            hideNotLogged();
-            $(".rentacar-admin").remove();
-            $('.admin-rentacar').remove();
-            $(".admin-airline").remove();
-            $('.airline-admin').remove();
-            $(".hotel-admin").remove();
-        },
-        error : function (e) {
-            hideLogged();
-            checkAdmins();
-        }
-    });
-
-
+function removeAdmin() {
+    $('.admin').remove();
+    $(".rentacar-admin").remove();
+    $('.admin-rentacar').remove();
+    $(".admin-airline").remove();
+    $('.airline-admin').remove();
+    $(".hotel-admin").remove();
 }
 
 function hideLogged() {

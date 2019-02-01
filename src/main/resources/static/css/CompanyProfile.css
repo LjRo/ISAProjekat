@@ -111,3 +111,7 @@ ul#hotelServicesList>li
 #hotelServices {
     overflow: scroll;
 }
+div.form-control{
+    height: auto;
+    margin: 5px;
+}

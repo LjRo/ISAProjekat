@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.service.hotel;
 
 import isa.projekat.Projekat.model.hotel.*;
+import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class HotelService {
 
     @Autowired
     private HotelReservationRepository hotelReservationRepository;
+
+    @Autowired LocationRepository locationRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -160,16 +163,46 @@ public class HotelService {
         if(!checkIfAdminAndCorrectAdmin(hotel.getId(),user))
             return false;
         Hotel foundHotel = hotelRepository.findById(hotel.getId()).get();
-        foundHotel.setAddress(hotel.getAddress());
         foundHotel.setFastDiscount(hotel.getFastDiscount());
         foundHotel.setDescription(hotel.getDescription());
         foundHotel.setName(hotel.getName());
 
-
+        Location foundLocation = locationRepository.findById(foundHotel.getAddress().getId()).get();
+        foundLocation.setCity(hotel.getAddress().getCity());
+        foundLocation.setAddressName(hotel.getAddress().getAddressName());
+        foundLocation.setLatitude(hotel.getAddress().getLatitude());
+        foundLocation.setCountry(hotel.getAddress().getCountry());
+        foundLocation.setLongitude(hotel.getAddress().getLongitude());
+        locationRepository.save(foundLocation);
         hotelRepository.save(foundHotel);
-       // entityManager.persist(foundHotel);
         return true;
     }
+
+    @Transactional
+    public boolean addHotel(Hotel hotel, User user) {
+        if(user.getType()!=1)
+            return false;
+
+        Hotel newHotel = new Hotel();
+        Location location = new Location();
+        location.setCity(hotel.getAddress().getCity());
+        location.setAddressName(hotel.getAddress().getAddressName());
+        location.setCountry(hotel.getAddress().getCountry());
+        location.setLatitude(hotel.getAddress().getLatitude());
+        location.setLongitude(hotel.getAddress().getLongitude());
+        locationRepository.save(location);
+
+        newHotel.setFastDiscount(hotel.getFastDiscount());
+        newHotel.setAddress(location);
+        newHotel.setDescription(hotel.getDescription());
+        newHotel.setName(hotel.getName());
+        hotelRepository.save(newHotel);
+
+        return true;
+    }
+
+
+
 
     @Transactional
     public boolean editHotelList(HotelPriceList hotelPriceList, User user) {
@@ -181,7 +214,6 @@ public class HotelService {
         HotelPriceList exact = foundHotelPrice.get();
         exact.setStarts(new Date());
         exact.setPrice(hotelPriceList.getPrice());
-        // entityManager.persist(foundHotel);
         return true;
     }
 
@@ -196,8 +228,6 @@ public class HotelService {
         newHotelService.setPrice(hotelServices.getPrice());
         target.getHotelServices().add(newHotelService);
         hotelServicesRepository.save(newHotelService);
-        //entityManager.persist(newFloorPlan);
-        //entityManager.persist(target);
         return true;
     }
 
@@ -214,7 +244,6 @@ public class HotelService {
             hotelServicesRepository.save(edited);
             return true;
         }
-        // entityManager.persist(foundHotel);
         return false;
     }
 
@@ -232,7 +261,6 @@ public class HotelService {
                 hotelServicesRepository.delete(removing);
                 return true;
             }
-            // entityManager.persist(foundHotel);
             return false;
         }
 

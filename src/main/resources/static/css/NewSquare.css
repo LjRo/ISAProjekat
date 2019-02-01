@@ -1,11 +1,21 @@
-#addForm > div.form-group {
+#addForm > div.form-group  {
     width: 60%;
     margin: 10px auto;
 }
+ .boxForm  {
+ width: 80%;
+ margin: 10px auto;
+ }
+ .boxForm div.form-group , btn-form {
+     width: 80%;
+     margin: 0 auto;
+ }
+
+
 
 @media (max-width:991px) {
-    #addForm > div.form-group {
-        width: 100%;
+    #addForm > div.form-group , .boxForm > div.form-group , btn-form{
+        width: 100% !important;
     }
 }
 input, select{
@@ -13,18 +23,27 @@ input, select{
 }
 @media (max-width: 1000px)
 {
-    #addForm
+    .boxForm {
+        width: 100% !important;
+    }
+
+    #addForm, .boxForm
     {
         margin: 0 !important;
     }
 
 }
-#addForm {
+#addForm  {
     margin: 0 150px 0 150px;
     background-color: #e9ecef;
     padding-bottom: 20px;
 
 }
+.boxForm {
+    background-color: #e9ecef;
+    padding-bottom: 20px;
+}
+
 #error{
     color:red;
     margin: 0 auto;
