@@ -170,11 +170,11 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (8, 1);
 
 /*companies.sql*/
 
-INSERT INTO airlines (name, address_id, description)
-VALUES ('AirSerbia',5, 'Aeroport Nikole Tesle Belgrade');
+INSERT INTO airlines (name, address_id, description, has_food, has_extra_luggage, has_other_services, food_price, luggage_price)
+VALUES ('AirSerbia',5, 'Aeroport Nikole Tesle Belgrade', true, true, false, 50, 100);
 
-INSERT INTO airlines (name, address_id, description)
-VALUES ('AirMontenegro', 6, 'Aeroport Saint Sarevos');
+INSERT INTO airlines (name, address_id, description, has_food, has_extra_luggage, has_other_services, food_price, luggage_price)
+VALUES ('AirMontenegro', 6, 'Aeroport Saint Sarevos', false, false, true, null, null);
 
 
 
@@ -343,7 +343,7 @@ values (0,0,100,true,false,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
 values (1,0,100,true,false,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
-values (2,0,100,false,false,null);
+values (2,0,100,false,true,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
 values (3,0,100,false,false,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
@@ -393,6 +393,8 @@ insert into flights_seats(flight_id,seats_id) values(2,14);
 insert into flights_seats(flight_id,seats_id) values(2,15);
 insert into flights_seats(flight_id,seats_id) values(2,16);
 
+insert into reservations(user_name,last_name,user_id,flight_id,passport,points_used, total_cost, confirmed, finished, seat_id) values(null,null,2,1,"RS201515123",0,100,true,true,3);
+insert into users_reservations (user_id, reservations_id) values (2,1);
 
 /*insert into airlines_admins (airline_id, admins_id) values (1,5); Commented because of An illegal reflective access operation has occurred*/
 

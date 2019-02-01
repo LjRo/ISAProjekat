@@ -58,7 +58,7 @@ public class FlightController {
 
     @RequestMapping(value = "api/flight/search", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public List<Flight> searchFlight(@RequestBody FlightSearchData searchData, HttpServletRequest req){
+    public List<FlightSearchResultData> searchFlight(@RequestBody FlightSearchData searchData, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
 
         //flightService.quickBookFlight(quickTicketData,email);
