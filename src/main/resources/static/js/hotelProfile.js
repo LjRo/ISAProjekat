@@ -28,7 +28,7 @@ $(document).ready(function () {
                 latitude = hotel.address.latitude;
                 name = hotel.name;
                 description = hotel.description;
-
+                checkUserType();
                 hotelPrices = hotel.hotelPriceList;
 
                 var floorPlansUS = hotel.floorPlans;
@@ -87,24 +87,8 @@ $(document).ready(function () {
                                 }
                                 setPagingButtons(data.totalPages, data.totalElements);
                             }
-                            $.get({
-                                url: '/api/user/hotelAdmin',
-                                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                                success: function (data) {
-                                },
-                                error : function (e) {
-                                    $(".hotel-admin").remove();
-                                }
-                            });
-                            $.get({
-                                url: '/api/user/user',
-                                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                                success: function (data) {
-                                },
-                                error : function (e) {
-                                    $(".user").remove();
-                                }
-                            });
+
+
                         }
                     });
                 }
@@ -126,6 +110,7 @@ $(document).ready(function () {
                     $('#search-People').val(people);
                     $('#search-Rooms').val(Rooms);
                     $('#search-Beds').val(Beds);
+                    $('#search-hotel').val(type);
 
                     $.post({
                         url: "api/rooms/findByIdAvailable",
@@ -150,12 +135,9 @@ $(document).ready(function () {
                                 var selRoomType;
                                 for (var i = 0; i < data.numberOfElements; i++) {
 
-                                    if(hotelPrices!=undefined && hotelPrices !=null)
-                                    {
-                                        for(var j=0; j< hotelPrices.length; ++j)
-                                        {
-                                            if(data.content[i].roomType.id == hotelPrices[j].roomType.id)
-                                            {
+                                    if (hotelPrices != undefined && hotelPrices != null) {
+                                        for (var j = 0; j < hotelPrices.length; ++j) {
+                                            if (data.content[i].roomType.id == hotelPrices[j].roomType.id) {
                                                 selRoomType = hotelPrices[j].price;
                                             }
                                         }
@@ -165,28 +147,13 @@ $(document).ready(function () {
                                     var date2 = new Date(departure);
                                     var timeDiff = Math.abs(date2.getTime() - date1.getTime());
                                     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                                    diffDays= (diffDays==0)?1:diffDays;
-                                    addRoom(data.content[i],pId,diffDays*selRoomType);
+                                    diffDays = (diffDays == 0) ? 1 : diffDays;
+                                    addRoom(data.content[i], pId, diffDays * selRoomType);
                                 }
                                 setPagingButtons(data.totalPages, data.totalElements);
-                                $.get({
-                                    url: '/api/user/hotelAdmin',
-                                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                                    success: function (data) {
-                                    },
-                                    error : function (e) {
-                                        $(".hotel-admin").remove();
-                                    }
-                                });
-                                $.get({
-                                    url: '/api/user/user',
-                                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                                    success: function (data) {
-                                    },
-                                    error : function (e) {
-                                        $(".user").remove();
-                                    }
-                                });
+
+
+                                checkUserType();
                             }
                         },
                         error: function (message) {
@@ -202,7 +169,7 @@ $(document).ready(function () {
         }
     });
 
-
+    
 
 
     $('#addRoom').click(function () {
@@ -231,7 +198,7 @@ $(document).ready(function () {
 
     $('#Search').on('submit',function (e) {
        e.preventDefault();
-
+       $('.user').attr('display','inherit');
         //window.location.replace(addParameterToURL("search=true"));
         var today = new Date();
         var dd = today.getDate();
@@ -304,6 +271,27 @@ $(document).ready(function () {
 
 });
 
+//0 - Normal, 1 - Admin, 2 - Airline Admin, 3 - Hotel Admin, 4 - RentACar Admin
+function checkUserType() {
+    $.get({
+        url: '/api/user/userType',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
+            if (data == -1) {
+                $(".user").remove();
+            }
+            if (data != 3) {
+                $(".hotel-admin").remove();
+            } else if (data == 3) {
+                $(".hotel-admin").show();
+            }
+        },
+        error: function (e) {
+
+        }
+    });
+}
+
 function addService(services) {
     services.forEach(function (entry) {
         $("#hotelServicesList").append('<li value= "' + entry.id + '">'  + entry.name + ' ' + entry.price +  '$</li>');
@@ -312,14 +300,27 @@ function addService(services) {
 
 
 function addRoom(room,hotelId,price) {
+    var arrival = getUrlParameter('arrival');
+    var departure = getUrlParameter('departure');
+    arrival = (arrival==undefined||arrival=='')?'':'&arrival='+arrival;
+    departure = (departure==undefined||departure=='')?'':'&departure='+departure;
+
+    var display = 'none';
+    if(arrival != '' && departure !='')
+    {
+        display='inherit'
+    }
+
+
+
     var pricing = (price==undefined)?"Unknown":price;
     var name = (room.name !=null)? room.name : room.roomType.name + ' ' + room.roomNumber ;
     var tr = $(
         '<div class="card mb-1">' +
         '                                                <div class="card-body">' +
         '                                                    <div class="row">' +
-        '                                                        <div class="col-md-3">' +
-        '                                                            <img class="card-img" src="assets/img/room.svg">' +
+        '                                                        <div class="col-md-3" style="max-height: 150px">' +
+        '                                                            <img style="height: 100%" class="card-img" src="assets/img/room.svg">' +
         '                                                        </div>' +
         '                                                        <div class="col-md-6 border-right">' +
         '                                                            <h5 class="text-danger" id="name">' +name +    '</h5>' +
@@ -340,8 +341,8 @@ function addRoom(room,hotelId,price) {
         '                                                            <br>' +
         '                                                            Floor: <strong><span id="Floor">' + room.floor + '</span></strong>' +
         '                                                            <br>' +
-        '                                                            <button id="editRoom' + room.id +'" class="btn btn-primary hotel-admin btn-outline-secondary rounded-0 mb-1" type="button"> Edit </button>' +
-        '                                                            <button id="reserveRoom' + room.id +'" class="btn btn-primary user  btn-outline-secondary rounded-0 mb-1" type="button"> Reserve  </button>' +
+        '                                                            <button id="editRoom' + room.id +'" class="btn btn-primary hotel-admin btn-outline-secondary rounded-0 mb-1" style="display:none" type="button"> Edit </button>' +
+        '                                                            <button id="reserveRoom' + room.id +'" class="btn btn-primary user btn-outline-secondary rounded-0 mb-1" style="display:' + display +  '" type="button"> Reserve  </button>' +
         '                                                        </div>' +
         '                                                    </div>' +
         '                                                </div>' +
@@ -351,7 +352,7 @@ function addRoom(room,hotelId,price) {
         window.location.href = "addRoom.html?id=" + hotelId +"&room="+ room.id + "&edit=1";
     });
     $('#' + 'reserveRoom' +  room.id).click(function () {
-        window.location.href = "hotelReservation.html?id=" + hotelId +"&room="+ room.id; // + "&edit=1";
+        window.location.href = "hotelReservation.html?id=" + hotelId +"&room="+ room.id +arrival + departure; // + "&edit=1";
     });
 
 }

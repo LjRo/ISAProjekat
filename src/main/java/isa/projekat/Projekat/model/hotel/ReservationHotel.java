@@ -2,10 +2,13 @@ package isa.projekat.Projekat.model.hotel;
 
 import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.user.User;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -34,9 +37,12 @@ public class ReservationHotel implements Serializable {
     @Column(nullable = false)
     private int People;
 
-    @Column
-    private boolean fast;
+    @OneToMany(cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<HotelServices> services;
 
+    @Column
+    private boolean fast = false;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Hotel hotel;
@@ -57,6 +63,14 @@ public class ReservationHotel implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<HotelServices> getServices() {
+        return services;
+    }
+
+    public void setServices(List<HotelServices> services) {
+        this.services = services;
     }
 
     public Long getId() {

@@ -66,10 +66,7 @@ public class RentCarController {
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @RequestMapping(value = "api/rentacar/edit", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> editRentACar(@RequestBody RentACar rentACar,  HttpServletRequest httpServletRequest){
-
-        String authToken = jwtTokenUtils.getToken(httpServletRequest);
-        String email = jwtTokenUtils.getUsernameFromToken(authToken);
-        User user = userService.findByUsername(email);
+        User user =  getUser(httpServletRequest);
 
         if (rentCarsService.editRentACar(rentACar,user)){
             Map<String, String> result = new HashMap<>();
@@ -82,4 +79,22 @@ public class RentCarController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "api/rentacar/add", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> addRentacar(@RequestBody RentACar rentACar,  HttpServletRequest httpServletRequest){
+        if (rentCarsService.addRentacar(rentACar)){
+            Map<String, String> result = new HashMap<>();
+            result.put("result", "success");
+            return ResponseEntity.accepted().body(result);
+        }else {
+            return ResponseEntity.status(401).build();
+        }
+
+    }
+
+    private User getUser( HttpServletRequest httpServletRequest){
+        String authToken = jwtTokenUtils.getToken(httpServletRequest);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        return userService.findByUsername(email);
+    }
 }

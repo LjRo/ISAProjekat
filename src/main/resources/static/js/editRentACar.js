@@ -42,9 +42,6 @@ $(function () {
                             name: name,
                             description: description,
                             fastDiscount: fastDiscount,
-                            bronzeDiscount: bronzeDiscount,
-                            silverDiscount: silverDiscount,
-                            goldDiscount: goldDiscount,
                             address: {
                                 id : idLocation,
                                 addressName: addressName,

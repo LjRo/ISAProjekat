@@ -110,6 +110,12 @@ public class HotelController {
         User user =  getUser(httpServletRequest);
         return responseTransaction(hotelService.editHotel(hotel,user));
     }
+    @RequestMapping(value = "api/hotel/addHotel", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void addHotel(@RequestBody Hotel hotel,HttpServletRequest httpServletRequest) {
+        User user =  getUser(httpServletRequest);
+        hotelService.addHotel(hotel,user);
+    }
 
     @RequestMapping(value = "api/hotel/editPriceList", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")

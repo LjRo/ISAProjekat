@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.controller.hotel;
 
+import isa.projekat.Projekat.model.hotel.ReservationHotelData;
 import isa.projekat.Projekat.model.hotel.Room;
 import isa.projekat.Projekat.model.hotel.RoomSearchData;
 import isa.projekat.Projekat.model.user.User;
@@ -73,6 +74,50 @@ public class RoomController {
         User user = getUser(httpServletRequest);
         return responseTransaction(roomService.deleteRoom(room,user,id));
     }
+
+    @RequestMapping(value = "api/rooms/reserveRoom", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<?> reserveRoom(@RequestBody ReservationHotelData reservationHotelData, HttpServletRequest httpServletRequest) {
+        User user = getUser(httpServletRequest);
+        return advanceResponse(roomService.reserveRoom(reservationHotelData,user));
+    }
+
+    private ResponseEntity<?> advanceResponse(int resultOfTransaction ){
+        Map<String, String> result = new HashMap<>();
+       switch (resultOfTransaction )
+       {
+           case 0:
+               result.put("result", "success");
+               result.put("status","200");
+                break;
+           case 1:
+               result.put("result", "error");
+               result.put("body","Unauthorized access");
+               result.put("status","401");
+               break;
+           case 2:
+               result.put("result", "errorExists");
+               result.put("body","Error already exists reservation for room for this airline reservation");
+               result.put("status","508");
+               break;
+           case 3:
+               result.put("result", "errorWithData");
+               result.put("body","Error with data that was sent");
+               result.put("status","509");
+               break;
+           case 4:
+               result.put("result", "errorAlreadyReserved");
+               result.put("body","Error already reserved room in this time period");
+               result.put("status","510");
+               break;
+           default:
+               result.put("result", "error");
+               result.put("status","505");
+               result.put("body","Unknown error");
+       }
+        return ResponseEntity.accepted().body(result);
+    }
+
 
 
     @SuppressWarnings("Duplicates")

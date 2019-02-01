@@ -1,28 +1,142 @@
 $(document).ready(function () {
 
-    var pId = getUrlParameter('hotelId');
-    var id = getUrlParameter('id');
+    var pId = getUrlParameter('id');
+    var id = getUrlParameter('room');
 
-    checkboxPrepare();
+    var arrival = getUrlParameter('arrival');
+    var departure = getUrlParameter('departure');
+
+    arrival = (arrival==undefined||arrival=='')?'':arrival;
+    departure = (departure==undefined||departure=='')?'':departure;
+
+    if(arrival != '' && departure != '')
+    {
+        $('#checkIn').val(arrival);
+        $('#checkOut').val(departure);
+    }
+
 
     $.get({
-        url: '/api/flight/reservation',
+        url: '/api/flight/reservations',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (data) {
             if (data != null) {
-                fillAirlineReservations(data);
+                if(data.length > 0)
+                {
+                    data.forEach(function (entry) {
+                        fillAirlineReservations(entry);
+                    });
+                    $('#confirmReservation').on('click', function(event) {
+                        event.preventDefault();
+                        var airlineReservationId =  $('select[name="selectAirlineReservations"]').val();
+
+                        if(airlineReservationId =="" || airlineReservationId == undefined)
+                        {
+                            $('#error').html("Please select flight reservation to be able to confirm").fadeIn().delay(3000).fadeOut();
+                        }
+                        else
+                        {
+                            var checkedItems = {}, counter = 0;
+                            $("#hotelServices li.active").each(function(idx, li) {
+                                checkedItems[counter] = $(li).val();
+                                counter++;
+                            }); // JSON.stringify(checkedItems, null)
+                            var services = '';
+
+                            for(var i = 0;i< counter ; i++)
+                            {
+                                if(i==0)
+                                    services += checkedItems[i];
+                                else
+                                    services += ','+checkedItems[i];
+                            }
+
+                            $.post({
+                                url: "api/rooms/reserveRoom",
+                                data: JSON.stringify({
+                                    hotelId: pId,
+                                    roomId : id,
+                                    reservationId: airlineReservationId,
+                                    services :services ,
+                                    arrivalDate: arrival,
+                                    departureDate: departure,
+                                }),
+                                dataType: "json",
+                                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                                contentType: 'application/json',
+                                success: function (message) {
+                                    if(message.status == '200')
+                                    {
+                                        $('#success').html("Succesfuly added this room to your reservation").fadeIn().delay(3000).fadeOut();
+                                        $('#confirmReservation').attr('disable','disable');
+                                        setTimeout(function () {
+                                            window.location.replace("hotelprofile.html?id=" + pId +"&page=0");
+                                        },3000);
+                                    }
+                                    else
+                                    {
+                                        $('#error').html(message.body).fadeIn().delay(3000).fadeOut();
+                                    }
+
+
+
+                                },
+                                error: function (data) {
+                                    if(data.status == undefined)
+                                    {
+                                        data.status = 'Unknown';
+                                    }
+                                    if(data.status == '500')
+                                    {
+                                        $('#error').html("Alredy reserved").fadeIn().delay(3000).fadeOut();
+                                    } else
+                                    $('#error').html("Error happened while reserving this(" + data.status +')' ).fadeIn().delay(3000).fadeOut();
+                                }
+                            });
+                        }
+
+                        //$('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
+                    });
+
+                }
+                else
+                {
+                    $('#confirmReservation').remove();
+                    $('#error2').html("Please make a airline reservation first to reserve a hotel").fadeIn().delay(10000).fadeOut();
+                    setTimeout(function () {
+                       // window.location.replace("hotelprofile.html?id=" + pId +"&page=0");
+                    },10000);
+                }
             }
+        },
+        error:function (message) {
+            alert(message.status);
         }
+
     });
 
+    $.get({
+        url: '/api/hotel/' + pId + '/HotelServicesForHotel',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (arrivedHotelServices) {
+            arrivedHotelServices.forEach(function (entry) {
+                addService(entry);
+            });
+            checkboxPrepare();
+        }
+
+    });
 
 
 });
 
 function fillAirlineReservations(data) {
-    $("#listReservations").append('<option value= "' + data.id + '">' + data.name + '</option>');
+    $("#listReservations").append('<option value= "' + data.id + '"> For ' + data.flight.finish.city + ' at ' + data.flight.startTime.substring(0,10) + '</option>');
 }
 
-
+function addService(entry) {
+        $("#hotelServices").append('<li value= "' + entry.id + '" class="list-group-item" data-style="button"  data-color="info">'  + entry.name + ' $' + entry.price +  '</li>');
+}
 
 
 var getUrlParameter = function getUrlParameter(sParam) {
@@ -108,13 +222,5 @@ function checkboxPrepare() {
         init();
     });
 
-    $('#get-checked-data').on('click', function(event) {
-        event.preventDefault();
-        var checkedItems = {}, counter = 0;
-        $("#check-list-box li.active").each(function(idx, li) {
-            checkedItems[counter] = $(li).val();
-            counter++;
-        });
-        $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
-    });
+
 }

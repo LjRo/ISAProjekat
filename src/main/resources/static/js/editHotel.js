@@ -53,7 +53,7 @@ $(function () {
                             }, 2000);
                         },
                         error: function (message) {
-                            $('#error').text('Error occured' + message.status).fadeIn.delay(3000).fadeOut();
+                            $('#error').text('Error occured' + message.status).fadeIn().delay(3000).fadeOut();
                         },
 
                     });

@@ -54,21 +54,34 @@ $(document).ready(function () {
 
 function addArticle(hotel) {
     var icon = "assets/img/hotel.svg";
+    var arrival = getUrlParameter('arrival');
+    var departure = getUrlParameter('departure');
+    arrival = (arrival=="" || arrival==undefined)?"":'&arrival=' +arrival;
+    departure = (departure=="" || departure==undefined)?"":'&departure=' +departure;
+    var rest='';
+    if(arrival != "" && departure !="")
+    {
+        rest = arrival + departure + '&minPrice=0&maxPrice=1000000000&people=1&rooms=0&beds=0&type=0&search=true';
+    }
+    var str = 'hotelprofile.html?id=' + hotel.id + '&page=0' + rest;
     $('#hotelList').append(
 
         '<div class="col-sm-6 col-md-5 col-lg-4 item">' +
-        '<div class="box">' + '<img src="' + icon + '" style="width:80px;height:80px"/>' +
+        '<div class="box">' + '<img onclick="changeTo(\'' + str + '\')" src="' + icon + '" style="width:80px;height:80px"/>' +
         '<br>' +
-        '<a href="/hotelprofile.html?id=' + hotel.id + '&page=0">' +
-        '<h3 class="name">' +hotel.name +'</h3>' +
+        '<a href="' + str + '">' +
+        '<h3 class="name"><strong>' +hotel.name +'</strong></h3>' +
         '</a>' +
         '<p class="description">Address: <span style = "color:black">'+ hotel.address.addressName  + ',' + hotel.address.city + '</span></p>' +
         '<p class="description">'+ hotel.description +'</p>' +
-        '<a class="edit-hotel admin" href="edithotel.html?id=' + hotel.id +'&name='+ hotel.name +'&description='+ hotel.description + '"><img src="/../assets/img/edit.png" style="height:16px;width16px;"></a> ' +
-        '<a id="' + hotel.id + '" class="delete-hotel admin" href="hotels.html"><img src="assets/img/delete.png" style="height:16px;width16px;"></a> '+
+        '<a class="edit-hotel hotel-admin" href="edithotel.html?id=' + hotel.id +'&name='+ hotel.name + '"><img src="/../assets/img/edit.png" style="height:16px;width16px;"></a> ' +
+        '<a id="' + hotel.id + '" class="delete-hotel" href="hotels.html"><img src="assets/img/delete.png" style="display:none;height:16px;width16px;"></a> '+
         '</div>');
 }
 
+function changeTo(to) {
+    window.location.replace(to)
+}
 
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),

@@ -40,6 +40,16 @@ public class UserController {
         return userService.getProfileData(email);
     }
 
+    @RequestMapping(value = "api/user/userType", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public int getUserType(HttpServletRequest req) {
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        if(user == null)
+            return -1;
+        return user.getType();
+    }
+
     @RequestMapping(value = "api/user/findAllFriends", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
     public List<UserData> findAllFriends(HttpServletRequest req) {
