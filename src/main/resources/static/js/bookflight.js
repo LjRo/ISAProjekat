@@ -387,7 +387,7 @@ function confirmInput() {
                                 });
 
                                 $('#addCar').click(function () {
-                                    var url = window.location.href.match(/^.*\//) + 'rentacar.html?type=1&search='+data.finish.city + '&start' + a + '&end='+d;
+                                    var url = window.location.href.match(/^.*\//) + 'rentacars.html?type=1&search='+data.finish.city + '&start=' + a + '&end='+d;
                                     window.location.replace(url);
                                 });
                                 $('#finishReservation').click(function () {

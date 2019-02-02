@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/NavigationWithButton.css">
+    <link rel="stylesheet" href="css/HighlightPhone.css">
+    <link rel="stylesheet" href="css/ProjectsHorizontal.css">
+    <link rel="stylesheet" href="css/LoginForm.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/NewSquare.css">
+    <script src="js/nav.js"></script>
+    <script src="js/loggedCheck.js"></script>
+    <script src="js/rentReservation.js"></script>
+    <title>eJourney</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+
+<div id="navbar-frame" style="font-size:15px"></div>
+<hr>
+<div class="">
+    <div class="container">
+        <div class="col-md-12" style="align-self: center">
+            <div class="col-md">
+                <form id="addForm">
+                    <h2 class="sr-only "></h2>
+                    <h2 style="text-align: center">Car Reservation</h2>
+                    <img src="assets/img/carlisting.svg"
+                         style="display: block; max-height:240px; max-width: 240px;margin-left: auto;margin-right: auto">
+                    <div id="start_div" class="form-group">
+                        <div id="error2" style="display:none;color:red; border: 1px solid red; text-align: center; vertical-align: middle;"></div>
+                        <select size="3" class="form-control" name="selectAirlineReservations">
+                            <optgroup label="Airline Reservations:" id="listReservations">
+                            </optgroup>
+                        </select>
+
+
+                        <h4 style="text-align: center">Check In</h4>
+                        <input class="form-control datepicker" id="checkIn" type="date" disabled>
+                        <h4 style="text-align: center">Check Out</h4>
+                        <input class="form-control datepicker" id="checkOut" type="date" disabled>
+                        <hr>
+                        <p id="info"></p>
+                        <p id="info2"></p>
+                        <h5 id="price"></h5>
+
+                        <h6 id="disc"></h6>
+                        <input style="width: 100%" class="btn btn-primary" type="button" id="confirmReservation" value="Confirm car reservation">
+
+
+                        <div id="error"></div>
+                        <div id="success"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

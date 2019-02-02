@@ -29,39 +29,34 @@
 
 <div id="navbar-frame"></div>
 
-
-<div class="newsletter-subscribe">
-    <div class="container">
-        <div class="intro">
-            <h2 class="text-center">Rent a car filter</h2>
-        </div>
-        <form class="form-inline" method="post" id="searchForm">
-            <select id="search-options" class="form-control" name="cars">
-                <optgroup id="searchOptions" label="Search by">
-                    <option value="0">Name</option>
-                    <option value="1">Location</option>
-                </optgroup>
-            </select>
-
-            <span class="form-group">
-                <input id="search-name" class="form-control" type="text" name="name" placeholder="Search" required/>
-            </span>
-            <input class="form-control datepicker" id="checkIn" type="date" required>
-            <input class="form-control datepicker" id="checkOut" type="date" required>
-
-            <span class="form-group">
-                <button class="btn btn-primary btn-block" id="searchButton" type="submit">Search</button>
-            </span>
-        </form>
-    </div>
-</div>
-
 <div class="features-boxed">
-    <div class="container">
+
+
+    <div class="container" style="padding-bottom: 150px">
+
+
         <div class="intro">
-            <h2 class="text-center">Rent a cars</h2>
+            <h2 class="text-center">Quick reserve</h2>
         </div>
-        <div class="row justify-content-center features" id="carsList">
+        <div class="row">
+            <div class="col-md-6" style="align-self: center; margin: 0 auto">
+                <div class="col-md">
+                    <div id="error2" style="display:none;color:red; border: 1px solid red; text-align: center; vertical-align: middle;"></div>
+                    <select size="3" class="form-control" name="selectAirlineReservations">
+                        <optgroup label="Airline Reservations:" id="listReservations">
+                        </optgroup>
+                    </select>
+                    <div id="error"></div>
+                    <div id="success"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-12" id="addListings"> <!--row justify-content-center features-->
+
+
 
         </div>
     </div>

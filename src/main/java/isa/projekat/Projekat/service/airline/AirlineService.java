@@ -50,7 +50,7 @@ public class AirlineService {
 
     public boolean updateAirlineData(AirlineData ad, String username) {
 
-        Airline target = findById(ad.getId());
+       /* Airline target = findById(ad.getId());
         User admin = userRepository.findByUsername(username);
 
         if(target == null || ad.getAddress() == null || ad.getDescription() == "" || ad.getName() == ""){
@@ -73,7 +73,7 @@ public class AirlineService {
             target.setName(ad.getName());
             return true;
 
-        }
+        }*/
 
         return false;
 

@@ -93,9 +93,19 @@ public class CarController {
     }
 
 
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "api/cars/{idReservation}/{idReservationAirline}/quickReserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> quickReserve(@PathVariable Long idReservation, @PathVariable Long idReservationAirline, HttpServletRequest httpServletRequest){
+        User user = getUser(httpServletRequest);
+        return responseTransaction(carService.quickReserve(idReservationAirline,idReservation,user));
+    }
+
+
+
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "api/cars/{idrent}/quick", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "api/cars/{idrent}/quick", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RentReservation> listQuickReservations(@PathVariable Long idrent){
         return carService.listQuickReservations(idrent);
     }

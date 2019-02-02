@@ -5,6 +5,7 @@ import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -28,10 +29,10 @@ public class RentReservation {
     @Column
     private Date endDate;
 
-    @Column
+    @ManyToOne
     private Location startLocation;
 
-    @Column
+    @ManyToOne
     private Location endLocation;
 
     @Column
@@ -41,7 +42,22 @@ public class RentReservation {
     @ManyToOne
     private Cars rentedCar;
 
+
+
     private Boolean fastReservation;
+
+
+    private BigDecimal price;
+
+
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 
     public Boolean getFastReservation() {
         return fastReservation;

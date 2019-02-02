@@ -84,5 +84,15 @@ public class FlightController {
     }
 
 
+    @RequestMapping(value = "api/flight/reservationRent", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public List<Reservation> findRentReservations(HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return flightService.findRentReservations(user.getId());
+    }
+
+
 
 }

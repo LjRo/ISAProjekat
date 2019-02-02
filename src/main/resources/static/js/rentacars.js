@@ -81,10 +81,22 @@ var getUrlParameter = function getUrlParameter(sParam) {
 };
 
 function addArticle(rentacar) {
+
+    var link;
+
+    var start = getUrlParameter('start');
+    var end = getUrlParameter('end');
+
+    if (start != undefined && end != undefined){
+        link = '/rentacarprofile.html?id=' + rentacar.id + '&page=0&pageLocation=0&start='+ start + '&end='+ end + '&carTypeId=0&passengers=1&locStart=1&locEnd=1';
+    }else {
+        link = '/rentacarprofile.html?id=' + rentacar.id + '&page=0&pageLocation=0';
+    }
+
     var icon = "assets/img/rent-a-car.svg";
     $('#carsList').append('<div class="col-sm-6 col-md-5 col-lg-4 item">' +
         '<div class="box">' + '<img src="' + icon + '" style="width:80px;height:80px"/>' +
-        '<a href="/rentacarprofile.html?id=' + rentacar.id + '&page=0&pageLocation=0">' +
+        '<a href="'+link+'">' +
         '<h3 class="name">' +rentacar.name +'</h3>' +
         '</a>' +
         '<p class="description">Address: <span style = "color:black">'+ 'Click to see google maps' + '</span></p>' +

@@ -48,6 +48,27 @@
                 </div>
             </div>
         </div>
+        <div class="row logged">
+            <div class="col-md-6" style="align-self: center; margin: 0 auto">
+                <div class="col-md">
+                    <h5>Reservations:</h5>
+                    <div id="error2" style="display:none;color:red; border: 1px solid red; text-align: center; vertical-align: middle;"></div>
+                    <select size="3" class="form-control" name="selectAirlineReservations" onchange="putInfo(this)">
+                        <optgroup label="Airline Reservations:" id="listReservations">
+                        </optgroup>
+                    </select>
+                    <div id="error"></div>
+                    <div id="success"></div>
+                </div>
+            </div>
+            <div class="col-md-12 logged">
+
+                <p id="status"></p>
+
+
+            </div>
+
+        </div>
     </div>
 </div>
 
