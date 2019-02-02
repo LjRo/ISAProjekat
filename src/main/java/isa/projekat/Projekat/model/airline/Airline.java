@@ -6,6 +6,7 @@ import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -30,6 +31,21 @@ public class Airline implements Serializable {
 
     @Column
     private String pricing;
+
+    @Column
+    private Boolean hasExtraLuggage;
+
+    @Column
+    private Boolean hasOtherServices;
+
+    @Column
+    private Boolean hasFood;
+
+    @Column
+    private BigDecimal luggagePrice;
+
+    @Column
+    private BigDecimal foodPrice;
 
     @ManyToMany
     private List<Location> destinations;
@@ -109,5 +125,45 @@ public class Airline implements Serializable {
 
     public void setPricing(String pricing) {
         this.pricing = pricing;
+    }
+
+    public Boolean getHasExtraLuggage() {
+        return hasExtraLuggage;
+    }
+
+    public void setHasExtraLuggage(Boolean hasExtraLuggage) {
+        this.hasExtraLuggage = hasExtraLuggage;
+    }
+
+    public Boolean getHasOtherServices() {
+        return hasOtherServices;
+    }
+
+    public void setHasOtherServices(Boolean hasOtherServices) {
+        this.hasOtherServices = hasOtherServices;
+    }
+
+    public Boolean getHasFood() {
+        return hasFood;
+    }
+
+    public void setHasFood(Boolean hasFood) {
+        this.hasFood = hasFood;
+    }
+
+    public BigDecimal getLuggagePrice() {
+        return luggagePrice;
+    }
+
+    public void setLuggagePrice(BigDecimal luggagePrice) {
+        this.luggagePrice = luggagePrice;
+    }
+
+    public BigDecimal getFoodPrice() {
+        return foodPrice;
+    }
+
+    public void setFoodPrice(BigDecimal foodPrice) {
+        this.foodPrice = foodPrice;
     }
 }

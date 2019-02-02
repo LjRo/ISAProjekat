@@ -20,9 +20,13 @@
             crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
     <script type="text/javascript" src="js/nav.js"></script>
-    <script type="text/javascript" src="js/loggedCheck.js"></script>
     <script type="text/javascript" src="js/airlines.js"></script>
+    <script type="text/javascript" src="js/searchFlight.js"></script>
+
 
 
 </head>
@@ -31,31 +35,99 @@
 <div id="navbar-frame"></div>
 
 
-<div class="newsletter-subscribe">
-    <div class="container">
-        <div class="intro">
-            <h2 class="text-center">Article Filter</h2>
-        </div>
-        <form class="form-inline" method="get" action="airlines.html">
-            <div class="form-group">
-                <input id="search-name" class="form-control" type="text" name="name" placeholder="Article Name"/>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary btn-block" type="submit">Search</button>
-            </div>
-        </form>
-    </div>
-</div>
 
-<div class="features-boxed">
-    <div class="container">
-        <div class="intro">
-            <h2 class="text-center">Articles</h2>
+
+<div class="col-sm-9" style = " margin:0 auto ">
+    <ul class="nav nav-tabs" style = " margin:auto; width:12% " >
+        <li class="active" style="text-align: left"><a data-toggle="tab" href="#home">Airlines</a></li>&nbsp;&nbsp;&nbsp;
+        <li style="text-align: right"><a data-toggle="tab" href="#destinationsTab">Search Flight</a></li>
+    </ul>
+    <hr>
+
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="home">
+
+            <div class="features-boxed">
+                <div class="container">
+                    <div class="intro">
+                        <h2 class="text-center">Airlines</h2>
+                    </div>
+                    <div class="row justify-content-center features" id="airlineList">
+                    </div>
+                </div>
+            </div>
+
+        </div><!--/tab-pane-->
+        <div class="tab-pane" id="destinationsTab">
+
+            <div class="newsletter-subscribe" id="filters">
+                <div class="container">
+                    <div class="intro">
+                        <h2 class="text-center">Flight Search</h2>
+                    </div>
+                    <form class="form-inline" >
+                        <div class="form-group" style="width: 100%">
+                            <input class="form-control" id="from" name="fromLoc" placeholder="From" type="text" style="margin: 0 auto"/>
+                            <input class="form-control" id="to" name="toLoc" placeholder="Destination" type="text" style="margin: 0 auto"/>
+                            <input class="form-control datepicker" id="fromDate" type="date" style="margin: 0 auto">
+                            <input class="form-control datepicker" id="toDate" type="date" style="margin: 0 auto">
+                        </div>
+
+                    </form>
+                    <div class="form-group" style="width: 15%;  margin:0 auto">
+                    <button class="btn btn-primary btn-block" id="searchBtn">Search</button>
+                </div>
+            </div>
         </div>
-        <div class="row justify-content-center features" id="airlineList">
+
+        <div class="features-boxed">
+            <div class="container" >
+                <form class="form-inline">
+                    <br>
+                    <br>
+                    <div class="form-group" style="width: 80%; margin:0 auto">
+                        <input class="form-control" id="fPrice" min="0" max="99999" name="minPrice" placeholder="Min Price" step="1" type="number" style="margin: 0 auto"/>
+                        <input class="form-control" id="tPrice" min="0" max="99999"  name="maxPrice" placeholder="Max Price" step="1" type="number" style="margin: 0 auto"/>
+                        <input class="form-control" id="fDuration" min="0" max="99999" name="minDuration" placeholder="Min Duration" step="0.25" type="number" style="margin: 0 auto"/>
+                        <input class="form-control" id="tDuration" min="0" max="99999" name="maxDuration" placeholder="Max Duration" step="0.25" type="number" style="margin: 0 auto"/>
+                        <input type="checkbox" id="luggage" name="luggage">
+                        <label for="luggage">Extra Luggage</label>&nbsp;&nbsp;
+                        <input type="checkbox" id="other" name="otherServices">
+                        <label for="other">Other Services</label>&nbsp;&nbsp;
+                        <input type="checkbox" id="food" name="food">
+                        <label for="food">Food</label>
+
+                    </div>
+
+
+                </form>
+                <div class="form-group" style="width: 15%;  margin:0 auto ">
+                    <button class="btn btn-primary btn-block" id="filterBtn">Filter</button>
+                </div>
+
+                <div class="intro">
+                    <h2 class="text-center">Flights</h2>
+                </div>
+
+
+                <div class="row justify-content-center features" id="flightList" style="width:80%; margin:0 auto">
+                    <table id="flights" class="display responsive dataTable dtr-inline collapsed table table-striped table-hover table-bordered" role="grid" style="width: 100%;">
+                        <thead>
+                        <tr>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="flightTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+
+        </div>
+        <hr>
+
 
 </body>
 

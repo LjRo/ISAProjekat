@@ -6,6 +6,7 @@ import isa.projekat.Projekat.repository.FlightRepository;
 import isa.projekat.Projekat.repository.ReservationRepository;
 import isa.projekat.Projekat.repository.SeatRepository;
 import isa.projekat.Projekat.repository.UserRepository;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -185,14 +186,14 @@ public class FlightService {
         return true;
     }
 
-    public List<Flight> searchFlights(FlightSearchData data) {
-        ArrayList<Flight> res = new ArrayList<>();
+    public List<FlightSearchResultData> searchFlights(FlightSearchData data) {
+        ArrayList<FlightSearchResultData> res = new ArrayList<>();
         //List<Flight> locFlights = flightRepository.findFlights(data.getCityFrom(),data.getCityTo());
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
         List<Flight> locFlights = flightRepository.findAll();
+        DateTime current = new DateTime();
 
-
-            for(Flight fl : locFlights) {
+        for(Flight fl : locFlights) {
                 if(!fl.getStart().getCity().equals(data.getCityFrom())) {
                     continue;
                 }
@@ -202,10 +203,14 @@ public class FlightService {
                 if(fmt.format(fl.getStartTime()).equals(fmt.format(data.getStartDate()))) {
                     if (data.getLandDate() != null) {
                         if (fmt.format(fl.getLandTime()).equals(fmt.format(data.getLandDate()))) {
-                            res.add(fl);
+                            if(current.isBefore(fl.getStartTime().getTime())) {
+                                res.add(formatData(fl));
+                            }
                         }
                     } else {
-                        res.add(fl);
+                        if(current.isBefore(fl.getStartTime().getTime())) {
+                            res.add(formatData(fl));
+                        }
                     }
                 }
             }
@@ -213,4 +218,16 @@ public class FlightService {
 
         return res;
     }
+
+    private FlightSearchResultData formatData(Flight fl) {
+
+        FlightSearchResultData nD = new FlightSearchResultData();
+        nD.setFlight(fl);
+        nD.setHasExtraLuggage(fl.getAirline().getHasExtraLuggage());
+        nD.setHasFood(fl.getAirline().getHasFood());
+        nD.setHasOtherServices(fl.getAirline().getHasOtherServices());
+
+        return nD;
+    }
 }
+

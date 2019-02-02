@@ -17,7 +17,7 @@ public class Reservation {
     @JsonBackReference(value = "user_reservation")
     private User user;
 
-    @Column
+    @Column (name ="user_name")
     private String name;
 
     @ManyToOne
