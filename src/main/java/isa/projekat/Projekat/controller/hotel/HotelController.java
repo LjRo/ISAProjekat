@@ -133,6 +133,13 @@ public class HotelController {
         return  responseTransaction(hotelService.addHotelServices(hotelServices,id,user));
     }
 
+    @RequestMapping(value = "api/hotel/{id}/{userId}/", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> addHotelServices(@PathVariable Long id, HttpServletRequest httpServletRequest, @PathVariable Long userId){
+        User user =  getUser(httpServletRequest);
+        return  responseTransaction(hotelService.addHotelAdmin(id,user));
+    }
+
     @RequestMapping(value = "api/hotel/editHotelServices", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     public  ResponseEntity<?> editHotelServices(@RequestBody HotelServices services,HttpServletRequest httpServletRequest) {

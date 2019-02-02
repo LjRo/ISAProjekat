@@ -22,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "api/user/updateInfo", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ROLE_ADMIN','ROLE_ADMIN_AIRLINE','ROLE_ADMIN_HOTEL','ROLE_ADMIN_RENT')")
     public void updateInfo(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "api/user/profile", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ROLE_ADMIN','ROLE_ADMIN_AIRLINE','ROLE_ADMIN_HOTEL','ROLE_ADMIN_RENT')")
     public UserData getProfileData(HttpServletRequest req) {
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);

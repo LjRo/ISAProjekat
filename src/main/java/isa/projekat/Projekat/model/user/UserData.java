@@ -10,6 +10,7 @@ public class UserData {
     private String city;
     private String phoneNumber;
     private Double points;
+    private int type;
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -28,7 +29,13 @@ public class UserData {
         this.city = city;
     }
 
+    public int getType() {
+        return type;
+    }
 
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getEmail() {
         return email;

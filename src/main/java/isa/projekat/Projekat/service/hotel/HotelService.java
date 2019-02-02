@@ -232,6 +232,18 @@ public class HotelService {
     }
 
     @Transactional
+    public boolean addHotelAdmin(Long hotel, User user) {
+        Optional<Hotel> optionalHotel = hotelRepository.findById(hotel);
+        if(!optionalHotel.isPresent())
+            return false;
+        Hotel target = optionalHotel.get();
+        target.getAdmins().add(user);
+        hotelRepository.save(target);
+        return true;
+    }
+
+
+    @Transactional
     public boolean editHotelServices(HotelServices hotelServices, User user) {
         if(!checkIfAdminAndCorrectAdmin(hotelServices.getHotel().getId(),user))
             return false;
