@@ -136,6 +136,21 @@ function addNew(id, url) {
     });
 }
 
+
+function checkPassword(from){
+    var pass = $('#password').val();
+    var pass2 = $('#verify').val();
+
+    if (pass === pass2){
+        $('#errorPassword').fadeOut(50);
+
+        return true;
+    }else {
+        $('#errorPassword').fadeIn(50).delay(3000).fadeOut();
+        return false;
+    }
+}
+
 function register(typeIn,companyId) {
     var type= typeIn;
     var password = $('input[name="password"]').val();
@@ -161,8 +176,19 @@ function register(typeIn,companyId) {
                 phoneNumber: phoneNumber
             }),
             contentType: 'application/json',
-            success: function () {
+            success: function (UserId) {
                 $('#success').html('Successfully added').fadeIn(500).delay(1500).fadeOut(500);
+
+                $.post({
+                    url:"api/hotel/" + companyId  + "/" + UserId +"/" ,
+                    contentType: 'application/json',
+                    success: function (message) {
+
+                    },
+                    error: function (message) {
+                        $('#error').html('Error happend while adding in comapany id:' + message.result).fadeIn(500).delay(1500).fadeOut(500);
+                    }
+                });
 
 
             },
@@ -175,4 +201,4 @@ function register(typeIn,companyId) {
         window.alert("Passwords must match!")
     }
 
-});
+}
