@@ -13,6 +13,12 @@ VALUES ("Maksima Gorkog 35", "Milano", "Italiy", 45.4642 , 9.1900 );
 INSERT INTO locations (address_name,city,country,latitude,longitude) /*4*/
 VALUES ("Boulevard Tsara Lazara 1", "Novi Sad", "Serbia", 45.247637 , 19.850474);
 
+INSERT INTO locations (address_name,city,country,latitude,longitude) /*5*/
+VALUES ("Nikola Tesle 21", "Beograd", "Serbia", 44.49153 ,  20.17314);
+
+INSERT INTO locations (address_name,city,country,latitude,longitude) /*6*/
+VALUES ("Kurta Schorka 36", "Sarajevo", "BiH", 43.49303  , 18.20074);
+
 
 /*  car_types.sql*/
 
@@ -127,13 +133,13 @@ INSERT into Users (type, username, first_name, last_name, password, address, cit
 values (0,"normala@gmail.com","normal","normalic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234",0);
 
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,administrated_hotel_id)
-values (0,"hotel@gmail.com","hotel","hotelic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr3","city3",b'1',"123-456-1234",1);
+values (3,"hotel@gmail.com","hotel","hotelic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr3","city3",b'1',"123-456-1234",1);
 
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,administrated_airline_id)
-values (0,"airline@gmail.com","airline","airlinovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr4","city4",b'1',"123-456-1234",1);
+values (2,"airline@gmail.com","airline","airlinovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr4","city4",b'1',"123-456-1234",1);
 
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number, administrated_rent_id)
-values (0,"rent@gmail.com","rent","rentovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr5","city5",b'1',"123-456-1234", 1);
+values (4,"rent@gmail.com","rent","rentovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr5","city5",b'1',"123-456-1234", 1);
 
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,points)
 values (0,"normalb@gmail.com","Mika","Mikic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234",0);
@@ -164,11 +170,11 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (8, 1);
 
 /*companies.sql*/
 
-INSERT INTO airlines (name, address, description)
-VALUES ('AirSerbia', 'Nikola Tesle 21 , Beograd', 'Aeroport Nikole Tesle Belgrade');
+INSERT INTO airlines (name, address_id, description, has_food, has_extra_luggage, has_other_services, food_price, luggage_price)
+VALUES ('AirSerbia',5, 'Aeroport Nikole Tesle Belgrade', true, true, false, 50, 100);
 
-INSERT INTO airlines (name, address, description)
-VALUES ('AirMontenegro', 'Sarajevos 8, Sarajevo', 'Aeroport Saint Sarevos');
+INSERT INTO airlines (name, address_id, description, has_food, has_extra_luggage, has_other_services, food_price, luggage_price)
+VALUES ('AirMontenegro', 6, 'Aeroport Saint Sarevos', false, false, true, null, null);
 
 
 
@@ -337,7 +343,7 @@ values (0,0,100,true,false,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
 values (1,0,100,true,false,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
-values (2,0,100,false,false,null);
+values (2,0,100,false,true,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
 values (3,0,100,false,false,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
@@ -387,6 +393,8 @@ insert into flights_seats(flight_id,seats_id) values(2,14);
 insert into flights_seats(flight_id,seats_id) values(2,15);
 insert into flights_seats(flight_id,seats_id) values(2,16);
 
+insert into reservations(user_name,last_name,user_id,flight_id,passport,points_used, total_cost, confirmed, finished, seat_id) values(null,null,2,1,"RS201515123",0,100,true,true,3);
+insert into users_reservations (user_id, reservations_id) values (2,1);
 
 /*insert into airlines_admins (airline_id, admins_id) values (1,5); Commented because of An illegal reflective access operation has occurred*/
 

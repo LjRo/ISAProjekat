@@ -14,10 +14,12 @@
     <link rel="stylesheet" href="css/NavigationWithButton.css">
     <link rel="stylesheet" href="css/HighlightPhone.css">
     <link rel="stylesheet" href="css/ProjectsHorizontal.css">
+    <link href="css/CompanyProfile.css" rel="stylesheet">
     <link rel="stylesheet" href="css/FeaturesBoxed.css">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=8919cfc8-630c-48b2-bb54-e81375325ce9&lang=en_US"
+            type="text/javascript"></script>
     <script src="/js/nav.js"></script>
-    <script type="text/javascript" src="/js/loggedCheck.js"></script>
     <script type="text/javascript" src="js/airlineprofile.js"></script>
 
 
@@ -44,13 +46,12 @@
                     Moonstreet 201/3
                 </li>
                 <li id="rating" class="list-group-item text-right"><span class="float-left"><strong>Rating:</strong></span> 5/5</li>
-                <li class="list-group-item text-right"><span class="d-flex justify-content-center"><a href="#quickFlightsTab"><button type="button" class="btn btn-success">Quick Reservation</button></a></span>
 
                 </li>
 
             </ul>
 
-            <ul class="list-group">
+            <ul class="list-group airline-admin">
                 <li class="list-group-item text-muted">Admin tools <i class="fa fa-dashboard fa-1x"></i></li>
                 <li id="ea" class="list-group-item "><span class="d-flex justify-content-center"><a class = "" id="editAirline" href="editAirline.html"><button type="button" class="btn btn-info">Edit Profile</button></a></span></li>
                 <li id="af" class="list-group-item "><span class="d-flex justify-content-center"><a class = "" id="addFlight" href="addFlight.html"><button type="button" class="btn btn-info">Add Flight</button></a></span></li>
@@ -78,6 +79,13 @@
                         <label><h4>Description:</h4></label>
                         <p id="desc">
 
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="d-none d-md-block iphone-mockup" style="max-height: 20%" id="map">
+
+                        </div>
                     </div>
 
                     <hr>

@@ -1,9 +1,11 @@
 package isa.projekat.Projekat.model.airline;
 
+import isa.projekat.Projekat.model.rent_a_car.Location;
+
 public class AirlineData {
     private Long id;
     private String name;
-    private String address;
+    private Location address;
     private String description;
 
     public Long getId() {
@@ -22,11 +24,11 @@ public class AirlineData {
         this.name = name;
     }
 
-    public String getAddress() {
+    public Location getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Location address) {
         this.address = address;
     }
 
