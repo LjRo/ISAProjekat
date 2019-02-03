@@ -2,6 +2,8 @@ package isa.projekat.Projekat.controller.airline;
 
 import isa.projekat.Projekat.model.airline.*;
 import isa.projekat.Projekat.model.rent_a_car.Location;
+import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.repository.UserRepository;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.airline.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class AirlineController {
 
     @Autowired
     private TokenUtils jwtTokenUtils;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PermitAll
     @RequestMapping(value = "api/airline/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -65,11 +70,47 @@ public class AirlineController {
         return airlineService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/airline/{id}/editData", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public AirlineEditData findAirlineEditData(@PathVariable Long id,HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId() == id) {
+            return airlineService.getEditData(id);
+        } else {
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "api/airline/{id}/edit", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    public void editAirline(@PathVariable Long id, @RequestBody AirlineEditData aED, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId() == id) {
+            airlineService.editAirline(aED, id);
+        } else {
+            return;
+        }
+    }
+
     @PermitAll
     @RequestMapping(value = "api/airline/{id}/destinations", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Location> findAirlineDestinations(@PathVariable Long id, HttpServletRequest req){
 
         return airlineService.findAirlineDestinations(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/location/{id}/delete", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public boolean deleteDest(@PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        return airlineService.deleteLocation(id,email);
     }
 
     @RequestMapping(value = "api/airline/{id}/addFlight", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -80,6 +121,14 @@ public class AirlineController {
 
         airlineService.addFlight(fd, email);
         return true;
+    }
+
+    @RequestMapping(value = "api/airline/{id}/addLocation", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    public void addLocation(@RequestBody Location loc , @PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        airlineService.addLocation(loc,id,email);
     }
 
 }

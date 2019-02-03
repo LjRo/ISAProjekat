@@ -50,7 +50,7 @@
 
             <ul class="list-group airline-admin">
                 <li class="list-group-item text-muted">Admin tools <i class="fa fa-dashboard fa-1x"></i></li>
-                <li id="ea" class="list-group-item "><span class="d-flex justify-content-center"><a class = "" id="editAirline" href="editAirline.html"><button type="button" class="btn btn-info">Edit Profile</button></a></span></li>
+                <li id="ea" class="list-group-item "><span class="d-flex justify-content-center"><a class = "" id="addLocation" href="addLocation.html"><button type="button" class="btn btn-info">AddLocation</button></a></span></li>
                 <li id="af" class="list-group-item "><span class="d-flex justify-content-center"><a class = "" id="addFlight" href="addFlight.html"><button type="button" class="btn btn-info">Add Flight</button></a></span></li>
 
 
@@ -65,6 +65,7 @@
                 <li><a data-toggle="tab" href="#destinationsTab">Destinations</a></li>&nbsp;&nbsp;&nbsp;
                 <li><a data-toggle="tab" href="#flightsTab">Flights</a></li>&nbsp;&nbsp;&nbsp;
                 <li><a data-toggle="tab" href="#quickFlightsTab">Quick Flights</a></li>&nbsp;&nbsp;&nbsp;
+                <li class="airline-admin" id="editPage" ><a data-toggle="tab"  href="#edit">Edit</a></li>&nbsp;&nbsp;&nbsp;
             </ul>
 
 
@@ -142,10 +143,109 @@
                     <hr>
 
                 </div>
+                <div class="tab-pane" id="edit">
+                    <hr>
+                    <form class="form" action="##" method="post" id="editForm">
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Name</h4></label>
+                                <input type="text" class="form-control" name="aName" id="aName"
+                                       placeholder="Airline Name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Description</h4></label>
+                                <input type="text" class="form-control" name="aDesc" id="aDesc"
+                                       placeholder="Description" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Country</h4></label>
+                                <input type="text" class="form-control" name="country" id="country"
+                                       placeholder="Country" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>City</h4></label>
+                                <input type="text" class="form-control" name="city" id="city"
+                                       placeholder="City" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Address</h4></label>
+                                <input type="text" class="form-control" name="address" id="eAddress"
+                                       placeholder="Address" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Latitude</h4></label>
+                                <input type="number" class="form-control" name="lat" id="lat" placeholder="Latitude" style="width:40%" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Longitude</h4></label>
+                                <input type="number" class="form-control" name="long" id="long" placeholder="Longitude"  style="width:40%" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><h4>Services</h4></label><br>
+                            <input type="checkbox" id="luggage" name="luggage">
+                            <label for="luggage">Extra Luggage</label>&nbsp;&nbsp;
+                            <input type="checkbox" id="food" name="food">
+                            <label for="food">Food</label>&nbsp;&nbsp;
+                            <input type="checkbox" id="other" name="otherServices">
+                            <label for="other">Other Services</label>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Luggage Price</h4></label>
+                                <input type="number" class="form-control" name="lugP" id="lugP" placeholder="Luggage Price" min="0" max="99999"  style="width:40%" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Food Price</h4></label>
+                                <input type="number" class="form-control" name="foodP" id="foodP" placeholder="Food Price" min="0" max="99999"  style="width:40%" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <br>
+                                <button class="btn btn-lg btn-success" type="submit"><i
+                                        class="glyphicon glyphicon-ok-sign"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <hr>
+
+                </div><!--/tab-pane-->
 
             </div><!--/tab-pane-->
         </div><!--/tab-content-->
 
     </div><!--/col-9-->
 </div><!--/row-->
-d

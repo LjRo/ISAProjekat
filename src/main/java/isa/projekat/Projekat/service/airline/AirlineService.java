@@ -53,7 +53,7 @@ public class AirlineService {
         Airline target = findById(ad.getId());
         User admin = userRepository.findByUsername(username);
 
-        if(target == null || ad.getAddress() == null || ad.getDescription() == "" || ad.getName() == ""){
+        if(target == null || ad.getAddress() == null || ad.getDescription().equals("") || ad.getName().equals("")){
             return false;
         }
 
@@ -79,7 +79,7 @@ public class AirlineService {
     }
 
     public boolean addAirline(Airline ad) {
-        if(ad.getAddress() == null || ad.getDescription() == "" || ad.getName() == ""){
+        if(ad.getAddress() == null || ad.getDescription().equals("") || ad.getName().equals("")){
             return false;
         }
         Location location = new Location(ad.getAddress().getAddressName(),ad.getAddress().getCountry(),ad.getAddress().getCity(),ad.getAddress().getLatitude(),ad.getAddress().getLongitude());
@@ -93,7 +93,14 @@ public class AirlineService {
     }
 
     public List<Location> findAirlineDestinations(Long id) {
-        return airlineRepository.findById(id).get().getDestinations();
+        List<Location> locations = airlineRepository.findById(id).get().getDestinations();
+        ArrayList<Location> res = new ArrayList<>();
+        for(Location loc : locations ) {
+            if(loc.getActive()) {
+                res.add(loc);
+            }
+        }
+        return res;
     }
 
     @Transactional
@@ -189,4 +196,106 @@ public class AirlineService {
         }
         return result;
     }
+
+    public Boolean deleteLocation(Long locationId, String email) {
+
+        User aAdmin = userRepository.findByUsername(email);
+        Airline target = aAdmin.getAdministratedAirline();
+
+        Location loc = locationRepository.findById(locationId).get();
+
+        if(!target.getDestinations().contains(loc)) {
+            return false;
+        }
+
+        if(loc != null) {
+            if(loc.getActive()) {
+                loc.setActive(false);
+                locationRepository.save(loc);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean addLocation (Location loc, Long id, String email) {
+        User aAdmin = userRepository.findByUsername(email);
+        Airline target = aAdmin.getAdministratedAirline();
+
+        if(loc.getCity() != null && loc.getCountry() != null && loc.getAddressName() != null ) {
+            Airline air = airlineRepository.findById(id).get();
+            if(!target.equals(air)) {
+                return false;
+            }
+            Location nLoc = new Location();
+            nLoc.setAddressName(loc.getAddressName());
+            nLoc.setCity(loc.getCity());
+            nLoc.setCountry(loc.getCountry());
+            nLoc.setLatitude(loc.getLatitude());
+            nLoc.setLongitude(loc.getLongitude());
+            nLoc.setActive(true);
+            locationRepository.save(nLoc);
+            air.getDestinations().add(nLoc);
+            airlineRepository.save(air);
+            return true;
+        }
+        return false;
+    }
+
+    public AirlineEditData getEditData(Long id) {
+        AirlineEditData res = new AirlineEditData();
+        if(!airlineRepository.findById(id).isPresent()) {
+            return null;
+        }
+        Airline target = airlineRepository.findById(id).get();
+
+
+        res.setName(target.getName());
+        res.setDescription(target.getDescription());
+        res.setCity(target.getAddress().getCity());
+        res.setCountry(target.getAddress().getCountry());
+        res.setAddress(target.getAddress().getAddressName());
+        res.setLongitude(target.getAddress().getLongitude());
+        res.setLatitude(target.getAddress().getLatitude());
+        res.setHasFood(target.getHasFood());
+        res.setHasLuggage(target.getHasExtraLuggage());
+        res.setHasOther(target.getHasOtherServices());
+        res.setFoodPrice(target.getFoodPrice());
+        res.setLuggagePrice(target.getLuggagePrice());
+
+        return res;
+    }
+
+    public boolean editAirline(AirlineEditData data, Long id) {
+        if(!airlineRepository.findById(id).isPresent()) {
+            return false;
+        }
+        Airline res = airlineRepository.findById(id).get();
+
+        if(data.getName().equals("") || data.getDescription().equals("") || data.getAddress().equals("") || data.getCountry().equals("") || data.getCity().equals("")) {
+           return false;
+        }
+
+        res.setName(data.getName());
+        res.setDescription(data.getDescription());
+        res.getAddress().setCity(data.getCity());
+        res.getAddress().setCountry(data.getCountry());
+        res.getAddress().setAddressName(data.getAddress());
+        res.getAddress().setLongitude(data.getLongitude());
+        res.getAddress().setLatitude(data.getLatitude());
+        res.setHasFood(data.isHasFood());
+        res.setHasExtraLuggage(data.isHasLuggage());
+        res.setHasOtherServices(data.isHasOther());
+        res.setFoodPrice(data.getFoodPrice());
+        res.setLuggagePrice(data.getLuggagePrice());
+
+        airlineRepository.save(res);
+
+        return true;
+    }
+
 }
+

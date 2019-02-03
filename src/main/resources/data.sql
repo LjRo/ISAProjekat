@@ -1,10 +1,10 @@
 /* Locations */
 
-INSERT INTO locations (address_name,city,country,latitude,longitude) /*1*/
-VALUES ("Buto Musilini 2, Venecia", "Venecia", "Italy", 12.144123 , 15.1414 );
+INSERT INTO locations (address_name,city,country,latitude,longitude,active) /*1*/
+VALUES ("Buto Musilini 2, Venecia", "Venecia", "Italy", 12.144123 , 15.1414 ,true);
 
-INSERT INTO locations (address_name,city,country,latitude,longitude) /*2*/
-VALUES ("Albara Musafa 2, Milano", "Milano", "Italy", 42.144123 , 11.155 );
+INSERT INTO locations (address_name,city,country,latitude,longitude, active) /*2*/
+VALUES ("Albara Musafa 2, Milano", "Milano", "Italy", 42.144123 , 11.155 , true);
 
 
 INSERT INTO locations (address_name,city,country,latitude,longitude) /*3*/

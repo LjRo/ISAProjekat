@@ -103,7 +103,7 @@ $(function () {
         var password2 = $('input[id="password2"]').val();
 
         if (password != password2) {
-            //TODO: Error
+            alert("Passwords must match!")
             return;
         }
 

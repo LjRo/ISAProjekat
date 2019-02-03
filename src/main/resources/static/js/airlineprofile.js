@@ -61,6 +61,76 @@ $(function() {
         }
     });
 
+    $.get({
+        url : '/api/airline/' + id + '/editData',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+
+            if (data != null) {
+
+                    fillEditData(data);
+
+            } else {
+
+            }
+        }
+    });
+
+    $('#editForm').on('submit', function (e) {
+        e.preventDefault();
+        var aName = $('input[id="aName"]').val();
+        var description = $('input[id="aDesc"]').val();
+        var country = $('input[id="country"]').val();
+        var address = $('input[id="eAddress"]').val();
+        var city = $('input[id="city"]').val();
+        var latitude = $('input[id="lat"]').val();
+        var longitude = $('input[id="long"]').val();
+
+        var hasFood = false;
+        var hasLuggage = false;
+        var hasOther = false;
+
+        if(document.getElementById('food').checked) {
+            hasFood=true;
+        }
+        if(document.getElementById('luggage').checked) {
+            hasLuggage=true;
+        }
+        if(document.getElementById('other').checked) {
+            hasOther=true;
+        }
+
+        var luggagePrice = $('input[id="lugP"]').val();
+        var foodPrice = $('input[id="foodP"]').val();
+
+        $.ajax({
+            url: "api/airline/" + id + "/edit",
+            type: 'PUT',
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            data: JSON.stringify({
+                name: aName,
+                description: description,
+                country: country,
+                address: address,
+                city: city,
+                latitude: latitude,
+                longitude: longitude,
+                hasFood: hasFood,
+                hasLuggage: hasLuggage,
+                hasOther: hasOther,
+                luggagePrice: luggagePrice,
+                foodPrice: foodPrice
+            }),
+            contentType: 'application/json',
+            success: function () {
+                window.location.replace("/airline.html?id=" + id);
+            },
+            error: function () {
+            },
+
+        });
+    });
+
 
 });
 
@@ -70,20 +140,40 @@ function fillData(data) {
     $('#desc').text(data.description);
     $('#pricing').text(data.pricing);
     $('#addFlight').attr("href","addFlight.html?id="+data.id);
-    $('#editAirline').attr("href","editAirline.html?id="+data.id);
+    $('#addLocation').attr("href","addLocation.html?id="+data.id);
 }
 
 
 function fillDest(data) {
     var table = $('#destinations').DataTable();
 
-    var tr = $('<tr></tr>');
+    var tr = $('<tr id="'+data.id+'"></tr>');
     var country = $('<td>' + data.country + '</td>');
     var city = $('<td>' + data.city + '</td>');
     var address = $('<td>' + data.addressName + '</td>');
+    var deleteBtn = $('<td class ="airline-admin">' + '<button type="button" class="btn btn-danger dBtn" name = "'+ data.id + '"style="display:block">Delete</button>' + '</td>');
 
-    tr.append(country).append(city).append(address);
+
+    tr.append(country).append(city).append(address).append(deleteBtn);
     table.row.add(tr).draw();
+
+    $('.dBtn').on('click', function(event) {
+        event.preventDefault();
+        var id = parseInt(event.delegateTarget.name);
+        $.ajax({
+            url: "api/location/"+id+"/delete",
+            type: 'POST',
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            contentType: 'application/json',
+            success: function (data) {
+                $("#"+id).css("display", "none");
+            },
+            error: function (data) {
+                alert("Something went wrong...");
+            },
+        });
+
+    });
 }
 
 function fillFlight(data) {
@@ -109,7 +199,7 @@ function fillFlight(data) {
         '                                    <h5>' + data.price + '$</h5>\n' +
         '                                    <br>\n' +
         '                                    Number of stops: <strong><span id="NumberOfStops">'+ data.numberOfStops +'</span></strong>\n<br><br>' +
-        '                                    <a href="/bookflight.html?id='+ data.id +'"><button type="button" class="btn btn-success">Book</button></a>\n' +
+        '                                    <a class="user" href="/bookflight.html?id='+ data.id +'"><button type="button" class="btn btn-success">Book</button></a>\n' +
         '                                </div>\n' +
         '                            </div>\n' +
         '                        </div>\n' +
@@ -177,6 +267,32 @@ function fillQuickFlight(data,us) {
         }
 
     });
+}
+
+function fillEditData(data) {
+
+    $('input[id="aName"]').val(data.name);
+    $('input[id="aDesc"]').val(data.description);
+    $('input[id="country"]').val(data.country);
+    $('input[id="eAddress"]').val(data.address);
+    $('input[id="city"]').val(data.city);
+    $('input[id="lat"]').val(data.latitude);
+    $('input[id="long"]').val(data.longitude);
+
+    if(data.hasFood) {
+        $("#food").prop("checked", true );
+    }
+    if(data.hasLuggage) {
+        $("#luggage").prop("checked", true );
+    }
+    if(data.hasOther) {
+        $("#other").prop("checked", true );
+    }
+
+    $('input[id="lugP"]').val(data.luggagePrice);
+    $('input[id="foodP"]').val(data.foodPrice);
+
+
 }
 
 var getUrlParameter = function getUrlParameter(sParam) {

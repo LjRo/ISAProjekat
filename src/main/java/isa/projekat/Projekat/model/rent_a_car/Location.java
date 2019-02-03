@@ -26,7 +26,11 @@ public class Location implements Serializable {
     @Column(name="longitude", nullable = false)
     private double longitude;
 
+    @Column (name="active")
+    private Boolean active = true;
+
     public Location() {
+        active = true;
     }
 
     public Location(String addressName, String country, String city, double latitude, double longitude) {
@@ -85,4 +89,11 @@ public class Location implements Serializable {
         this.longitude = longitude;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
