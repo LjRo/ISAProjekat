@@ -1,4 +1,6 @@
 var quickTickets;
+var longitude, latitude, description, name, address;
+
 $(function() {
 
     var id = getUrlParameter("id")
@@ -9,6 +11,12 @@ $(function() {
 
             if (data != null) {
                 fillData(data);
+                address = data.address.addressName + ', ' + data.address.city;
+                longitude = data.address.longitude;
+                latitude = data.address.latitude;
+                name = data.name;
+                description = data.description;
+                ymaps.ready(makeMap);
             } else {
 
             }
@@ -133,6 +141,29 @@ $(function() {
 
 
 });
+
+
+function makeMap() {
+    var myMap = new ymaps.Map('map', {
+            center: [latitude, longitude],
+            zoom: 9
+        }, {
+            searchControlProvider: 'yandex#search'
+        }),
+        myPlacemark = new ymaps.Placemark(myMap.getCenter(), {
+            hintContent: name,
+            balloonContent: '<strong>' + name + '</strong>' + '<br>' + address + '<br>' + description
+        }, {
+            iconLayout: 'default#image',
+            iconImageHref: 'https://image.flaticon.com/icons/svg/252/252025.svg',
+            iconImageSize: [30, 42],
+            iconImageOffset: [-5, -38]
+        });
+    myMap.controls.remove('fullscreenControl');
+    myMap.geoObjects
+        .add(myPlacemark);
+}
+
 
 function fillData(data) {
     $('#nameDisplay').text(data.name);

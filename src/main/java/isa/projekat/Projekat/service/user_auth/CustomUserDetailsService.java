@@ -102,7 +102,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 			}
 		}
 	}
-
+	@SuppressWarnings("Duplicates")
 	public void register(UserData userData) {
 		User user = new User();
 		user.setType(0);
@@ -120,6 +120,39 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 		userRepository.save(user);
 		sendConfirmationEmail(user);
+	}
+
+	@SuppressWarnings("Duplicates")
+	public Long registerAdmin(UserData userData) {
+		User user = new User();
+		user.setType(userData.getType());
+		String auth;
+		switch (userData.getType())
+		{
+			case 1: auth = "ROLE_ADMIN";
+				break;
+			case 2: auth = "ROLE_ADMIN_AIRLINE";
+				break;
+			case 3: auth = "ROLE_ADMIN_HOTEL";
+				break;
+			case 4: auth = "ROLE_ADMIN_RENT";
+				break;
+			default:
+				return Long.parseLong("-1");
+		}
+		Authority authority = new Authority(auth);
+		List<Authority> list = new ArrayList<>();
+		list.add(authority);
+		user.setAuthorities(list);
+		user.setAddress(userData.getAddress());
+		user.setCity(userData.getCity());
+		user.setFirstName(userData.getFirstName());
+		user.setLastName(userData.getLastName());
+		user.setPassword(passwordEncoder.encode(userData.getPassword()));
+		user.setPhoneNumber(userData.getPhoneNumber());
+		userRepository.save(user);
+		sendConfirmationEmail(user);
+		return userRepository.findByUsername(user.getUsername()).getId();
 	}
 
 	private void sendConfirmationEmail(User user) {

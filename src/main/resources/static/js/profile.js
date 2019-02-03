@@ -3,14 +3,34 @@ $(function () {
     var id = getUrlParameter("id");
 
     if (id == null) {
-
+//0 - Normal, 1 - Admin, 2 - Airline Admin, 3 - Hotel Admin, 4 - RentACar Admin
         $.get({
             url: '/api/user/profile',
             headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
             success: function (data) {
 
                 if (data != null) {
-                    fillData(data);
+
+                    $.get({
+                        url: '/api/user/userType',
+                        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                        success: function (type) {
+                            var userType = '';
+                            if(type==0)
+                                userType=' (User)';
+                            else if(type==1)
+                                userType=' (Admin)';
+                            else if(type==2)
+                                userType=' (Admin Airline)';
+                            else if(type==4)
+                                userType=' (Admin Rent A Car)';
+                            else if(type==3)
+                                userType=' (Admin Hotel)';
+                            fillData(data,userType);
+                        }
+                    });
+
+
                 } else {
 
                 }
@@ -318,10 +338,12 @@ function fillRequests(data) {
     });
 }
 
-function fillData(data) {
+function fillData(data,type) {
 
     $("#requestPage").css("display", "block");
     $("#editPage").css("display", "block");
+
+
 
     $('input[id="email"]').val(data.email);
     $('input[id="name"]').val(data.firstName);
@@ -329,7 +351,7 @@ function fillData(data) {
     $('input[id="address"]').val(data.address);
     $('input[id="city"]').val(data.city);
     $('input[id="phoneNumber"]').val(data.phoneNumber);
-    $('#nameDisplay').text(data.firstName + " " + data.lastName);
+    $('#nameDisplay').text(data.firstName + " " + data.lastName + type);
 }
 
 function fillOtherUserData(data) {

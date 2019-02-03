@@ -143,6 +143,25 @@ public class AuthenticationController {
 	}
 
 
+	@RequestMapping(value = "/registerAdmin", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<?> registerAdmins(@RequestBody UserData userData) {
+		try {
+			Map<String, String> result = new HashMap<>();
+			userDetailsService.loadUserByUsername(userData.getEmail());
+			result.put("result", "User already in database");
+			return ResponseEntity.badRequest().body(result);
+		}catch (UsernameNotFoundException e){
+			userDetailsService.registerAdmin(userData);
+		}
+
+		Map<String, String> result = new HashMap<>();
+		result.put("result", "Successfully added");
+		return ResponseEntity.accepted().body(result);
+	}
+
+
+
 	@RequestMapping(value = "/confirm", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> confirm(@RequestBody VerificationToken verificationToken){
 		//producer.sendMessageTo(topic, message);
