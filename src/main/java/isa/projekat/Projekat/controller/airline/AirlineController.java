@@ -1,11 +1,13 @@
 package isa.projekat.Projekat.controller.airline;
 
+import isa.projekat.Projekat.aspects.AdminEnabledCheck;
 import isa.projekat.Projekat.model.airline.*;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.UserRepository;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.airline.AirlineService;
+import isa.projekat.Projekat.service.airline.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +22,10 @@ public class AirlineController {
 
     @Autowired
     private AirlineService airlineService;
+
+    @Autowired
+    private FlightService flightService;
+
 
     @Autowired
     private TokenUtils jwtTokenUtils;
@@ -51,6 +57,7 @@ public class AirlineController {
 
     @RequestMapping(value = "api/airline/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @AdminEnabledCheck
     public void updateInfo(@RequestBody AirlineData ad, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -59,6 +66,7 @@ public class AirlineController {
 
     @RequestMapping(value = "api/airline/add", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @AdminEnabledCheck
     public void addAirline(@RequestBody Airline ad, HttpServletRequest req){
         airlineService.addAirline(ad);
     }
@@ -70,8 +78,20 @@ public class AirlineController {
         return airlineService.findById(id);
     }
 
+    @PermitAll
+    @RequestMapping(value = "api/airline/{id}/lastSeatData", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public SeatData findLastSeatData(@PathVariable Long id,HttpServletRequest req){
+        Long flightId = airlineService.findLastSeat(id);
+        if(flightId == null) {
+            return null;
+        }
+
+        return flightService.findSeatDataById(flightId);
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
     @RequestMapping(value = "api/airline/{id}/editData", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
     public AirlineEditData findAirlineEditData(@PathVariable Long id,HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -86,6 +106,7 @@ public class AirlineController {
 
     @RequestMapping(value = "api/airline/{id}/edit", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @AdminEnabledCheck
     public void editAirline(@PathVariable Long id, @RequestBody AirlineEditData aED, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -107,6 +128,7 @@ public class AirlineController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
     @RequestMapping(value = "api/location/{id}/delete", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
     public boolean deleteDest(@PathVariable Long id, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -115,6 +137,7 @@ public class AirlineController {
 
     @RequestMapping(value = "api/airline/{id}/addFlight", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @AdminEnabledCheck
     public Boolean addFlight(@PathVariable Long id, HttpServletRequest req, @RequestBody FlightData fd){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -125,6 +148,7 @@ public class AirlineController {
 
     @RequestMapping(value = "api/airline/{id}/addLocation", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @AdminEnabledCheck
     public void addLocation(@RequestBody Location loc , @PathVariable Long id, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);

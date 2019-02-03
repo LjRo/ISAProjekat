@@ -39,6 +39,15 @@ $(function() {
     });
 
     $.get({
+        url : '/api/airline/' + id + '/lastSeatData',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+            fillSeats(data);
+        }
+    });
+
+
+    $.get({
         url : '/api/airline/' + id + '/flights',
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success : function(data) {
@@ -83,6 +92,8 @@ $(function() {
             }
         }
     });
+
+
 
     $('#editForm').on('submit', function (e) {
         e.preventDefault();
@@ -172,6 +183,28 @@ function fillData(data) {
     $('#pricing').text(data.pricing);
     $('#addFlight').attr("href","addFlight.html?id="+data.id);
     $('#addLocation').attr("href","addLocation.html?id="+data.id);
+
+    var foodIcon = '';
+    var luggageIcon = '';
+    var otherIcon = '';
+
+    if(data.hasFood) {
+        foodIcon = '<img style="width: 24px; height = 24px" src="assets/img/p_food.png\">'
+    }
+
+    if(data.hasExtraLuggage) {
+        luggageIcon = '<img style="width: 24px; height = 24px" src="assets/img/p_luggage.png\">'
+    }
+
+    if(data.hasOtherServices) {
+        otherIcon = '<img style="width: 24px; height = 24px" src="assets/img/p_other.png\">'
+    }
+
+    $('#serv').html(foodIcon + luggageIcon + otherIcon);
+    $('#lPrice').text(data.luggagePrice);
+    $('#fPrice').text(data.foodPrice);
+
+
 }
 
 
@@ -322,6 +355,79 @@ function fillEditData(data) {
 
     $('input[id="lugP"]').val(data.luggagePrice);
     $('input[id="foodP"]').val(data.foodPrice);
+
+
+}
+
+function fillSeats(data) {
+
+    if(data!=null) {
+        var segments = data.segments;
+        var columns = data.columns;
+        var rows = data.rows;
+        //var seatData = data.seats;
+        //var priceData = seatData[0].price;
+    } else {
+        var segments = 3;
+        var columns = 3;
+        var rows = 10;
+        //var seatData = data.seats;
+        //var priceData = seatData[0].price;
+    }
+
+    var mapData = [];
+
+    for (i = 0; i < rows; i++) {
+        var rowTemplate = "";
+        for (k = 0; k < segments; k++) {
+            if (rowTemplate != "") {
+                rowTemplate += "_"
+            }
+            for (j = 0; j < columns; j++) {
+                rowTemplate += "e"
+            }
+        }
+        mapData.push(rowTemplate);
+    }
+
+    var firstSeatLabel = 1;
+    var $cart = $('#selected-seats'),
+        $counter = $('#counter'),
+        $total = $('#total'),
+        sc = $('#seat-map').seatCharts({
+            map: mapData,
+            seats: {
+                e: {
+                    price: 0,
+                    classes: 'economy-class',
+                    category: 'Economy Class'
+                }
+
+            },
+            naming: {
+                top: false,
+                getLabel: function (character, row, column) {
+                    return firstSeatLabel++;
+                },
+            },
+            legend: {
+                node: $('#legend'),
+                items: [
+                    ['e', 'available', 'Economy Class'],
+                    ['f', 'unavailable', 'Booked']
+                ]
+            },
+            click: function () {
+                if (this.status() == 'available') {
+                    return 'available';
+                }
+            }
+
+        });
+
+
+
+
 
 
 }

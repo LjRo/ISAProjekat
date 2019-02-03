@@ -74,6 +74,15 @@ public class UserController {
         return userService.findAllFriendRequests(email);
     }
 
+    @RequestMapping(value = "api/user/isEnabled", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN_AIRLINE','ROLE_ADMIN_HOTEL','ROLE_ADMIN_RENT')")
+    public Boolean isEnabled(HttpServletRequest req) {
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+
+        return userService.isEnabled(email);
+    }
+
     @RequestMapping(value = "api/user/sendFriendRequest", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
     public void sendFriendRequest(@RequestBody UserData ud, HttpServletRequest req){
@@ -88,6 +97,16 @@ public class UserController {
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
         userService.confirmRequest(email, ud.getId());
+
+    }
+
+    @RequestMapping(value = "api/user/changePassword", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN_AIRLINE','ROLE_ADMIN_HOTEL','ROLE_ADMIN_RENT')")
+    public void changePassword(@RequestBody UserData ud, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+
+        userService.changePassword(ud,email);
 
     }
 

@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.controller.hotel;
 
+import isa.projekat.Projekat.aspects.AdminEnabledCheck;
 import isa.projekat.Projekat.model.hotel.FloorPlan;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
@@ -45,6 +46,7 @@ public class FloorController {
 
     @RequestMapping(value = "api/floor/{id}/editFloor", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @AdminEnabledCheck
     public ResponseEntity<?> addRoomType(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody FloorPlan floorPlan){
         User user =  getUser(httpServletRequest);
         return  responseTransaction(floorService.editFloorPlan(floorPlan,id,user));

@@ -269,6 +269,7 @@ public class AirlineService {
         return res;
     }
 
+
     public boolean editAirline(AirlineEditData data, Long id) {
         if(!airlineRepository.findById(id).isPresent()) {
             return false;
@@ -295,6 +296,16 @@ public class AirlineService {
         airlineRepository.save(res);
 
         return true;
+    }
+
+    public Long findLastSeat(Long id) {
+        Airline target = airlineRepository.findById(id).get();
+        int val = target.getFlights().size() - 1;
+        if(val == -1) {
+            return null;
+        }
+        return target.getFlights().get(val).getId();
+
     }
 
 }

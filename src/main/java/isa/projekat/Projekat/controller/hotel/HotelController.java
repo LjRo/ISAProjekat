@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.controller.hotel;
 
 
+import isa.projekat.Projekat.aspects.AdminEnabledCheck;
 import isa.projekat.Projekat.model.hotel.*;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
@@ -72,6 +73,7 @@ public class HotelController {
 
     @RequestMapping(value = "api/hotel/{id}/addRoom", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @AdminEnabledCheck
     public ResponseEntity<?> addRoom(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody RoomData room){
 
         User user =  getUser(httpServletRequest);
@@ -80,6 +82,7 @@ public class HotelController {
 
     @RequestMapping(value = "api/hotel/{id}/addRoomType", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @AdminEnabledCheck
     public ResponseEntity<?> addRoomType(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody RoomType room){
 
         User user =  getUser(httpServletRequest);
@@ -87,6 +90,7 @@ public class HotelController {
     }
     @RequestMapping(value = "api/hotel/{id}/addNewFloor", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @AdminEnabledCheck
     public ResponseEntity<?> addNewFloor(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody FloorPlan floorPlan){
         User user =  getUser(httpServletRequest);
         return  responseTransaction(hotelService.addFloorPlan(floorPlan,id,user));
@@ -97,6 +101,7 @@ public class HotelController {
 
     @RequestMapping(value = "api/hotel/{id}/{idFloor}/removeFloor", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @AdminEnabledCheck
     public ResponseEntity<?> removeFloor(@PathVariable Long id,@PathVariable Long idFloor, HttpServletRequest httpServletRequest){
 
         User user =  getUser(httpServletRequest);
@@ -106,12 +111,14 @@ public class HotelController {
 
     @RequestMapping(value = "api/hotel/editHotel", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @AdminEnabledCheck
     public  ResponseEntity<?> editHotel(@RequestBody Hotel hotel,HttpServletRequest httpServletRequest) {
         User user =  getUser(httpServletRequest);
         return responseTransaction(hotelService.editHotel(hotel,user));
     }
     @RequestMapping(value = "api/hotel/addHotel", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @AdminEnabledCheck
     public void addHotel(@RequestBody Hotel hotel,HttpServletRequest httpServletRequest) {
         User user =  getUser(httpServletRequest);
         hotelService.addHotel(hotel,user);
