@@ -93,6 +93,20 @@ $(function() {
         }
     });
 
+    $.get({
+        url : '/api/airline/' + id + '/yearlyTickets',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+
+            if (data != null)
+            {
+                plotYearly(data);
+            } else {
+
+            }
+        }
+    });
+
 
 
     $('#editForm').on('submit', function (e) {
@@ -432,6 +446,60 @@ function fillSeats(data) {
 
 }
 
+function plotYearly(data) {
+
+    var dKeys = [];
+    var plotData = [];
+
+
+    for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+            dKeys.push(key);
+        }
+    }
+    dKeys.sort();
+    for(var j in dKeys) {
+        plotData.push({x: new Date(dKeys[j]),y: data[dKeys[j]]});
+    }
+
+
+    var options = {
+        animationEnabled: true,
+        title:{
+            text: "Yearly Ticket Sales"
+        },
+        axisX:{
+            valueFormatString: "DD MMM",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Tickets Sold",
+            includeZero: false,
+            valueFormatString: "##0",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true,
+                labelFormatter: function(e) {
+                    return "" + CanvasJS.formatNumber(e.value, "##0")+ " T";
+                }
+            }
+        },
+        data: [{
+            type: "area",
+            xValueFormatString: "DD MMM",
+            yValueFormatString: "##0",
+            dataPoints: plotData
+}]
+};
+
+
+    $("#chartContainer").CanvasJSChart(options);
+
+}
+
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
         sURLVariables = sPageURL.split('&'),
@@ -446,3 +514,4 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+

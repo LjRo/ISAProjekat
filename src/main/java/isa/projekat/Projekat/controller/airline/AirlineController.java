@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AirlineController {
@@ -153,6 +155,21 @@ public class AirlineController {
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
         airlineService.addLocation(loc,id,email);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/airline/{id}/yearlyTickets", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
+    public Map<LocalDate,Integer> getYearlyTickets(@PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId() == id) {
+            return airlineService.countYearlySales(id);
+        } else {
+            return null;
+        }
     }
 
 }

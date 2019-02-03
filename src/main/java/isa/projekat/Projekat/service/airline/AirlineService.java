@@ -14,9 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 @Service
 public class AirlineService {
@@ -148,7 +152,7 @@ public class AirlineService {
         if(target.getAdmins().contains(admin)) {
 
             target.getFlights().add(fl);
-            entityManager.persist(target);
+            airlineRepository.save(target);
             return true;
 
         }
@@ -306,6 +310,38 @@ public class AirlineService {
         }
         return target.getFlights().get(val).getId();
 
+    }
+
+    public Map<LocalDate, Integer> countYearlySales(Long airlineId) {
+        HashMap<LocalDate,Integer> result = new HashMap<LocalDate,Integer>();
+
+        List<Flight> flights = flightRepository.getAllFlightsThisYear(airlineId);
+
+        LocalDate now = LocalDate.now();
+        LocalDate firstDay = now.with(firstDayOfYear());
+        LocalDate lastDay = now.with(lastDayOfYear());
+
+        for (LocalDate date = firstDay; date.isBefore(lastDay); date = date.plusDays(1))
+        {
+            result.put(date,0);
+        }
+
+        for(Flight fl : flights) {
+            LocalDate sDate = convertToLocalDateViaMilisecond(fl.getStartTime());
+            for(Seat st : fl.getSeats()) {
+                if(st.isTaken()) {
+                    result.put(sDate, result.get(sDate) + 1);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private LocalDate convertToLocalDateViaMilisecond(Date dateToConvert) {
+        return Instant.ofEpochMilli(dateToConvert.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 
 }

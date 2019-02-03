@@ -28,7 +28,7 @@ public class AdminEnabledCheckAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String email = tUtils.getUsernameFromToken(tUtils.getToken(request));
         User target = userRepository.findByUsername(email);
-        if(!target.isEnabled()) {
+        if(!target.isPasswordChanged()) {
             throw new AdminEnabledException("Password not changed!");
         }
 

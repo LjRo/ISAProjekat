@@ -23,6 +23,7 @@
 
     <script src="https://api-maps.yandex.ru/2.1/?apikey=8919cfc8-630c-48b2-bb54-e81375325ce9&lang=en_US"
             type="text/javascript"></script>
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
     <script src="/js/nav.js"></script>
     <script type="text/javascript" src="js/airlineprofile.js"></script>
 
@@ -72,6 +73,7 @@
                 <li><a data-toggle="tab" href="#destinationsTab">Destinations</a></li>&nbsp;&nbsp;&nbsp;
                 <li><a data-toggle="tab" href="#flightsTab">Flights</a></li>&nbsp;&nbsp;&nbsp;
                 <li><a data-toggle="tab" href="#quickFlightsTab">Quick Flights</a></li>&nbsp;&nbsp;&nbsp;
+                <li><a data-toggle="tab" href="#stats">Stats</a></li>&nbsp;&nbsp;&nbsp;
                 <li class="airline-admin" id="editPage" ><a data-toggle="tab"  href="#edit">Edit</a></li>&nbsp;&nbsp;&nbsp;
             </ul>
 
@@ -167,6 +169,13 @@
                         <tbody id="quickFlightTableBody">
                         </tbody>
                     </table>
+                    <hr>
+
+                </div>
+                <div class="tab-pane" id="stats">
+                    <br>
+                    <h2>Statistics:</h2>
+                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
                     <hr>
 
                 </div>

@@ -66,8 +66,8 @@ public class UserService {
 
 		if(ud.getPassword() != null && !ud.getPassword().equals("")) {
 			target.setPassword(passwordEncoder.encode(ud.getPassword()));
-			if(!target.isEnabled()) {
-				target.setEnabled(true);
+			if(!target.isPasswordChanged()) {
+				target.setPasswordChanged(true);
 			}
 		}
 
@@ -239,8 +239,8 @@ public class UserService {
 
 		if(ud.getPassword() != null && !ud.getPassword().equals("")) {
 			target.setPassword(passwordEncoder.encode(ud.getPassword()));
-			if(!target.isEnabled()) {
-				target.setEnabled(true);
+			if(!target.isPasswordChanged()) {
+				target.setPasswordChanged(true);
 			}
 			userRepository.save(target);
 			return true;
@@ -251,6 +251,6 @@ public class UserService {
 
 	public boolean isEnabled(String email) {
 		User target = userRepository.findByUsername(email);
-		return target.isEnabled();
+		return target.isPasswordChanged();
 	}
 }
