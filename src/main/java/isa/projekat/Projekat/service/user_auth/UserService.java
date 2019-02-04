@@ -253,4 +253,20 @@ public class UserService {
 		User target = userRepository.findByUsername(email);
 		return target.isPasswordChanged();
 	}
+
+	public List<User> getAllNormalUsers() {
+
+		List<User> us = userRepository.getAllNormalUsers();
+		ArrayList<User> res = new ArrayList<>();
+
+		for(User u : us) {
+			User nUser = new User();
+			nUser.setFirstName(u.getFirstName());
+			nUser.setLastName(u.getLastName());
+			nUser.setId(u.getId());
+			res.add(nUser);
+		}
+
+		return res;
+	}
 }

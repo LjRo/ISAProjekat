@@ -58,6 +58,13 @@ public class UserController {
         return userService.findAllFriends(email);
     }
 
+    @RequestMapping(value = "api/user/findAllUsers", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public List<User> findAllNormalusers(HttpServletRequest req) {
+        return userService.getAllNormalUsers();
+    }
+
+
     @RequestMapping(value = "api/user/findSpecificFriends", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
     public List<User> findAllFriends(@RequestBody String search, HttpServletRequest req) {

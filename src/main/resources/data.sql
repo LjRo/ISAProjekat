@@ -136,10 +136,10 @@ INSERT into Users (type, username, first_name, last_name, password, address, cit
 values (3,"hotel@gmail.com","hotel","hotelic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr3","city3",b'1',"123-456-1234",1,true);
 
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,administrated_airline_id,password_changed)
-values (2,"airline@gmail.com","airline","airlinovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr4","city4",b'1',"123-456-1234",1,false);
+values (2,"airline@gmail.com","airline","airlinovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr4","city4",b'1',"123-456-1234",1,true);
 
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number, administrated_rent_id,password_changed)
-values (4,"rent@gmail.com","rent","rentovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr5","city5",b'1',"123-456-1234", 1,false);
+values (4,"rent@gmail.com","rent","rentovic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr5","city5",b'1',"123-456-1234", 1,true);
 
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,points)
 values (0,"normalb@gmail.com","Mika","Mikic","$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW","adr0","city0",b'1',"123-456-1234",0);
@@ -343,7 +343,7 @@ values (0,0,100,true,false,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
 values (1,0,100,true,false,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
-values (2,0,100,false,true,null);
+values (2,0,100,false,true,1);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
 values (3,0,100,false,false,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)

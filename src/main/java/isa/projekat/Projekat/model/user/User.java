@@ -67,7 +67,7 @@ public class User implements UserDetails {
     private boolean enabled = false;
 
     @Column
-    private boolean passwordChanged = false;
+    private Boolean passwordChanged = false;
 
     // Airline stuff
     @ManyToOne(cascade = CascadeType.PERSIST)

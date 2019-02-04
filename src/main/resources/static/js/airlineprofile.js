@@ -100,12 +100,65 @@ $(function() {
 
             if (data != null)
             {
-                plotYearly(data);
+                plotYearly(data,"#chartContainerYearly", "Yearly Ticket Sales");
             } else {
 
             }
         }
     });
+
+    $.get({
+        url : '/api/airline/' + id + '/monthlyTickets',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+
+            if (data != null)
+            {
+                plotYearly(data,"#chartContainerMonthly", "Monthly Ticket Sales");
+            } else {
+
+            }
+        }
+    });
+
+
+    $.get({
+        url : '/api/airline/' + id + '/weeklyTickets',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+
+            if (data != null)
+            {
+                plotYearly(data,"#chartContainerWeekly", "Weekly Ticket Sales");
+            } else {
+
+            }
+        }
+    });
+
+    $('#filterBtn').unbind('click').bind('click', function(event) {
+        event.preventDefault();
+
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+
+        $.post({
+            url: '/api/airline/' + id + '/profitFromInterval',
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            data: JSON.stringify({sDate: fromDate, eDate:toDate}),
+            contentType: 'application/json',
+            success: function (data) {
+
+                if (data != null) {
+                    plotIncome(data, "#chartContainerSpecific", "Income");
+                } else {
+
+                }
+            }
+        });
+    });
+
+
 
 
 
@@ -446,7 +499,7 @@ function fillSeats(data) {
 
 }
 
-function plotYearly(data) {
+function plotYearly(data,name,title) {
 
     var dKeys = [];
     var plotData = [];
@@ -466,7 +519,7 @@ function plotYearly(data) {
     var options = {
         animationEnabled: true,
         title:{
-            text: "Yearly Ticket Sales"
+            text: title
         },
         axisX:{
             valueFormatString: "DD MMM",
@@ -496,7 +549,61 @@ function plotYearly(data) {
 };
 
 
-    $("#chartContainer").CanvasJSChart(options);
+    $(name).CanvasJSChart(options);
+
+}
+
+function plotIncome(data,name,title) {
+
+    var dKeys = [];
+    var plotData = [];
+
+
+    for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+            dKeys.push(key);
+        }
+    }
+    dKeys.sort();
+    for(var j in dKeys) {
+        plotData.push({x: new Date(dKeys[j]),y: data[dKeys[j]]});
+    }
+
+
+    var options = {
+        animationEnabled: true,
+        title:{
+            text: title
+        },
+        axisX:{
+            valueFormatString: "DD MMM",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Profit (in USD)",
+            includeZero: false,
+            valueFormatString: "$##0.00",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true,
+                labelFormatter: function(e) {
+                    return "$" + CanvasJS.formatNumber(e.value, "##0.00");
+                }
+            }
+        },
+        data: [{
+            type: "area",
+            xValueFormatString: "DD MMM",
+            yValueFormatString: "$##0.00",
+            dataPoints: plotData
+        }]
+    };
+
+
+    $(name).CanvasJSChart(options);
 
 }
 

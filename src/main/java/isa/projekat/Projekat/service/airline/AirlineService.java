@@ -14,10 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
@@ -313,7 +320,7 @@ public class AirlineService {
     }
 
     public Map<LocalDate, Integer> countYearlySales(Long airlineId) {
-        HashMap<LocalDate,Integer> result = new HashMap<LocalDate,Integer>();
+        HashMap<LocalDate,Integer> result = new HashMap<>();
 
         List<Flight> flights = flightRepository.getAllFlightsThisYear(airlineId);
 
@@ -321,10 +328,59 @@ public class AirlineService {
         LocalDate firstDay = now.with(firstDayOfYear());
         LocalDate lastDay = now.with(lastDayOfYear());
 
+        return countDateRange(result,firstDay,lastDay,flights);
+    }
+
+    public Map<LocalDate, Integer> countMonthlySales(Long airlineId) {
+        HashMap<LocalDate,Integer> result = new HashMap<>();
+
+        List<Flight> flights = flightRepository.getAllFlightsThisMonth(airlineId);
+
+        LocalDate now = LocalDate.now();
+        LocalDate firstDay = now.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate lastDay = now.with(TemporalAdjusters.lastDayOfMonth());
+
+        return countDateRange(result,firstDay,lastDay,flights);
+
+    }
+
+    public Map<LocalDate, Integer> countWeeklySales(Long airlineId) {
+        HashMap<LocalDate,Integer> result = new HashMap<>();
+        List<Flight> flights = flightRepository.getAllFlightsThisWeek(airlineId);
+
+        LocalDate now = LocalDate.now();
+        List<LocalDate> days = datesOfWeekDate(now);
+        LocalDate firstDay = days.get(0);
+        LocalDate lastDay = days.get(6);
+
+        return countDateRange(result,firstDay,lastDay,flights);
+    }
+
+    public Map<LocalDate, BigDecimal> calculateIntervalProfit(Long airlineId, LocalDate firstDay, LocalDate lastDay) {
+        HashMap<LocalDate,BigDecimal> result = new HashMap<>();
+        List<Object[]> data = flightRepository.getProfitFromRange(airlineId,firstDay,lastDay);
+
+        for (LocalDate date = firstDay; date.isBefore(lastDay); date = date.plusDays(1))
+        {
+            result.put(date, new BigDecimal("0"));
+        }
+        result.put(lastDay, new BigDecimal("0"));
+
+        for(Object[] prof : data) {
+            LocalDate tDate = ((Timestamp)prof[0]).toLocalDateTime().toLocalDate();
+            result.put(tDate,result.get(tDate).add(getBigDecimal(prof[1])));
+        }
+
+        return result;
+    }
+
+    private Map<LocalDate, Integer> countDateRange(Map<LocalDate,Integer> result, LocalDate firstDay, LocalDate lastDay, List<Flight> flights ) {
+
         for (LocalDate date = firstDay; date.isBefore(lastDay); date = date.plusDays(1))
         {
             result.put(date,0);
         }
+        result.put(lastDay,0);
 
         for(Flight fl : flights) {
             LocalDate sDate = convertToLocalDateViaMilisecond(fl.getStartTime());
@@ -343,6 +399,32 @@ public class AirlineService {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
+
+    public static List<LocalDate> datesOfWeekDate(LocalDate date) {
+        LocalDate monday = date
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+
+        return IntStream.range(0, 7).mapToObj(monday::plusDays).collect(Collectors.toList());
+    }
+
+    public static BigDecimal getBigDecimal( Object value ) {
+        BigDecimal ret = null;
+        if( value != null ) {
+            if( value instanceof BigDecimal ) {
+                ret = (BigDecimal) value;
+            } else if( value instanceof String ) {
+                ret = new BigDecimal( (String) value );
+            } else if( value instanceof BigInteger) {
+                ret = new BigDecimal( (BigInteger) value );
+            } else if( value instanceof Number ) {
+                ret = new BigDecimal( ((Number)value).doubleValue() );
+            } else {
+                throw new ClassCastException("Not possible to coerce ["+value+"] from class "+value.getClass()+" into a BigDecimal.");
+            }
+        }
+        return ret;
+    }
+
 
 }
 

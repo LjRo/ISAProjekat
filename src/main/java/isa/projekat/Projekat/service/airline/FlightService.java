@@ -131,6 +131,7 @@ public class FlightService {
                     targetUser.setPoints(targetUser.getPoints() - resData.getPointsUsed());
                     newRes.setPointsUsed(resData.getPointsUsed());
                     priceFactor = (new BigDecimal(1.0 - (resData.getPointsUsed() / 10 * 0.05)));
+                    targetUser.setPoints(targetUser.getPoints()+flight.getDistance()/1000);
                 } else {
                     newRes.setPointsUsed(0.0);
                 }

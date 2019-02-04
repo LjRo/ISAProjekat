@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -99,7 +100,7 @@ public class AirlineController {
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
         User user = userRepository.findByUsername(email);
 
-        if(user.getAdministratedAirline().getId() == id) {
+        if(user.getAdministratedAirline().getId().equals(id)) {
             return airlineService.getEditData(id);
         } else {
             return null;
@@ -114,7 +115,7 @@ public class AirlineController {
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
         User user = userRepository.findByUsername(email);
 
-        if(user.getAdministratedAirline().getId() == id) {
+        if(user.getAdministratedAirline().getId().equals(id)) {
             airlineService.editAirline(aED, id);
         } else {
             return;
@@ -165,8 +166,53 @@ public class AirlineController {
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
         User user = userRepository.findByUsername(email);
 
-        if(user.getAdministratedAirline().getId() == id) {
+        if(user.getAdministratedAirline().getId().equals(id)) {
             return airlineService.countYearlySales(id);
+        } else {
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/airline/{id}/monthlyTickets", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
+    public Map<LocalDate,Integer> getMonthlyTickets(@PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId().equals(id)) {
+            return airlineService.countMonthlySales(id);
+        } else {
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/airline/{id}/weeklyTickets", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
+    public Map<LocalDate,Integer> getWeeklyTickets(@PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId().equals(id)) {
+            return airlineService.countWeeklySales(id);
+        } else {
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/airline/{id}/profitFromInterval", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
+    public Map<LocalDate, BigDecimal> getProfitFromInterval(@PathVariable Long id, @RequestBody ProfitFilterData fData, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId().equals(id)) {
+            return airlineService.calculateIntervalProfit(id,fData.getsDate(),fData.geteDate());
         } else {
             return null;
         }

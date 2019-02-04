@@ -73,7 +73,7 @@
                 <li><a data-toggle="tab" href="#destinationsTab">Destinations</a></li>&nbsp;&nbsp;&nbsp;
                 <li><a data-toggle="tab" href="#flightsTab">Flights</a></li>&nbsp;&nbsp;&nbsp;
                 <li><a data-toggle="tab" href="#quickFlightsTab">Quick Flights</a></li>&nbsp;&nbsp;&nbsp;
-                <li><a data-toggle="tab" href="#stats">Stats</a></li>&nbsp;&nbsp;&nbsp;
+                <li class="airline-admin"><a data-toggle="tab" href="#stats">Stats</a></li>&nbsp;&nbsp;&nbsp;
                 <li class="airline-admin" id="editPage" ><a data-toggle="tab"  href="#edit">Edit</a></li>&nbsp;&nbsp;&nbsp;
             </ul>
 
@@ -175,7 +175,23 @@
                 <div class="tab-pane" id="stats">
                     <br>
                     <h2>Statistics:</h2>
-                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                    <div id="chartContainerYearly" style="height: 370px; width: 100%;"></div>
+                    <hr>
+                    <div id="chartContainerMonthly" style="height: 370px; width: 100%;"></div>
+                    <hr>
+                    <div id="chartContainerWeekly" style="height: 370px; width: 100%;"></div>
+                    <hr>
+                    <h2>Profit:</h2>
+                    <form class="form-inline" >
+                        <div class="form-group">
+                            <input class="form-control datepicker" id="fromDate" type="date" style="margin: 0 auto">
+                            <input class="form-control datepicker" id="toDate" type="date" style="margin: 0 auto">
+                            <button type="submit" class="btn btn-primary mb-2" id="filterBtn">Plot</button>
+
+                        </div>
+                    </form>
+                    <div id="chartContainerSpecific" style="height: 370px; width: 100%;"></div>
+
                     <hr>
 
                 </div>
