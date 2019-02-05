@@ -191,9 +191,23 @@ VALUES (3,1,3,1);
 
 
 
+INSERT INTO room_type (name)
+VALUES ('Single Beds');
 
+INSERT INTO room_type (name)
+VALUES ('Couple DoubleBed + 2 Single beds');
 
+INSERT INTO room_type (name)
+VALUES ('Couple DoubleBed + Single bed');
 
+INSERT INTO room_type (name)
+VALUES ('2 Couple DoubleBeds');
+
+INSERT INTO room_type (name)
+VALUES ('2 Couple DoubleBeds + Single bed');
+
+INSERT INTO room_type (name)
+VALUES ('Deluxe room');
 
 INSERT INTO room_type (name)
 VALUES ('Single Bed');
@@ -243,25 +257,6 @@ INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
 VALUES (1,6);
 INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
 VALUES (1,7);
-
-
-INSERT INTO room_type (name)
-VALUES ('Single Beds');
-
-INSERT INTO room_type (name)
-VALUES ('Couple DoubleBed + 2 Single beds');
-
-INSERT INTO room_type (name)
-VALUES ('Couple DoubleBed + Single bed');
-
-INSERT INTO room_type (name)
-VALUES ('2 Couple DoubleBeds');
-
-INSERT INTO room_type (name)
-VALUES ('2 Couple DoubleBeds + Single bed');
-
-INSERT INTO room_type (name)
-VALUES ('Deluxe room');
 
 INSERT INTO rooms (name,number_of_beds, number_of_people, number_of_rooms,room_number,floor,room_type_id,hotel_id)
 VALUES ('Swan of love' ,1, 2 , 1 ,107, 1, 7 , 2);
