@@ -38,6 +38,9 @@ public class HotelService {
 
     @Autowired LocationRepository locationRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -232,12 +235,17 @@ public class HotelService {
     }
 
     @Transactional
-    public boolean addHotelAdmin(Long hotel, User user) {
+    public boolean addHotelAdmin(Long hotel, Long user) {
         Optional<Hotel> optionalHotel = hotelRepository.findById(hotel);
+        Optional<User> foundUser = userRepository.findById(user);
+
+        if(!foundUser.isPresent())
+            return false;
         if(!optionalHotel.isPresent())
             return false;
         Hotel target = optionalHotel.get();
-        target.getAdmins().add(user);
+        User targetUser = foundUser.get();
+        target.getAdmins().add(targetUser);
         hotelRepository.save(target);
         return true;
     }

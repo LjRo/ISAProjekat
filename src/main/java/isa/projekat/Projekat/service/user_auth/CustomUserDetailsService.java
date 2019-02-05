@@ -111,6 +111,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		list.add(authority);
 		user.setAuthorities(list);
 
+		user.setUsername(userData.getEmail());
 		user.setAddress(userData.getAddress());
 		user.setCity(userData.getCity());
 		user.setFirstName(userData.getFirstName());
@@ -143,6 +144,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		Authority authority = new Authority(auth);
 		List<Authority> list = new ArrayList<>();
 		list.add(authority);
+		user.setUsername(userData.getEmail());
 		user.setAuthorities(list);
 		user.setAddress(userData.getAddress());
 		user.setCity(userData.getCity());
