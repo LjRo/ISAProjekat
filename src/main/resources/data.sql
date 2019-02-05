@@ -319,12 +319,6 @@ VALUES (5, '2019-01-10', '2019-01-15' ,14, '2019-01-01', 1 ,4,3, null );
 insert into airlines_destinations (airline_id, destinations_id) values (1,1);
 insert into airlines_destinations (airline_id, destinations_id) values (1,2);
 
-insert into users_friends(user_id,friends_id) values (2,3);
-insert into users_friends(user_id,friends_id) values (3,2);
-insert into users_friends(user_id,friends_id) values (2,7);
-insert into users_friends(user_id,friends_id) values (7,2);
-insert into users_friends(user_id,friends_id) values (2,8);
-insert into users_friends(user_id,friends_id) values (8,2);
 
 insert into flights (c_columns, c_rows, distance, duration, land_time, number_of_stops, price, segments, start_time, airline_id, finish_id, start_id)
 values (2,2,100,2,'2019-2-20 23:59:59',0,100,2,'2019-2-15 23:59:59',1,2,1);

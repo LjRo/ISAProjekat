@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
-    @Query(value = "SELECT * From Flights f WHERE f.airline_id = ?1 AND YEAR(f.start_time) = YEAR(CURDATE())", nativeQuery = true)
+    @Query(value = "SELECT f FROM Flights f where f.airline_id = :id and YEAR(f.start_time) = YEAR(current_date())")
     public List<Flight> getAllFlightsThisYear(Long id);
 
     @Query(value = "SELECT * From Flights f WHERE f.airline_id = ?1 AND YEAR(f.start_time) = YEAR(CURDATE()) AND MONTH(f.start_time) = MONTH(CURDATE())", nativeQuery = true)
