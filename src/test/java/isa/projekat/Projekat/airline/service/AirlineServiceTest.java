@@ -61,8 +61,7 @@ public class AirlineServiceTest {
     @Mock
     private Location locationMock;
 
-    @Mock
-    private LocalDate dateMock;
+    private LocalDate dateMock = LocalDate.now();
 
     @InjectMocks
     private AirlineService airlineService;
@@ -168,8 +167,8 @@ public class AirlineServiceTest {
     public void calculatedIntervalTest() {
         Object dummy[] = new Object[2];
 
-        dummy[1] = LocalDate.now();
-        dummy[2] = new BigDecimal("25.00");
+        dummy[0] = LocalDate.now();
+        dummy[1] = new BigDecimal("25.00");
         ArrayList<Object[]> dummyArray = new ArrayList<Object[]>();
         dummyArray.add(dummy);
 
