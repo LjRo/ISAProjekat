@@ -77,13 +77,13 @@ VALUES (1,2);*/
 
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('Ficko','Mercedes','Benz','13AC12',4,4,4,100,false,1,1);
+values ('Ficko','Mercedes','Benz','13AC42',4,4,4,100,false,1,1);
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('Brzko','Mercedes','Benz','13QQ55',4,4,4,250,true,1,1);
+values ('Brzko','Mercedes','Benz','13QQ65',4,4,4,250,true,1,1);
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('Spora','Mercedes','C','44WE32',4,4,4,100,false,1,1);
+values ('Spora','Mercedes','C','44WE72',4,4,4,100,false,1,1);
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
 values ('FickoQ','Mercedes','Benz','13AC12',4,4,4,100,false,1,1);
@@ -96,29 +96,29 @@ values ('SporaQ','Mercedes','C','44WE32',4,4,4,100,false,1,1);
 
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('FickoQW','Mercedes','Benz','13AC12',4,4,4,100,false,1,1);
+values ('FickoQW','Mercedes','Benz','13AC72',4,4,4,100,false,1,1);
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('BrzkoQW','Mercedes','Benz','13QQ55',4,4,4,250,true,1,1);
+values ('BrzkoQW','Mercedes','Benz','13QQ85',4,4,4,250,true,1,1);
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('SporaQW','Mercedes','C','44WE32',4,4,4,100,false,1,1);
+values ('SporaQW','Mercedes','C','44WE92',4,4,4,100,false,1,1);
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('FickoQWE','Mercedes','Benz','13AC12',4,4,4,100,false,1,1);
+values ('FickoQWE','Mercedes','Benz','11AC12',4,4,4,100,false,1,1);
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('BrzkoQWE','Mercedes','Benz','13QQ55',4,4,4,250,true,1,1);
+values ('BrzkoQWE','Mercedes','Benz','11QQ55',4,4,4,250,true,1,1);
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('SporaQWE','Mercedes','C','44WE32',4,4,4,100,false,1,1);
+values ('SporaQWE','Mercedes','C','41WE32',4,4,4,100,false,1,1);
 
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('EW','Mercedes','C','44WE32',4,4,4,100,false,2,2);
+values ('EW','Mercedes','C','45WE32',4,4,4,100,false,2,2);
 
 INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
-values ('WE','Mercedes','C','44WE32',4,4,4,100,false,2,1);
+values ('WE','Mercedes','C','46WE32',4,4,4,100,false,2,1);
 
 /* users.sql */
 /* password = 123*/
