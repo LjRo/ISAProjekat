@@ -330,11 +330,11 @@ insert into flights (c_columns, c_rows, distance, duration, land_time, number_of
 values (2,2,100,2,'2019-2-20 23:59:59',0,100,2,'2019-2-15 23:59:59',1,2,1);
 
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
-values (0,0,100,true,false,null);
+values (0,0,100,true,false, null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
-values (1,0,100,true,false,null);
+values (1,0,100,true,false, null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
-values (2,0,100,false,true,1);
+values (2,0,100,false,false, null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
 values (3,0,100,false,false,null);
 insert into seats (c_column, c_row, price, quick, taken, reservation_id)
@@ -384,8 +384,6 @@ insert into flights_seats(flight_id,seats_id) values(2,14);
 insert into flights_seats(flight_id,seats_id) values(2,15);
 insert into flights_seats(flight_id,seats_id) values(2,16);
 
-insert into reservations(user_name,last_name,user_id,flight_id,passport,points_used, total_cost, confirmed, finished, seat_id) values(null,null,2,1,'RS201515123',0,100,true,true,3);
-insert into users_reservations (user_id, reservations_id) values (2,1);
 
 /*insert into airlines_admins (airline_id, admins_id) values (1,5); Commented because of An illegal reflective access operation has occurred*/
 
