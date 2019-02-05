@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -37,8 +35,6 @@ public class AirlineService {
     private FlightRepository flightRepository;
     @Autowired
     private UserRepository userRepository;
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Autowired
     private LocationRepository locationRepository;
@@ -137,6 +133,15 @@ public class AirlineService {
         fl.setC_rows(flightData.getRows());
         fl.setNumberOfStops(flightData.getStopCount());
         fl.setAirline(target);
+
+        if(fl.getStart() == null || fl.getFinish() == null) {
+            return false;
+        }
+
+        if(fl.getPrice() == null) {
+            return false;
+        }
+
 
         ArrayList<Location> stops = new ArrayList<>();
 
