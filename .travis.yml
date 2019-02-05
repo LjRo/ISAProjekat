@@ -8,3 +8,4 @@ deploy:
   provider: heroku
   api_key:
     secure: "a11c9262-33c5-4ba9-bebf-12e77373ee44"
+  app: ISAProjekat
