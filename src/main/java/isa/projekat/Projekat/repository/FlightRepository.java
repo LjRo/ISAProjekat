@@ -14,10 +14,10 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
     @Query(value = "SELECT * From Flights f WHERE f.airline_id = ?1 AND date_part('year',f.start_time) = date_part('year',current_date)", nativeQuery = true)
     public List<Flight> getAllFlightsThisYear(Long id);
 
-    @Query(value = "SELECT * From Flights f WHERE f.airline_id = ?1 AND  date_part('year',f.start_time) = date_part('year',current_date) AND date_part('month',f.start_time) = date_part('month',current_date))", nativeQuery = true)
+    @Query(value = "SELECT * From Flights f WHERE f.airline_id = ?1 AND  date_part('year',f.start_time) = date_part('year',current_date) AND date_part('month',f.start_time) = date_part('month',current_date)", nativeQuery = true)
     public List<Flight> getAllFlightsThisMonth(Long id);
 
-    @Query(value = "SELECT * From Flights f WHERE f.airline_id = ?1 AND date_part('year',f.start_time) = date_part('year',current_date) AND date_part('week',f.start_time) = date_part('week',current_date))", nativeQuery = true)
+    @Query(value = "SELECT * From Flights f WHERE f.airline_id = ?1 AND date_part('year',f.start_time) = date_part('year',current_date) AND date_part('week',f.start_time) = date_part('week',current_date)", nativeQuery = true)
     public List<Flight> getAllFlightsThisWeek(Long id);
 
     @Query(value = "SELECT f.start_time as startTime, r.total_cost as price From Flights f" +
