@@ -164,10 +164,10 @@ function register(typeIn,companyId) {
     if (checkPassword(true)) {
 
         $.post({
-            url: window.location.href.match(/^.*\//) + "auth/registerAdmin",
+            url: 'registerAdmin',
             data: JSON.stringify({
                 type:type,
-                username: email,
+                email: email,
                 password: password,
                 firstName: firstName,
                 lastName: lastName,
@@ -175,11 +175,13 @@ function register(typeIn,companyId) {
                 city: city,
                 phoneNumber: phoneNumber
             }),
+            dataType: "json",
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
             contentType: 'application/json',
             success: function (UserId) {
                 $('#success').html('Successfully added').fadeIn(500).delay(1500).fadeOut(500);
 
-                $.post({
+               /* $.post({
                     url:"api/hotel/" + companyId  + "/" + UserId +"/" ,
                     contentType: 'application/json',
                     success: function (message) {
@@ -189,7 +191,7 @@ function register(typeIn,companyId) {
                         $('#error').html('Error happend while adding in comapany id:' + message.result).fadeIn(500).delay(1500).fadeOut(500);
                     }
                 });
-
+                */
 
             },
             error: function (message) {

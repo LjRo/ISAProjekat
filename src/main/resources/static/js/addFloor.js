@@ -103,19 +103,19 @@ $(function () {
                     hotel: {id: id},
                     id: idFloor,
                     floorNumber: floorNumber,
-                    configuration: floorPlanHtml,
+                    configuration: changed,
                 }),
                 headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
                 contentType: 'application/json',
                 success: function () {
                     window.location.href = 'manageFloors.html?id=' + id;
                 },
-                error: function () {
+                error: function (message) {
                     if (message.status == 401) {
                         $('#toSubmit').attr("disabled", "disabled");
                         $('#error').text("Unauthorized access").fadeIn().delay(4000).fadeOut();
                     } else
-                        $('#error').text("Error in making room").fadeIn().delay(3000).fadeOut();
+                        $('#error').text("Error in editing room").fadeIn().delay(3000).fadeOut();
                 },
 
             });
