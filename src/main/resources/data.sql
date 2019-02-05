@@ -66,6 +66,20 @@ VALUES ('QQ filijala',3,2);
 INSERT INTO rent_office (name,location_id,rentacar_id)
 VALUES ('WW filijala',4,2);
 
+
+INSERT INTO airlines (name, address_id, description, has_food, has_extra_luggage, has_other_services, food_price, luggage_price)
+VALUES ('AirSerbia',5, 'Aeroport Nikole Tesle Belgrade', true, true, false, 50, 100);
+
+INSERT INTO airlines (name, address_id, description, has_food, has_extra_luggage, has_other_services, food_price, luggage_price)
+VALUES ('AirMontenegro', 6, 'Aeroport Saint Sarevos', false, false, true, null, null);
+
+
+INSERT INTO hotels (name, address_id, description,fast_discount)
+VALUES ('Aleksandar', 3, 'Hotel with 5 stars in Milano with great locations',15);
+
+INSERT INTO hotels (name, address_id, description,fast_discount)
+VALUES ('Putnik', 4 , 'Cheap rooms ,Hotel with 3 stars near the center',15);
+
 /*
 INSERT INTO rentacar_rent_offices (rentacar_id,rent_offices_id)
 VALUES (1,1);
@@ -170,13 +184,6 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (8, 1);
 
 /*companies.sql*/
 
-INSERT INTO airlines (name, address_id, description, has_food, has_extra_luggage, has_other_services, food_price, luggage_price)
-VALUES ('AirSerbia',5, 'Aeroport Nikole Tesle Belgrade', true, true, false, 50, 100);
-
-INSERT INTO airlines (name, address_id, description, has_food, has_extra_luggage, has_other_services, food_price, luggage_price)
-VALUES ('AirMontenegro', 6, 'Aeroport Saint Sarevos', false, false, true, null, null);
-
-
 
 
 INSERT INTO ratings(user_rating,user_id,type,hotel_id)
@@ -185,11 +192,7 @@ VALUES (3,1,3,1);
 
 
 
-INSERT INTO hotels (name, address_id, description,fast_discount)
-VALUES ('Aleksandar', 3, 'Hotel with 5 stars in Milano with great locations',15);
 
-INSERT INTO hotels (name, address_id, description,fast_discount)
-VALUES ('Putnik', 4 , 'Cheap rooms ,Hotel with 3 stars near the center',15);
 
 
 INSERT INTO room_type (name)
