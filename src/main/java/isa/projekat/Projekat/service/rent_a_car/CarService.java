@@ -1,7 +1,6 @@
 package isa.projekat.Projekat.service.rent_a_car;
 
 import isa.projekat.Projekat.model.airline.Order;
-import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.rent_a_car.Cars;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import isa.projekat.Projekat.model.rent_a_car.RentReservation;
@@ -14,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -154,7 +151,7 @@ public class CarService {
 
 
 
-        //newReservation.setAirlineReservation(reservation);
+        //newReservation.setUserOrder(reservation);
         newReservation.setOrder(order);
         newReservation.setEndDate(rentReservation.getEndDate());
         newReservation.setEndLocation(rentReservation.getEndLocation());
@@ -192,7 +189,7 @@ public class CarService {
        if (ord == null || rentReservation == null||! ord.getPlacedOrder().equals(user))
            return  false;
 
-       //rentReservation.setAirlineReservation(res);
+       //rentReservation.setUserOrder(res);
         if (rentReservation.getOrder() != null)
             return false; // someone already ordered it
 

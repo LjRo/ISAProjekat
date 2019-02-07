@@ -45,14 +45,14 @@ public class HotelService {
     private EntityManager entityManager;
 
 
-
+    @Transactional(readOnly = true)
     public List<Hotel> findAll() {
         List<Hotel> returning =  hotelRepository.findAll();
         for (Hotel hotel: returning)
             hotel.setAdmins(null);
         return returning;
     }
-
+    @Transactional(readOnly = true)
     public Hotel findHotelById(Long id) {
         Optional<Hotel> item = hotelRepository.findById(id);
         if(!item.isPresent())
@@ -61,10 +61,12 @@ public class HotelService {
         returning.setAdmins(null);
         return returning;
     }
+    @Transactional(readOnly = true)
     public List<Hotel> findAvailableByHotelId(String arrival,String departure, String location ,String name) {
         return hotelRepository.returnAvailableHotels(arrival,departure,location,name);
     }
 
+    @Transactional(readOnly = true)
     public HotelServices findHotelServiceById(Long id){
         Optional<HotelServices> item = hotelServicesRepository.findById(id);
         if(!item.isPresent())

@@ -79,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/logout").permitAll()
 			.antMatchers("/api/user/userType").permitAll()
 			.antMatchers("api/cars/**/quick").permitAll()
-
+			.antMatchers("/api/pricesDiscount**").permitAll()
 				// svaki zahtev mora biti autorizovan
 			.anyRequest().authenticated().and()
 			

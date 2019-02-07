@@ -9,6 +9,7 @@
 
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/NavigationWithButton.css">
     <link rel="stylesheet" href="css/HighlightPhone.css">
     <link rel="stylesheet" href="css/ProjectsHorizontal.css">
@@ -51,7 +52,8 @@
                 <div class="col-md">
                     <h5>Reservations:</h5>
                     <div id="error2" style="display:none;color:red; border: 1px solid red; text-align: center; vertical-align: middle;"></div>
-                    <select size="3" class="form-control change-list" name="selectAirlineReservations" onchange="putInfo(this)">
+                    <!--<select size="3" class="form-control change-list" name="selectAirlineReservations" onchange="putInfo(this)"> -->
+                    <select size="3" class="form-control change-list" name="selectAirlineReservations">
                         <optgroup label="Airline Reservations:" id="listReservations">
                         </optgroup>
                     </select>
@@ -66,6 +68,18 @@
 
             </div>
 
+        </div>
+        <div class="row logged user">
+            <div class="col-md-12" id="orderListings">
+
+
+
+            </div>
+            <div class="col-md-12" id="airlineListings">
+
+
+
+            </div>
         </div>
     </div>
 </div>

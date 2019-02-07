@@ -1,6 +1,6 @@
 package isa.projekat.Projekat.service.hotel;
 
-import isa.projekat.Projekat.model.airline.Reservation;
+import isa.projekat.Projekat.model.airline.Order;
 import isa.projekat.Projekat.model.hotel.*;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.*;
@@ -36,6 +36,9 @@ public class RoomService {
 
     @Autowired
     private RoomTypeRepository roomTypeRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     public Page<Room> findAll(PageRequest pageRequest){
         return roomRepository.findAll(pageRequest);
@@ -91,12 +94,12 @@ public class RoomService {
 
     @Transactional
     public int reserveRoom(ReservationHotelData reservationHotelData, User user) {
-        ReservationHotel reservationHotel = hotelReservationRepository.findByAirlineReservation_Id(reservationHotelData.getReservationId());
+        ReservationHotel reservationHotel = hotelReservationRepository.findByUserOrder_Id(reservationHotelData.getReservationId());
         if(reservationHotel != null)
             return 2;
         Room room = roomRepository.checkIfAvailableStill(reservationHotelData.getRoomId(),reservationHotelData.getArrivalDate(),reservationHotelData.getDepartureDate());
         Optional<Room> exists  = roomRepository.findById(reservationHotelData.getRoomId());
-        Optional<Reservation> reservation = reservationRepository.findById(reservationHotelData.getReservationId());
+        Optional<Order> reservation = orderRepository.findById(reservationHotelData.getReservationId());
         Date arrival;
         Date departure;
         try {
@@ -136,11 +139,12 @@ public class RoomService {
             return 3;
         if(room != null)
         {
+            Order pendingOrder = reservation.get();
             Room roomFound = exists.get();
             ReservationHotel newReservation = new ReservationHotel();
             newReservation.setNightsStaying((int)days);
             newReservation.setHotel(roomFound.getHotel());
-            newReservation.setAirlineReservation(reservation.get());
+            newReservation.setUserOrder(pendingOrder);
             newReservation.setArrivalDate(arrival);
             newReservation.setPeople(roomFound.getNumberOfPeople());
             newReservation.setDepartureDate(departure);
@@ -148,7 +152,9 @@ public class RoomService {
             newReservation.setReservationDate(new Date());
             newReservation.setUser(user);
             newReservation.setRoom(roomFound);
+            pendingOrder.setReservationHotel(newReservation);
             hotelReservationRepository.save(newReservation);
+            orderRepository.save(pendingOrder);
             return 0;
         }
         else

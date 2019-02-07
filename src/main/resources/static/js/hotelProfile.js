@@ -83,7 +83,7 @@ $(document).ready(function () {
                                             }
                                         }
                                     }
-                                    addRoom(data.content[i], pId, selRoomType);
+                                    addRoom(data.content[i], pId, selRoomType,false);
                                 }
                                 setPagingButtons(data.totalPages, data.totalElements);
                             }
@@ -148,7 +148,7 @@ $(document).ready(function () {
                                     var timeDiff = Math.abs(date2.getTime() - date1.getTime());
                                     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
                                     diffDays = (diffDays == 0) ? 1 : diffDays;
-                                    addRoom(data.content[i], pId, diffDays * selRoomType);
+                                    addRoom(data.content[i], pId, diffDays * selRoomType,false);
                                 }
                                 setPagingButtons(data.totalPages, data.totalElements);
 
@@ -169,7 +169,22 @@ $(document).ready(function () {
         }
     });
 
-    
+    $.get({
+        url: '/api/flight/allFutureOrders',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
+            if (data != null) {
+                if (data.length > 0)
+                {
+                    data.forEach(function (entry) {
+                        fillOrders(entry);
+                    });
+                }
+            }
+
+        }
+    });
+
 
 
     $('#addRoom').click(function () {
@@ -271,6 +286,11 @@ $(document).ready(function () {
 
 });
 
+
+function fillOrders(data) {
+    $("#listReservations").append('<option value= "' + data.id + '"> Order ' + data.id + '</option>');
+}
+
 //0 - Normal, 1 - Admin, 2 - Airline Admin, 3 - Hotel Admin, 4 - RentACar Admin
 function checkUserType() {
     $.get({
@@ -299,16 +319,24 @@ function addService(services) {
 }
 
 
-function addRoom(room,hotelId,price) {
+function addRoom(room,hotelId,price,quick) {
     var arrival = getUrlParameter('arrival');
     var departure = getUrlParameter('departure');
     arrival = (arrival==undefined||arrival=='')?'':'&arrival='+arrival;
     departure = (departure==undefined||departure=='')?'':'&departure='+departure;
 
     var display = 'none';
+    var addingToId = '';
+    var advice = 'Click search to check if available';
     if(arrival != '' && departure !='')
     {
-        display='inherit'
+        advice='';
+        display='inherit';
+    }
+
+    if(quick){
+        advice ='';
+        addingToId='quick';
     }
 
 
@@ -340,22 +368,80 @@ function addRoom(room,hotelId,price) {
         '                                                            <i class="fa fa-star"></i>' +
         '                                                            <br>' +
         '                                                            Floor: <strong><span id="Floor">' + room.floor + '</span></strong>' +
+        '                                                            <div>' + advice + '</div>' +
         '                                                            <br>' +
         '                                                            <button id="editRoom' + room.id +'" class="btn btn-primary hotel-admin btn-outline-secondary rounded-0 mb-1" style="display:none" type="button"> Edit </button>' +
-        '                                                            <button id="reserveRoom' + room.id +'" class="btn btn-primary user btn-outline-secondary rounded-0 mb-1" style="display:' + display +  '" type="button"> Reserve  </button>' +
+        '                                                            <button id="reserveRoom' + addingToId + room.id +'" class="btn btn-primary user btn-outline-secondary rounded-0 mb-1" style="display:' + display +  '" type="button"> Reserve  </button>' +
         '                                                        </div>' +
         '                                                    </div>' +
         '                                                </div>' +
         '                                            </div>');
-    $('#addListings').append(tr);
-    $('#' + 'editRoom' +  room.id).click(function () {
-        window.location.href = "addRoom.html?id=" + hotelId +"&room="+ room.id + "&edit=1";
-    });
-    $('#' + 'reserveRoom' +  room.id).click(function () {
-        window.location.href = "hotelReservation.html?id=" + hotelId +"&room="+ room.id +arrival + departure; // + "&edit=1";
-    });
+    if(quick)
+    {
+        $('#quickListings').append(tr);
+        var orderId = $('select[name="selectOrder"]').val();
+
+        $('#' + 'reserveRoom' + addingToId +  room.id).click(function () {
+            if(orderId == undefined)
+            {
+                $('qerror').text('Select order to which you want to add').fadeIn().delay(3000).fadeOut();
+                return;
+            }
+            $.post({
+                url: "api/rooms/reserveRoom",
+                data: JSON.stringify({
+                    hotelId: hotelId,
+                    roomId : id,
+                    reservationId: orderId,
+                    services :services ,
+                    arrivalDate: arrival,
+                    departureDate: departure,
+                }),
+                dataType: "json",
+                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                contentType: 'application/json',
+                success: function (message) {
+                    if(message.status == '200')
+                    {
+                        $('#qsuccess').html("Succesfuly added this room to your reservation").fadeIn().delay(3000).fadeOut();
+                        $('#confirmReservation').attr('disable','disable');
+                    }
+                    else
+                    {
+                        $('#error').html(message.body).fadeIn().delay(3000).fadeOut();
+                    }
+                },
+                error: function (data) {
+                    if(data.status == undefined)
+                    {
+                        data.status = 'Unknown';
+                    }
+                    if(data.status == '500')
+                    {
+                        $('#error').html("Alredy reserved").fadeIn().delay(3000).fadeOut();
+                    } else
+                        $('#error').html("Error happened while reserving this(" + data.status +')' ).fadeIn().delay(3000).fadeOut();
+                }
+            });
+        });
+    }
+    else
+    {
+        $('#addListings').append(tr);
+        $('#' + 'editRoom' +  room.id).click(function () {
+            window.location.href = "addRoom.html?id=" + hotelId +"&room="+ room.id + "&edit=1";
+        });
+        $('#' + 'reserveRoom' +  room.id).click(function () {
+            window.location.href = "hotelReservation.html?id=" + hotelId +"&room="+ room.id +arrival + departure; // + "&edit=1";
+        });
+    }
+
+
+
 
 }
+
+
 
 
 function setPagingButtons(MaxPages, MaxElements) {

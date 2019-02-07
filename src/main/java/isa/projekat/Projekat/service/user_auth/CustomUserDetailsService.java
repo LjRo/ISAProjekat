@@ -1,11 +1,13 @@
 package isa.projekat.Projekat.service.user_auth;
 
+import isa.projekat.Projekat.model.airline.Airline;
+import isa.projekat.Projekat.model.hotel.Hotel;
+import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import isa.projekat.Projekat.model.user.Authority;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.model.user.UserData;
 import isa.projekat.Projekat.model.user.VerificationToken;
-import isa.projekat.Projekat.repository.TokenRepository;
-import isa.projekat.Projekat.repository.UserRepository;
+import isa.projekat.Projekat.repository.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -47,6 +46,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
 	private TokenRepository tokenRepository;
 
+	@Autowired
+	private AirlineRepository airlineRepository;
+
+	@Autowired
+	private HotelRepository hotelRepository;
+
+	@Autowired
+	private RentCarRepository rentCarRepository;
 
 	// Funkcija koja na osnovu username-a iz baze vraca objekat User-a
 	@Override
@@ -123,27 +130,63 @@ public class CustomUserDetailsService implements UserDetailsService {
 		sendConfirmationEmail(user);
 	}
 
-	@SuppressWarnings("Duplicates")
-	public Long registerAdmin(UserData userData) {
-		User user = new User();
-		user.setType(userData.getType());
+	public Long registerAdmin(UserData userData,Long idCompany) {
+		User user;
 		String auth;
 		switch (userData.getType())
 		{
 			case 1: auth = "ROLE_ADMIN";
+				user = fillUserData(userData,auth);
+				userRepository.save(user);
 				break;
 			case 2: auth = "ROLE_ADMIN_AIRLINE";
+				Optional<Airline> optionalAirline = airlineRepository.findById(idCompany);
+				if(!optionalAirline.isPresent())
+					return Long.parseLong("-1");
+				Airline airline = optionalAirline.get();
+				user = fillUserData(userData,auth);
+				user.setAdministratedAirline(airline);
+				airline.getAdmins().add(user);
+				userRepository.save(user);
+				airlineRepository.save(airline);
 				break;
 			case 3: auth = "ROLE_ADMIN_HOTEL";
+				Optional<Hotel> hotelOptional = hotelRepository.findById(idCompany);
+				if(!hotelOptional.isPresent())
+					return Long.parseLong("-1");
+				Hotel hotel = hotelOptional.get();
+				user = fillUserData(userData,auth);
+				user.setAdministratedHotel(hotel);
+				hotel.getAdmins().add(user);
+				userRepository.save(user);
+				hotelRepository.save(hotel);
 				break;
 			case 4: auth = "ROLE_ADMIN_RENT";
+				Optional<RentACar> optionalRentACar = rentCarRepository.findById(idCompany);
+				if(!optionalRentACar.isPresent())
+					return Long.parseLong("-1");
+				RentACar rent = optionalRentACar.get();
+				user =fillUserData(userData,auth);
+				user.setAdministratedRent(rent);
+				rent.getAdmins().add(user);
+				userRepository.save(user);
+				rentCarRepository.save(rent);
 				break;
 			default:
 				return Long.parseLong("-1");
 		}
+		sendConfirmationEmail(user);
+		return userRepository.findByUsername(user.getUsername()).getId();
+	}
+
+	@SuppressWarnings("Duplicates")
+	private User fillUserData(UserData userData,String auth){
+		User user = new User();
 		Authority authority = new Authority(auth);
 		List<Authority> list = new ArrayList<>();
+		user.setType(userData.getType());
 		list.add(authority);
+		user.setPasswordChanged(false);
 		user.setUsername(userData.getEmail());
 		user.setAuthorities(list);
 		user.setAddress(userData.getAddress());
@@ -152,10 +195,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 		user.setLastName(userData.getLastName());
 		user.setPassword(passwordEncoder.encode(userData.getPassword()));
 		user.setPhoneNumber(userData.getPhoneNumber());
-		userRepository.save(user);
-		sendConfirmationEmail(user);
-		return userRepository.findByUsername(user.getUsername()).getId();
+		return user;
 	}
+
 
 	private void sendConfirmationEmail(User user) {
 		String token = UUID.randomUUID().toString();
