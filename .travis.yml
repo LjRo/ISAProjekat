@@ -9,3 +9,8 @@ deploy:
   api_key:
     secure: "a11c9262-33c5-4ba9-bebf-12e77373ee44"
   app: isa-tim-11
+addons:
+  sonarcloud:
+    organization: "ljrokvic-github"
+script:
+  - sonar-scanner
