@@ -94,7 +94,7 @@ public class RoomService {
 
     @Transactional
     public int reserveRoom(ReservationHotelData reservationHotelData, User user) {
-        ReservationHotel reservationHotel = hotelReservationRepository.findByUserOrder(reservationHotelData.getReservationId());
+        ReservationHotel reservationHotel = hotelReservationRepository.findByUserOrder_Id(reservationHotelData.getReservationId());
         if(reservationHotel != null)
             return 2;
         Room room = roomRepository.checkIfAvailableStill(reservationHotelData.getRoomId(),reservationHotelData.getArrivalDate(),reservationHotelData.getDepartureDate());
