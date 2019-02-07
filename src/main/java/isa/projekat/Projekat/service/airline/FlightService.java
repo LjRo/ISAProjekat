@@ -141,7 +141,7 @@ public class FlightService {
                 return false;
             }
 
-            if (resData.getPassport() == null || resData.getPassport() == "") {
+            if (resData.getPassport() == null || resData.getPassport().equals("")) {
                 return false;
             }
 
@@ -157,10 +157,10 @@ public class FlightService {
             newRes.setFlight(flight);
             if (targetUser == null) {
 
-                if (resData.getFirstName() == null || resData.getFirstName() == "") {
+                if (resData.getFirstName() == null || resData.getFirstName().equals("")) {
                     return false;
                 }
-                if (resData.getLastName() == null || resData.getLastName() == "") {
+                if (resData.getLastName() == null || resData.getLastName().equals("")) {
                     return false;
                 }
                 newRes.setName(resData.getFirstName());
@@ -233,7 +233,7 @@ public class FlightService {
         newRes.setName(requester.getFirstName());
         newRes.setLastName(requester.getLastName());
         newRes.setPointsUsed(0.0);
-        newRes.setTotalCost(targetSeat.getPrice().multiply(new BigDecimal(0.95)));
+        newRes.setTotalCost(targetSeat.getPrice().multiply(new BigDecimal("0.95")));
         newRes.setConfirmed(true);
         newRes.setUser(requester);
 
@@ -263,10 +263,8 @@ public class FlightService {
                 }
                 if(fmt.format(fl.getStartTime()).equals(fmt.format(data.getStartDate()))) {
                     if (data.getLandDate() != null) {
-                        if (fmt.format(fl.getLandTime()).equals(fmt.format(data.getLandDate()))) {
-                            if(current.isBefore(fl.getStartTime().getTime())) {
-                                res.add(formatData(fl));
-                            }
+                        if (fmt.format(fl.getLandTime()).equals(fmt.format(data.getLandDate())) && current.isBefore(fl.getStartTime().getTime())) {
+                            res.add(formatData(fl));
                         }
                     } else {
                         if(current.isBefore(fl.getStartTime().getTime())) {

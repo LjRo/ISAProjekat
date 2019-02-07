@@ -92,6 +92,15 @@ public class User implements UserDetails {
     @JsonManagedReference(value = "user_rent_reservation")
     private List<RentReservation> rentReservations;
 
+    @Column
+    private Timestamp lastPasswordResetDate;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+    private List<Authority> authorities;
+
     public List<RentReservation> getRentReservations() {
         return rentReservations;
     }
@@ -131,14 +140,6 @@ public Hotel getAdministratedHotel() {
 
     //
 
-    @Column
-    private Timestamp lastPasswordResetDate;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_authority",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
-    private List<Authority> authorities;
 
     public Long getId() {
         return id;

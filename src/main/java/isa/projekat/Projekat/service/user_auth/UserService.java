@@ -151,12 +151,10 @@ public class UserService {
 		User firstUser = findByUsername(user);
 		User friendUser = findById(id);
 
-		if(friendUser != null && firstUser != null) {
-			if(firstUser.getFriendRequests().contains(friendUser)) {
-				firstUser.getFriendRequests().remove(friendUser);
-                userRepository.save(firstUser);
-				return true;
-			}
+		if(friendUser != null && firstUser != null && firstUser.getFriendRequests().contains(friendUser)) {
+			firstUser.getFriendRequests().remove(friendUser);
+			userRepository.save(firstUser);
+			return true;
 		}
 		return false;
 	}
