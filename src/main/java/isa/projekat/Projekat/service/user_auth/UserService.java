@@ -81,8 +81,14 @@ public class UserService {
 	}
 
     public List<UserData> findAllFriendsById(Long id) throws AccessDeniedException {
-        List<User> fList = userRepository.findById(id).get().getFriends();
-        return getUserDataFromList(fList);
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()){
+			return getUserDataFromList(user.get().getFriends());
+		}else {
+        	return null;
+		}
+
+
     }
 
 	public List<UserData> findAllFriendRequests(String email) throws AccessDeniedException {

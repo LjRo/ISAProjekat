@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.service.rent_a_car;
 
 import isa.projekat.Projekat.model.airline.Order;
+import isa.projekat.Projekat.model.rent_a_car.CarType;
 import isa.projekat.Projekat.model.rent_a_car.Cars;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import isa.projekat.Projekat.model.rent_a_car.RentReservation;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -50,7 +52,13 @@ public class CarService {
     public Page<Cars> findByRentACarId( Long id,PageRequest pageRequest) { return carRepository.findByRentACarId(id,pageRequest);}
 
     @Transactional(readOnly = true)
-    public Cars findByCarId( long id){ return carRepository.findById(id).get(); }
+    public Cars findByCarId( long id){
+        Optional<Cars> cars =  carRepository.findById(id);
+        if (cars.isPresent())
+            return cars.get();
+        else
+            return null;
+    }
 
     @Transactional
     public boolean addCars(Cars cars, User user, Long id){
@@ -77,10 +85,15 @@ public class CarService {
     public boolean editCar(Cars cars, User user){
 
         Optional<Cars> optionalCars = carRepository.findById(cars.getId());
+        if (!optionalCars.isPresent())
+            return false;
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(optionalCars.get().getId());
 
-        if (!everythingPresent(optionalRentACar, optionalCars, user, true))
-            return false;
+        if (!optionalRentACar.isPresent()){
+            return  false;
+        }
+        else if (!optionalRentACar.get().getAdmins().contains(user))
+             return  false;
 
         Cars fromDatabase = optionalCars.get();
 
@@ -96,14 +109,18 @@ public class CarService {
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(idrent);
         Optional<Cars> optionalCars = carRepository.findById(id);
 
-        if (!everythingPresent(optionalRentACar, optionalCars, user, true))
-            return false;
+        if (!optionalRentACar.isPresent() || !optionalCars.isPresent()){
+            return  false;
+        }
+        else if (!optionalRentACar.get().getAdmins().contains(user))
+                return  false;
+        else {
+            Cars toRemove = optionalCars.get();
 
-        Cars toRemove = optionalCars.get();
-
-        optionalRentACar.get().getCars().remove(toRemove);
-        carRepository.delete(toRemove);
-        return true;
+            optionalRentACar.get().getCars().remove(toRemove);
+            carRepository.delete(toRemove);
+            return true;
+        }
     }
 
     @Transactional
@@ -112,13 +129,12 @@ public class CarService {
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(idrent);
         Optional<Cars> optionalCars = carRepository.findById(id);
 
-        if (!everythingPresent(optionalRentACar, optionalCars, user, false))
-            return false;
+        if (!optionalRentACar.isPresent() || !optionalCars.isPresent()){
+            return  false;
+        }
 
         RentReservation newReservation = new RentReservation();
         Cars rentedCar = optionalCars.get();
-
-        //Reservation reservation = reservationRepository.getOne(idAirlineReservation);
 
         Order order = orderRepository.getOne(idOrder);
 
@@ -131,11 +147,11 @@ public class CarService {
         String end = f.format(rentReservation.getEndDate());
 
 
-        List<Cars> alist = listAvailableWithDateWithoutPage(idrent, rentedCar.getType().getId(), BigDecimal.valueOf(0),
+        List<Cars> available = listAvailableWithDateWithoutPage(idrent, rentedCar.getType().getId(), BigDecimal.valueOf(0),
                 BigDecimal.valueOf(Integer.MAX_VALUE), start , end, rentReservation.getNumberOfPeople());
         boolean isNotAvailable = true;
 
-        for (Cars car: alist) {
+        for (Cars car: available) {
             if (car.getId().equals(rentedCar.getId())) {
                 isNotAvailable = false;
             }
@@ -146,12 +162,6 @@ public class CarService {
         }
 
         order.setRentReservation(newReservation);
-
-
-
-
-
-        //newReservation.setUserOrder(reservation);
         newReservation.setOrder(order);
         newReservation.setEndDate(rentReservation.getEndDate());
         newReservation.setEndLocation(rentReservation.getEndLocation());
@@ -181,7 +191,7 @@ public class CarService {
     @Transactional
     public boolean quickReserve(Long idOrder, Long idReservation, User user){
 
-       //Reservation res = reservationRepository.getOne(idReservationAirline);
+
         Order ord = orderRepository.getOne(idOrder);
 
         RentReservation rentReservation = rentReservationRepository.getOne(idReservation);
@@ -189,7 +199,7 @@ public class CarService {
        if (ord == null || rentReservation == null||! ord.getPlacedOrder().equals(user))
            return  false;
 
-       //rentReservation.setUserOrder(res);
+
         if (rentReservation.getOrder() != null)
             return false; // someone already ordered it
 
@@ -269,7 +279,9 @@ public class CarService {
         toSet.setNumberOfBags(dataFrom.getNumberOfBags());
         toSet.setNumberOfDoors(dataFrom.getNumberOfDoors());
         toSet.setRegistrationNumber(dataFrom.getRegistrationNumber());
-        toSet.setType(carTypeRepository.findById(dataFrom.getType().getId()).get());
+        Optional<CarType> oType = carTypeRepository.findById(dataFrom.getType().getId());
+        CarType type = oType.isPresent() ? oType.get() : null;
+        toSet.setType(type);
     }
 
 }

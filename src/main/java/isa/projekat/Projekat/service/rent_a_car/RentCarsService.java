@@ -28,7 +28,14 @@ public class RentCarsService {
 
     @Transactional(readOnly = true)
     public RentACar findById(Long id) {
-        return  rentCarRepository.findById(id).get();
+        Optional<RentACar> rentACar = rentCarRepository.findById(id);
+        if (!rentACar.isPresent()){
+            return null;
+        }else {
+            return rentACar.get();
+        }
+
+
     }
 
     @Transactional

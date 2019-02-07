@@ -105,13 +105,6 @@
 		</dependency>
 
 
-		<!--<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mobile</artifactId>
-			<version>2.0.0.M5</version>
-		</dependency> -->
-
-
 	</dependencies>
 
 	<build>
