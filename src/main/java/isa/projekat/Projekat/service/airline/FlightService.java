@@ -41,6 +41,14 @@ public class FlightService {
         }
     }
 
+    public Order findOrderById(Long id) {
+        if(orderRepository.findById(id).isPresent()) {
+            return orderRepository.findById(id).get();
+        } else {
+            return null;
+        }
+    }
+
 
     @Transactional(readOnly = true)
     public SeatData findSeatDataById(Long id) {
@@ -115,8 +123,6 @@ public class FlightService {
         }
         return false;
     }
-
-
     @Transactional(readOnly = true)
     public Boolean isOrdering(Long id,String email) {
         if(!orderRepository.findById(id).isPresent()) {
