@@ -26,8 +26,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-//import isa.projekat.Projekat.utils.DeviceProvider;
-//import org.springframework.mobile.device.Device;
+
 
 //Kontroler zaduzen za autentifikaciju korisnika
 @RestController
@@ -43,11 +42,8 @@ public class AuthenticationController {
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 
-	//@Autowired
-	//private DeviceProvider deviceProvider;
-
-	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
+	@PostMapping(value = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
                                                        HttpServletResponse response) throws AuthenticationException, IOException {
 
 		final Authentication authentication = authenticationManager
@@ -68,8 +64,8 @@ public class AuthenticationController {
 	}
 
 
-	@RequestMapping(value = "/loginToken", method = RequestMethod.POST)
-	public ResponseEntity<?> loginWithToken(HttpServletRequest request) throws AuthenticationException, ParseException {
+	@PostMapping(value = "/loginToken")
+	public ResponseEntity<UserTokenState> loginWithToken(HttpServletRequest request) throws AuthenticationException, ParseException {
 		String token = tokenUtils.getToken(request);
 		String username = this.tokenUtils.getUsernameFromToken(token);
 		User user = (User) this.userDetailsService.loadUserByUsername(username);
@@ -89,8 +85,8 @@ public class AuthenticationController {
 	}
 
 
-	@RequestMapping(value = "/refresh", method = RequestMethod.POST)
-	public ResponseEntity<?> refreshAuthenticationToken(HttpServletRequest request) {
+	@PostMapping(value = "/refresh")
+	public ResponseEntity<UserTokenState> refreshAuthenticationToken(HttpServletRequest request) {
 
 		String token = tokenUtils.getToken(request);
 		String username = this.tokenUtils.getUsernameFromToken(token);
@@ -109,9 +105,9 @@ public class AuthenticationController {
 		}
 	}
 
-	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
+	@PostMapping(value = "/change-password")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
+	public ResponseEntity<Map<String,String>> changePassword(@RequestBody PasswordChanger passwordChanger) {
 		userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
 		
 		Map<String, String> result = new HashMap<>();
@@ -120,8 +116,8 @@ public class AuthenticationController {
 	}
 
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> register(@RequestBody UserData userData) {
+	@PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<Map<String,String>> register(@RequestBody UserData userData) {
 
 
 		try {
@@ -140,7 +136,7 @@ public class AuthenticationController {
 	}
 
 
-	@RequestMapping(value = "/registerAdmin", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+	@PostMapping(value = "/registerAdmin", consumes = {MediaType.APPLICATION_JSON_VALUE})
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Long registerAdmins(@RequestBody UserData userData,@RequestParam Long idCompany) {
 		Long returnId=Long.parseLong("-1");
@@ -156,8 +152,8 @@ public class AuthenticationController {
 
 
 
-	@RequestMapping(value = "/confirm", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> confirm(@RequestBody VerificationToken verificationToken){
+	@PostMapping(value = "/confirm", consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<Map<String,String>> confirm(@RequestBody VerificationToken verificationToken){
 		//producer.sendMessageTo(topic, message);
 		System.out.println("TOKEN:" + verificationToken.getToken());
 		userDetailsService.confirm(verificationToken.getToken());

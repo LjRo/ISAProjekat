@@ -77,6 +77,9 @@ public class TokenUtils {
 		String refreshedToken;
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
+			if (claims == null){
+				return null;
+			}
 			claims.setIssuedAt(timeProvider.now());
 			refreshedToken = Jwts.builder()
 					.setClaims(claims)
@@ -138,6 +141,9 @@ public class TokenUtils {
 		String username;
 		try {
 			final Claims claims = this.getAllClaimsFromToken(token);
+			if (claims == null){
+				return null;
+			}
 			username = claims.getSubject();
 		} catch (Exception e) {
 			username = null;

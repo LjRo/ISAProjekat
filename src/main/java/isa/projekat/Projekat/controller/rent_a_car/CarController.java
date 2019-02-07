@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,19 +38,19 @@ public class CarController {
     private UserService userService;
 
 
-    @RequestMapping(value = "api/cars/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/cars/findAll", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Cars> findAll(@RequestParam String page) {
         return carService.findAll(pageRequestProvider.provideRequest(page));
     }
 
 
-    @RequestMapping(value = "api/cars/findByIdAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/cars/findByIdAll", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Cars> findById(@RequestParam long id,@RequestParam String page) {
         return carService.findByRentACarId(id,pageRequestProvider.provideRequest(page));
     }
 
 
-    @RequestMapping(value = "api/cars/{id}",method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/cars/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Cars findCarById(@PathVariable Long id){
 
         return carService.findByCarId(id);
@@ -61,8 +60,8 @@ public class CarController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
-    @RequestMapping(value = "api/cars/edit", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> editCar(@RequestBody Cars cars, HttpServletRequest httpServletRequest){
+    @PostMapping(value = "api/cars/edit", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Map<String,String>> editCar(@RequestBody Cars cars, HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
         return responseTransaction(carService.editCar(cars,user));
     }
@@ -71,8 +70,8 @@ public class CarController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
-    @RequestMapping(value = "api/cars/{id}/add", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> addCar(@PathVariable Long id,@RequestBody Cars cars, HttpServletRequest httpServletRequest){
+    @PostMapping(value = "api/cars/{id}/add", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Map<String,String>> addCar(@PathVariable Long id,@RequestBody Cars cars, HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
         return responseTransaction(carService.addCars(cars,user,id));
     }
@@ -80,8 +79,8 @@ public class CarController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
-    @RequestMapping(value = "api/cars/{idrent}/remove", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> removeCar(@PathVariable Long idrent,@RequestParam long id ,HttpServletRequest httpServletRequest){
+    @PostMapping(value = "api/cars/{idrent}/remove", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Map<String,String>> removeCar(@PathVariable Long idrent,@RequestParam long id ,HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
         return responseTransaction(carService.removeCar(id, idrent, user));
     }
@@ -90,8 +89,8 @@ public class CarController {
 
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "api/cars/{idrent}/{idAir}/reserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> reserveCar(@PathVariable Long idrent, @PathVariable Long idAir, @RequestBody RentReservation rentReservation, HttpServletRequest httpServletRequest){
+    @PostMapping(value = "api/cars/{idrent}/{idAir}/reserve", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Map<String,String>> reserveCar(@PathVariable Long idrent, @PathVariable Long idAir, @RequestBody RentReservation rentReservation, HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
         return responseTransaction(carService.reserveCar(rentReservation.getRentedCar().getId(), idrent, user, rentReservation, idAir));
     }
@@ -99,8 +98,8 @@ public class CarController {
 
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "api/cars/{idReservation}/{idOrder}/quickReserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> quickReserve(@PathVariable Long idReservation, @PathVariable Long idOrder, HttpServletRequest httpServletRequest){
+    @PostMapping(value = "api/cars/{idReservation}/{idOrder}/quickReserve", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Map<String,String>> quickReserve(@PathVariable Long idReservation, @PathVariable Long idOrder, HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
         return responseTransaction(carService.quickReserve(idOrder, idReservation, user));
     }
@@ -109,15 +108,13 @@ public class CarController {
 
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "api/cars/{idrent}/quick", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/cars/{idrent}/quick", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RentReservation> listQuickReservations(@PathVariable Long idrent){
         return carService.listQuickReservations(idrent);
     }
 
 
-
-    //@PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "api/cars/{idrent}/availablePrice", method = RequestMethod.GET)
+    @GetMapping(value = "api/cars/{idrent}/availablePrice")
     public Page<Cars> listAvailablePrice(@PathVariable Long idrent, @RequestParam String page, @RequestParam Long carTypeId, @RequestParam String start, @RequestParam String end,
                                          @RequestParam Integer passengers, @RequestParam BigDecimal minPrice, @RequestParam BigDecimal maxPrice){
         if (minPrice.equals(BigDecimal.valueOf(0)) && minPrice.equals(maxPrice)){
@@ -128,14 +125,14 @@ public class CarController {
 
 
 
-    //@PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
-    @RequestMapping(value = "api/cars/{idrent}/check", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @GetMapping(value = "api/cars/{idrent}/check")
     public Boolean checkEdibility(@PathVariable Long idrent, @RequestParam Long id){
         return carService.checkEdibility(idrent, id);
     }
 
     @SuppressWarnings("Duplicates")
-    private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){
+    private ResponseEntity<Map<String,String>> responseTransaction(Boolean resultOfTransaction ){
         Map<String, String> result = new HashMap<>();
         if(resultOfTransaction )
         {
