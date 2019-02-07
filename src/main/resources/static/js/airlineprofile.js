@@ -212,6 +212,8 @@ $(function() {
                 window.location.replace("/airline.html?id=" + id);
             },
             error: function () {
+                //alert("Something went wrong...");
+                location.reload();
             },
 
         });

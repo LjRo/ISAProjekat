@@ -7,6 +7,7 @@ import isa.projekat.Projekat.service.airline.FlightService;
 import isa.projekat.Projekat.service.user_auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,28 +42,44 @@ public class FlightController {
 
     @RequestMapping(value = "api/flight/book", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public void bookFlight(@RequestBody BookingData bookingData, HttpServletRequest req){
+    public ResponseEntity bookFlight(@RequestBody BookingData bookingData, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
 
-        flightService.bookFlight(bookingData,email);
+        return ResponseFormatter.format(flightService.bookFlight(bookingData,email),false);
     }
 
     @RequestMapping(value = "api/flight/quickBook", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public void quickBook(@RequestBody QuickTicketData quickTicketData, HttpServletRequest req){
+    public ResponseEntity quickBook(@RequestBody QuickTicketData quickTicketData, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
 
-        flightService.quickBookFlight(quickTicketData,email);
+        return ResponseFormatter.format(flightService.quickBookFlight(quickTicketData,email),false);
+
+    }
+
+    @RequestMapping(value = "api/order/{id}/confirm", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity confirmOrder(@PathVariable Long orderId, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+
+        return ResponseFormatter.format(flightService.finishOrder(orderId,email),false);
+    }
+
+    @RequestMapping(value = "api/order/{id}/isOrdering", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public Boolean isOrdering(@PathVariable Long orderId, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+
+        return flightService.isOrdering(orderId,email);
     }
 
     @RequestMapping(value = "api/flight/search", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
     public List<FlightSearchResultData> searchFlight(@RequestBody FlightSearchData searchData, HttpServletRequest req){
-        String authToken = jwtTokenUtils.getToken(req);
-
-        //flightService.quickBookFlight(quickTicketData,email);
         return flightService.searchFlights(searchData);
     }
 
@@ -118,6 +135,11 @@ public class FlightController {
         User user = userService.findByUsername(email);
         return flightService.findRentReservations(user.getId());
     }
+
+
+
+
+
 
 
 

@@ -403,6 +403,7 @@ function confirmInput() {
         },
         error: function (data) {
             alert("Something went wrong...");
+            location.reload();
         },
     });
 
