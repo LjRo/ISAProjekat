@@ -25,7 +25,7 @@ public class FlightService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
-    private ReservationRepository reservationRespository;
+    private ReservationRepository reservationRepository;
 
     @Transactional(readOnly = true)
     public List<Flight> findAll() {
@@ -52,32 +52,49 @@ public class FlightService {
     }
 
     @Transactional(readOnly = true)
+    public List<Order> findAllNotFinished(Long id){
+        return orderRepository.findAllByPlacedOrderIdAndFinishedIsFalse(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> findAllOrders(Long id){
+        return orderRepository.findAllByPlacedOrderId(id);
+    }
+
+    @Transactional(readOnly = true)
     public List<Reservation> findFutureReservationByUserId(Long userId){
         String date = java.time.LocalDate.now().toString();
-        List<Reservation> reservations = reservationRespository.returnAllFutureReservationsByUser(userId,date);
+        List<Reservation> reservations = reservationRepository.returnAllFutureReservationsByUser(userId,date);
         return reservations;
     }
 
     @Transactional(readOnly = true)
     public List<Reservation> findRentReservations(Long userId){
         String date = java.time.LocalDate.now().toString();
-        List<Reservation> reservations = reservationRespository.returnFutureRentReservationByUser(userId,date);
+        List<Reservation> reservations = reservationRepository.returnFutureRentReservationByUser(userId,date);
         return reservations;
     }
 
+    @Transactional(readOnly = true)
+    public List<Order> findAllFutureOrders(Long userId){
+        String date = java.time.LocalDate.now().toString();
+        return  orderRepository.findAllFutureOrdersByUserIdAndDate(userId,date);
+    }
 
 
     @Transactional(readOnly = true)
     public List<Reservation> findReservationsByUserId(Long userId){
-        List<Reservation> reservations = reservationRespository.getAllByUser(userId);
+        List<Reservation> reservations = reservationRepository.getAllByUser(userId);
         return reservations;
     }
 
     @Transactional(readOnly = true)
     public List<Reservation> findAllReservationsByUserId(Long userId){
-        List<Reservation> reservations = reservationRespository.findAllByUserId(userId);
+        List<Reservation> reservations = reservationRepository.findAllByUserId(userId);
         return reservations;
     }
+
+
 
     @Transactional
     public Boolean finishOrder(Long id,String email) {
@@ -107,7 +124,6 @@ public class FlightService {
         }
         return false;
     }
-
 
 
     @Transactional
@@ -199,7 +215,7 @@ public class FlightService {
             targetSeat.setTaken(true);
             nOrder.getReservations().add(newRes);
             newRes.setOrder(nOrder);
-            reservationRespository.save(newRes);
+            reservationRepository.save(newRes);
 
         }
         orderRepository.save(nOrder);
@@ -241,7 +257,7 @@ public class FlightService {
         newRes.setSeat(targetSeat);
         targetSeat.setTaken(true);
         targetSeat.setReservation(newRes);
-        reservationRespository.save(newRes);
+        reservationRepository.save(newRes);
 
         return true;
     }

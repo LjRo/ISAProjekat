@@ -2,6 +2,7 @@ package isa.projekat.Projekat.model.airline;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import isa.projekat.Projekat.model.rent_a_car.RentReservation;
 import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
@@ -23,6 +24,10 @@ public class Order {
     @JsonManagedReference("reservations")
     private List<Reservation> reservations;
 
+    @OneToOne
+    @JsonManagedReference("rent")
+    private RentReservation rentReservation;
+
     @ManyToOne
     @JsonBackReference("placed_orders")
     private User placedOrder;
@@ -41,6 +46,14 @@ public class Order {
         this.placedOrder = placedOrder;
         this.orderDate = orderDate;
         this.finished = finished;
+    }
+
+    public RentReservation getRentReservation() {
+        return rentReservation;
+    }
+
+    public void setRentReservation(RentReservation rentReservation) {
+        this.rentReservation = rentReservation;
     }
 
     public Long getId() {

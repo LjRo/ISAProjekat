@@ -50,7 +50,7 @@ public class RentOfficeController {
         return rentOfficeService.findAllByRentACarId(id,pageRequestProvider.provideRequest(page));
     }
 
-    @Transactional
+
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
     @RequestMapping(value = "api/office/{idrent}/edit", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -72,7 +72,7 @@ public class RentOfficeController {
     }
 
 
-    @Transactional
+
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
     @RequestMapping(value = "api/office/{rentid}/add",method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -93,7 +93,7 @@ public class RentOfficeController {
     }
 
 
-    @Transactional
+
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
     @RequestMapping(value = "api/office/{idrent}/remove", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})

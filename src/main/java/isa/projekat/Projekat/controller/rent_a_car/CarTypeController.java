@@ -18,7 +18,7 @@ public class CarTypeController {
     private CarTypeService carTypeService;
 
 
-    @Transactional(readOnly = true)
+
     @RequestMapping(value = "api/cartypes", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<CarType> findAll() {
         return carTypeService.findAll();

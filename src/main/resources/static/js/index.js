@@ -27,6 +27,11 @@ $(document).ready(function () {
     });
 
 
+    $('.change-list').change(function () {
+
+    });
+
+
 
 
 });

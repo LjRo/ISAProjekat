@@ -31,7 +31,7 @@ public class RentCarController {
     @Autowired
     private UserService userService;
 
-    @Transactional(readOnly = true)
+
     @RequestMapping(value = "api/rentacar/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RentACar> findAll() {
         List<RentACar> list = rentCarsService.findAll();
@@ -42,7 +42,7 @@ public class RentCarController {
     }
 
 
-    @Transactional(readOnly = true)
+
     @RequestMapping(value = "api/rentacar/filtered", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RentACar> findFilteredRentACar(@RequestParam Integer type, @RequestParam String search, @RequestParam String start, @RequestParam String end){
 
@@ -55,7 +55,7 @@ public class RentCarController {
     }
 
 
-    @Transactional(readOnly = true)
+
     @RequestMapping(value = "api/rentacar/findById={id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public RentACar findRentACarById(@PathVariable("id") long id) {
         RentACar rentACar = rentCarsService.findById(id);
@@ -63,7 +63,7 @@ public class RentCarController {
         return rentACar;
     }
 
-    @Transactional
+
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
     @RequestMapping(value = "api/rentacar/edit", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})

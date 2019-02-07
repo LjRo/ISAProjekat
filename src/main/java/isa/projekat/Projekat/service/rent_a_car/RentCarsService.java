@@ -21,14 +21,17 @@ public class RentCarsService {
     @Autowired
     private LocationRepository locationRepository;
 
+    @Transactional(readOnly = true)
     public List<RentACar> findAll(){
         return rentCarRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public RentACar findById(Long id) {
         return  rentCarRepository.findById(id).get();
     }
 
+    @Transactional
     public boolean editRentACar(RentACar rentACar, User user){
 
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(rentACar.getId());
@@ -82,7 +85,7 @@ public class RentCarsService {
     }
 
 
-
+    @Transactional(readOnly = true)
     public List<RentACar> findAllByName(String name, String startDate, String endDate){
         List<RentACar> list = rentCarRepository.findAllByName(name,startDate,endDate);
 
@@ -93,6 +96,7 @@ public class RentCarsService {
         return list;
     }
 
+    @Transactional(readOnly = true)
     public List<RentACar> findAllByLocation(String city, String startDate, String endDate){
         List<RentACar> list =  rentCarRepository.findAllByCity(city,startDate,endDate);
 
