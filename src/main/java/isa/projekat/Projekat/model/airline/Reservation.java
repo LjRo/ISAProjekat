@@ -38,8 +38,9 @@ public class Reservation {
     @Column
     private Boolean confirmed = false;
 
-    @Column
-    private Boolean finished = false;
+    @ManyToOne
+    @JsonBackReference(value = "reservations")
+    private Order order;
 
     @OneToOne
     @JsonBackReference(value = "seat_reservation")
@@ -87,14 +88,6 @@ public class Reservation {
         this.passport = passport;
     }
 
-    public Boolean getFinished() {
-        return finished;
-    }
-
-    public void setFinished(Boolean finished) {
-        this.finished = finished;
-    }
-
     public Seat getSeat() {
         return seat;
     }
@@ -133,5 +126,13 @@ public class Reservation {
 
     public void setConfirmed(Boolean confirmed) {
         this.confirmed = confirmed;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

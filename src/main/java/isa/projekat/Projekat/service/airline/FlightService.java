@@ -2,10 +2,7 @@ package isa.projekat.Projekat.service.airline;
 
 import isa.projekat.Projekat.model.airline.*;
 import isa.projekat.Projekat.model.user.User;
-import isa.projekat.Projekat.repository.FlightRepository;
-import isa.projekat.Projekat.repository.ReservationRepository;
-import isa.projekat.Projekat.repository.SeatRepository;
-import isa.projekat.Projekat.repository.UserRepository;
+import isa.projekat.Projekat.repository.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,6 +21,8 @@ public class FlightService {
     private FlightRepository flightRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderRepository orderRepository;
     @Autowired
     private ReservationRepository reservationRespository;
 
@@ -69,11 +69,14 @@ public class FlightService {
         if (!requester.getId().equals(bd.getAirlineReservations().get(0).getUserId())) {
             return false;
         }
+        Order nOrder = new Order(new ArrayList<Reservation>(),requester,new Date(),false );
+        orderRepository.save(nOrder);
 
         for (ReservationData resData : reservations) {
 
             Seat targetSeat = seatRepository.findById(resData.getSeatId()).get();
             User targetUser;
+
 
             if (resData.getUserId() == null) {
                 targetUser = null;
@@ -144,8 +147,12 @@ public class FlightService {
             newRes.setSeat(targetSeat);
             targetSeat.setReservation(newRes);
             targetSeat.setTaken(true);
+            nOrder.getReservations().add(newRes);
+            newRes.setOrder(nOrder);
             reservationRespository.save(newRes);
+
         }
+        orderRepository.save(nOrder);
         return true;
     }
 

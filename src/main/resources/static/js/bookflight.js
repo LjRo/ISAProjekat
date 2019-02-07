@@ -343,8 +343,8 @@ function confirmInput() {
     }
 
     for (var j = friendsSelected+1; j < seatsSelected; j++) {
-        var selF = '#user' + (j+1) + 'Passport';
-        var selL = '#user' + (j+1) + 'Passport';
+        var selF = '#user' + (j+1) + 'Name';
+        var selL = '#user' + (j+1) + 'LastName';
         var selP = '#user' + (j+1) + 'Passport';
         var res = {
             userId: null,

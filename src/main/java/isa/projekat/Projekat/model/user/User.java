@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import isa.projekat.Projekat.model.airline.Airline;
+import isa.projekat.Projekat.model.airline.Order;
 import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.hotel.Hotel;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
@@ -79,6 +80,9 @@ public class User implements UserDetails {
     @JsonBackReference(value = "hotel_admins")
     private Hotel administratedHotel;
 
+    @OneToMany
+    @JsonBackReference("placed_orders")
+    private List<Order> orders;
 
     @OneToMany
     @JsonManagedReference(value = "user_reservation")

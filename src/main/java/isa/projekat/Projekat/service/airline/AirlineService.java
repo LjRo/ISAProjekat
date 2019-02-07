@@ -39,12 +39,15 @@ public class AirlineService {
     @Autowired
     private LocationRepository locationRepository;
 
+    @Transactional(readOnly = true)
     public List<Airline> findAll(){
         return airlineRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Airline findById(Long id) { return airlineRepository.findById(id).get(); }
 
+    @Transactional(readOnly = true)
     public Location findLocationById(Long id, Long locId) {
         List<Location> locs = airlineRepository.findById(id).get().getDestinations();
         for (Location loc : locs) {
@@ -54,7 +57,7 @@ public class AirlineService {
         }
         return null;
     }
-
+    @Transactional
     public boolean updateAirlineData(AirlineData ad, String username) {
 
         Airline target = findById(ad.getId());
@@ -85,6 +88,7 @@ public class AirlineService {
 
     }
 
+    @Transactional
     public boolean addAirline(Airline ad) {
         if(ad.getAddress() == null || ad.getDescription().equals("") || ad.getName().equals("")){
             return false;
@@ -99,6 +103,7 @@ public class AirlineService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public List<Location> findAirlineDestinations(Long id) {
         List<Location> locations = airlineRepository.findById(id).get().getDestinations();
         ArrayList<Location> res = new ArrayList<>();
@@ -172,6 +177,7 @@ public class AirlineService {
         return false;
     }
 
+    @Transactional(readOnly = true)
     public List<Flight> findAllActiveFlights(Long id) {
         List<Flight> allFlights = airlineRepository.findById(id).get().getFlights();
         ArrayList<Flight> result = new ArrayList<>();
@@ -184,6 +190,7 @@ public class AirlineService {
         return result;
     }
 
+    @Transactional(readOnly = true)
     public List<QuickTicketData> findAllActiveFlightsWithQuickReservation(Long id) {
         List<Flight> allFlights = airlineRepository.findById(id).get().getFlights();
         ArrayList<QuickTicketData> result = new ArrayList<>();
@@ -213,6 +220,7 @@ public class AirlineService {
         return result;
     }
 
+    @Transactional
     public Boolean deleteLocation(Long locationId, String email) {
 
         User aAdmin = userRepository.findByUsername(email);
@@ -237,6 +245,7 @@ public class AirlineService {
         }
     }
 
+    @Transactional
     public Boolean addLocation (Location loc, Long id, String email) {
         User aAdmin = userRepository.findByUsername(email);
         Airline target = aAdmin.getAdministratedAirline();
@@ -261,6 +270,7 @@ public class AirlineService {
         return false;
     }
 
+    @Transactional(readOnly = true)
     public AirlineEditData getEditData(Long id) {
         AirlineEditData res = new AirlineEditData();
         if(!airlineRepository.findById(id).isPresent()) {
@@ -285,7 +295,7 @@ public class AirlineService {
         return res;
     }
 
-
+    @Transactional
     public boolean editAirline(AirlineEditData data, Long id) {
         if(!airlineRepository.findById(id).isPresent()) {
             return false;
@@ -314,6 +324,7 @@ public class AirlineService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public Long findLastSeat(Long id) {
         Airline target = airlineRepository.findById(id).get();
         int val = target.getFlights().size() - 1;
@@ -324,6 +335,7 @@ public class AirlineService {
 
     }
 
+    @Transactional(readOnly = true)
     public Map<LocalDate, Integer> countYearlySales(Long airlineId) {
         HashMap<LocalDate,Integer> result = new HashMap<>();
 
@@ -336,6 +348,7 @@ public class AirlineService {
         return countDateRange(result,firstDay,lastDay,flights);
     }
 
+    @Transactional(readOnly = true)
     public Map<LocalDate, Integer> countMonthlySales(Long airlineId) {
         HashMap<LocalDate,Integer> result = new HashMap<>();
 
@@ -349,6 +362,7 @@ public class AirlineService {
 
     }
 
+    @Transactional(readOnly = true)
     public Map<LocalDate, Integer> countWeeklySales(Long airlineId) {
         HashMap<LocalDate,Integer> result = new HashMap<>();
         List<Flight> flights = flightRepository.getAllFlightsThisWeek(airlineId);
@@ -361,6 +375,7 @@ public class AirlineService {
         return countDateRange(result,firstDay,lastDay,flights);
     }
 
+    @Transactional(readOnly = true)
     public Map<LocalDate, BigDecimal> calculateIntervalProfit(Long airlineId, LocalDate firstDay, LocalDate lastDay) {
         HashMap<LocalDate,BigDecimal> result = new HashMap<>();
         List<Object[]> data = flightRepository.getProfitFromRange(airlineId,firstDay,lastDay);
@@ -388,7 +403,7 @@ public class AirlineService {
         result.put(lastDay,0);
 
         for(Flight fl : flights) {
-            LocalDate sDate = convertToLocalDateViaMilisecond(fl.getStartTime());
+            LocalDate sDate = convertToLocalDateViaMillisecond(fl.getStartTime());
             for(Seat st : fl.getSeats()) {
                 if(st.isTaken()) {
                     result.put(sDate, result.get(sDate) + 1);
@@ -399,20 +414,20 @@ public class AirlineService {
         return result;
     }
 
-    private LocalDate convertToLocalDateViaMilisecond(Date dateToConvert) {
+    private LocalDate convertToLocalDateViaMillisecond(Date dateToConvert) {
         return Instant.ofEpochMilli(dateToConvert.getTime())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
 
-    public static List<LocalDate> datesOfWeekDate(LocalDate date) {
+    private static List<LocalDate> datesOfWeekDate(LocalDate date) {
         LocalDate monday = date
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
         return IntStream.range(0, 7).mapToObj(monday::plusDays).collect(Collectors.toList());
     }
 
-    public static BigDecimal getBigDecimal( Object value ) {
+    private static BigDecimal getBigDecimal( Object value ) {
         BigDecimal ret = null;
         if( value != null ) {
             if( value instanceof BigDecimal ) {
