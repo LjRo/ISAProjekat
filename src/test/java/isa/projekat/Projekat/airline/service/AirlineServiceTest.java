@@ -71,9 +71,6 @@ public class AirlineServiceTest {
         List<Airline> airlines = airlineService.findAll();
         assertThat(airlines).hasSize(1);
 
-        verify(airlineRepositoryMock, times(1)).findAll();
-        verifyNoMoreInteractions(airlineRepositoryMock);
-
     }
 
     @Test
@@ -83,9 +80,6 @@ public class AirlineServiceTest {
         Airline dbAirline = airlineService.findById(new Long(1));
         assertEquals(airlineRepositoryMock.findById(DB_ID).get(), dbAirline);
 
-
-        verify(airlineRepositoryMock, times(2)).findById(DB_ID);
-        verifyNoMoreInteractions(airlineRepositoryMock);
     }
 
     @Test
