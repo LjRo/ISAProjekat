@@ -8,13 +8,14 @@ $(document).ready(function () {
         e.preventDefault();
         addNew('#airlineTabForm',"api/airline/add");
     });
-     $('#nav-rentcar form').on('submit', function (e) {
-            e.preventDefault();
-            addNew('#rentTabForm',"api/rentacar/add");
-     });
+    $('#nav-rentcar form').on('submit', function (e) {
+        e.preventDefault();
+        addNew('#rentTabForm',"api/rentacar/add");
+    });
 
     $.get({
         url : '/api/airline/findAll',
+        dataType: "json",
         success : function(data) {
             if (data != null) {
                 addArticle(data,'#listAirlines');
@@ -24,6 +25,7 @@ $(document).ready(function () {
 
     $.get({
         url: '/api/hotel/findAll',
+        dataType: "json",
         success: function (data) {
             if (data != null) {
                 addArticle(data,'#listHotels');
@@ -33,6 +35,7 @@ $(document).ready(function () {
 
     $.get({
         url : '/api/rentacar/findAll',
+        dataType: "json",
         success : function(data) {
             if (data != null) {
                 addArticle(data,'#listRents');
@@ -40,6 +43,14 @@ $(document).ready(function () {
         }
     });
 
+    $.get({
+        url : '/api/pricesDiscount?name=Coupon',
+        success : function(data) {
+            if (data != null) {
+               $('input[name="prices"]').val(data*100)
+            }
+        }
+    });
 
     $('#first_toggle').click(function () {
         $('select[name="selectAirline"]').hide();
@@ -63,7 +74,8 @@ $(document).ready(function () {
         $('select[name="selectRents"]').fadeIn();
     });
 
-    $('#confirmRegistration').click(function () {
+    $('#registerForm').on('submit',function (e) {
+        e.preventDefault();
         var admin = $('#first_toggle').prop('checked');
         var airlineAdmin = $('#second_toggle').prop('checked');
         var hotelAdmin = $('#third_toggle').prop('checked');
@@ -80,7 +92,32 @@ $(document).ready(function () {
         }
 
     });
-    
+
+    $('#pricesTab').on('submit',function (e) {
+       e.preventDefault();
+       var discount = $('input[name="prices"]').val();
+       if(discount == null || discount == undefined)
+           return;
+       discount = discount/100;
+       discount.toFixed(2);
+        $.post({
+            url: 'api/pricesDiscount/update',
+            data: JSON.stringify({
+                priceName: 'Coupon',
+                discount:discount
+                }),
+            dataType: "json",
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            contentType: 'application/json',
+            success: function () {
+                $('#pricesTab div[name="success"]').text('Success').fadeIn(500).delay(1500).fadeOut(500);
+            },
+            error: function (message) {
+                $('#pricesTab div[name="error"]').text('Error occured').fadeIn().delay(3000).fadeOut();
+            },
+        });
+    });
+
 });
 
 function checkIfSelected(what,type){
@@ -155,16 +192,19 @@ function register(typeIn,companyId) {
     var type= typeIn;
     var password = $('input[name="password"]').val();
     var email = $('input[name="email"]').val();
-    var firstName = $('input[name="name"]').val();
+    var firstName = $('input[name="firstName"]').val();
     var lastName = $('input[name="surname"]').val();
     var address = $('input[name="address"]').val();
-    var city = $('input[name="city"]').val();
+    var city = $('input[name="City"]').val();
     var phoneNumber = $('input[name="phoneNumber"]').val();
+
+    if(companyId==undefined)
+        companyId = -1;
 
     if (checkPassword(true)) {
 
         $.post({
-            url: 'registerAdmin',
+            url: '/auth/registerAdmin?idCompany=' + companyId,
             data: JSON.stringify({
                 type:type,
                 email: email,
@@ -179,23 +219,15 @@ function register(typeIn,companyId) {
             headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
             contentType: 'application/json',
             success: function (UserId) {
-                $('#success').html('Successfully added').fadeIn(500).delay(1500).fadeOut(500);
-
-               /* $.post({
-                    url:"api/hotel/" + companyId  + "/" + UserId +"/" ,
-                    contentType: 'application/json',
-                    success: function (message) {
-
-                    },
-                    error: function (message) {
-                        $('#error').html('Error happend while adding in comapany id:' + message.result).fadeIn(500).delay(1500).fadeOut(500);
-                    }
-                });
-                */
-
+                if(UserId==-2)
+                    $('#error').html('User already in database').fadeIn().delay(1500).fadeOut(500);
+                else if(UserId == -1)
+                    $('#error').html('Error in database').fadeIn().delay(1500).fadeOut(500);
+                else
+                    $('#success').html('Successfully added').fadeIn(500).delay(1500).fadeOut(500);
             },
             error: function (message) {
-                $('#error').html('Error happend:' + message.result).fadeIn(500).delay(1500).fadeOut(500);
+                $('#error').html('Error happend:' + message.result).fadeIn().delay(1500).fadeOut(500);
             },
 
         });

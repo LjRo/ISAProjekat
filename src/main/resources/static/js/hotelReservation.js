@@ -17,7 +17,7 @@ $(document).ready(function () {
 
 
     $.get({
-        url: '/api/flight/reservations',
+        url: '/api/flight/allFutureOrders',
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (data) {
             if (data != null) {
@@ -28,11 +28,11 @@ $(document).ready(function () {
                     });
                     $('#confirmReservation').on('click', function(event) {
                         event.preventDefault();
-                        var airlineReservationId =  $('select[name="selectAirlineReservations"]').val();
+                        var orderId =  $('select[name="selectAirlineReservations"]').val();
 
-                        if(airlineReservationId =="" || airlineReservationId == undefined)
+                        if(orderId =="" || orderId == undefined)
                         {
-                            $('#error').html("Please select flight reservation to be able to confirm").fadeIn().delay(3000).fadeOut();
+                            $('#error').html("Please select order for flight reservation to be able to confirm").fadeIn().delay(3000).fadeOut();
                         }
                         else
                         {
@@ -56,7 +56,7 @@ $(document).ready(function () {
                                 data: JSON.stringify({
                                     hotelId: pId,
                                     roomId : id,
-                                    reservationId: airlineReservationId,
+                                    reservationId: orderId,
                                     services :services ,
                                     arrivalDate: arrival,
                                     departureDate: departure,
@@ -131,7 +131,8 @@ $(document).ready(function () {
 });
 
 function fillAirlineReservations(data) {
-    $("#listReservations").append('<option value= "' + data.id + '"> For ' + data.flight.finish.city + ' at ' + data.flight.startTime.substring(0,10) + '</option>');
+
+    $("#listReservations").append('<option value= "' + data.id + '"> Order ' + data.id + '</option>');
 }
 
 function addService(entry) {

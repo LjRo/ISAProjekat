@@ -8,5 +8,5 @@ import org.springframework.stereotype.Component;
 public interface HotelReservationRepository extends JpaRepository<ReservationHotel, Long> {
 
 
-    public ReservationHotel findByAirlineReservation_Id(Long id);
+    public ReservationHotel findByUserOrder(Long id);
 }

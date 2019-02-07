@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.model.hotel;
 
-import isa.projekat.Projekat.model.airline.Reservation;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import isa.projekat.Projekat.model.airline.Order;
 import isa.projekat.Projekat.model.user.User;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -48,7 +49,8 @@ public class ReservationHotel implements Serializable {
     private Hotel hotel;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Reservation airlineReservation;
+    @JsonBackReference(value = "rooms")
+    private Order userOrder;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Room room;
@@ -137,12 +139,12 @@ public class ReservationHotel implements Serializable {
         this.hotel = hotel;
     }
 
-    public Reservation getAirlineReservation() {
-        return airlineReservation;
+    public Order getUserOrder() {
+        return userOrder;
     }
 
-    public void setAirlineReservation(Reservation airlineReservation) {
-        this.airlineReservation = airlineReservation;
+    public void setUserOrder(Order userOrder) {
+        this.userOrder = userOrder;
     }
 
     public Room getRoom() {
