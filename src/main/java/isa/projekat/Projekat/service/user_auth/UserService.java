@@ -10,8 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +19,6 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@PersistenceContext
-	private EntityManager entityManager;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -71,7 +66,7 @@ public class UserService {
 			}
 		}
 
-		entityManager.persist(target);
+		userRepository.save(target);
 		return true;
 	}
 

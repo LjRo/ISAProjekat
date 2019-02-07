@@ -59,14 +59,6 @@ public class AirlineController {
         return airlineService.findAllActiveFlightsWithQuickReservation(id);
     }
 
-    @RequestMapping(value = "api/airline/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
-    @AdminEnabledCheck
-    public ResponseEntity updateInfo(@RequestBody AirlineData ad, HttpServletRequest req){
-        String authToken = jwtTokenUtils.getToken(req);
-        String email = jwtTokenUtils.getUsernameFromToken(authToken);
-        return ResponseFormatter.format(airlineService.updateAirlineData(ad, email),true);
-    }
 
     @RequestMapping(value = "api/airline/add", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -153,7 +145,7 @@ public class AirlineController {
     @RequestMapping(value = "api/airline/{id}/addLocation", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
     @AdminEnabledCheck
-    public ResponseEntity addLocation(@RequestBody Location loc , @PathVariable Long id, HttpServletRequest req){
+    public ResponseEntity addLocation(@RequestBody LocationData loc , @PathVariable Long id, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
         return ResponseFormatter.format(airlineService.addLocation(loc,id,email),true);
