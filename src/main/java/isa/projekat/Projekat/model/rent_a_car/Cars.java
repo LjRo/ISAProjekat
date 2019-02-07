@@ -14,7 +14,7 @@ public class Cars implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -30,7 +30,7 @@ public class Cars implements Serializable {
     @Column(name = "model", nullable =  false)
     private String model;
 
-    @Column(name = "registrationNumber", unique = true, nullable = false)
+    @Column(name = "registrationNumber", nullable = false)
     private String registrationNumber;
 
     @Column(name = "numberOfBags", nullable = false)

@@ -101,11 +101,26 @@ public class FlightController {
     }
 
     @RequestMapping(value= "api/flight/allOrders", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
     public List<Order> findAllUserOrders(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
         User user = userService.findByUsername(email);
         return flightService.findAllOrders(user.getId());
+    }
+
+    @RequestMapping(value= "api/flight/{id}/order", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public Order findAllUserOrders(HttpServletRequest req, @PathVariable Long id){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        Order or =  flightService.findOrderById(id);
+        if (or.getPlacedOrder().getId().equals(user.getId())){
+            return or;
+        }else {
+            return null;
+        }
     }
 
     @RequestMapping(value= "api/flight/allFutureOrders", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -119,6 +134,7 @@ public class FlightController {
 
 
     @RequestMapping(value= "api/flight/allNonFinishedOrders", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
     public List<Order> findAllUserNotFinishedOrders(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);

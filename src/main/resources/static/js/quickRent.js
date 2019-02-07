@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     $.get({
-        url: '/api/flight/reservationRent',
+        url: 'api/flight/allOrders',
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (data) {
             if (data != null) {
@@ -99,7 +99,7 @@ function addRoom(rentReservation) {
 
         if(airlineReservationId =="" || airlineReservationId == undefined)
         {
-            $('#error').html("Please select flight reservation to be able to confirm").fadeIn().delay(3000).fadeOut();
+            $('#error').html("Please select order reservation to be able to confirm").fadeIn().delay(3000).fadeOut();
         }
         else {
 
