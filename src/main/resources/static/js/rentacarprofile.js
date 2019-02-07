@@ -1,12 +1,12 @@
 var longitude,latitude,description,name,address, mapName;
 
 $(document).ready(function () {
-    $("#carsList").load("/carList.html");
+
 
     var pId = getUrlParameter('id');
 
-    $('#addCarButton').append('<button style="flex:0.2" type="button" class="btn btn-primary rentacar-admin"><span class="fa fa-gear"></span> add Car</button>');
-    $('#addOfficeButton').append('<button style="flex:0.2" type="button" class="btn btn-primary rentacar-admin"><span class="fa fa-gear"></span> add Office</button>');
+    $('#addCarButton').append('<button style="flex:0.2" type="button" class="btn btn-primary admin-rentacar"><span class="fa fa-gear"></span> add Car</button>');
+    $('#addOfficeButton').append('<button style="flex:0.2" type="button" class="btn btn-primary admin-rentacar"><span class="fa fa-gear"></span> add Office</button>');
 
 
 
@@ -16,6 +16,11 @@ $(document).ready(function () {
 
     $('#editRentACar').click(function () {
        window.location.href =  window.location.href.match(/^.*\//)+ "editRentACar.html?id=" + pId;
+    });
+
+
+    $('#quickReservations').click(function () {
+        window.location.href =  window.location.href.match(/^.*\//)+ "quickRent.html?id=" + pId;
     });
 
     $('#addCarButton>button').click(function () {
@@ -338,19 +343,10 @@ function addLocation(location) {
     var d13 = $('<div class="col-md-3"></div>');
 
 
+    var d23 = $(' <button type="button" id="editButtonLocation'+ location.id +'" class="btn btn-primary admin-rentacar btn-outline-secondary rounded-0 mb-1">Edit</button>');
+    d13.append(d23);
 
 
-    $.get({
-        url: '/api/user/rentAdmin',
-        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-        success: function (data) {
-            var d23 = $(' <button type="button" id="editButtonLocation'+ location.id +'" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1">Edit</button>');
-            d13.append(d23);
-        },
-        error : function (e) {
-
-        }
-    });
 
 
 
@@ -383,7 +379,7 @@ function addLocation(location) {
 
 
 }
-var resId = localStorage.getItem('reservation');
+
 
 function addCar(car) {
     var div = $('#addListings');
@@ -407,7 +403,18 @@ function addCar(car) {
     var d11 = $(' <div style="width: 33%;float:right;" style="width: auto">Bags: <strong><div id="numberBags">' +  car.numberOfBags + '</div></strong></div>');
 
     var d13 = $('<div class="col-md-3"></div>');
-    var d14 = $(' <h5>$'+ car.dailyPrice +'</h5>');
+    var d14;
+    var q1;
+
+    if (getUrlParameter("carTypeId") != undefined){
+        d14 = $(' <h5>$'+ car.dailyPrice * daysBetween(getUrlParameter('start'),getUrlParameter('end')) *0.95 +'</h5>');
+        q1 = $(' <h5 style="text-decoration: line-through">$'+ car.dailyPrice * daysBetween(getUrlParameter('start'),getUrlParameter('end')) +'</h5>');
+    }else {
+        d14 =  $(' <h5>$'+ car.dailyPrice * 0.95  +'</h5>');
+        q1 =  $(' <h5 style="text-decoration: line-through">$'+ car.dailyPrice  +'</h5>');
+    }
+
+
     var d15 = $('<i id="star1" class="fa fa-star"></i>');
     var d16 = $('<i id="star2" class="fa fa-star"></i>');
     var d17 = $('<i id="star3" class="fa fa-star"></i>');
@@ -420,7 +427,7 @@ function addCar(car) {
 
 
     var d23 = $(' <button type="button" id="editButtonCar'+ car.id +'" class="btn btn-primary admin-rent btn-outline-secondary rounded-0 mb-1 admin-rentacar">Edit</button>');
-    var d24 = $(' <button type="button" id="buyButtonCar' + car.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">BUY</button>');
+    var d24 = $(' <button type="button" id="buyButtonCar' + car.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Reserve</button>');
    // var d25 = $(' </div>'); same as d6 x4
 
     //Picture
@@ -437,6 +444,7 @@ function addCar(car) {
 
     //Price, stars, more info, buttons
     d13.append(d14);
+    d13.append(q1);
     d13.append(d15);
     d13.append(d16);
     d13.append(d17);
@@ -461,45 +469,14 @@ function addCar(car) {
         window.location.href = window.location.href.match(/^.*\//)+ "addCar.html?idrent=" + pId + "&edit=true&id=" + car.id;
     });
 
-    if (resId != null && getUrlParameter("carTypeId") != undefined){
+    if (getUrlParameter("carTypeId") != undefined){
         d13.append(d24);
 
         $('#'+ "buyButtonCar" + car.id).click(function () {
 
-            /* @RequestMapping(value = "api/cars/{idrent}/{idAir}/reserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> reserveCar(@PathVariable Long idrent, @PathVariable Long idAir, @RequestParam Long id, HttpServletRequest httpServletRequest,@RequestBody RentReservation rentReservation){
-   */
-            $.post({
-                url:  "api/cars/" + pId + "/" + resId + "/reserve",
-                data: JSON.stringify(
-                    {
-                        rentReservation: {
-                            airlineReservation : {
-                                id : resId
-                            },
-                            user: null,
-                            startDate : getUrlParameter('start'),
-                            endDate : getUrlParameter('end'),
-                            startLocation: {
-                                id: getUrlParameter('locStart')
-                            },
-                            endLocation: {
-                                id: getUrlParameter('locEnd')
-                            },
-                            numberOfPeople:  getUrlParameter('passengers'),
-                            rentedCar : car,
-                            fastReservation: false
-                        }
-                    }),
-                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                contentType: 'application/json',
-                success: function (data) {
-                },
-                error : function (e) {
-                    $(".admin-rentacar").remove();
-                }
-            });
-            //window.location.href = window.location.href.match(/^.*\//)+ "addCar.html?idrent=" + pId + "&edit=true&id=" + car.id;
+            localStorage.setItem('car',JSON.stringify(car));
+            window.location.href = window.location.href.match(/^.*\//)+ "rentReservation.html?idrent=" + pId + "&start=" + getUrlParameter('start')+'&end=' + getUrlParameter('end')+
+            '&rented=' + car.id + '&locStart=' + getUrlParameter('locStart') + "&locEnd=" +getUrlParameter('locEnd') + "&passengers=" + getUrlParameter('passengers');
         });
     }
 
@@ -537,6 +514,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
 };
 
+
 function setFilter(){
     var carTypeId =  getUrlParameter('carTypeId')
     var start = getUrlParameter('start');
@@ -567,4 +545,16 @@ function fillTypes(data) {
 
 function fillLocation(data,selector) {
     $(selector).append('<option value= "' + data.id + '">' + data.addressName + '</option>');
+}
+
+
+function treatAsUTC(date) {
+    var result = new Date(date);
+    result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+    return result;
+}
+
+function daysBetween(startDate, endDate) {
+    var millisecondsPerDay = 24 * 60 * 60 * 1000;
+    return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
 }

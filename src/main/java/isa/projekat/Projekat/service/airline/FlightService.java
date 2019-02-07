@@ -53,10 +53,21 @@ public class FlightService {
         return reservations;
     }
 
+    public List<Reservation> findRentReservations(Long userId){
+        String date = java.time.LocalDate.now().toString();
+        List<Reservation> reservations = reservationRespository.returnFutureRentReservationByUser(userId,date);
+        return reservations;
+    }
+
 
 
     public List<Reservation> findReservationsByUserId(Long userId){
         List<Reservation> reservations = reservationRespository.getAllByUser(userId);
+        return reservations;
+    }
+
+    public List<Reservation> findAllReservationsByUserId(Long userId){
+        List<Reservation> reservations = reservationRespository.findAllByUserId(userId);
         return reservations;
     }
 

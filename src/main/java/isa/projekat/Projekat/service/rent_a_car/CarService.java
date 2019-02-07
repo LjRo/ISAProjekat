@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class CarService {
@@ -35,6 +37,8 @@ public class CarService {
 
     @Autowired
     private RentReservationRepository rentReservationRepository;
+
+
 
     public Page<Cars> findAll(PageRequest pageRequest){
         return carRepository.findAll(pageRequest);
@@ -92,13 +96,7 @@ public class CarService {
         Cars toRemove = optionalCars.get();
 
         optionalRentACar.get().getCars().remove(toRemove);
-
-     //   toRemove.setRentACar(null);
-     //   toRemove.setType(null);
-
         carRepository.delete(toRemove);
-
-
         return true;
     }
 
@@ -112,6 +110,7 @@ public class CarService {
             return false;
 
         RentReservation newReservation = new RentReservation();
+        Cars rentedCar = optionalCars.get();
 
         Reservation reservation = reservationRepository.getOne(idAirlineReservation);
 
@@ -119,11 +118,16 @@ public class CarService {
         if (!reservation.getUser().equals(user))
             return false;
 
-        //List<RentReservation> list = rentReservationRepository.findAllByRentedCarId(rentReservation.getRentedCar().getId());
+        // max 1 per airline reservation, can be removed later on ...
+        List<RentReservation> list = rentReservationRepository.findAllByUserId(user.getId());
+        for (RentReservation r: list) {
+            if (r.getAirlineReservation() != null){
+                if (r.getAirlineReservation().getId() == idAirlineReservation){
+                    return false;
+                }
+            }
 
-       /* if (!canBeReserved(rentReservation.getRentedCar().getId(),rentReservation.getStartDate(), rentReservation.getEndDate())){
-            return  false;
-        }*/
+        }
 
 
 
@@ -135,6 +139,11 @@ public class CarService {
         newReservation.setNumberOfPeople(rentReservation.getNumberOfPeople());
         newReservation.setUser(user);
         newReservation.setRentedCar(newReservation.getRentedCar());
+        newReservation.setFastReservation(false);
+        newReservation.setRentedCar(rentedCar);
+
+        // Price without % discount
+        newReservation.setPrice(BigDecimal.valueOf(getDifferenceDays(rentReservation.getStartDate(),rentReservation.getEndDate())).multiply(rentedCar.getDailyPrice()));
 
         rentReservationRepository.save(newReservation);
 
@@ -142,9 +151,31 @@ public class CarService {
     }
 
 
-    public List<RentReservation> listQuickReservations(Long idrent){
+    private static long getDifferenceDays(Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
 
-        return rentReservationRepository.findAllByRentedCarIdAndFastReservationIsTrue(idrent);
+
+    public boolean quickReserve(Long idReservationAirline, Long idReservation, User user){
+
+       Reservation res = reservationRepository.getOne(idReservationAirline);
+       RentReservation rentReservation = rentReservationRepository.getOne(idReservation);
+
+       if (res == null || rentReservation == null||!res.getUser().equals(user))
+           return  false;
+
+       rentReservation.setAirlineReservation(res);
+       rentReservation.setUser(user);
+
+
+        return true;
+    }
+
+
+    public List<RentReservation> listQuickReservations(Long idrent){
+        String date = java.time.LocalDate.now().toString();
+        return rentReservationRepository.listQuick(idrent, date);
     }
 
 

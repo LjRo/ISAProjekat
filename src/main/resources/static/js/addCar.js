@@ -42,40 +42,47 @@ $(function () {
     }
     if (changing !== undefined && changing === "true") {
         $('#deleteButton').show();
+        $.get({
+            url: 'api/cars/'+ getUrlParameter('idrent')+'/check?id='+ getUrlParameter('id'),
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            success: function(data) {
+                if (data === true){ // EDITABLE
+                    $('#deleteButton').removeAttr("disabled");
+                    $('#error').hide();
+                    $('#submitButton').removeAttr("disabled");
 
-        if (!isPossibleToEdit(id)){
-            $('#deleteButton').attr("disabled", "disabled");
-            $('#error').show();
-            $('#submitButton').attr('disabled',"disabled");
-        } else {
+                    $('#deleteButton').click(function (e) {
+                        e.preventDefault();
 
+                        var idrent = getUrlParameter('idrent');
+                        $.post({
+                            url: "api/cars/" + idrent + "/remove?id=" + id,
+                            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                            contentType: 'application/json',
+                            success: function () {
+                                $('#success-message').fadeIn(500).delay(1500).fadeOut(500);
 
-            $('#deleteButton').click(function (e) {
-                e.preventDefault();
+                                //  window.location.replace("http://localhost:8080/index.html");
 
-                var idrent = getUrlParameter('idrent');
-                $.post({
-                    url: "api/cars/" + idrent + "/remove?id=" + id,
-                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                    contentType: 'application/json',
-                    success: function () {
-                        $('#success-message').fadeIn(500).delay(1500).fadeOut(500);
+                                setTimeout(function () {
 
-                        //  window.location.replace("http://localhost:8080/index.html");
+                                    window.open("rentacarprofile.html?id=" + idrent + "&page=0&pageLocation=0", "_self");
+                                }, 2000);
+                            },
+                            error: function (message) {
+                                console.log("Error");
+                                $('#error').css("visibility", "visible");
+                            },
 
-                        setTimeout(function () {
-
-                            window.open("rentacarprofile.html?id=" + idrent + "&page=0&pageLocation=0", "_self");
-                        }, 2000);
-                    },
-                    error: function (message) {
-                        console.log("Error");
-                        $('#error').css("visibility", "visible");
-                    },
-
-                });
-            });
-        }
+                        });
+                    });
+                }else {
+                    $('#deleteButton').attr("disabled", "disabled");
+                    $('#error').show();
+                    $('#submitButton').attr('disabled',"disabled");
+                }
+            }
+        });
     }
     });
 
@@ -83,9 +90,6 @@ $(function () {
     $('#addForm').on('submit', function(e) {
         e.preventDefault();
 
-        if (!isPossibleToEdit(getUrlParameter('id'))){
-            return;
-        }
         // $("input[name='id']").val();
 
         var mark  =   $("input[name='carMark']").val();
@@ -211,13 +215,7 @@ function fillData(data) {
 var isPossibleToEdit = function possible(param){
 
 
-    $.get({
-        url: 'api/cars/'+ getUrlParameter('idrent')+'/check?id='+ param,
-        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-        success: function(data) {
-            return data;
-        }
-    });
+
 
 
 }
