@@ -66,6 +66,11 @@ public class FlightService {
         return reservations;
     }
 
+    public List<Reservation> findAllReservationsByUserId(Long userId){
+        List<Reservation> reservations = reservationRespository.findAllByUserId(userId);
+        return reservations;
+    }
+
 
     public Boolean bookFlight(BookingData bd, String email) {
         List<ReservationData> reservations = bd.getAirlineReservations();

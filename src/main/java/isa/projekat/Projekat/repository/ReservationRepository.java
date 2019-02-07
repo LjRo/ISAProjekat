@@ -25,4 +25,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> returnFutureRentReservationByUser(Long userId, String todayDate);
 
 
+
+    List<Reservation> findAllByUserId(Long userId);
+
+
+
 }

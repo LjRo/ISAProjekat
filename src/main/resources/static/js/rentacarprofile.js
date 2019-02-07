@@ -1,7 +1,7 @@
 var longitude,latitude,description,name,address, mapName;
 
 $(document).ready(function () {
-    $("#carsList").load("/carList.html");
+
 
     var pId = getUrlParameter('id');
 
@@ -343,19 +343,10 @@ function addLocation(location) {
     var d13 = $('<div class="col-md-3"></div>');
 
 
+    var d23 = $(' <button type="button" id="editButtonLocation'+ location.id +'" class="btn btn-primary admin-rentacar btn-outline-secondary rounded-0 mb-1">Edit</button>');
+    d13.append(d23);
 
 
-    $.get({
-        url: '/api/user/rentAdmin',
-        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-        success: function (data) {
-            var d23 = $(' <button type="button" id="editButtonLocation'+ location.id +'" class="btn btn-primary admin-rentacar btn-outline-secondary rounded-0 mb-1">Edit</button>');
-            d13.append(d23);
-        },
-        error : function (e) {
-
-        }
-    });
 
 
 
