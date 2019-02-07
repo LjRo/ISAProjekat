@@ -58,7 +58,7 @@ public class FlightService {
 
     @Transactional(readOnly = true)
     public List<Order> findAllOrders(Long id){
-        return orderRepository.findAllByPlacedOrderIdAndFinishedIsFalse(id);
+        return orderRepository.findAllByPlacedOrderId(id);
     }
 
     @Transactional(readOnly = true)
@@ -75,6 +75,11 @@ public class FlightService {
         return reservations;
     }
 
+    @Transactional(readOnly = true)
+    public List<Order> findAllFutureOrders(Long userId){
+        String date = java.time.LocalDate.now().toString();
+        return  orderRepository.findAllFutureOrdersByUserIdAndDate(userId,date);
+    }
 
 
     @Transactional(readOnly = true)
@@ -88,6 +93,8 @@ public class FlightService {
         List<Reservation> reservations = reservationRepository.findAllByUserId(userId);
         return reservations;
     }
+
+
 
     @Transactional
     public Boolean finishOrder(Long id,String email) {

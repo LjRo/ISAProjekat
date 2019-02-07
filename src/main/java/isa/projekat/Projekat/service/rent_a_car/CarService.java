@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -43,15 +44,18 @@ public class CarService {
     @Autowired
     private OrderRepository orderRepository;
 
-
+    @Transactional(readOnly = true)
     public Page<Cars> findAll(PageRequest pageRequest){
         return carRepository.findAll(pageRequest);
     }
 
+    @Transactional(readOnly = true)
     public Page<Cars> findByRentACarId( Long id,PageRequest pageRequest) { return carRepository.findByRentACarId(id,pageRequest);}
 
+    @Transactional(readOnly = true)
     public Cars findByCarId( long id){ return carRepository.findById(id).get(); }
 
+    @Transactional
     public boolean addCars(Cars cars, User user, Long id){
 
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(id);
@@ -72,6 +76,7 @@ public class CarService {
         return  true;
     }
 
+    @Transactional
     public boolean editCar(Cars cars, User user){
 
         Optional<Cars> optionalCars = carRepository.findById(cars.getId());
@@ -88,7 +93,7 @@ public class CarService {
         return  true;
     }
 
-
+    @Transactional
     public boolean removeCar(Long id, Long idrent, User user){
 
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(idrent);
@@ -104,7 +109,7 @@ public class CarService {
         return true;
     }
 
-
+    @Transactional
     public boolean reserveCar(Long id, Long idrent, User user, RentReservation rentReservation, Long idOrder){
 
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(idrent);
@@ -176,6 +181,7 @@ public class CarService {
     }
 
 
+    @Transactional
     public boolean quickReserve(Long idOrder, Long idReservation, User user){
 
        //Reservation res = reservationRepository.getOne(idReservationAirline);
@@ -199,18 +205,18 @@ public class CarService {
         return true;
     }
 
-
+    @Transactional(readOnly = true)
     public List<RentReservation> listQuickReservations(Long idrent){
         String date = java.time.LocalDate.now().toString();
         return rentReservationRepository.listQuick(idrent, date);
     }
 
-
+    @Transactional(readOnly = true)
     public Page<Cars> listAvailableWithDateOnly(Long idrent, PageRequest pageRequest, Long carType, String start, String end, Integer passengers){
         return listAvailableWithDate(idrent,pageRequest, carType, BigDecimal.valueOf(0),BigDecimal.valueOf(200000), start, end, passengers);
     }
 
-
+    @Transactional(readOnly = true)
     public Boolean checkEdibility(Long idrent, Long id){
 
         SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
@@ -231,11 +237,11 @@ public class CarService {
     }
 
 
-
+    @Transactional(readOnly = true)
     public  Page<Cars> listAvailableWithDate(Long idrent, PageRequest pageRequest, Long carType, BigDecimal min, BigDecimal max, String start, String end, Integer passengers){
         return carRepository.filterCars(carType,passengers,start,end,idrent,min,max,pageRequest);
         }
-
+    @Transactional(readOnly = true)
     public List<Cars> listAvailableWithDateWithoutPage(Long idrent, Long carType, BigDecimal min, BigDecimal max, String start, String end, Integer passengers){
         return carRepository.filterCarsList(carType,passengers,start,end,idrent,min,max);
     }

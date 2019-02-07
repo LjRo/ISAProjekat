@@ -38,19 +38,19 @@ public class CarController {
     @Autowired
     private UserService userService;
 
-    @Transactional(readOnly = true)
+
     @RequestMapping(value = "api/cars/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Cars> findAll(@RequestParam String page) {
         return carService.findAll(pageRequestProvider.provideRequest(page));
     }
 
-    @Transactional(readOnly = true)
+
     @RequestMapping(value = "api/cars/findByIdAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Cars> findById(@RequestParam long id,@RequestParam String page) {
         return carService.findByRentACarId(id,pageRequestProvider.provideRequest(page));
     }
 
-    @Transactional(readOnly = true)
+
     @RequestMapping(value = "api/cars/{id}",method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Cars findCarById(@PathVariable Long id){
 
@@ -58,7 +58,7 @@ public class CarController {
     }
 
 
-    @Transactional
+
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
     @RequestMapping(value = "api/cars/edit", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -68,7 +68,7 @@ public class CarController {
     }
 
 
-    @Transactional
+
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
     @RequestMapping(value = "api/cars/{id}/add", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -77,7 +77,7 @@ public class CarController {
         return responseTransaction(carService.addCars(cars,user,id));
     }
 
-    @Transactional
+
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
     @RequestMapping(value = "api/cars/{idrent}/remove", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -88,7 +88,7 @@ public class CarController {
 
 
 
-    @Transactional
+
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "api/cars/{idrent}/{idAir}/reserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> reserveCar(@PathVariable Long idrent, @PathVariable Long idAir, @RequestBody RentReservation rentReservation, HttpServletRequest httpServletRequest){
@@ -97,7 +97,7 @@ public class CarController {
     }
 
 
-    @Transactional
+
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "api/cars/{idReservation}/{idOrder}/quickReserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> quickReserve(@PathVariable Long idReservation, @PathVariable Long idOrder, HttpServletRequest httpServletRequest){
@@ -107,7 +107,7 @@ public class CarController {
 
 
 
-    @Transactional(readOnly = true)
+
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "api/cars/{idrent}/quick", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<RentReservation> listQuickReservations(@PathVariable Long idrent){
@@ -115,7 +115,7 @@ public class CarController {
     }
 
 
-    @Transactional(readOnly = true)
+
     //@PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "api/cars/{idrent}/availablePrice", method = RequestMethod.GET)
     public Page<Cars> listAvailablePrice(@PathVariable Long idrent, @RequestParam String page, @RequestParam Long carTypeId, @RequestParam String start, @RequestParam String end,
@@ -127,7 +127,7 @@ public class CarController {
     }
 
 
-    @Transactional(readOnly = true)
+
     //@PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @RequestMapping(value = "api/cars/{idrent}/check", method = RequestMethod.GET)
     public Boolean checkEdibility(@PathVariable Long idrent, @RequestParam Long id){

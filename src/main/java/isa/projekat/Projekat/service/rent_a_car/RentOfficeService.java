@@ -27,18 +27,19 @@ public class RentOfficeService {
     @Autowired
     private RentCarRepository rentCarRepository;
 
-  //  @PersistenceContext
-  //  private EntityManager entityManager;
-
     @Autowired
     private LocationRepository locationRepository;
 
+    @Transactional(readOnly = true)
     public Page<RentOffice> findAll(PageRequest pageRequest) { return rentOfficeRepository.findAll(pageRequest);}
 
+    @Transactional(readOnly = true)
     public Page<RentOffice> findAllByRentACarId(Long id, PageRequest pageRequest) { return rentOfficeRepository.findAllByRentACarId(id, pageRequest);}
 
+    @Transactional(readOnly = true)
     public RentOffice findByIdAndRentACarId(Long id, Long idrent){ return rentOfficeRepository.findByIdAndRentACarId(id,idrent);}
 
+    @Transactional(readOnly = true)
     public List<RentOffice> findAllByRentACarIdList(Long id) { return rentOfficeRepository.findAllByRentACarId(id);}
 
 
@@ -48,10 +49,6 @@ public class RentOfficeService {
 
         RentACar rentACar = rentCarRepository.findById(id).get();
 
-      /*  if (!rentACar.getAdmin().equals(user)){
-            return  false; // not a administrator on this particular rent a car
-        }
-        */
         if (!rentACar.getAdmins().contains(user))
             return false;
         RentOffice rentOffice = new RentOffice();
@@ -71,19 +68,12 @@ public class RentOfficeService {
 
         rentACar.getRentOffices().add(rentOffice);
 
-       // entityManager.persist(location);
-       // entityManager.persist(rentACar);
-
         locationRepository.save(location);
-
         rentCarRepository.save(rentACar);
-
-
         return true;
-
     }
 
-    @SuppressWarnings("Duplicates")
+
     @Transactional
     public boolean editOffice(RentOffice office, User user, Long id){
 
@@ -91,13 +81,9 @@ public class RentOfficeService {
 
         Optional<RentACar> rentACar = rentCarRepository.findById(id);
 
-
-
-        if (!rentOffice.isPresent() || !rentACar.isPresent())
-            return  false;
-
-        if (!rentACar.get().getAdmins().contains(user)) // is not a admin on the rentacar
-            return  false;
+        if (!checkIfPresent(rentACar,rentOffice,user)){
+            return false;
+        }
 
         RentOffice fromDatabase = rentOffice.get();
 
@@ -110,40 +96,44 @@ public class RentOfficeService {
         //fromDatabase.getLocation().setId(office.getLocation().getId()); // id should not be changed, but will leave this in case for future...
 
         fromDatabase.setName(office.getName());
-
-       // entityManager.persist(fromDatabase.getLocation());
-       // entityManager.persist(fromDatabase);
-
         locationRepository.save(fromDatabase.getLocation());
-
         rentOfficeRepository.save(fromDatabase);
-
-
-
         return  true;
     }
 
-    @SuppressWarnings("Duplicates")
     @Transactional
     public boolean removeOffice(Long id, Long idrent, User user){
 
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(idrent);
         Optional<RentOffice> optionalRentOffice = rentOfficeRepository.findById(id);
 
-        if (!optionalRentACar.isPresent() || !optionalRentOffice.isPresent()){
-            return  false;
+        if (!checkIfPresent(optionalRentACar,optionalRentOffice,user)){
+            return false;
         }
-
-        if (!optionalRentACar.get().getAdmins().contains(user))
-            return  false;
 
         RentOffice toRemove = optionalRentOffice.get();
 
+        toRemove.setLocation(null); // the location has been saved for all times
         optionalRentACar.get().getCars().remove(toRemove);
 
         rentOfficeRepository.delete(toRemove);
 
         return true;
     }
+
+    private boolean checkIfPresent(Optional<RentACar> rentACar, Optional<RentOffice> rentOffice, User user){
+        if (rentACar == null || rentOffice == null || user == null){
+            return false;
+        }else if (!rentACar.isPresent() || !rentOffice.isPresent()) {
+            return false;
+        }else if (!rentACar.get().getAdmins().contains(user)){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+
+
 
 }

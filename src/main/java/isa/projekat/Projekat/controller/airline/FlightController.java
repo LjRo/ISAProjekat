@@ -109,6 +109,15 @@ public class FlightController {
         return flightService.findAllOrders(user.getId());
     }
 
+    @RequestMapping(value= "api/flight/allFutureOrders", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Order> findAllUserFutureOrders(HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return flightService.findAllFutureOrders(user.getId());
+    }
+
+
     @RequestMapping(value= "api/flight/allNonFinishedOrders", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Order> findAllUserNotFinishedOrders(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
