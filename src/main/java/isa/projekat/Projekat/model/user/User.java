@@ -34,7 +34,7 @@ public class User implements UserDetails {
     //0 - Normal, 1 - Admin, 2 - Airline Admin, 3 - Hotel Admin, 4 - RentACar Admin
 
     // Email values will be stored in username
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)

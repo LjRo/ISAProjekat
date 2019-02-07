@@ -37,6 +37,10 @@ public class FlightService {
         return flightRepository.findById(id).get();
     }
 
+    @Transactional(readOnly = true)
+    public Order findOrderById(Long id){
+        return orderRepository.findById(id).get();
+    }
 
     @Transactional(readOnly = true)
     public SeatData findSeatDataById(Long id) {
