@@ -17,10 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -145,20 +142,17 @@ public class AuthenticationController {
 
 	@RequestMapping(value = "/registerAdmin", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ResponseEntity<?> registerAdmins(@RequestBody UserData userData) {
+	public Long registerAdmins(@RequestBody UserData userData,@RequestParam Long idCompany) {
+		Long returnId=Long.parseLong("-1");
 		try {
-			Map<String, String> result = new HashMap<>();
 			userDetailsService.loadUserByUsername(userData.getEmail());
-			result.put("result", "User already in database");
-			return ResponseEntity.badRequest().body(result);
+			return Long.parseLong("-2");
 		}catch (UsernameNotFoundException e){
-			userDetailsService.registerAdmin(userData);
+			returnId = userDetailsService.registerAdmin(userData,idCompany);
 		}
-
-		Map<String, String> result = new HashMap<>();
-		result.put("result", "Successfully added");
-		return ResponseEntity.accepted().body(result);
+		return returnId;
 	}
+
 
 
 
