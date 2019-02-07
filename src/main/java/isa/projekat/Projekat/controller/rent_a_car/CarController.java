@@ -83,7 +83,7 @@ public class CarController {
     @RequestMapping(value = "api/cars/{idrent}/remove", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> removeCar(@PathVariable Long idrent,@RequestParam long id ,HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
-        return responseTransaction(carService.removeCar(id,idrent,user));
+        return responseTransaction(carService.removeCar(id, idrent, user));
     }
 
 
@@ -93,16 +93,16 @@ public class CarController {
     @RequestMapping(value = "api/cars/{idrent}/{idAir}/reserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> reserveCar(@PathVariable Long idrent, @PathVariable Long idAir, @RequestBody RentReservation rentReservation, HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
-        return responseTransaction(carService.reserveCar(rentReservation.getRentedCar().getId(),idrent,user,rentReservation,idAir));
+        return responseTransaction(carService.reserveCar(rentReservation.getRentedCar().getId(), idrent, user, rentReservation, idAir));
     }
 
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "api/cars/{idReservation}/{idReservationAirline}/quickReserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> quickReserve(@PathVariable Long idReservation, @PathVariable Long idReservationAirline, HttpServletRequest httpServletRequest){
+    @RequestMapping(value = "api/cars/{idReservation}/{idOrder}/quickReserve", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> quickReserve(@PathVariable Long idReservation, @PathVariable Long idOrder, HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
-        return responseTransaction(carService.quickReserve(idReservationAirline,idReservation,user));
+        return responseTransaction(carService.quickReserve(idOrder, idReservation, user));
     }
 
 

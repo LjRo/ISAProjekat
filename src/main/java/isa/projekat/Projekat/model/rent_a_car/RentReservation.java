@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.model.rent_a_car;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import isa.projekat.Projekat.model.airline.Order;
 import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.user.User;
 
@@ -16,8 +17,13 @@ public class RentReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //@ManyToOne
+    //private Reservation airlineReservation;
+
     @ManyToOne
-    private Reservation airlineReservation;
+    @JsonBackReference(value = "rent")
+    private Order order;
+
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonBackReference(value = "user_rent_reservation")
@@ -86,12 +92,12 @@ public class RentReservation {
         this.id = id;
     }
 
-    public Reservation getAirlineReservation() {
-        return airlineReservation;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setAirlineReservation(Reservation airlineReservation) {
-        this.airlineReservation = airlineReservation;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public User getUser() {
