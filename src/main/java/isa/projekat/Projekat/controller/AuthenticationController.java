@@ -42,6 +42,9 @@ public class AuthenticationController {
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 
+	private static final String resultString = "result";
+	private static final String successString = "success";
+
 	@PostMapping(value = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
                                                        HttpServletResponse response) throws AuthenticationException, IOException {
@@ -69,7 +72,6 @@ public class AuthenticationController {
 		String token = tokenUtils.getToken(request);
 		String username = this.tokenUtils.getUsernameFromToken(token);
 		User user = (User) this.userDetailsService.loadUserByUsername(username);
-		//Date expiresIn = tokenUtils.getExpirationDateFromToken(token);
 
 		final Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(
@@ -92,8 +94,6 @@ public class AuthenticationController {
 		String username = this.tokenUtils.getUsernameFromToken(token);
 	    User user = (User) this.userDetailsService.loadUserByUsername(username);
 
-		//Device device = deviceProvider.getCurrentDevice(request);
-
 		if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
 			String refreshedToken = tokenUtils.refreshToken(token);
 			int expiresIn = tokenUtils.getExpiredIn();
@@ -111,27 +111,24 @@ public class AuthenticationController {
 		userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
 		
 		Map<String, String> result = new HashMap<>();
-		result.put("result", "success");
+		result.put(resultString, successString);
 		return ResponseEntity.accepted().body(result);
 	}
 
 
 	@PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<Map<String,String>> register(@RequestBody UserData userData) {
-
-
 		try {
 			userDetailsService.loadUserByUsername(userData.getEmail());
 			Map<String, String> result = new HashMap<>();
-			result.put("result", "User already in database");
+			result.put(resultString, "User already in database");
 			return ResponseEntity.badRequest().body(result);
 		}catch (UsernameNotFoundException e){
 			userDetailsService.register(userData);
 		}
 
-
 		Map<String, String> result = new HashMap<>();
-		result.put("result", "success");
+		result.put(resultString, successString);
 		return ResponseEntity.accepted().body(result);
 	}
 
@@ -139,14 +136,12 @@ public class AuthenticationController {
 	@PostMapping(value = "/registerAdmin", consumes = {MediaType.APPLICATION_JSON_VALUE})
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Long registerAdmins(@RequestBody UserData userData,@RequestParam Long idCompany) {
-		Long returnId=Long.parseLong("-1");
 		try {
 			userDetailsService.loadUserByUsername(userData.getEmail());
-			return Long.parseLong("-2");
+			return -2L;
 		}catch (UsernameNotFoundException e){
-			returnId = userDetailsService.registerAdmin(userData,idCompany);
+			return userDetailsService.registerAdmin(userData,idCompany);
 		}
-		return returnId;
 	}
 
 
@@ -154,7 +149,6 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/confirm", consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<Map<String,String>> confirm(@RequestBody VerificationToken verificationToken){
-		//producer.sendMessageTo(topic, message);
 		System.out.println("TOKEN:" + verificationToken.getToken());
 		userDetailsService.confirm(verificationToken.getToken());
 

@@ -47,8 +47,10 @@ public class RentOfficeService {
     @Transactional
     public boolean addOffice(RentOffice office,Long id, User user) {
 
-        RentACar rentACar = rentCarRepository.findById(id).get();
-
+        Optional<RentACar> optional = rentCarRepository.findById(id);
+        if (!optional.isPresent())
+            return false;
+        RentACar rentACar = optional.get();
         if (!rentACar.getAdmins().contains(user))
             return false;
         RentOffice rentOffice = new RentOffice();
@@ -81,24 +83,27 @@ public class RentOfficeService {
 
         Optional<RentACar> rentACar = rentCarRepository.findById(id);
 
-        if (!checkIfPresent(rentACar,rentOffice,user)){
+        if (rentACar == null || rentOffice == null || user == null){
             return false;
+        }else if (!rentACar.isPresent() || !rentOffice.isPresent()) {
+            return false;
+        }else if (!rentACar.get().getAdmins().contains(user)){
+            return false;
+        }else {
+
+            RentOffice fromDatabase = rentOffice.get();
+
+            fromDatabase.getLocation().setCountry(office.getLocation().getCountry());
+            fromDatabase.getLocation().setCity(office.getLocation().getCity());
+            fromDatabase.getLocation().setLongitude(office.getLocation().getLongitude());
+            fromDatabase.getLocation().setLatitude(office.getLocation().getLatitude());
+            fromDatabase.getLocation().setAddressName(office.getLocation().getAddressName());
+            fromDatabase.setName(office.getName());
+
+            locationRepository.save(fromDatabase.getLocation());
+            rentOfficeRepository.save(fromDatabase);
+            return true;
         }
-
-        RentOffice fromDatabase = rentOffice.get();
-
-        fromDatabase.getLocation().setCountry(office.getLocation().getCountry());
-        fromDatabase.getLocation().setCity(office.getLocation().getCity());
-        fromDatabase.getLocation().setLongitude(office.getLocation().getLongitude());
-        fromDatabase.getLocation().setLatitude(office.getLocation().getLatitude());
-        fromDatabase.getLocation().setAddressName(office.getLocation().getAddressName());
-
-        //fromDatabase.getLocation().setId(office.getLocation().getId()); // id should not be changed, but will leave this in case for future...
-
-        fromDatabase.setName(office.getName());
-        locationRepository.save(fromDatabase.getLocation());
-        rentOfficeRepository.save(fromDatabase);
-        return  true;
     }
 
     @Transactional
@@ -107,18 +112,25 @@ public class RentOfficeService {
         Optional<RentACar> optionalRentACar = rentCarRepository.findById(idrent);
         Optional<RentOffice> optionalRentOffice = rentOfficeRepository.findById(id);
 
-        if (!checkIfPresent(optionalRentACar,optionalRentOffice,user)){
+
+        if (optionalRentACar == null || optionalRentOffice == null || user == null){
             return false;
+        }else if (!optionalRentACar.isPresent() || !optionalRentOffice.isPresent()) {
+            return false;
+        }else if (!optionalRentACar.get().getAdmins().contains(user)){
+            return false;
+        }else {
+            RentOffice toRemove = optionalRentOffice.get();
+
+            toRemove.setLocation(null); // the location has been saved for all times
+            optionalRentACar.get().getRentOffices().remove(toRemove);
+
+            rentOfficeRepository.delete(toRemove);
+
+            return true;
         }
 
-        RentOffice toRemove = optionalRentOffice.get();
 
-        toRemove.setLocation(null); // the location has been saved for all times
-        optionalRentACar.get().getCars().remove(toRemove);
-
-        rentOfficeRepository.delete(toRemove);
-
-        return true;
     }
 
     private boolean checkIfPresent(Optional<RentACar> rentACar, Optional<RentOffice> rentOffice, User user){

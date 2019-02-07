@@ -10,8 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +19,6 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@PersistenceContext
-	private EntityManager entityManager;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -81,13 +76,14 @@ public class UserService {
 	}
 
     public List<UserData> findAllFriendsById(Long id) throws AccessDeniedException {
-
-		if(!userRepository.findById(id).isPresent()) {
-			return null;
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()){
+			return getUserDataFromList(user.get().getFriends());
+		}else {
+        	return null;
 		}
 
-        List<User> fList = userRepository.findById(id).get().getFriends();
-        return getUserDataFromList(fList);
+
     }
 
 	public List<UserData> findAllFriendRequests(String email) throws AccessDeniedException {
