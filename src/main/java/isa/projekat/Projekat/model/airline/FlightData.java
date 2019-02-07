@@ -21,6 +21,21 @@ public class FlightData {
     public FlightData() {
     }
 
+    public FlightData(Long startID, Long destID, Date startDate, Date finishDate, Double length, Double distance, BigDecimal price, Integer segments, Integer columns, Integer rows, Integer stopCount, List<Long> stopIDs) {
+        this.startID = startID;
+        this.destID = destID;
+        this.startDate = startDate;
+        this.finishDate = finishDate;
+        this.length = length;
+        this.distance = distance;
+        this.price = price;
+        this.segments = segments;
+        this.columns = columns;
+        this.rows = rows;
+        this.stopCount = stopCount;
+        this.stopIDs = stopIDs;
+    }
+
     public Long getStartID() {
         return startID;
     }

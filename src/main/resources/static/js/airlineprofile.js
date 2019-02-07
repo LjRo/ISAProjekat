@@ -39,6 +39,15 @@ $(function() {
     });
 
     $.get({
+        url : '/api/airline/' + id + '/lastSeatData',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+            fillSeats(data);
+        }
+    });
+
+
+    $.get({
         url : '/api/airline/' + id + '/flights',
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success : function(data) {
@@ -67,6 +76,145 @@ $(function() {
 
             }
         }
+    });
+
+    $.get({
+        url : '/api/airline/' + id + '/editData',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+
+            if (data != null) {
+
+                    fillEditData(data);
+
+            } else {
+
+            }
+        }
+    });
+
+    $.get({
+        url : '/api/airline/' + id + '/yearlyTickets',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+
+            if (data != null)
+            {
+                plotYearly(data,"#chartContainerYearly", "Yearly Ticket Sales");
+            } else {
+
+            }
+        }
+    });
+
+    $.get({
+        url : '/api/airline/' + id + '/monthlyTickets',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+
+            if (data != null)
+            {
+                plotYearly(data,"#chartContainerMonthly", "Monthly Ticket Sales");
+            } else {
+
+            }
+        }
+    });
+
+
+    $.get({
+        url : '/api/airline/' + id + '/weeklyTickets',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success : function(data) {
+
+            if (data != null)
+            {
+                plotYearly(data,"#chartContainerWeekly", "Weekly Ticket Sales");
+            } else {
+
+            }
+        }
+    });
+
+    $('#filterBtn').unbind('click').bind('click', function(event) {
+        event.preventDefault();
+
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+
+        $.post({
+            url: '/api/airline/' + id + '/profitFromInterval',
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            data: JSON.stringify({sDate: fromDate, eDate:toDate}),
+            contentType: 'application/json',
+            success: function (data) {
+
+                if (data != null) {
+                    plotIncome(data, "#chartContainerSpecific", "Income");
+                } else {
+
+                }
+            }
+        });
+    });
+
+
+
+
+
+    $('#editForm').on('submit', function (e) {
+        e.preventDefault();
+        var aName = $('input[id="aName"]').val();
+        var description = $('input[id="aDesc"]').val();
+        var country = $('input[id="country"]').val();
+        var address = $('input[id="eAddress"]').val();
+        var city = $('input[id="city"]').val();
+        var latitude = $('input[id="lat"]').val();
+        var longitude = $('input[id="long"]').val();
+
+        var hasFood = false;
+        var hasLuggage = false;
+        var hasOther = false;
+
+        if(document.getElementById('food').checked) {
+            hasFood=true;
+        }
+        if(document.getElementById('luggage').checked) {
+            hasLuggage=true;
+        }
+        if(document.getElementById('other').checked) {
+            hasOther=true;
+        }
+
+        var luggagePrice = $('input[id="lugP"]').val();
+        var foodPrice = $('input[id="foodP"]').val();
+
+        $.ajax({
+            url: "api/airline/" + id + "/edit",
+            type: 'PUT',
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            data: JSON.stringify({
+                name: aName,
+                description: description,
+                country: country,
+                address: address,
+                city: city,
+                latitude: latitude,
+                longitude: longitude,
+                hasFood: hasFood,
+                hasLuggage: hasLuggage,
+                hasOther: hasOther,
+                luggagePrice: luggagePrice,
+                foodPrice: foodPrice
+            }),
+            contentType: 'application/json',
+            success: function () {
+                window.location.replace("/airline.html?id=" + id);
+            },
+            error: function () {
+            },
+
+        });
     });
 
 
@@ -101,20 +249,62 @@ function fillData(data) {
     $('#desc').text(data.description);
     $('#pricing').text(data.pricing);
     $('#addFlight').attr("href","addFlight.html?id="+data.id);
-    $('#editAirline').attr("href","editAirline.html?id="+data.id);
+    $('#addLocation').attr("href","addLocation.html?id="+data.id);
+
+    var foodIcon = '';
+    var luggageIcon = '';
+    var otherIcon = '';
+
+    if(data.hasFood) {
+        foodIcon = '<img style="width: 24px; height = 24px" src="assets/img/p_food.png\">'
+    }
+
+    if(data.hasExtraLuggage) {
+        luggageIcon = '<img style="width: 24px; height = 24px" src="assets/img/p_luggage.png\">'
+    }
+
+    if(data.hasOtherServices) {
+        otherIcon = '<img style="width: 24px; height = 24px" src="assets/img/p_other.png\">'
+    }
+
+    $('#serv').html(foodIcon + luggageIcon + otherIcon);
+    $('#lPrice').text(data.luggagePrice);
+    $('#fPrice').text(data.foodPrice);
+
+
 }
 
 
 function fillDest(data) {
     var table = $('#destinations').DataTable();
 
-    var tr = $('<tr></tr>');
+    var tr = $('<tr id="'+data.id+'"></tr>');
     var country = $('<td>' + data.country + '</td>');
     var city = $('<td>' + data.city + '</td>');
     var address = $('<td>' + data.addressName + '</td>');
+    var deleteBtn = $('<td class ="airline-admin">' + '<button type="button" class="btn btn-danger dBtn" name = "'+ data.id + '"style="display:block">Delete</button>' + '</td>');
 
-    tr.append(country).append(city).append(address);
+
+    tr.append(country).append(city).append(address).append(deleteBtn);
     table.row.add(tr).draw();
+
+    $('.dBtn').on('click', function(event) {
+        event.preventDefault();
+        var id = parseInt(event.delegateTarget.name);
+        $.ajax({
+            url: "api/location/"+id+"/delete",
+            type: 'POST',
+            headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+            contentType: 'application/json',
+            success: function (data) {
+                $("#"+id).css("display", "none");
+            },
+            error: function (data) {
+                alert("Something went wrong...");
+            },
+        });
+
+    });
 }
 
 function fillFlight(data) {
@@ -140,7 +330,7 @@ function fillFlight(data) {
         '                                    <h5>' + data.price + '$</h5>\n' +
         '                                    <br>\n' +
         '                                    Number of stops: <strong><span id="NumberOfStops">'+ data.numberOfStops +'</span></strong>\n<br><br>' +
-        '                                    <a href="/bookflight.html?id='+ data.id +'"><button type="button" class="btn btn-success">Book</button></a>\n' +
+        '                                    <a class="user" href="/bookflight.html?id='+ data.id +'"><button type="button" class="btn btn-success">Book</button></a>\n' +
         '                                </div>\n' +
         '                            </div>\n' +
         '                        </div>\n' +
@@ -210,6 +400,213 @@ function fillQuickFlight(data,us) {
     });
 }
 
+function fillEditData(data) {
+
+    $('input[id="aName"]').val(data.name);
+    $('input[id="aDesc"]').val(data.description);
+    $('input[id="country"]').val(data.country);
+    $('input[id="eAddress"]').val(data.address);
+    $('input[id="city"]').val(data.city);
+    $('input[id="lat"]').val(data.latitude);
+    $('input[id="long"]').val(data.longitude);
+
+    if(data.hasFood) {
+        $("#food").prop("checked", true );
+    }
+    if(data.hasLuggage) {
+        $("#luggage").prop("checked", true );
+    }
+    if(data.hasOther) {
+        $("#other").prop("checked", true );
+    }
+
+    $('input[id="lugP"]').val(data.luggagePrice);
+    $('input[id="foodP"]').val(data.foodPrice);
+
+
+}
+
+function fillSeats(data) {
+
+    if(data!=null) {
+        var segments = data.segments;
+        var columns = data.columns;
+        var rows = data.rows;
+        //var seatData = data.seats;
+        //var priceData = seatData[0].price;
+    } else {
+        var segments = 3;
+        var columns = 3;
+        var rows = 10;
+        //var seatData = data.seats;
+        //var priceData = seatData[0].price;
+    }
+
+    var mapData = [];
+
+    for (i = 0; i < rows; i++) {
+        var rowTemplate = "";
+        for (k = 0; k < segments; k++) {
+            if (rowTemplate != "") {
+                rowTemplate += "_"
+            }
+            for (j = 0; j < columns; j++) {
+                rowTemplate += "e"
+            }
+        }
+        mapData.push(rowTemplate);
+    }
+
+    var firstSeatLabel = 1;
+    var $cart = $('#selected-seats'),
+        $counter = $('#counter'),
+        $total = $('#total'),
+        sc = $('#seat-map').seatCharts({
+            map: mapData,
+            seats: {
+                e: {
+                    price: 0,
+                    classes: 'economy-class',
+                    category: 'Economy Class'
+                }
+
+            },
+            naming: {
+                top: false,
+                getLabel: function (character, row, column) {
+                    return firstSeatLabel++;
+                },
+            },
+            legend: {
+                node: $('#legend'),
+                items: [
+                    ['e', 'available', 'Economy Class'],
+                    ['f', 'unavailable', 'Booked']
+                ]
+            },
+            click: function () {
+                if (this.status() == 'available') {
+                    return 'available';
+                }
+            }
+
+        });
+
+
+
+
+
+
+}
+
+function plotYearly(data,name,title) {
+
+    var dKeys = [];
+    var plotData = [];
+
+
+    for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+            dKeys.push(key);
+        }
+    }
+    dKeys.sort();
+    for(var j in dKeys) {
+        plotData.push({x: new Date(dKeys[j]),y: data[dKeys[j]]});
+    }
+
+
+    var options = {
+        animationEnabled: true,
+        title:{
+            text: title
+        },
+        axisX:{
+            valueFormatString: "DD MMM",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Tickets Sold",
+            includeZero: false,
+            valueFormatString: "##0",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true,
+                labelFormatter: function(e) {
+                    return "" + CanvasJS.formatNumber(e.value, "##0")+ " T";
+                }
+            }
+        },
+        data: [{
+            type: "area",
+            xValueFormatString: "DD MMM",
+            yValueFormatString: "##0",
+            dataPoints: plotData
+}]
+};
+
+
+    $(name).CanvasJSChart(options);
+
+}
+
+function plotIncome(data,name,title) {
+
+    var dKeys = [];
+    var plotData = [];
+
+
+    for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+            dKeys.push(key);
+        }
+    }
+    dKeys.sort();
+    for(var j in dKeys) {
+        plotData.push({x: new Date(dKeys[j]),y: data[dKeys[j]]});
+    }
+
+
+    var options = {
+        animationEnabled: true,
+        title:{
+            text: title
+        },
+        axisX:{
+            valueFormatString: "DD MMM",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Profit (in USD)",
+            includeZero: false,
+            valueFormatString: "$##0.00",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true,
+                labelFormatter: function(e) {
+                    return "$" + CanvasJS.formatNumber(e.value, "##0.00");
+                }
+            }
+        },
+        data: [{
+            type: "area",
+            xValueFormatString: "DD MMM",
+            yValueFormatString: "$##0.00",
+            dataPoints: plotData
+        }]
+    };
+
+
+    $(name).CanvasJSChart(options);
+
+}
+
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
         sURLVariables = sPageURL.split('&'),
@@ -224,3 +621,4 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+

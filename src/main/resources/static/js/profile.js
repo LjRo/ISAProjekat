@@ -123,7 +123,7 @@ $(function () {
         var password2 = $('input[id="password2"]').val();
 
         if (password != password2) {
-            //TODO: Error
+            alert("Passwords must match!")
             return;
         }
 
@@ -340,9 +340,15 @@ function fillRequests(data) {
 
 function fillData(data,type) {
 
-    $("#requestPage").css("display", "block");
     $("#editPage").css("display", "block");
 
+    if(type == "(Admin Airline)" || type == "(Admin Hotel)" || type =="(Admin Rent A Car)") {
+        $("#requestPage").css("display", "block");
+        $("#friendPage").css("display", "none");
+    } else {
+        $("#requestPage").css("display", "block");
+
+    }
 
 
     $('input[id="email"]').val(data.email);

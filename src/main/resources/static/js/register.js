@@ -20,7 +20,7 @@ $(document).ready(function () {
             $.post({
                 url: window.location.href.match(/^.*\//) + "auth/register",
                 data: JSON.stringify({
-                    username: email,
+                    email: email,
                     password: password,
                     firstName: firstName,
                     lastName: lastName,

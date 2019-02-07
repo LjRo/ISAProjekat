@@ -12,11 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 @Service
 public class AirlineService {
@@ -26,8 +35,6 @@ public class AirlineService {
     private FlightRepository flightRepository;
     @Autowired
     private UserRepository userRepository;
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Autowired
     private LocationRepository locationRepository;
@@ -53,7 +60,7 @@ public class AirlineService {
        /* Airline target = findById(ad.getId());
         User admin = userRepository.findByUsername(username);
 
-        if(target == null || ad.getAddress() == null || ad.getDescription() == "" || ad.getName() == ""){
+        if(target == null || ad.getAddress() == null || ad.getDescription().equals("") || ad.getName().equals("")){
             return false;
         }
 
@@ -79,7 +86,7 @@ public class AirlineService {
     }
 
     public boolean addAirline(Airline ad) {
-        if(ad.getAddress() == null || ad.getDescription() == "" || ad.getName() == ""){
+        if(ad.getAddress() == null || ad.getDescription().equals("") || ad.getName().equals("")){
             return false;
         }
         Location location = new Location(ad.getAddress().getAddressName(),ad.getAddress().getCountry(),ad.getAddress().getCity(),ad.getAddress().getLatitude(),ad.getAddress().getLongitude());
@@ -93,7 +100,14 @@ public class AirlineService {
     }
 
     public List<Location> findAirlineDestinations(Long id) {
-        return airlineRepository.findById(id).get().getDestinations();
+        List<Location> locations = airlineRepository.findById(id).get().getDestinations();
+        ArrayList<Location> res = new ArrayList<>();
+        for(Location loc : locations ) {
+            if(loc.getActive()) {
+                res.add(loc);
+            }
+        }
+        return res;
     }
 
     @Transactional
@@ -120,6 +134,15 @@ public class AirlineService {
         fl.setNumberOfStops(flightData.getStopCount());
         fl.setAirline(target);
 
+        if(fl.getStart() == null || fl.getFinish() == null) {
+            return false;
+        }
+
+        if(fl.getPrice() == null) {
+            return false;
+        }
+
+
         ArrayList<Location> stops = new ArrayList<>();
 
         ArrayList<Seat> seats = new ArrayList<>();
@@ -141,7 +164,7 @@ public class AirlineService {
         if(target.getAdmins().contains(admin)) {
 
             target.getFlights().add(fl);
-            entityManager.persist(target);
+            airlineRepository.save(target);
             return true;
 
         }
@@ -189,4 +212,224 @@ public class AirlineService {
         }
         return result;
     }
+
+    public Boolean deleteLocation(Long locationId, String email) {
+
+        User aAdmin = userRepository.findByUsername(email);
+        Airline target = aAdmin.getAdministratedAirline();
+
+        Location loc = locationRepository.findById(locationId).get();
+
+        if(!target.getDestinations().contains(loc)) {
+            return false;
+        }
+
+        if(loc != null) {
+            if(loc.getActive()) {
+                loc.setActive(false);
+                locationRepository.save(loc);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean addLocation (Location loc, Long id, String email) {
+        User aAdmin = userRepository.findByUsername(email);
+        Airline target = aAdmin.getAdministratedAirline();
+
+        if(loc.getCity() != null && loc.getCountry() != null && loc.getAddressName() != null ) {
+            Airline air = airlineRepository.findById(id).get();
+            if(!target.equals(air)) {
+                return false;
+            }
+            Location nLoc = new Location();
+            nLoc.setAddressName(loc.getAddressName());
+            nLoc.setCity(loc.getCity());
+            nLoc.setCountry(loc.getCountry());
+            nLoc.setLatitude(loc.getLatitude());
+            nLoc.setLongitude(loc.getLongitude());
+            nLoc.setActive(true);
+            locationRepository.save(nLoc);
+            air.getDestinations().add(nLoc);
+            airlineRepository.save(air);
+            return true;
+        }
+        return false;
+    }
+
+    public AirlineEditData getEditData(Long id) {
+        AirlineEditData res = new AirlineEditData();
+        if(!airlineRepository.findById(id).isPresent()) {
+            return null;
+        }
+        Airline target = airlineRepository.findById(id).get();
+
+
+        res.setName(target.getName());
+        res.setDescription(target.getDescription());
+        res.setCity(target.getAddress().getCity());
+        res.setCountry(target.getAddress().getCountry());
+        res.setAddress(target.getAddress().getAddressName());
+        res.setLongitude(target.getAddress().getLongitude());
+        res.setLatitude(target.getAddress().getLatitude());
+        res.setHasFood(target.getHasFood());
+        res.setHasLuggage(target.getHasExtraLuggage());
+        res.setHasOther(target.getHasOtherServices());
+        res.setFoodPrice(target.getFoodPrice());
+        res.setLuggagePrice(target.getLuggagePrice());
+
+        return res;
+    }
+
+
+    public boolean editAirline(AirlineEditData data, Long id) {
+        if(!airlineRepository.findById(id).isPresent()) {
+            return false;
+        }
+        Airline res = airlineRepository.findById(id).get();
+
+        if(data.getName().equals("") || data.getDescription().equals("") || data.getAddress().equals("") || data.getCountry().equals("") || data.getCity().equals("")) {
+           return false;
+        }
+
+        res.setName(data.getName());
+        res.setDescription(data.getDescription());
+        res.getAddress().setCity(data.getCity());
+        res.getAddress().setCountry(data.getCountry());
+        res.getAddress().setAddressName(data.getAddress());
+        res.getAddress().setLongitude(data.getLongitude());
+        res.getAddress().setLatitude(data.getLatitude());
+        res.setHasFood(data.isHasFood());
+        res.setHasExtraLuggage(data.isHasLuggage());
+        res.setHasOtherServices(data.isHasOther());
+        res.setFoodPrice(data.getFoodPrice());
+        res.setLuggagePrice(data.getLuggagePrice());
+
+        airlineRepository.save(res);
+
+        return true;
+    }
+
+    public Long findLastSeat(Long id) {
+        Airline target = airlineRepository.findById(id).get();
+        int val = target.getFlights().size() - 1;
+        if(val == -1) {
+            return null;
+        }
+        return target.getFlights().get(val).getId();
+
+    }
+
+    public Map<LocalDate, Integer> countYearlySales(Long airlineId) {
+        HashMap<LocalDate,Integer> result = new HashMap<>();
+
+        List<Flight> flights = flightRepository.getAllFlightsThisYear(airlineId);
+
+        LocalDate now = LocalDate.now();
+        LocalDate firstDay = now.with(firstDayOfYear());
+        LocalDate lastDay = now.with(lastDayOfYear());
+
+        return countDateRange(result,firstDay,lastDay,flights);
+    }
+
+    public Map<LocalDate, Integer> countMonthlySales(Long airlineId) {
+        HashMap<LocalDate,Integer> result = new HashMap<>();
+
+        List<Flight> flights = flightRepository.getAllFlightsThisMonth(airlineId);
+
+        LocalDate now = LocalDate.now();
+        LocalDate firstDay = now.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate lastDay = now.with(TemporalAdjusters.lastDayOfMonth());
+
+        return countDateRange(result,firstDay,lastDay,flights);
+
+    }
+
+    public Map<LocalDate, Integer> countWeeklySales(Long airlineId) {
+        HashMap<LocalDate,Integer> result = new HashMap<>();
+        List<Flight> flights = flightRepository.getAllFlightsThisWeek(airlineId);
+
+        LocalDate now = LocalDate.now();
+        List<LocalDate> days = datesOfWeekDate(now);
+        LocalDate firstDay = days.get(0);
+        LocalDate lastDay = days.get(6);
+
+        return countDateRange(result,firstDay,lastDay,flights);
+    }
+
+    public Map<LocalDate, BigDecimal> calculateIntervalProfit(Long airlineId, LocalDate firstDay, LocalDate lastDay) {
+        HashMap<LocalDate,BigDecimal> result = new HashMap<>();
+        List<Object[]> data = flightRepository.getProfitFromRange(airlineId,firstDay,lastDay);
+
+        for (LocalDate date = firstDay; date.isBefore(lastDay); date = date.plusDays(1))
+        {
+            result.put(date, new BigDecimal("0"));
+        }
+        result.put(lastDay, new BigDecimal("0"));
+
+        for(Object[] prof : data) {
+            LocalDate tDate = ((Timestamp)prof[0]).toLocalDateTime().toLocalDate();
+            result.put(tDate,result.get(tDate).add(getBigDecimal(prof[1])));
+        }
+
+        return result;
+    }
+
+    private Map<LocalDate, Integer> countDateRange(Map<LocalDate,Integer> result, LocalDate firstDay, LocalDate lastDay, List<Flight> flights ) {
+
+        for (LocalDate date = firstDay; date.isBefore(lastDay); date = date.plusDays(1))
+        {
+            result.put(date,0);
+        }
+        result.put(lastDay,0);
+
+        for(Flight fl : flights) {
+            LocalDate sDate = convertToLocalDateViaMilisecond(fl.getStartTime());
+            for(Seat st : fl.getSeats()) {
+                if(st.isTaken()) {
+                    result.put(sDate, result.get(sDate) + 1);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private LocalDate convertToLocalDateViaMilisecond(Date dateToConvert) {
+        return Instant.ofEpochMilli(dateToConvert.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+    public static List<LocalDate> datesOfWeekDate(LocalDate date) {
+        LocalDate monday = date
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+
+        return IntStream.range(0, 7).mapToObj(monday::plusDays).collect(Collectors.toList());
+    }
+
+    public static BigDecimal getBigDecimal( Object value ) {
+        BigDecimal ret = null;
+        if( value != null ) {
+            if( value instanceof BigDecimal ) {
+                ret = (BigDecimal) value;
+            } else if( value instanceof String ) {
+                ret = new BigDecimal( (String) value );
+            } else if( value instanceof BigInteger) {
+                ret = new BigDecimal( (BigInteger) value );
+            } else if( value instanceof Number ) {
+                ret = new BigDecimal( ((Number)value).doubleValue() );
+            } else {
+                throw new ClassCastException("Not possible to coerce ["+value+"] from class "+value.getClass()+" into a BigDecimal.");
+            }
+        }
+        return ret;
+    }
+
+
 }
+

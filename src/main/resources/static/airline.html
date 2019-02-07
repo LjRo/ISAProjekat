@@ -17,8 +17,13 @@
     <link href="css/CompanyProfile.css" rel="stylesheet">
     <link rel="stylesheet" href="css/FeaturesBoxed.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/SeatChart.css">
+    <link rel="stylesheet" href="css/SeatStyle.css">
+    <script src="/js/SeatCharts.js"></script>
+
     <script src="https://api-maps.yandex.ru/2.1/?apikey=8919cfc8-630c-48b2-bb54-e81375325ce9&lang=en_US"
             type="text/javascript"></script>
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
     <script src="/js/nav.js"></script>
     <script type="text/javascript" src="js/airlineprofile.js"></script>
 
@@ -53,7 +58,7 @@
 
             <ul class="list-group airline-admin">
                 <li class="list-group-item text-muted">Admin tools <i class="fa fa-dashboard fa-1x"></i></li>
-                <li id="ea" class="list-group-item "><span class="d-flex justify-content-center"><a class = "" id="editAirline" href="editAirline.html"><button type="button" class="btn btn-info">Edit Profile</button></a></span></li>
+                <li id="ea" class="list-group-item "><span class="d-flex justify-content-center"><a class = "" id="addLocation" href="addLocation.html"><button type="button" class="btn btn-info">AddLocation</button></a></span></li>
                 <li id="af" class="list-group-item "><span class="d-flex justify-content-center"><a class = "" id="addFlight" href="addFlight.html"><button type="button" class="btn btn-info">Add Flight</button></a></span></li>
 
 
@@ -68,6 +73,8 @@
                 <li><a data-toggle="tab" href="#destinationsTab">Destinations</a></li>&nbsp;&nbsp;&nbsp;
                 <li><a data-toggle="tab" href="#flightsTab">Flights</a></li>&nbsp;&nbsp;&nbsp;
                 <li><a data-toggle="tab" href="#quickFlightsTab">Quick Flights</a></li>&nbsp;&nbsp;&nbsp;
+                <li class="airline-admin"><a data-toggle="tab" href="#stats">Stats</a></li>&nbsp;&nbsp;&nbsp;
+                <li class="airline-admin" id="editPage" ><a data-toggle="tab"  href="#edit">Edit</a></li>&nbsp;&nbsp;&nbsp;
             </ul>
 
 
@@ -77,13 +84,13 @@
 
                     <div class="col-xs-6">
                         <label><h4>Description:</h4></label>
-                        <p id="desc">
+                        <p id="desc" style="margin:0 auto">
 
 
                     </div>
 
                     <div class="col-md-6">
-                        <div class="d-none d-md-block iphone-mockup" style="max-height: 20%" id="map">
+                        <div class="d-none d-md-block iphone-mockup" style="max-height: 20%; margin:0 auto" id="map">
 
                         </div>
                     </div>
@@ -93,6 +100,19 @@
                     <div class="col-xs-6">
                         <label><h4>Pricing and Seating:</h4></label>
                         <p id="pricing">
+
+                            <div class="seatContainer" >
+                                <div id="seat-map">
+                                    <div class="front-indicator">Front</div>
+                                </div>
+                                <div class="booking-details">
+                                    <h2>Services:</h2>
+                                        <div id="serv"></div> <br>
+                                    <h2>Prices:</h2>
+                                    <p>Extra Luggage Price: <a id="lPrice"></a>$ </p>
+                                    <p>Food Price: <a id="fPrice"></a>$ </p>
+                                </div>
+                            </div>
 
 
                     </div>
@@ -152,10 +172,132 @@
                     <hr>
 
                 </div>
+                <div class="tab-pane" id="stats">
+                    <br>
+                    <h2>Statistics:</h2>
+                    <div id="chartContainerYearly" style="height: 370px; width: 100%;"></div>
+                    <hr>
+                    <div id="chartContainerMonthly" style="height: 370px; width: 100%;"></div>
+                    <hr>
+                    <div id="chartContainerWeekly" style="height: 370px; width: 100%;"></div>
+                    <hr>
+                    <h2>Profit:</h2>
+                    <form class="form-inline" >
+                        <div class="form-group">
+                            <input class="form-control datepicker" id="fromDate" type="date" style="margin: 0 auto">
+                            <input class="form-control datepicker" id="toDate" type="date" style="margin: 0 auto">
+                            <button type="submit" class="btn btn-primary mb-2" id="filterBtn">Plot</button>
+
+                        </div>
+                    </form>
+                    <div id="chartContainerSpecific" style="height: 370px; width: 100%;"></div>
+
+                    <hr>
+
+                </div>
+                <div class="tab-pane" id="edit">
+                    <hr>
+                    <form class="form" action="##" method="post" id="editForm">
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Name</h4></label>
+                                <input type="text" class="form-control" name="aName" id="aName"
+                                       placeholder="Airline Name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Description</h4></label>
+                                <input type="text" class="form-control" name="aDesc" id="aDesc"
+                                       placeholder="Description" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Country</h4></label>
+                                <input type="text" class="form-control" name="country" id="country"
+                                       placeholder="Country" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>City</h4></label>
+                                <input type="text" class="form-control" name="city" id="city"
+                                       placeholder="City" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Address</h4></label>
+                                <input type="text" class="form-control" name="address" id="eAddress"
+                                       placeholder="Address" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Latitude</h4></label>
+                                <input type="number" class="form-control" name="lat" id="lat" placeholder="Latitude"  step ="0.00001"  style="width:40%" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Longitude</h4></label>
+                                <input type="number" class="form-control" name="long" id="long" placeholder="Longitude" step ="0.00001"  style="width:40%" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><h4>Services</h4></label><br>
+                            <input type="checkbox" id="luggage" name="luggage">
+                            <label for="luggage">Extra Luggage</label>&nbsp;&nbsp;
+                            <input type="checkbox" id="food" name="food">
+                            <label for="food">Food</label>&nbsp;&nbsp;
+                            <input type="checkbox" id="other" name="otherServices">
+                            <label for="other">Other Services</label>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Luggage Price</h4></label>
+                                <input type="number" class="form-control" name="lugP" id="lugP" placeholder="Luggage Price" min="0" max="99999"  style="width:40%" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label><h4>Food Price</h4></label>
+                                <input type="number" class="form-control" name="foodP" id="foodP" placeholder="Food Price" min="0" max="99999"  style="width:40%" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <br>
+                                <button class="btn btn-lg btn-success" type="submit"><i
+                                        class="glyphicon glyphicon-ok-sign"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <hr>
+
+                </div><!--/tab-pane-->
 
             </div><!--/tab-pane-->
         </div><!--/tab-content-->
 
     </div><!--/col-9-->
 </div><!--/row-->
-d

@@ -1,9 +1,13 @@
 package isa.projekat.Projekat.controller.airline;
 
+import isa.projekat.Projekat.aspects.AdminEnabledCheck;
 import isa.projekat.Projekat.model.airline.*;
 import isa.projekat.Projekat.model.rent_a_car.Location;
+import isa.projekat.Projekat.model.user.User;
+import isa.projekat.Projekat.repository.UserRepository;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.airline.AirlineService;
+import isa.projekat.Projekat.service.airline.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AirlineController {
@@ -20,7 +27,14 @@ public class AirlineController {
     private AirlineService airlineService;
 
     @Autowired
+    private FlightService flightService;
+
+
+    @Autowired
     private TokenUtils jwtTokenUtils;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PermitAll
     @RequestMapping(value = "api/airline/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -46,6 +60,7 @@ public class AirlineController {
 
     @RequestMapping(value = "api/airline/updateInfo", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @AdminEnabledCheck
     public void updateInfo(@RequestBody AirlineData ad, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -54,6 +69,7 @@ public class AirlineController {
 
     @RequestMapping(value = "api/airline/add", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @AdminEnabledCheck
     public void addAirline(@RequestBody Airline ad, HttpServletRequest req){
         airlineService.addAirline(ad);
     }
@@ -66,20 +82,140 @@ public class AirlineController {
     }
 
     @PermitAll
+    @RequestMapping(value = "api/airline/{id}/lastSeatData", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public SeatData findLastSeatData(@PathVariable Long id,HttpServletRequest req){
+        Long flightId = airlineService.findLastSeat(id);
+        if(flightId == null) {
+            return null;
+        }
+
+        return flightService.findSeatDataById(flightId);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/airline/{id}/editData", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
+    public AirlineEditData findAirlineEditData(@PathVariable Long id,HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId().equals(id)) {
+            return airlineService.getEditData(id);
+        } else {
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "api/airline/{id}/edit", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @AdminEnabledCheck
+    public void editAirline(@PathVariable Long id, @RequestBody AirlineEditData aED, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId().equals(id)) {
+            airlineService.editAirline(aED, id);
+        } else {
+            return;
+        }
+    }
+
+    @PermitAll
     @RequestMapping(value = "api/airline/{id}/destinations", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Location> findAirlineDestinations(@PathVariable Long id, HttpServletRequest req){
 
         return airlineService.findAirlineDestinations(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/location/{id}/delete", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
+    public boolean deleteDest(@PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        return airlineService.deleteLocation(id,email);
+    }
+
     @RequestMapping(value = "api/airline/{id}/addFlight", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @AdminEnabledCheck
     public Boolean addFlight(@PathVariable Long id, HttpServletRequest req, @RequestBody FlightData fd){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
 
         airlineService.addFlight(fd, email);
         return true;
+    }
+
+    @RequestMapping(value = "api/airline/{id}/addLocation", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @AdminEnabledCheck
+    public void addLocation(@RequestBody Location loc , @PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        airlineService.addLocation(loc,id,email);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/airline/{id}/yearlyTickets", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
+    public Map<LocalDate,Integer> getYearlyTickets(@PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId().equals(id)) {
+            return airlineService.countYearlySales(id);
+        } else {
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/airline/{id}/monthlyTickets", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
+    public Map<LocalDate,Integer> getMonthlyTickets(@PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId().equals(id)) {
+            return airlineService.countMonthlySales(id);
+        } else {
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/airline/{id}/weeklyTickets", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
+    public Map<LocalDate,Integer> getWeeklyTickets(@PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId().equals(id)) {
+            return airlineService.countWeeklySales(id);
+        } else {
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_AIRLINE')")
+    @RequestMapping(value = "api/airline/{id}/profitFromInterval", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @AdminEnabledCheck
+    public Map<LocalDate, BigDecimal> getProfitFromInterval(@PathVariable Long id, @RequestBody ProfitFilterData fData, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userRepository.findByUsername(email);
+
+        if(user.getAdministratedAirline().getId().equals(id)) {
+            return airlineService.calculateIntervalProfit(id,fData.getsDate(),fData.geteDate());
+        } else {
+            return null;
+        }
     }
 
 }

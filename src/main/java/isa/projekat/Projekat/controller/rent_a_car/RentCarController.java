@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.controller.rent_a_car;
 
+import isa.projekat.Projekat.aspects.AdminEnabledCheck;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
@@ -64,6 +65,7 @@ public class RentCarController {
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @AdminEnabledCheck
     @RequestMapping(value = "api/rentacar/edit", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> editRentACar(@RequestBody RentACar rentACar,  HttpServletRequest httpServletRequest){
         User user =  getUser(httpServletRequest);
@@ -80,6 +82,7 @@ public class RentCarController {
 
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @AdminEnabledCheck
     @RequestMapping(value = "api/rentacar/add", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> addRentacar(@RequestBody RentACar rentACar,  HttpServletRequest httpServletRequest){
         if (rentCarsService.addRentacar(rentACar)){

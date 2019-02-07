@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.controller.rent_a_car;
 
+import isa.projekat.Projekat.aspects.AdminEnabledCheck;
 import isa.projekat.Projekat.model.rent_a_car.Cars;
 import isa.projekat.Projekat.model.rent_a_car.RentReservation;
 import isa.projekat.Projekat.model.user.User;
@@ -59,6 +60,7 @@ public class CarController {
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @AdminEnabledCheck
     @RequestMapping(value = "api/cars/edit", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> editCar(@RequestBody Cars cars, HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
@@ -68,6 +70,7 @@ public class CarController {
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @AdminEnabledCheck
     @RequestMapping(value = "api/cars/{id}/add", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> addCar(@PathVariable Long id,@RequestBody Cars cars, HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
@@ -76,6 +79,7 @@ public class CarController {
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @AdminEnabledCheck
     @RequestMapping(value = "api/cars/{idrent}/remove", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> removeCar(@PathVariable Long idrent,@RequestParam long id ,HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);

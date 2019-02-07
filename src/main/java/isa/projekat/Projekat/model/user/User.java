@@ -66,6 +66,9 @@ public class User implements UserDetails {
     @Column
     private boolean enabled = false;
 
+    @Column
+    private Boolean passwordChanged = false;
+
     // Airline stuff
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonBackReference(value = "airline_admins")
@@ -285,5 +288,11 @@ public Hotel getAdministratedHotel() {
         return true;
     }
 
+    public boolean isPasswordChanged() {
+        return passwordChanged;
+    }
 
+    public void setPasswordChanged(boolean passwordChanged) {
+        this.passwordChanged = passwordChanged;
+    }
 }

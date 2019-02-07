@@ -64,8 +64,11 @@ public class UserService {
 		target.setPhoneNumber(ud.getPhoneNumber());
 
 
-		if(ud.getPassword() != null && ud.getPassword() != "") {
+		if(ud.getPassword() != null && !ud.getPassword().equals("")) {
 			target.setPassword(passwordEncoder.encode(ud.getPassword()));
+			if(!target.isPasswordChanged()) {
+				target.setPasswordChanged(true);
+			}
 		}
 
 		entityManager.persist(target);
@@ -230,4 +233,40 @@ public class UserService {
 
         return result;
     }
+
+    public boolean changePassword(UserData ud, String email) {
+		User target = userRepository.findByUsername(email);
+
+		if(ud.getPassword() != null && !ud.getPassword().equals("")) {
+			target.setPassword(passwordEncoder.encode(ud.getPassword()));
+			if(!target.isPasswordChanged()) {
+				target.setPasswordChanged(true);
+			}
+			userRepository.save(target);
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isEnabled(String email) {
+		User target = userRepository.findByUsername(email);
+		return target.isPasswordChanged();
+	}
+
+	public List<User> getAllNormalUsers() {
+
+		List<User> us = userRepository.getAllNormalUsers();
+		ArrayList<User> res = new ArrayList<>();
+
+		for(User u : us) {
+			User nUser = new User();
+			nUser.setFirstName(u.getFirstName());
+			nUser.setLastName(u.getLastName());
+			nUser.setId(u.getId());
+			res.add(nUser);
+		}
+
+		return res;
+	}
 }

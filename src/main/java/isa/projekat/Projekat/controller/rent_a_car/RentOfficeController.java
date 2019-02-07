@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.controller.rent_a_car;
 
+import isa.projekat.Projekat.aspects.AdminEnabledCheck;
 import isa.projekat.Projekat.model.rent_a_car.RentOffice;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
@@ -51,6 +52,7 @@ public class RentOfficeController {
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @AdminEnabledCheck
     @RequestMapping(value = "api/office/{idrent}/edit", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     public  boolean changed(@RequestBody RentOffice changed, @PathVariable Long idrent, HttpServletRequest httpServletRequest) {
         String authToken = jwtTokenUtils.getToken(httpServletRequest);
@@ -72,6 +74,7 @@ public class RentOfficeController {
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @AdminEnabledCheck
     @RequestMapping(value = "api/office/{rentid}/add",method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> addOffice(@PathVariable long rentid, @RequestBody RentOffice rentOffice, HttpServletRequest httpServletRequest) {
 
@@ -92,6 +95,7 @@ public class RentOfficeController {
 
     @Transactional
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @AdminEnabledCheck
     @RequestMapping(value = "api/office/{idrent}/remove", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> removeOffice(@PathVariable Long idrent,@RequestParam long id ,HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);

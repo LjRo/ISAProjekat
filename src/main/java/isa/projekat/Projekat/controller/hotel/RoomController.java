@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.controller.hotel;
 
+import isa.projekat.Projekat.aspects.AdminEnabledCheck;
 import isa.projekat.Projekat.model.hotel.ReservationHotelData;
 import isa.projekat.Projekat.model.hotel.Room;
 import isa.projekat.Projekat.model.hotel.RoomSearchData;
@@ -63,6 +64,7 @@ public class RoomController {
 
     @RequestMapping(value = "api/rooms/{id}/editRoom", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @AdminEnabledCheck
     public ResponseEntity<?> editHotel(@RequestBody Room room,@PathVariable Long id, HttpServletRequest httpServletRequest) {
         User user = getUser(httpServletRequest);
         return responseTransaction(roomService.editRoom(room,user,id));
@@ -70,6 +72,7 @@ public class RoomController {
 
     @RequestMapping(value = "api/rooms/{id}/deleteRoom", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @AdminEnabledCheck
     public ResponseEntity<?> deleteRoom(@RequestBody Room room,@PathVariable Long id, HttpServletRequest httpServletRequest) {
         User user = getUser(httpServletRequest);
         return responseTransaction(roomService.deleteRoom(room,user,id));

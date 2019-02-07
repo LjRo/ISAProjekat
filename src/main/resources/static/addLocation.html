@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/NavigationWithButton.css">
+    <link rel="stylesheet" href="css/HighlightPhone.css">
+    <link rel="stylesheet" href="css/ProjectsHorizontal.css">
+    <link rel="stylesheet" href="css/LoginForm.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="/js/nav.js"></script>
+    <script src="/js/addlocation.js"></script>
+    <title>eJourney</title>
+
+
+</head>
+
+<body>
+
+<div id="navbar-frame" style="font-size:15px"></div>
+<hr>
+
+
+<div class="jumbotron mx-auto" style="width:20%">
+    <form id="addform" >
+        <h2 class="sr-only "></h2>
+        <h2 style="text-align: center">New Location</h2>
+        <img src="assets/img/location.svg"
+             style="display: block; max-height:240px; max-width: 240px;margin-left: auto;margin-right: auto">
+        <div class="form-group"><input class="form-control" type="text" name ="country" placeholder="Country" required /></div>
+        <div class="form-group"><input class="form-control" type="text" name ="city" placeholder="City" required /></div>
+        <div class="form-group"><input class="form-control" type="text" name ="address" placeholder="Address" required /></div>
+
+        <div class="form-group"><input class="form-control" type="number" name="long"  step ="0.00001"
+                                       placeholder="Longitude" required></div>
+        <div class="form-group"><input class="form-control" type="number" name="lat"  step ="0.00001"
+                                       placeholder="Latitude" required></div>
+
+
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+</body>
+
+</html>
