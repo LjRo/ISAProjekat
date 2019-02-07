@@ -34,7 +34,11 @@ public class FlightService {
 
     @Transactional(readOnly = true)
     public Flight findById(Long id) {
-        return flightRepository.findById(id).get();
+        if(flightRepository.findById(id).isPresent()) {
+            return flightRepository.findById(id).get();
+        } else {
+            return null;
+        }
     }
 
 
@@ -64,15 +68,14 @@ public class FlightService {
     @Transactional(readOnly = true)
     public List<Reservation> findFutureReservationByUserId(Long userId){
         String date = java.time.LocalDate.now().toString();
-        List<Reservation> reservations = reservationRepository.returnAllFutureReservationsByUser(userId,date);
-        return reservations;
+        return reservationRepository.returnAllFutureReservationsByUser(userId,date);
+
     }
 
     @Transactional(readOnly = true)
     public List<Reservation> findRentReservations(Long userId){
         String date = java.time.LocalDate.now().toString();
-        List<Reservation> reservations = reservationRepository.returnFutureRentReservationByUser(userId,date);
-        return reservations;
+        return reservationRepository.returnFutureRentReservationByUser(userId,date);
     }
 
     @Transactional(readOnly = true)
@@ -84,20 +87,22 @@ public class FlightService {
 
     @Transactional(readOnly = true)
     public List<Reservation> findReservationsByUserId(Long userId){
-        List<Reservation> reservations = reservationRepository.getAllByUser(userId);
-        return reservations;
+        return reservationRepository.getAllByUser(userId);
     }
 
     @Transactional(readOnly = true)
     public List<Reservation> findAllReservationsByUserId(Long userId){
-        List<Reservation> reservations = reservationRepository.findAllByUserId(userId);
-        return reservations;
+        return reservationRepository.findAllByUserId(userId);
     }
 
 
 
     @Transactional
     public Boolean finishOrder(Long id,String email) {
+
+        if(!orderRepository.findById(id).isPresent()) {
+            return false;
+        }
         Order target = orderRepository.findById(id).get();
         User req = userRepository.findByUsername(email);
 
@@ -114,8 +119,11 @@ public class FlightService {
 
     @Transactional(readOnly = true)
     public Boolean isOrdering(Long id,String email) {
-        Order target = orderRepository.findById(id).get();
+        if(!orderRepository.findById(id).isPresent()) {
+            return false;
+        }
         User req = userRepository.findByUsername(email);
+        Order target = orderRepository.findById(id).get();
 
         for(Order o: req.getOrders()) {
             if(o.getId().equals(target.getId())) {
@@ -128,6 +136,10 @@ public class FlightService {
 
     @Transactional
     public Boolean bookFlight(BookingData bd, String email) {
+        if(bd == null) {
+            return false;
+        }
+
         List<ReservationData> reservations = bd.getAirlineReservations();
 
         User requester = userRepository.findByUsername(email);
@@ -140,6 +152,10 @@ public class FlightService {
 
         for (ReservationData resData : reservations) {
 
+            if(!seatRepository.findById(resData.getSeatId()).isPresent()) {
+                return false;
+            }
+
             Seat targetSeat = seatRepository.findById(resData.getSeatId()).get();
             User targetUser;
 
@@ -147,12 +163,13 @@ public class FlightService {
             if (resData.getUserId() == null) {
                 targetUser = null;
             } else {
+                if(! userRepository.findById(resData.getUserId()).isPresent()) {
+                    return false;
+                }
+
                 targetUser = userRepository.findById(resData.getUserId()).get();
             }
 
-            if (targetSeat == null) {
-                return false;
-            }
             if (targetSeat.isTaken()) {
                 return false;
             }
@@ -167,6 +184,10 @@ public class FlightService {
                 resData.setPointsUsed(0.0);
 
             resData.setTotalCost(targetSeat.getPrice());
+
+            if(!flightRepository.findById(resData.getFlight()).isPresent()) {
+                return false;
+            }
 
             Reservation newRes = new Reservation();
             Flight flight = flightRepository.findById(resData.getFlight()).get();
@@ -186,7 +207,7 @@ public class FlightService {
                 newRes.setConfirmed(true);
             } else {
 
-                if (targetUser.getId() == requester.getId()) {
+                if (targetUser.getId().equals(requester.getId())) {
                     newRes.setConfirmed(true);
                 } else {
                     newRes.setConfirmed(false);
@@ -232,12 +253,16 @@ public class FlightService {
             return false;
         }
 
-        Seat targetSeat = seatRepository.findById(qTD.getSeatId()).get();
-
-        if (targetSeat == null || targetSeat.isTaken()) {
+        if(!seatRepository.findById(qTD.getSeatId()).isPresent()) {
             return false;
         }
-        if (qTD.getPassport() == null || qTD.getPassport() == "") {
+
+        Seat targetSeat = seatRepository.findById(qTD.getSeatId()).get();
+
+        if (targetSeat.isTaken()) {
+            return false;
+        }
+        if (qTD.getPassport() == null || qTD.getPassport().equals("")) {
             return false;
         }
         if(!targetSeat.isQuick()) {

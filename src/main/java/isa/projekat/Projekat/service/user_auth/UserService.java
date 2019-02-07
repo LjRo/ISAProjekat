@@ -71,7 +71,7 @@ public class UserService {
 			}
 		}
 
-		entityManager.persist(target);
+		userRepository.save(target);
 		return true;
 	}
 
@@ -81,6 +81,11 @@ public class UserService {
 	}
 
     public List<UserData> findAllFriendsById(Long id) throws AccessDeniedException {
+
+		if(!userRepository.findById(id).isPresent()) {
+			return null;
+		}
+
         List<User> fList = userRepository.findById(id).get().getFriends();
         return getUserDataFromList(fList);
     }
