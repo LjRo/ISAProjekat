@@ -56,12 +56,27 @@ public class FlightController {
         flightService.quickBookFlight(quickTicketData,email);
     }
 
+    @RequestMapping(value = "api/order/{id}/confirm", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public Boolean confirmOrder(@PathVariable Long orderId, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+
+        return flightService.finishOrder(orderId,email);
+    }
+
+    @RequestMapping(value = "api/order/{id}/isOrdering", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public Boolean isOrdering(@PathVariable Long orderId, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+
+        return flightService.isOrdering(orderId,email);
+    }
+
     @RequestMapping(value = "api/flight/search", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
     public List<FlightSearchResultData> searchFlight(@RequestBody FlightSearchData searchData, HttpServletRequest req){
-        String authToken = jwtTokenUtils.getToken(req);
-
-        //flightService.quickBookFlight(quickTicketData,email);
         return flightService.searchFlights(searchData);
     }
 

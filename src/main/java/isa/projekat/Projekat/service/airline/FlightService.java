@@ -6,6 +6,7 @@ import isa.projekat.Projekat.repository.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -26,15 +27,18 @@ public class FlightService {
     @Autowired
     private ReservationRepository reservationRespository;
 
+    @Transactional(readOnly = true)
     public List<Flight> findAll() {
         return flightRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Flight findById(Long id) {
         return flightRepository.findById(id).get();
     }
 
 
+    @Transactional(readOnly = true)
     public SeatData findSeatDataById(Long id) {
         SeatData result = new SeatData();
         Flight target = findById(id);
@@ -47,12 +51,14 @@ public class FlightService {
         return result;
     }
 
+    @Transactional(readOnly = true)
     public List<Reservation> findFutureReservationByUserId(Long userId){
         String date = java.time.LocalDate.now().toString();
         List<Reservation> reservations = reservationRespository.returnAllFutureReservationsByUser(userId,date);
         return reservations;
     }
 
+    @Transactional(readOnly = true)
     public List<Reservation> findRentReservations(Long userId){
         String date = java.time.LocalDate.now().toString();
         List<Reservation> reservations = reservationRespository.returnFutureRentReservationByUser(userId,date);
@@ -61,17 +67,50 @@ public class FlightService {
 
 
 
+    @Transactional(readOnly = true)
     public List<Reservation> findReservationsByUserId(Long userId){
         List<Reservation> reservations = reservationRespository.getAllByUser(userId);
         return reservations;
     }
 
+    @Transactional(readOnly = true)
     public List<Reservation> findAllReservationsByUserId(Long userId){
         List<Reservation> reservations = reservationRespository.findAllByUserId(userId);
         return reservations;
     }
 
+    @Transactional
+    public Boolean finishOrder(Long id,String email) {
+        Order target = orderRepository.findById(id).get();
+        User req = userRepository.findByUsername(email);
 
+        for(Order o: req.getOrders()) {
+            if(o.getId().equals(target.getId())) {
+                target.setFinished(true);
+                orderRepository.save(target);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    @Transactional(readOnly = true)
+    public Boolean isOrdering(Long id,String email) {
+        Order target = orderRepository.findById(id).get();
+        User req = userRepository.findByUsername(email);
+
+        for(Order o: req.getOrders()) {
+            if(o.getId().equals(target.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    @Transactional
     public Boolean bookFlight(BookingData bd, String email) {
         List<ReservationData> reservations = bd.getAirlineReservations();
 
@@ -167,6 +206,8 @@ public class FlightService {
         return true;
     }
 
+
+    @Transactional
     public Boolean quickBookFlight(QuickTicketData qTD, String email) {
 
         User requester = userRepository.findByUsername(email);
@@ -205,6 +246,7 @@ public class FlightService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public List<FlightSearchResultData> searchFlights(FlightSearchData data) {
         ArrayList<FlightSearchResultData> res = new ArrayList<>();
         //List<Flight> locFlights = flightRepository.findFlights(data.getCityFrom(),data.getCityTo());

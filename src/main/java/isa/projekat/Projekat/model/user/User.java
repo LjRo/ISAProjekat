@@ -299,4 +299,12 @@ public Hotel getAdministratedHotel() {
     public void setPasswordChanged(boolean passwordChanged) {
         this.passwordChanged = passwordChanged;
     }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 }
