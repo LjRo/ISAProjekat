@@ -8,7 +8,7 @@ $(document).ready(function () {
                 if(data.length > 0)
                 {
                     data.forEach(function (entry) {
-                        fillAirlineReservations(entry);
+                        fillInfo(entry);
                     });
                             $.get({
                                 url : 'api/cars/'+ getUrlParameter('id') +'/quick',
@@ -47,8 +47,12 @@ $(document).ready(function () {
 
 
 });
-function fillAirlineReservations(data) {
-    $("#listReservations").append('<option value= "' + data.id + '"> For ' + data.flight.finish.city + ' at ' + data.flight.startTime.substring(0,10) + '</option>');
+//function fillAirlineReservations(data) {
+//    $("#listReservations").append('<option value= "' + data.id + '"> For ' + data.flight.finish.city + ' at ' + data.flight.startTime.substring(0,10) + '</option>');
+//}
+
+function fillInfo(data){
+    $('#listReservations').append('<option value= "' + data.id + '"> For order id:' + data.id + '</option>')
 }
 
 
