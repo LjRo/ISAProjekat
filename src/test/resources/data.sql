@@ -58,8 +58,8 @@ VALUES (1,1);
 INSERT INTO rooms (number_of_beds, number_of_people, number_of_rooms,room_number,floor,room_type_id,hotel_id)
 VALUES (1, 2 , 2 ,118, 1, 1 , 1);
 
-INSERT INTO hotel_services(name,price,hotel_id)
-VALUES ('WiFi',20,1);
+INSERT INTO hotel_services(name,price)
+VALUES ('WiFi',20);
 
 INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
 VALUES (1,1);
