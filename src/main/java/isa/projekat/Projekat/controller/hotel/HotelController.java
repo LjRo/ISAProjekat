@@ -34,36 +34,33 @@ public class HotelController {
     private UserService userService;
 
     @PermitAll
-    @RequestMapping(value = "api/hotel/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/hotel/findAll", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Hotel> findAll() {
         return hotelService.findAll();
     }
 
     @PermitAll
-    @RequestMapping(value = "api/hotel/findAvailable", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/hotel/findAvailable", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Hotel> findAvailable(@RequestParam String name,@RequestParam String location,@RequestParam String arrival,@RequestParam String departure)
     {
         return hotelService.findAvailableByHotelId(arrival,departure,location,name);
     }
 
 
-
-
-
     @PermitAll
-    @RequestMapping(value = "api/hotel/findById={id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/hotel/findById={id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Hotel findHotelById(@PathVariable("id") long id) { return  hotelService.findHotelById(id);}
 
 
     @PermitAll
-    @RequestMapping(value = "api/hotel/{id}/roomTypes", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/hotel/{id}/roomTypes", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Set<RoomType> findRoomTypes(@PathVariable Long id, HttpServletRequest req){
         return hotelService.findHotelById(id).getRoomTypes();
     }
 
 
     @PermitAll
-    @RequestMapping(value = "api/hotel/{id}/PriceLists", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/hotel/{id}/PriceLists", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Set<HotelPriceList> findPriceLists(@PathVariable Long id, HttpServletRequest req)
     {
         return  hotelService.findHotelById(id).getHotelPriceList();
@@ -71,51 +68,51 @@ public class HotelController {
 
 
 
-    @RequestMapping(value = "api/hotel/{id}/addRoom", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PostMapping(value = "api/hotel/{id}/addRoom", consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     @AdminEnabledCheck
-    public ResponseEntity<?> addRoom(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody RoomData room){
+    public ResponseEntity<Map<String,String>> addRoom(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody RoomData room){
 
         User user =  getUser(httpServletRequest);
         return  responseTransaction(hotelService.addRoom(room,id,user));
     }
 
-    @RequestMapping(value = "api/hotel/{id}/addRoomType", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PostMapping(value = "api/hotel/{id}/addRoomType", consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     @AdminEnabledCheck
-    public ResponseEntity<?> addRoomType(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody RoomType room){
+    public ResponseEntity<Map<String,String>> addRoomType(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody RoomType room){
 
         User user =  getUser(httpServletRequest);
         return  responseTransaction(hotelService.addRoomType(room,id,user));
     }
-    @RequestMapping(value = "api/hotel/{id}/addNewFloor", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PostMapping(value = "api/hotel/{id}/addNewFloor", consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     @AdminEnabledCheck
-    public ResponseEntity<?> addNewFloor(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody FloorPlan floorPlan){
+    public ResponseEntity<Map<String,String>> addNewFloor(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody FloorPlan floorPlan){
         User user =  getUser(httpServletRequest);
         return  responseTransaction(hotelService.addFloorPlan(floorPlan,id,user));
     }
 
 
 
-    @RequestMapping(value = "api/hotel/{id}/{idFloor}/removeFloor", method = RequestMethod.POST)
+    @PostMapping(value = "api/hotel/{id}/{idFloor}/removeFloor")
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     @AdminEnabledCheck
-    public ResponseEntity<?> removeFloor(@PathVariable Long id,@PathVariable Long idFloor, HttpServletRequest httpServletRequest){
+    public ResponseEntity<Map<String,String>> removeFloor(@PathVariable Long id,@PathVariable Long idFloor, HttpServletRequest httpServletRequest){
 
         User user =  getUser(httpServletRequest);
         return responseTransaction(hotelService.removeFloorPlan(idFloor,id,user));
     }
 
 
-    @RequestMapping(value = "api/hotel/editHotel", method = RequestMethod.POST)
+    @PostMapping(value = "api/hotel/editHotel")
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     @AdminEnabledCheck
-    public  ResponseEntity<?> editHotel(@RequestBody Hotel hotel,HttpServletRequest httpServletRequest) {
+    public  ResponseEntity<Map<String,String>> editHotel(@RequestBody Hotel hotel,HttpServletRequest httpServletRequest) {
         User user =  getUser(httpServletRequest);
         return responseTransaction(hotelService.editHotel(hotel,user));
     }
-    @RequestMapping(value = "api/hotel/addHotel", method = RequestMethod.POST)
+    @PostMapping(value = "api/hotel/addHotel")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @AdminEnabledCheck
     public void addHotel(@RequestBody Hotel hotel,HttpServletRequest httpServletRequest) {
@@ -123,51 +120,49 @@ public class HotelController {
         hotelService.addHotel(hotel,user);
     }
 
-    @RequestMapping(value = "api/hotel/editPriceList", method = RequestMethod.POST)
+    @PostMapping(value = "api/hotel/editPriceList")
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
-    public  ResponseEntity<?> editPriceList(@RequestBody HotelPriceList hotelPriceList,HttpServletRequest httpServletRequest) {
+    public  ResponseEntity<Map<String,String>> editPriceList(@RequestBody HotelPriceList hotelPriceList,HttpServletRequest httpServletRequest) {
         User user =  getUser(httpServletRequest);
         return responseTransaction(hotelService.editHotelList(hotelPriceList,user));
     }
 
-    //-- HOTEL SERVICES
-
-    @RequestMapping(value = "api/hotel/{id}/addHotelServices", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PostMapping(value = "api/hotel/{id}/addHotelServices", consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
-    public ResponseEntity<?> addHotelServices(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody HotelServices hotelServices){
+    public ResponseEntity<Map<String,String>> addHotelServices(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody HotelServices hotelServices){
         User user =  getUser(httpServletRequest);
         return  responseTransaction(hotelService.addHotelServices(hotelServices,id,user));
     }
 
-    @RequestMapping(value = "api/hotel/{id}/{userId}/", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PostMapping(value = "api/hotel/{id}/{userId}/", consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> addAdmin(@PathVariable Long id, HttpServletRequest httpServletRequest, @PathVariable Long userId){
+    public ResponseEntity<Map<String,String>> addAdmin(@PathVariable Long id, HttpServletRequest httpServletRequest, @PathVariable Long userId){
         return  responseTransaction(hotelService.addHotelAdmin(id,userId));
     }
 
-    @RequestMapping(value = "api/hotel/editHotelServices", method = RequestMethod.POST)
+    @PostMapping(value = "api/hotel/editHotelServices")
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
-    public  ResponseEntity<?> editHotelServices(@RequestBody HotelServices services,HttpServletRequest httpServletRequest) {
+    public  ResponseEntity<Map<String,String>> editHotelServices(@RequestBody HotelServices services,HttpServletRequest httpServletRequest) {
         User user =  getUser(httpServletRequest);
         return responseTransaction(hotelService.editHotelServices(services,user));
     }
 
-    @RequestMapping(value = "api/hotel/removeHotelServices", method = RequestMethod.POST)
+    @PostMapping(value = "api/hotel/removeHotelServices")
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
-    public ResponseEntity<?> removeHotelServices(@RequestBody HotelServices hotelServices, HttpServletRequest httpServletRequest){
+    public ResponseEntity<Map<String,String>> removeHotelServices(@RequestBody HotelServices hotelServices, HttpServletRequest httpServletRequest){
         User user =  getUser(httpServletRequest);
         return responseTransaction(hotelService.removeHotelService(hotelServices,user));
     }
 
     @PermitAll
-    @RequestMapping(value = "api/hotel/{id}/HotelServicesForHotel", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/hotel/{id}/HotelServicesForHotel", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Set<HotelServices> findHotelServicesList(@PathVariable Long id, HttpServletRequest req)
     {
         return  hotelService.findHotelById(id).getHotelServices();
     }
 
     @PermitAll
-    @RequestMapping(value = "api/hotel/{id}/HotelServices", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/hotel/{id}/HotelServices", produces = {MediaType.APPLICATION_JSON_VALUE})
     public HotelServices findHotelService(@PathVariable Long id, HttpServletRequest req)
     {
         return  hotelService.findHotelServiceById(id);
@@ -175,7 +170,7 @@ public class HotelController {
 
 
     @SuppressWarnings("Duplicates")
-    private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){
+    private ResponseEntity<Map<String,String>> responseTransaction(Boolean resultOfTransaction ){
         Map<String, String> result = new HashMap<>();
         if(resultOfTransaction )
         {

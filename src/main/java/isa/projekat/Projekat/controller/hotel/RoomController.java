@@ -1,9 +1,7 @@
 package isa.projekat.Projekat.controller.hotel;
 
 import isa.projekat.Projekat.aspects.AdminEnabledCheck;
-import isa.projekat.Projekat.model.hotel.ReservationHotelData;
-import isa.projekat.Projekat.model.hotel.Room;
-import isa.projekat.Projekat.model.hotel.RoomSearchData;
+import isa.projekat.Projekat.model.hotel.*;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.hotel.RoomService;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,54 +37,68 @@ public class RoomController {
 
 
     @PermitAll
-    @RequestMapping(value = "api/rooms/findById", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/rooms/findById", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Room find(@RequestParam Long id) {
         return roomService.findById(id);
     }
 
     @PermitAll
-    @RequestMapping(value = "api/rooms/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/rooms/findAll", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Room> findAll(@RequestParam String page) {
         return roomService.findAll(pageRequestProvider.provideRequest(page));
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping(value = "api/rooms/{idHotel}/quick", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<ReservationHotel> listQuickReservations(@PathVariable Long idHotel){
+        return roomService.listQuickReservations(idHotel);
+    }
+
+
     @PermitAll
-    @RequestMapping(value = "api/rooms/findByIdAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/rooms/findByIdAll", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Room> findById(@RequestParam long id,@RequestParam String page) {
         return roomService.findByHotelId(id,pageRequestProvider.provideRequest(page));
     }
 
     @PermitAll
-    @RequestMapping(value = "api/rooms/findByIdAvailable", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "api/rooms/findByIdAvailable", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<Room> findByIdAvailable(@RequestBody RoomSearchData roomSearchData) {
         return roomService.findAvailableByHotelId(roomSearchData,pageRequestProvider.provideRequest(roomSearchData.getPage()));
     }
 
 
-    @RequestMapping(value = "api/rooms/{id}/editRoom", method = RequestMethod.POST)
+    @PostMapping(value = "api/rooms/{id}/editRoom")
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     @AdminEnabledCheck
-    public ResponseEntity<?> editHotel(@RequestBody Room room,@PathVariable Long id, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Map<String,String>> editHotel(@RequestBody Room room,@PathVariable Long id, HttpServletRequest httpServletRequest) {
         User user = getUser(httpServletRequest);
         return responseTransaction(roomService.editRoom(room,user,id));
     }
 
-    @RequestMapping(value = "api/rooms/{id}/deleteRoom", method = RequestMethod.POST)
+    @PostMapping(value = "api/rooms/{id}/deleteRoom")
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     @AdminEnabledCheck
-    public ResponseEntity<?> deleteRoom(@RequestBody Room room,@PathVariable Long id, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Map<String,String>> deleteRoom(@RequestBody Room room,@PathVariable Long id, HttpServletRequest httpServletRequest) {
         User user = getUser(httpServletRequest);
         return responseTransaction(roomService.deleteRoom(room,user,id));
     }
 
-    @RequestMapping(value = "api/rooms/reserveRoom", method = RequestMethod.POST)
+    @PostMapping(value = "api/rooms/reserveRoom")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<?> reserveRoom(@RequestBody ReservationHotelData reservationHotelData, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Map<String,String>> reserveRoom(@RequestBody ReservationHotelData reservationHotelData, HttpServletRequest httpServletRequest) {
         User user = getUser(httpServletRequest);
         return advanceResponse(roomService.reserveRoom(reservationHotelData,user));
     }
 
-    private ResponseEntity<?> advanceResponse(int resultOfTransaction ){
+    @PostMapping(value = "api/rooms/quickReserve")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<Map<String,String>> quickReserve(@RequestBody QuickReserveData quickReserveData, HttpServletRequest httpServletRequest) {
+        User user = getUser(httpServletRequest);
+        return advanceResponse(roomService.quickReserve(quickReserveData,user));
+    }
+
+    private ResponseEntity<Map<String,String>> advanceResponse(int resultOfTransaction ){
         Map<String, String> result = new HashMap<>();
        switch (resultOfTransaction )
        {
@@ -121,10 +134,8 @@ public class RoomController {
         return ResponseEntity.accepted().body(result);
     }
 
-
-
     @SuppressWarnings("Duplicates")
-    private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){
+    private ResponseEntity<Map<String,String>> responseTransaction(Boolean resultOfTransaction ){
         Map<String, String> result = new HashMap<>();
         if(resultOfTransaction )
         {

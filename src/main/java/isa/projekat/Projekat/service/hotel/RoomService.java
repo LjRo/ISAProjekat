@@ -25,8 +25,6 @@ public class RoomService {
     @Autowired
     private HotelRepository hotelRepository;
 
-    @Autowired
-    private ReservationRepository reservationRepository;
 
     @Autowired
     private HotelReservationRepository hotelReservationRepository;
@@ -34,8 +32,6 @@ public class RoomService {
     @Autowired
     private HotelServicesRepository hotelServicesRepository;
 
-    @Autowired
-    private RoomTypeRepository roomTypeRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -52,6 +48,14 @@ public class RoomService {
 
     }
 
+
+    @Transactional(readOnly = true)
+    public List<ReservationHotel> listQuickReservations(Long idHotel){
+        String date = java.time.LocalDate.now().toString();
+        return hotelReservationRepository.listQuick(idHotel, date);
+    }
+
+
     private int findDaysInBetween(String arrivalString,String departureString){
         Date arrival;
         Date departure;
@@ -66,6 +70,7 @@ public class RoomService {
         int idays = (int) days;
         return (idays==0)?1:idays;
     }
+
 
     public Room findById( Long id) {
         Optional<Room> oRoom = roomRepository.findById(id);
@@ -90,6 +95,33 @@ public class RoomService {
         foundRoom.setNumberOfBeds(room.getNumberOfBeds());
         roomRepository.save(foundRoom);
         return true;
+    }
+
+    @Transactional
+    public int quickReserve(QuickReserveData quickReserveData,User user){
+        ReservationHotel reservationHotel = hotelReservationRepository.findByUserOrder_Id(quickReserveData.getOrderId());
+        Optional<Order> optionalOrder = orderRepository.findById(quickReserveData.getOrderId());
+        if(reservationHotel != null)
+            return 2;
+        Optional<ReservationHotel> optionalReservationHotel = hotelReservationRepository.findById(quickReserveData.getReservationId());
+        if(optionalReservationHotel.isPresent())
+        {
+            ReservationHotel found = optionalReservationHotel.get();
+            if(found.getUser() == null && optionalOrder.isPresent())
+            {
+                Order order = optionalOrder.get();
+                order.setReservationHotel(found);
+                found.setUser(user);
+                found.setUserOrder(order);
+                orderRepository.save(order);
+                hotelReservationRepository.save(found);
+                return 0;
+            }
+            else
+                return 4;
+        }
+        else
+            return 4;
     }
 
     @Transactional

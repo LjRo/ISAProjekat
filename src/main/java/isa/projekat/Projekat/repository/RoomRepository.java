@@ -25,7 +25,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             "AND (ro.number_of_beds = ?7 or ?7 = 0 ) "+
             "AND ro.id NOT IN (Select r.room_id " +
             "from reservation_hotel r " +
-            "where (r.fast is null or r.fast is false) AND " +
+            "where " +
             "            (((r.arrival_date >= ?2 AND r.departure_date <=  ?3) OR " +
             "(r.arrival_date >= ?2 AND r.arrival_date <=  ?3) or " +
             "(r.departure_date >= ?2 AND r.departure_date <= ?3 )) AND r.hotel_id = ro.hotel_id ) " +
