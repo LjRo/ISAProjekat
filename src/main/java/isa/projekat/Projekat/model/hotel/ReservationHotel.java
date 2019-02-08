@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.model.hotel;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import isa.projekat.Projekat.model.airline.Order;
 import isa.projekat.Projekat.model.user.User;
 import org.hibernate.annotations.Fetch;
@@ -20,8 +21,6 @@ public class ReservationHotel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private User user;
 
     @Column(nullable = false)
     private Date arrivalDate;
@@ -38,18 +37,21 @@ public class ReservationHotel implements Serializable {
     @Column(nullable = false)
     private int People;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @Fetch(value = FetchMode.SUBSELECT)
-    private List<HotelServices> services;
-
     @Column
     private boolean fast = false;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<HotelServices> services;
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "hotels_bla")
+    private User user;
+
+    @ManyToOne
     @JsonBackReference(value = "rooms")
     private Order userOrder;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
     private Room room;
 
     public ReservationHotel(){

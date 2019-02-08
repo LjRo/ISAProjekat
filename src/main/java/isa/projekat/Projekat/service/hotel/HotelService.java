@@ -66,12 +66,12 @@ public class HotelService {
     @Transactional(readOnly = true)
     public HotelServices findHotelServiceById(Long id){
         Optional<HotelServices> item = hotelServicesRepository.findById(id);
+        hotelRepository.returnHotelServicesForHotel(id);
         if(!item.isPresent())
         {
             return  null;
         }
         HotelServices hotelServices = item.get();
-        hotelServices.getHotel().setAdmins(null);
         return hotelServices;
     }
 
@@ -252,7 +252,10 @@ public class HotelService {
 
     @Transactional
     public boolean editHotelServices(HotelServices hotelServices, User user) {
-        if(!checkIfAdminAndCorrectAdmin(hotelServices.getHotel().getId(),user))
+        Hotel found = hotelRepository.returnHotelServicesForHotel(hotelServices.getId());
+        if(found==null)
+            return false;
+        if(!checkIfAdminAndCorrectAdmin(found.getId(),user))
             return false;
         Optional<HotelServices> foundHotelServices = hotelServicesRepository.findById(hotelServices.getId());
         if(foundHotelServices.isPresent())
@@ -268,15 +271,18 @@ public class HotelService {
 
     @Transactional
     public boolean removeHotelService(HotelServices hotelServices, User user) {
-            if(!checkIfAdminAndCorrectAdmin(hotelServices.getHotel().getId(),user))
+            Hotel found = hotelRepository.returnHotelServicesForHotel(hotelServices.getId());
+            if(found==null)
+                return false;
+            if(!checkIfAdminAndCorrectAdmin(found.getId(),user))
                 return false;
             Optional<HotelServices> foundHotelServices = hotelServicesRepository.findById(hotelServices.getId());
             if(foundHotelServices.isPresent())
             {
                 HotelServices removing = foundHotelServices.get();
-                Hotel target = hotelRepository.findById(hotelServices.getHotel().getId()).get();
+                Hotel target = hotelRepository.findById(found.getId()).get();
                 target.getHotelServices().remove(removing);
-                removing.setHotel(null);
+
                 hotelServicesRepository.delete(removing);
                 return true;
             }

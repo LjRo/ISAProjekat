@@ -31,9 +31,10 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
 
 
-    @Query(value = "SELECT AVG(r.user_rating) FROM ratings r" +
+    @Query(value = " SELECT AVG(r.user_rating) FROM ratings r" +
             " LEFT OUTER JOIN reservation_hotel rh ON rh.id = r.hotel_reservation_id" +
-            " WHERE rh.hotel_id = ?1 group by rh.hotel_id", nativeQuery = true)
+            " LEFT OUTER JOIN rooms r1 ON r1.id = rh.room_id\n" +
+            " WHERE r1.hotel_id = 1 group by r1.hotel_id", nativeQuery = true)
     Double getAverageHotelRatingById(Long id);
 
     @Query(value = "SELECT AVG(r.user_rating) FROM ratings r" +

@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.repository;
 
 import isa.projekat.Projekat.model.hotel.Hotel;
+import isa.projekat.Projekat.model.hotel.HotelServices;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,6 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "(r.departure_date >= ?1 AND r.departure_date <= ?2 )))))",nativeQuery = true)
           public List<Hotel> returnAvailableHotels(String arrivalDate, String departureDate, String location , String name);
 
-
-
+    @Query(value ="Select h from hotels h left join hotels_hotel_services hhs on h.id = hhs.id and  hhs.hotel_service_id = ?1",nativeQuery = true)
+        Hotel returnHotelServicesForHotel(Long hotelId);
 }

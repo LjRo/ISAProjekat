@@ -29,6 +29,9 @@ public class RentReservation {
     @JsonBackReference(value = "user_rent_reservation")
     private User user;
 
+    @ManyToOne
+    private Cars rentedCar;
+
     @Column
     private Date startDate;
 
@@ -45,8 +48,7 @@ public class RentReservation {
     private Integer numberOfPeople;
 
     // One car can be rented in different periods
-    @ManyToOne
-    private Cars rentedCar;
+
 
 
 

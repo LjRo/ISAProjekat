@@ -22,9 +22,7 @@ public class HotelServices implements Serializable {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @JsonBackReference(value="hotel_services")
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Hotel hotel;
+
 
     public HotelServices() {
         super();
@@ -55,13 +53,6 @@ public class HotelServices implements Serializable {
         this.price = newPrice;
     }
 
-    public Hotel getHotel() {
-        return hotel;
-    }
-
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
-    }
 
     @Override
     public boolean equals(Object o) {
