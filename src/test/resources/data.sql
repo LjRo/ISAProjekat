@@ -1,6 +1,6 @@
 
-INSERT INTO locations (address_name,city,country,latitude,longitude)
-VALUES ('Nikola Tesle 21', 'Beograd', 'Serbia', 44.49153 ,  20.17314);
+INSERT INTO locations (address_name,city,country,latitude,longitude, active)
+VALUES ('Nikola Tesle 21', 'Beograd', 'Serbia', 44.49153 ,  20.17314, true);
 
 INSERT INTO locations (address_name,city,country,latitude,longitude) /*1*/
 VALUES ('Maksima Gorkog 35', 'Milano', 'Italiy', 45.4642 , 9.1900 );
@@ -22,6 +22,7 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (1, 1);
 INSERT INTO airlines (name, address_id, description, has_food, has_extra_luggage, has_other_services, food_price, luggage_price)
 VALUES ('AirSerbia',1, 'Aeroport Nikole Tesle Belgrade', true, true, false, 50, 100);
 
+insert into airlines_destinations (airline_id, destinations_id) values (1,1);
 
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,administrated_airline_id,password_changed)
 values (2,'airline@gmail.com','airline','airlinovic','$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW','adr4','city4',true,'123-456-1234',1,true);
