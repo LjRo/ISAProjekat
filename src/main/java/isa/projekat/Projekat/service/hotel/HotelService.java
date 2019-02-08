@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -33,14 +31,14 @@ public class HotelService {
     @Autowired
     private HotelServicesRepository hotelServicesRepository;
 
-    @Autowired LocationRepository locationRepository;
+    @Autowired
+    private  LocationRepository locationRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Autowired
     private UserRepository userRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
 
     @Transactional(readOnly = true)
     public List<Hotel> findAll() {
@@ -66,7 +64,6 @@ public class HotelService {
     @Transactional(readOnly = true)
     public HotelServices findHotelServiceById(Long id){
         Optional<HotelServices> item = hotelServicesRepository.findById(id);
-        hotelRepository.returnHotelServicesForHotel(id);
         if(!item.isPresent())
         {
             return  null;
@@ -82,7 +79,12 @@ public class HotelService {
             return false;
 
         Hotel target = user.getAdministratedHotel();
-        RoomType roomType = roomTypeRepository.findById(roomData.getRoomType().getId()).get();
+        Optional<RoomType> optionalRoomType = roomTypeRepository.findById(roomData.getRoomType().getId());
+
+        if(!optionalRoomType.isPresent())
+            return false;
+
+        RoomType roomType = optionalRoomType.get();
 
         Room room = new Room();
         room.setHotel(target);
@@ -95,8 +97,8 @@ public class HotelService {
         room.setRoomType(roomType);
         target.getRooms().add(room);
 
-        entityManager.persist(room);
-        entityManager.persist(target);
+        roomRepository.save(room);
+        hotelRepository.save(target);
         return true;
     }
     @Transactional
@@ -118,9 +120,8 @@ public class HotelService {
         hotelPricesRepository.save(hotelPriceList);
         target.getHotelPriceList().add(hotelPriceList);
 
-        entityManager.persist(roomType);
-        entityManager.persist(target);
-
+        roomTypeRepository.save(roomType);
+        hotelRepository.save(target);
         return true;
     }
 
@@ -252,6 +253,7 @@ public class HotelService {
 
 
     @Transactional
+    @SuppressWarnings("Duplicates")
     public boolean editHotelServices(HotelServices hotelServices, User user) {
         Hotel found = hotelRepository.returnHotelServicesForHotel(hotelServices.getId());
         if(found==null)
@@ -271,6 +273,7 @@ public class HotelService {
     }
 
     @Transactional
+    @SuppressWarnings("Duplicates")
     public boolean removeHotelService(HotelServices hotelServices, User user) {
             Hotel found = hotelRepository.returnHotelServicesForHotel(hotelServices.getId());
             if(found==null)

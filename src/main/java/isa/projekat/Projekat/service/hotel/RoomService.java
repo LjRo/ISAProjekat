@@ -34,13 +34,14 @@ public class RoomService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Transactional(readOnly = true)
     public Page<Room> findAll(PageRequest pageRequest){
         return roomRepository.findAll(pageRequest);
     }
-
+    @Transactional(readOnly = true)
     public Page<Room> findByHotelId( Long id,PageRequest pageRequest) { return roomRepository.findByHotelId(id,pageRequest);}
 
-    //(roomSearchData.getHotelId(),roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate(),roomSearchData.getType(),pageRequestProvider.provideRequest(roomSearchData.getPage()));
+    @Transactional(readOnly = true)
     public Page<Room> findAvailableByHotelId(RoomSearchData roomSearchData, PageRequest pageRequest) {
             return roomRepository.returnRoomsThatAreAvailable(roomSearchData.getHotelId(),roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate(),roomSearchData.getType(),roomSearchData.getNumberOfPeople(),roomSearchData.getNumberOfRooms(),roomSearchData.getNumberOfBeds(),roomSearchData.getMinPrice(),roomSearchData.getMaxPrice(), findDaysInBetween(roomSearchData.getArrivalDate(),roomSearchData.getDepartureDate()),pageRequest);
 
@@ -157,15 +158,18 @@ public class RoomService {
         String services = reservationHotelData.getServices();
         List<HotelServices> servicesList = new ArrayList<>();
         BigDecimal cumulativePrice = new BigDecimal(0);
-        Set<HotelPriceList> priceList = room.getHotel().getHotelPriceList();
 
-        for(HotelPriceList stock : priceList){
-            if(stock.getRoomType().equals(room.getRoomType()))
-            {
-                cumulativePrice =  stock.getPrice().multiply(new BigDecimal(days));
+        if(room!=null)
+        {
+            Set<HotelPriceList> priceList = room.getHotel().getHotelPriceList();
+
+            for(HotelPriceList stock : priceList){
+                if(stock.getRoomType().equals(room.getRoomType()))
+                {
+                    cumulativePrice =  stock.getPrice().multiply(new BigDecimal(days));
+                }
             }
         }
-
         if(services!="")
         {
             if(services.contains(","))

@@ -1,12 +1,11 @@
 package isa.projekat.Projekat.hotel.service;
 
-import isa.projekat.Projekat.model.hotel.FloorPlan;
-import isa.projekat.Projekat.model.hotel.Hotel;
-import isa.projekat.Projekat.model.hotel.HotelServices;
-import isa.projekat.Projekat.model.hotel.RoomType;
+import isa.projekat.Projekat.model.hotel.*;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
-import isa.projekat.Projekat.repository.*;
+import isa.projekat.Projekat.repository.HotelRepository;
+import isa.projekat.Projekat.repository.HotelServicesRepository;
+import isa.projekat.Projekat.repository.RoomTypeRepository;
 import isa.projekat.Projekat.service.hotel.HotelService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,24 +29,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class HotelServiceTest {
     public static final Long DB_ID = 1L;
-    public static final Long DB_ID_2 = 1L;
+    public static final Long DB_ID_2 = 2L;
     public static final Long LOC_ID = 520L;
-
-
-    @Mock
-    private HotelRepository hotelRepository;
-
-    @Mock
-    private RoomTypeRepository roomTypeRepository;
-
-    @Mock
-    private FloorRepository floorRepository;
-
-    @Mock
-    private HotelPricesRepository hotelPricesRepository;
-
-    @Mock
-    private HotelServicesRepository hotelServicesRepository;
 
     @Mock
     private Hotel hotelMock;
@@ -61,17 +44,27 @@ public class HotelServiceTest {
     @Mock
     private HotelServices hotelServicesMock;
 
-    @Mock
-    private UserRepository userRepositoryMock;
 
     @Mock
-    private LocationRepository locationRepositoryMock;
+    private Room roomMock;
+
+    @Mock
+    private Location locationMock;
 
     @Mock
     private User userMock;
 
     @Mock
-    private Location locationMock;
+    private User user2Mock;
+
+    @Mock
+    private HotelRepository hotelRepository;
+
+    @Mock
+    private RoomTypeRepository roomTypeRepository;
+
+    @Mock
+    private HotelServicesRepository hotelServicesRepository;
 
     private LocalDate dateMock = LocalDate.now();
 
@@ -93,6 +86,30 @@ public class HotelServiceTest {
         assertEquals(hotelRepository.findById(DB_ID).get().getId(), hotel.getId());
 
     }
+
+    @Test
+    public void testFailFineOne() {
+        Optional<Hotel>  optionalHotel = Optional.ofNullable(null);
+        when(hotelRepository.findById(DB_ID_2)).thenReturn(optionalHotel);
+        Hotel hotel = hotelService.findHotelById(DB_ID_2);
+        assertEquals(hotel,null);
+    }
+
+    @Test
+    public void testFailFindHotelServicesById() {
+        Optional<HotelServices>  optionalHotelServices = Optional.ofNullable(null);
+        when(hotelServicesRepository.findById(DB_ID_2)).thenReturn(optionalHotelServices);
+        HotelServices checkHotelServices = hotelService.findHotelServiceById(DB_ID_2);
+        assertEquals(checkHotelServices,null);
+    }
+
+    @Test
+    public void testFindHotelServiceById() {
+        when(hotelServicesRepository.findById(DB_ID)).thenReturn(Optional.of(hotelServicesMock));
+        HotelServices checkHotelServices = hotelService.findHotelServiceById(DB_ID);
+        assertEquals(checkHotelServices,hotelServicesMock);
+    }
+
 
 
     @Test
@@ -153,6 +170,7 @@ public class HotelServiceTest {
         assertFalse(hotelService.editHotel(hotelMock,userMock));
     }
 
+
     @Test
     @Transactional
     public void testAddRoomType() {
@@ -163,6 +181,46 @@ public class HotelServiceTest {
         when(hotelMock.getAdmins()).thenReturn((listing));
         assertFalse(hotelService.addRoomType(roomTypeMock,DB_ID,userMock));
     }
+
+
+    @Test
+    @Transactional
+    public void testFailAddRoom1() {
+        RoomData data = new RoomData("Name",roomTypeMock,1,1,1,1,1);
+        when(userMock.getType()).thenReturn(0);
+        List<User>listing = new ArrayList<>();
+        listing.add(userMock);
+        when(hotelMock.getAdmins()).thenReturn((listing));
+        when(userMock.getAdministratedHotel()).thenReturn(hotelMock);
+        assertFalse(hotelService.addRoom(data,DB_ID,userMock));
+    }
+
+    @Test
+    @Transactional
+    public void testFailAddRoom2() {
+        RoomData data = new RoomData("Name",roomTypeMock,1,1,1,1,1);
+        when(userMock.getType()).thenReturn(3);
+        when(userMock.getAdministratedHotel()).thenReturn(null);
+        when(hotelMock.getAdmins()).thenReturn(new ArrayList<>());
+        assertFalse(hotelService.addRoom(data,DB_ID,user2Mock));
+    }
+
+    @Test
+    @Transactional
+    public void testAddRoom() {
+        when(roomTypeMock.getId()).thenReturn(DB_ID);
+        when(roomTypeRepository.findById(DB_ID)).thenReturn(Optional.of(roomTypeMock));
+        RoomData data = new RoomData("Name",roomTypeMock,1,1,1,1,1);
+        when(userMock.getId()).thenReturn(DB_ID);
+        List<User>listing = new ArrayList<>();
+        listing.add(userMock);
+        when(hotelMock.getAdmins()).thenReturn((listing));
+        when(userMock.getAdministratedHotel()).thenReturn(hotelMock);
+        when(hotelRepository.findById(DB_ID)).thenReturn(Optional.of(hotelMock));
+        Boolean shouldBeTrue = hotelService.addRoom(data,DB_ID,userMock);
+        assertTrue(shouldBeTrue);
+    }
+
 
     @Test
     @Transactional

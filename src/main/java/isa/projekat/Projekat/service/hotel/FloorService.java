@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -34,7 +35,14 @@ public class FloorService {
         if(!checkIfAdminAndCorrectAdmin(id,user))
             return false;
         Hotel target = user.getAdministratedHotel();
-        FloorPlan updating = floorRepository.findById(floorPlan.getId()).get();
+        Optional<FloorPlan> optionalFloorPlan = floorRepository.findById(floorPlan.getId());
+        if(target == null || !optionalFloorPlan.isPresent())
+        {
+            return false;
+        }
+
+
+        FloorPlan updating = optionalFloorPlan.get();
         updating.setConfiguration(floorPlan.getConfiguration());
 
         floorRepository.save(updating);
@@ -46,7 +54,11 @@ public class FloorService {
         if(adminToCheck.getAdministratedHotel() == null) {
             return false;
         }
-        Hotel hotel = hotelRepository.findById(id).get();
+        Optional<Hotel> optionalHotel = hotelRepository.findById(id);
+
+        if(!optionalHotel.isPresent())
+            return false;
+        Hotel hotel = optionalHotel.get();
 
         if(!hotel.getAdmins().contains(adminToCheck))
         {

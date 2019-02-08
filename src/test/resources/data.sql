@@ -55,8 +55,14 @@ VALUES ('Single Beds');
 INSERT INTO hotels_room_types(hotel_id,room_types_id)
 VALUES (1,1);
 
+INSERT INTO rooms (id,number_of_beds, number_of_people, number_of_rooms,room_number,floor,room_type_id,hotel_id)
+VALUES (1,1, 2 , 2 ,118, 1, 1 , 1);
+
 INSERT INTO rooms (number_of_beds, number_of_people, number_of_rooms,room_number,floor,room_type_id,hotel_id)
 VALUES (1, 2 , 2 ,118, 1, 1 , 1);
+
+INSERT INTO rooms (number_of_beds, number_of_people, number_of_rooms,room_number,floor,room_type_id,hotel_id)
+VALUES (1, 2 , 2 ,208, 1, 1 , 1);
 
 INSERT INTO hotel_services(name,price)
 VALUES ('WiFi',20);
@@ -67,3 +73,5 @@ VALUES (1,1);
 INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id)
 VALUES (3, '2019-01-01', '2019-01-15' ,14, '2019-01-01' , 1 ,1, null );
 
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id,fast,price)
+VALUES (4, '2018-02-03', '2018-02-15' ,12, null , 1 ,null , null,true ,1400);
