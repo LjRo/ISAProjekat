@@ -37,15 +37,10 @@ public class Room implements Serializable {
 
     @Column
     private String discount;
-
-
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    
+    @ManyToOne
     @JsonBackReference(value="hotel_rooms")
     private Hotel hotel;
-
-
 
     public Room() {
         super();

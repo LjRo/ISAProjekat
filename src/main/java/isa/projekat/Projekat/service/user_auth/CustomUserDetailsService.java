@@ -113,9 +113,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public void register(UserData userData) {
 		User user = new User();
 		user.setType(0);
-		Authority authority = new Authority("USER");
+		Authority authority1 = new Authority("USER");
+		Authority authority2 = new Authority("ROLE_USER");
 		List<Authority> list = new ArrayList<>();
-		list.add(authority);
+		list.add(authority1);
+		list.add(authority2);
 		user.setAuthorities(list);
 
 		user.setUsername(userData.getEmail());

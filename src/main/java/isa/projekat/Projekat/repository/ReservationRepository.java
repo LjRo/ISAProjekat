@@ -2,6 +2,7 @@ package isa.projekat.Projekat.repository;
 
 import isa.projekat.Projekat.model.airline.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
 
     void deleteById(Long id);
-
+    @Modifying
+    @Query(value = "DELETE w FROM orders_reservations w WHERE w.reservations_id NOT IN (SELECT rr.id FROM rent_reservation rr)",nativeQuery = true)
+    void CleanUp();
 
 
 

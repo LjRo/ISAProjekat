@@ -59,6 +59,16 @@ public class CarService {
             return null;
     }
 
+    @Transactional(readOnly = true)
+    public List<Object> findStatisticsDaily(){
+        int info = 30;
+
+        for (int i = 0; i < 30; i++){
+            int a = 5;
+        }
+        return null;
+    }
+
     @Transactional
     public boolean addCars(Cars cars, User user, Long id){
 
