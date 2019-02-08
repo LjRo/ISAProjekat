@@ -1,9 +1,12 @@
 package isa.projekat.Projekat.model.hotel;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import isa.projekat.Projekat.model.Rating;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 // Model for room in hotels
 @Entity
@@ -39,9 +42,13 @@ public class Room implements Serializable {
     private String discount;
 
 
+
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference(value="hotel_rooms")
     private Hotel hotel;
+
+
 
     public Room() {
         super();

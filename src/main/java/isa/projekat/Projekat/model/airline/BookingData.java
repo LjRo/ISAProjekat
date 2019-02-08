@@ -7,7 +7,7 @@ public class BookingData {
     //TODO: add Hotel and Car data
 
     public BookingData(){
-
+        super();
     }
 
     public List<ReservationData> getAirlineReservations() {

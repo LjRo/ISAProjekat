@@ -33,6 +33,7 @@ public class VerificationToken {
     }
 
     public VerificationToken() {
+        super();
     }
 
     public VerificationToken(String token, User user) {

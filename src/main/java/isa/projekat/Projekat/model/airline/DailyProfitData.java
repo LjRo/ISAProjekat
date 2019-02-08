@@ -7,6 +7,10 @@ public class DailyProfitData {
     private LocalDate startTime;
     private BigDecimal price;
 
+    public DailyProfitData() {
+        super();
+    }
+
     public LocalDate getStartTime() {
         return startTime;
     }

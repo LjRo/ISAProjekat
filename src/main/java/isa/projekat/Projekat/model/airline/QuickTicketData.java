@@ -21,6 +21,10 @@ public class QuickTicketData {
     private String passport;
     private Long seatId;
 
+    public QuickTicketData() {
+        super();
+    }
+
     public Long getId() {
         return id;
     }

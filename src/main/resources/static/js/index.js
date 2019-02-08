@@ -42,7 +42,7 @@ $(document).ready(function () {
                     });
                 }
                 if (data.rentReservation != undefined){
-                    guiRent(data, sel);
+                    guiRent(data.rentReservation, sel);
                 }
                 if (data.reservationHotel != undefined){
                     guiHotel(data.reservationHotel.room);

@@ -182,14 +182,6 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (6, 5);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (7, 1);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (8, 1);
 
-/*companies.sql*/
-
-
-
-INSERT INTO ratings(user_rating,user_id,type,hotel_id)
-VALUES (3,1,3,1);
-
-
 
 INSERT INTO room_type (name)
 VALUES ('Single Beds');

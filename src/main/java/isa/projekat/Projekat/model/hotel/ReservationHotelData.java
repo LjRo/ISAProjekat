@@ -1,6 +1,8 @@
 package isa.projekat.Projekat.model.hotel;
 
-public class ReservationHotelData {
+import java.io.Serializable;
+
+public class ReservationHotelData implements Serializable {
 
     private Long hotelId;
     private Long roomId;
@@ -10,6 +12,7 @@ public class ReservationHotelData {
     private String departureDate;
 
     public ReservationHotelData() {
+        super();
     }
 
     public Long getReservationId() {

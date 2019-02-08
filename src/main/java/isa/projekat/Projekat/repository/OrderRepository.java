@@ -10,7 +10,11 @@ import java.util.List;
 @Component
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
+    @Query(value = "SELECT o.* FROM orders o WHERE o.placed_order_id = ?1 AND o.finished IS FALSE", nativeQuery = true)
     List<Order> findAllByPlacedOrderIdAndFinishedIsFalse(Long id);
+
+
+    @Query(value = "SELECT o.* FROM orders o WHERE o.placed_order_id = ?1", nativeQuery = true)
     List<Order> findAllByPlacedOrderId(Long id);
 
 

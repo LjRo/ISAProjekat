@@ -83,9 +83,7 @@ public class RentOfficeService {
 
         Optional<RentACar> rentACar = rentCarRepository.findById(id);
 
-        if (rentACar == null || rentOffice == null || user == null){
-            return false;
-        }else if (!rentACar.isPresent() || !rentOffice.isPresent()) {
+        if (!rentACar.isPresent() || !rentOffice.isPresent()) {
             return false;
         }else if (!rentACar.get().getAdmins().contains(user)){
             return false;
@@ -113,7 +111,7 @@ public class RentOfficeService {
         Optional<RentOffice> optionalRentOffice = rentOfficeRepository.findById(id);
 
 
-        if (optionalRentACar == null || optionalRentOffice == null || user == null){
+        if (user == null){
             return false;
         }else if (!optionalRentACar.isPresent() || !optionalRentOffice.isPresent()) {
             return false;
@@ -132,20 +130,4 @@ public class RentOfficeService {
 
 
     }
-
-    private boolean checkIfPresent(Optional<RentACar> rentACar, Optional<RentOffice> rentOffice, User user){
-        if (rentACar == null || rentOffice == null || user == null){
-            return false;
-        }else if (!rentACar.isPresent() || !rentOffice.isPresent()) {
-            return false;
-        }else if (!rentACar.get().getAdmins().contains(user)){
-            return false;
-        }else {
-            return true;
-        }
-    }
-
-
-
-
 }

@@ -2,10 +2,13 @@ package isa.projekat.Projekat.model.rent_a_car;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import isa.projekat.Projekat.model.Rating;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Entity
@@ -36,6 +39,8 @@ public class Cars implements Serializable {
     @Column(name = "numberOfBags", nullable = false)
     private int numberOfBags;
 
+
+
     @Column(name = "maxPassengers", nullable = false)
     private int maxPassengers;
 
@@ -53,10 +58,9 @@ public class Cars implements Serializable {
     private RentACar rentACar;
 
 
-    //TODO SET LIST OF REVIEWS
-
 
     public Cars() {
+        super();
     }
 
     public Cars(CarType type, String name, String mark, String model, String registrationNumber, int numberOfBags, int maxPassengers, int numberOfDoors, BigDecimal dailyPrice, Boolean isFastReserved, RentACar rentACar) {
@@ -72,6 +76,8 @@ public class Cars implements Serializable {
         this.isFastReserved = isFastReserved;
         this.rentACar = rentACar;
     }
+
+
 
     public RentACar getRentACar() {
         return rentACar;

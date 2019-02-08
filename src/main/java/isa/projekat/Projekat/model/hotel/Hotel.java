@@ -61,6 +61,7 @@ public class Hotel implements Serializable {
 
 
     public Hotel() {
+        super();
     }
 
     public Long getId() {

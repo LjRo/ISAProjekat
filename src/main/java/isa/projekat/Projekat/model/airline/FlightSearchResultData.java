@@ -10,6 +10,10 @@ public class FlightSearchResultData {
     private BigDecimal luggagePrice;
     private BigDecimal foodPrice;
 
+    public FlightSearchResultData() {
+        super();
+    }
+
     public Flight getFlight() {
         return flight;
     }

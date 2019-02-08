@@ -122,7 +122,11 @@ public class User implements UserDetails {
         this.administratedAirline = administratedAirline;
     }
 
-public Hotel getAdministratedHotel() {
+    public User() {
+        super();
+    }
+
+    public Hotel getAdministratedHotel() {
         return administratedHotel;
     }
 
@@ -137,9 +141,6 @@ public Hotel getAdministratedHotel() {
     public void setAdministratedRent(RentACar administratedRent) {
         this.administratedRent = administratedRent;
     }
-
-    //
-
 
     public Long getId() {
         return id;
@@ -250,8 +251,6 @@ public Hotel getAdministratedHotel() {
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
-
-
 
     public Timestamp getLastPasswordResetDate() {
         return lastPasswordResetDate;

@@ -6,6 +6,10 @@ public class ProfitFilterData {
     private LocalDate sDate;
     private LocalDate eDate;
 
+    public ProfitFilterData() {
+        super();
+    }
+
     public LocalDate getsDate() {
         return sDate;
     }

@@ -61,7 +61,7 @@ public class Flight {
     private BigDecimal price;
 
     public Flight(){
-
+        super();
     }
 
     public Long getId() {

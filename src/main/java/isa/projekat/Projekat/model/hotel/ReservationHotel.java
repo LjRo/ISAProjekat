@@ -56,7 +56,7 @@ public class ReservationHotel implements Serializable {
     private Room room;
 
     public ReservationHotel(){
-
+        super();
     }
 
     public User getUser() {

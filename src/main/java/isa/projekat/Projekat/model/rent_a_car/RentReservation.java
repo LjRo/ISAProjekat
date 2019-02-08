@@ -55,7 +55,9 @@ public class RentReservation {
 
     private BigDecimal price;
 
-
+    public RentReservation() {
+        super();
+    }
 
     public BigDecimal getPrice() {
         return price;
@@ -71,9 +73,6 @@ public class RentReservation {
 
     public void setFastReservation(Boolean fastReservation) {
         this.fastReservation = fastReservation;
-    }
-
-    public RentReservation() {
     }
 
     public Integer getNumberOfPeople() {

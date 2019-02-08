@@ -45,6 +45,7 @@ public class Order implements Serializable {
     private Boolean finished;
 
     public Order() {
+        super();
     }
 
     public Order(List<Reservation> reservations, User placedOrder, Date orderDate, Boolean finished) {

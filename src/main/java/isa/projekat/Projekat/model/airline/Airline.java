@@ -1,6 +1,7 @@
 package isa.projekat.Projekat.model.airline;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import isa.projekat.Projekat.model.Rating;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
 
@@ -58,8 +59,9 @@ public class Airline implements Serializable {
     @JsonManagedReference(value = "airline_admins")
     private List<User> admins;
 
-    public Airline() {
 
+    public Airline() {
+        super();
     }
 
 
