@@ -67,11 +67,14 @@ values (3,'hotel@gmail.com','hotel','hotelic','$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8
 
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (3, 4);
 
-INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,points)
-values (1,'admin@gmail.com','admin','adminovic','$2a$10$CItG2LPX2aHLCzm9LMud8e05QoLTM1rxEd/WdfZJKHAbE0miu23/e','adr2','city2',true,'123-456-1234',0);
-
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,points,password_changed)
+values (1,'admin@gmail.com','admin','adminovic','$2a$10$CItG2LPX2aHLCzm9LMud8e05QoLTM1rxEd/WdfZJKHAbE0miu23/e','adr2','city2',true,'123-456-1234',0,true );
 
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (4, 2);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (4, 1);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (4, 3);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (4, 4);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (4, 5);
 
 INSERT INTO room_type (name)
 VALUES ('Single Beds');
@@ -106,4 +109,11 @@ VALUES ('RentAleksandar', 1, 'Cheap cars that will take you where you need to be
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number, administrated_rent_id,password_changed)
 values (4,'rent@gmail.com','rent','rentovic','$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW','adr5','city5',true,'123-456-1234', 1,true);
 
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (5, 5);
 
+
+INSERT into car_type (name)
+values ('Hatchback');
+
+INSERT into cars (name, mark, model, registration_number, number_of_bags, max_passengers, number_of_doors, daily_price, is_fast_reserved, type_id, rentacar_id )
+values ('Ficko','Mercedes','Benz','13AC42',4,4,4,100,false,1,1);
