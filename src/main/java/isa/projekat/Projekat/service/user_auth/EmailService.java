@@ -113,8 +113,10 @@ public class EmailService{
             for(int i = 0; i < order.getReservationHotel().getServices().size(); i++) {
                 if(first) {
                     rez += "Additional services: ";
+                } else {
+                    rez += ", ";
                 }
-                rez+=order.getReservationHotel().getServices().get(i);
+                rez+=order.getReservationHotel().getServices().get(i).getName();
             }
             rez+="\r\n\r\n";
         }
