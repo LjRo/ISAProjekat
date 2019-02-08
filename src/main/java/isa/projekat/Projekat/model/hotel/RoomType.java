@@ -18,6 +18,10 @@ public class RoomType implements Serializable {
         super();
     }
 
+    public RoomType(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

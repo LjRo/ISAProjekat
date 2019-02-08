@@ -65,6 +65,13 @@ VALUES ('Aleksandar', 2, 'Hotel with 5 stars in Milano with great locations',15)
 INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,administrated_hotel_id,password_changed)
 values (3,'hotel@gmail.com','hotel','hotelic','$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW','adr3','city3',true,'123-456-1234',1,true);
 
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (3, 4);
+
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,points)
+values (1,'admin@gmail.com','admin','adminovic','$2a$10$CItG2LPX2aHLCzm9LMud8e05QoLTM1rxEd/WdfZJKHAbE0miu23/e','adr2','city2',true,'123-456-1234',0);
+
+
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (4, 2);
 
 INSERT INTO room_type (name)
 VALUES ('Single Beds');
@@ -92,3 +99,11 @@ VALUES (3, '2019-01-01', '2019-01-15' ,14, '2019-01-01' , 1 ,1, null );
 
 INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id,fast,price)
 VALUES (4, '2018-02-03', '2018-02-15' ,12, null , 1 ,null , null,true ,1400);
+
+INSERT INTO rentacar (name,address_id, description,fast_discount)
+VALUES ('RentAleksandar', 1, 'Cheap cars that will take you where you need to be.',20);
+
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number, administrated_rent_id,password_changed)
+values (4,'rent@gmail.com','rent','rentovic','$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW','adr5','city5',true,'123-456-1234', 1,true);
+
+
