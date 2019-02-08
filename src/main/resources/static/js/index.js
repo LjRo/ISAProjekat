@@ -35,10 +35,49 @@ $(document).ready(function () {
             headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
             success: function (data) {
                 var sel = '#orderListings';
-                $(sel).append('<h6> Order id: ' + data.id+ ' </h6>');
+                $(sel).append('<h6 style="display: inline"> Order id: ' + data.id+ ' </h6>');
+                $(sel).append('<button type="button" id="CancelOrder' + data.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Cancel order</button>');
+                $(sel).append('<button type="button" id="ConfirmOrder' + data.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Cancel order</button>')
+                $('#CancelOrder'+data.id).click(function () {
+
+                    $.get({
+                        url: 'api/flight/cancelOrder?id=' + data.id,
+                        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                        success: function (data) {
+                            if (data == true) {
+                                window.location.reload(true);
+                            }else {
+                                alert("Failed to delete order");
+                            }
+                        },
+                        error: function (e) {
+
+                        }
+                    });
+
+                });
+
+                $('#ConfirmOrder' + data.id).click(function () {
+                    $.get({
+                        url: 'api/order/'+data.id+'/confirm',
+                        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                        success: function (data) {
+                            if (data == true) {
+                                alert
+                            }else {
+                                alert("Failed to delete order");
+                            }
+                        },
+                        error: function (e) {
+
+                        }
+                    });
+                });
+
                 if (data.reservations != undefined) {
+
                     data.reservations.forEach(function (entry) {
-                        guiAriline(entry.flight,sel, entry.name, entry.lastName, entry.confirmed);
+                        guiAirline(entry.flight,sel, entry.name, entry.lastName, entry.confirmed);
                     });
                 }
                 if (data.rentReservation != undefined){
@@ -95,7 +134,7 @@ function guiRent(rentReservation, selectedElement) {
             '<div class="card mb-1">' +
             '                                                <div class="card-body">' +
             '                                                    <div class="row">' +
-            '                                                        <div class="col-md-3" style="max-height: 150px">' +
+            '                                                        <div class="col-md-3" style="max-height:150px">' +
             '                                                            <img class="card-img" src="assets/img/carlisting.svg" style="height: 100px;">' +
             '                                                        </div>' +
             '                                                        <div class="col-md-6 border-right">' +
@@ -221,7 +260,10 @@ var guiHotel = function (hotel, selectedElement) {
     });*/
 }
 
-function guiAriline(data, selectedElement, firstName, lastName, confirmed) {
+
+
+
+function guiAirline(data, selectedElement, firstName, lastName, confirmed) {
     var sDate = new Date(data.startTime);
     var lDate = new Date(data.landTime);
     var flightData = $(

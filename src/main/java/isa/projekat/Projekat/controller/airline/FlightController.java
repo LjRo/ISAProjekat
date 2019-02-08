@@ -1,5 +1,6 @@
 package isa.projekat.Projekat.controller.airline;
 
+
 import isa.projekat.Projekat.model.airline.*;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
@@ -118,13 +119,50 @@ public class FlightController {
         return flightService.findAllOrders(user.getId());
     }
 
-    @RequestMapping(value= "api/flight/{id}/cancel", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+
+    @GetMapping(value = "api/flight/confirm", produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
-    public Boolean cancelFlight(@PathVariable Long id, HttpServletRequest req){
+    public Boolean confirm(@RequestParam Long id, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
         User user = userService.findByUsername(email);
-        return flightService.cancelFlight(id,user);
+        return flightService.confirmFlight(id,user);
+    }
+
+    @GetMapping(value = "api/flight/decline", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public Boolean decline(@RequestParam Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return flightService.declineFlight(id,user);
+    }
+
+    @GetMapping(value = "api/flight/cancelHotel", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Boolean cancelHotel(@RequestParam Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return flightService.cancelHotel(id,user);
+    }
+
+
+    @GetMapping(value = "api/flight/cancelOrder", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public Boolean cancelOrder(@RequestParam Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return flightService.cancelOrder(id,user);
+    }
+
+    @GetMapping(value = "api/flight/cancelRent", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public Boolean cancelRent(@RequestParam Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return flightService.cancelRent(id,user);
     }
 
 

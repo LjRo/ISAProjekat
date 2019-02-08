@@ -50,10 +50,10 @@ public class FlightService {
     }
 
     @Transactional
-    public Boolean cancelOrder(Long id, User user){
+    public Boolean cancelOrder(Long idOrder, User user){
 
 
-        Optional<Order> orderOptional = orderRepository.findById(id);
+        Optional<Order> orderOptional = orderRepository.findById(idOrder);
 
         if (!orderOptional.isPresent() || user == null){
             return false;
@@ -61,14 +61,14 @@ public class FlightService {
         Order order = orderOptional.get();
 
         // not the user that placed the order
-        if (order.getPlacedOrder().getId().equals(user.getId())|| order.getReservations().size() == 0){
+        if (!order.getPlacedOrder().getId().equals(user.getId())|| order.getReservations().size() == 0){
             return  false;
         }
         Date date = order.getReservations().get(0).getFlight().getStartTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.HOUR, -3);
-        if (!cal.before(new Date())){
+        if (cal.after(new Date())){
             return false; // can't cancel
         }
 
@@ -76,43 +76,33 @@ public class FlightService {
             r.setFlight(null);
             r.getSeat().setTaken(false);
             r.getSeat().setReservation(null);
+
+            seatRepository.save(r.getSeat());
             r.setSeat(null);
-            reservationRepository.save(r);
             reservationRepository.deleteById(r.getId());
         }
 
         if (order.getRentReservation() != null){
             RentReservation rentReservation = order.getRentReservation();
-
-            rentReservation.setRentedCar(null);
-            rentReservation.setStartLocation(null);
-            rentReservation.setEndLocation(null);
-            rentReservation.setUser(null);
-            rentReservationRepository.save(rentReservation);
             rentReservationRepository.deleteById(rentReservation.getId());
         }
         if (order.getReservationHotel() != null){
             ReservationHotel reservationHotel = order.getReservationHotel();
-
             reservationHotel.setUser(null);
             reservationHotel.setRoom(null);
-            reservationHotel.setServices(null);
-
             hotelReservationRepository.save(reservationHotel);
-            hotelReservationRepository.deleteById(id);
         }
-
-
+        reservationRepository.CleanUp();
+        orderRepository.deleteById(order.getId());
 
         return true;
-
     }
 
-    // Id Order
+
     @SuppressWarnings("Duplicates")
     @Transactional
-    public Boolean cancelRent(Long id, User user){
-        Optional<Order> orderOptional = orderRepository.findById(id);
+    public Boolean cancelRent(Long idOrder, User user){
+        Optional<Order> orderOptional = orderRepository.findById(idOrder);
         if (!orderOptional.isPresent()){
             return false;
         }
@@ -126,7 +116,7 @@ public class FlightService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DAY_OF_MONTH, -3);
-        if (!cal.before(new Date())){
+        if (!cal.after(new Date())){
             return false; // can't cancel
         }
 
@@ -160,7 +150,7 @@ public class FlightService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DAY_OF_MONTH, -3);
-        if (!cal.before(new Date())){
+        if (!cal.after(new Date())){
             return false; // can't cancel
         }
 
@@ -169,9 +159,9 @@ public class FlightService {
 
     // For friends to cancel
     @Transactional
-    public Boolean cancelFlight(Long id, User user){
+    public Boolean declineFlight(Long idReservation, User user){
 
-        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+        Optional<Reservation> optionalReservation = reservationRepository.findById(idReservation);
 
         if (!optionalReservation.isPresent()){
             return false;
@@ -183,7 +173,7 @@ public class FlightService {
             return false;
         }
 
-        Order fromOrder = orderRepository.findByReservationId(id);
+        Order fromOrder = orderRepository.findByReservationId(idReservation);
         if (fromOrder == null){
             return false;
         }
@@ -203,8 +193,8 @@ public class FlightService {
 
 
     @Transactional
-    public Boolean confirmFlight(Long id, User user){
-        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+    public Boolean confirmFlight(Long idReservation, User user){
+        Optional<Reservation> optionalReservation = reservationRepository.findById(idReservation);
 
         if (!optionalReservation.isPresent()){
             return false;
@@ -217,7 +207,7 @@ public class FlightService {
         }
 
         reservation.setConfirmed(true);
-
+        reservationRepository.save(reservation);
         return true;
 
     }
