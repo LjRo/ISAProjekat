@@ -86,13 +86,13 @@ public class FlightControllerTest {
     @Test
     @Transactional
     public void confirmTest() throws Exception {
-        mockMvc.perform(post("/api/order" + "/" + DB_ID+"/confirm")).andExpect(status().is5xxServerError());
+        mockMvc.perform(post("/api/order" + "/" + DB_ID+"/confirm")).andExpect(status().is4xxClientError());
     }
 
     @WithMockUser(roles = {"USER"})
     @Test
     public void isOrderingTest() throws Exception {
-        mockMvc.perform(get("/api/order" + "/" + DB_ID+"/isOrdering")).andExpect(status().is5xxServerError());
+        mockMvc.perform(get("/api/order" + "/" + DB_ID+"/isOrdering")).andExpect(status().isOk());
     }
 
     @WithMockUser(roles = {"USER"})
