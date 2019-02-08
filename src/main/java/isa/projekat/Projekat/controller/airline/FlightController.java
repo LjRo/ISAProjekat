@@ -28,7 +28,7 @@ public class FlightController {
 
 
     @RequestMapping(value = "api/flight/{id}/seatData", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public SeatData findFlightSeatData(@PathVariable Long id, HttpServletRequest req){
 
         return flightService.findSeatDataById(id);
@@ -40,7 +40,7 @@ public class FlightController {
     }
 
     @RequestMapping(value = "api/flight/book", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity bookFlight(@RequestBody BookingData bookingData, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -49,7 +49,7 @@ public class FlightController {
     }
 
     @RequestMapping(value = "api/flight/quickBook", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity quickBook(@RequestBody QuickTicketData quickTicketData, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -59,7 +59,7 @@ public class FlightController {
     }
 
     @RequestMapping(value = "api/order/{id}/confirm", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity confirmOrder(@PathVariable Long orderId, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -68,7 +68,7 @@ public class FlightController {
     }
 
     @RequestMapping(value = "api/order/{id}/isOrdering", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Boolean isOrdering(@PathVariable Long orderId, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -77,7 +77,7 @@ public class FlightController {
     }
 
     @RequestMapping(value = "api/order/confirmLast", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity confirmLastOrder(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -86,13 +86,13 @@ public class FlightController {
     }
 
     @RequestMapping(value = "api/flight/search", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<FlightSearchResultData> searchFlight(@RequestBody FlightSearchData searchData, HttpServletRequest req){
         return flightService.searchFlights(searchData);
     }
 
     @RequestMapping(value = "api/flight/reservations", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<Reservation> findUserReservations(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -101,7 +101,7 @@ public class FlightController {
     }
 
     @RequestMapping(value = "api/flight/allReservations", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<Reservation> findAllUserReservations(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -110,7 +110,7 @@ public class FlightController {
     }
 
     @RequestMapping(value= "api/flight/allOrders", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<Order> findAllUserOrders(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -119,7 +119,7 @@ public class FlightController {
     }
 
     @RequestMapping(value= "api/flight/{id}/cancel", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Boolean cancelFlight(@PathVariable Long id, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -131,7 +131,7 @@ public class FlightController {
 
 
     @RequestMapping(value= "api/flight/{id}/order", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Order findAllUserOrders(HttpServletRequest req, @PathVariable Long id){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -145,7 +145,7 @@ public class FlightController {
     }
 
     @RequestMapping(value= "api/flight/allFutureOrders", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasAnyRole('USER','ROLE_ADMIN','ROLE_ADMIN_AIRLINE','ROLE_ADMIN_HOTEL','ROLE_ADMIN_RENT')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_ADMIN_AIRLINE','ROLE_ADMIN_HOTEL','ROLE_ADMIN_RENT')")
     public List<Order> findAllUserFutureOrders(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -155,7 +155,7 @@ public class FlightController {
 
 
     @RequestMapping(value= "api/flight/allNonFinishedOrders", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<Order> findAllUserNotFinishedOrders(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -164,7 +164,7 @@ public class FlightController {
     }
 
     @RequestMapping(value = "api/flight/futureReservations", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<Reservation> findFutureUserReservations(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -174,7 +174,7 @@ public class FlightController {
 
 
     @RequestMapping(value = "api/flight/reservationRent", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<Reservation> findRentReservations(HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
