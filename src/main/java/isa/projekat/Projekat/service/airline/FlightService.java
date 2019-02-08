@@ -115,7 +115,7 @@ public class FlightService {
         Date date = order.getRentReservation().getStartDate();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.DAY_OF_MONTH, -3);
+        cal.add(Calendar.DATE, -3);
         if (!cal.after(new Date())){
             return false; // can't cancel
         }
@@ -149,7 +149,7 @@ public class FlightService {
         Date date = order.getReservationHotel().getArrivalDate();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.DAY_OF_MONTH, -3);
+        cal.add(Calendar.DATE, -3);
         if (!cal.after(new Date())){
             return false; // can't cancel
         }
@@ -169,14 +169,19 @@ public class FlightService {
 
         Reservation reservation = optionalReservation.get();
 
-        if (!reservation.getUser().getId().equals(user)){
-            return false;
-        }
+
 
         Order fromOrder = orderRepository.findByReservationId(idReservation);
         if (fromOrder == null){
             return false;
         }
+
+        Boolean calledUser = reservation.getUser().getId().equals(user.getId());
+        Boolean orderUser = fromOrder.getPlacedOrder().getId().equals(user.getId());
+        if (!(calledUser || orderUser)){
+            return false;
+        }
+
 
         fromOrder.getReservations().remove(reservation);
 

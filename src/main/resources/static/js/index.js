@@ -37,7 +37,7 @@ $(document).ready(function () {
                 var sel = '#orderListings';
                 $(sel).append('<h6 style="display: inline"> Order id: ' + data.id+ ' </h6>');
                 $(sel).append('<button type="button" id="CancelOrder' + data.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Cancel order</button>');
-                $(sel).append('<button type="button" id="ConfirmOrder' + data.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Cancel order</button>')
+                $(sel).append('<button type="button" id="ConfirmOrder' + data.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Confirm order</button>')
                 $('#CancelOrder'+data.id).click(function () {
 
                     $.get({
@@ -63,7 +63,7 @@ $(document).ready(function () {
                         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
                         success: function (data) {
                             if (data == true) {
-                                alert
+
                             }else {
                                 alert("Failed to delete order");
                             }
@@ -84,7 +84,7 @@ $(document).ready(function () {
                     guiRent(data.rentReservation, sel);
                 }
                 if (data.reservationHotel != undefined){
-                    guiHotel(data.reservationHotel);
+                    guiHotel(data.reservationHotel, sel);
                 }
 
             },
@@ -125,11 +125,8 @@ function checkUserType() {
 }
 
 function guiRent(rentReservation, selectedElement) {
-
-
         var car = rentReservation.rentedCar;
         var pricing =  rentReservation.price;
-        //var normal = car.dailyPrice * daysBetween(rentReservation.startDate, rentReservation.endDate);
         var tr = $(
             '<div class="card mb-1">' +
             '                                                <div class="card-body">' +
@@ -153,67 +150,32 @@ function guiRent(rentReservation, selectedElement) {
             '                                                            <i class="fa fa-star"></i>' +
             '                                                            <i class="fa fa-star"></i>' +
             '                                                            <i class="fa fa-star"></i>' +
-            '                                                            <button type="button" id="buyButtonCar' + rentReservation.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Reserve</button>' +
+            '                                                            <button type="button" id="cancelRent' + rentReservation.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Cancel</button>' +
             '                                                        </div>' +
             '                                                    </div>' +
             '                                                </div>' +
             '                                            </div>');
         //$('#addListings').append(tr);
          $(selectedElement).append(tr)
-        /*
-        $('#' + 'buyButtonCar' +  rentReservation.id).click(function () {
 
-            var airlineReservationId =  $('select[name="selectAirlineReservations"]').val();
-
-            if(airlineReservationId =="" || airlineReservationId == undefined)
-            {
-                $('#error').html("Please select order reservation to be able to confirm").fadeIn().delay(3000).fadeOut();
-            }
-            else {
-
-                $.post({
-                    url: "api/cars/" + rentReservation.id + "/" + getUrlParameter('id') + "/quickReserve",
-                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-                    contentType: 'application/json',
-                    success: function () {
-
-                        $('#success').html("Your renting of a car is a success").fadeIn().delay(3000).fadeOut();
-
-                        setTimeout(function () {
-                            window.location.replace('index.html');
-                        },2000)
-
-                    },
-                    error: function (data) {
-                        if (data.status == undefined) {
-                            data.status = 'Unknown';
-                        }
-                        if (data.status == '500') {
-                            $('#error').html("Alredy reserved").fadeIn().delay(3000).fadeOut();
-                        } else
-                            $('#error').html("Error happened while reserving this(" + data.status + ')').fadeIn().delay(3000).fadeOut();
-
-                    }
-                });
-            }
-        }); */
-
-
-
+        $('#cancelRent'+ rentReservation.id).click(function () {
+            $.get({
+                url: 'api/flight/cancelRent?id=' + rentReservation.id,
+                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                success: function (data) {
+                   window.location.reload(true);
+                },
+                error: function (e) {
+                    alert('Failed to carry out operation');
+                }
+            });
+        });
 }
 
 var guiHotel = function (hotel, selectedElement) {
     var room = hotel.room;
-
-    var price = room.hotel.priceList;
-    var hotelId = room.hotel.id;
-
-    var cena = undefined;
-    price.forEach(function (entry) {
-       if (entry.roomType = room.roomType){
-           cena = entry.price;
-       }
-    });
+    var price = hotel.price;
+    var cena = price;
 
     var pricing = (cena==undefined)?"Unknown":price;
     var name = (room.name !=null)? room.name : room.roomType.name + ' ' + room.roomNumber ;
@@ -243,21 +205,28 @@ var guiHotel = function (hotel, selectedElement) {
         '                                                            <br>' +
         '                                                            Floor: <strong><span id="Floor">' + room.floor + '</span></strong>' +
         '                                                            <br>' +
-        '                                                            <button id="editRoom' + room.id +'" class="btn btn-primary hotel-admin btn-outline-secondary rounded-0 mb-1" style="display:none" type="button"> Edit </button>' +
-        '                                                            <button id="reserveRoom' + room.id +'" class="btn btn-primary user btn-outline-secondary rounded-0 mb-1" style="display:' + display +  '" type="button"> Reserve  </button>' +
-        '                                                        </div>' +
+        '                                                            <button type="button" id="cancelRoom' + room.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Cancel</button>' +'                                                        </div>' +
         '                                                    </div>' +
         '                                                </div>' +
         '                                            </div>');
         $(selectedElement).append(tr)
 
-   /* $('#addListings').append(tr);
-    $('#' + 'editRoom' +  room.id).click(function () {
-        window.location.href = "addRoom.html?id=" + hotelId +"&room="+ room.id + "&edit=1";
-    });
-    $('#' + 'reserveRoom' +  room.id).click(function () {
-        window.location.href = "hotelReservation.html?id=" + hotelId +"&room="+ room.id +arrival + departure; // + "&edit=1";
-    });*/
+
+        $('#cancelRoom'+room.id).click(function () {
+
+            $.get({
+                url: 'api/flight/cancelHotel?id='+ room.id,
+                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                success: function (data) {
+                    window.location.reload(true);
+                },
+                error: function (e) {
+                    alert('Failed to carry out operation');
+                }
+            });
+
+        });
+
 }
 
 
@@ -266,6 +235,15 @@ var guiHotel = function (hotel, selectedElement) {
 function guiAirline(data, selectedElement, firstName, lastName, confirmed) {
     var sDate = new Date(data.startTime);
     var lDate = new Date(data.landTime);
+    var nesto = '';
+    if (confirmed && false){
+        nesto =   '                                                            ' +
+            '<button type="button" id="cancelAir' + data.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Revoke invite</button>';
+    }else {
+        nesto = '';
+    }
+
+
     var flightData = $(
         '<h6>Booked for '+ firstName +' '+ lastName +' </h6>'+
         '<div class="card mb-1">\n' +
@@ -291,10 +269,30 @@ function guiAirline(data, selectedElement, firstName, lastName, confirmed) {
         '                                    <h5>' + data.price + '$</h5>\n' +
         '                                    <br>\n' +
         '                                    Number of stops: <strong><span id="NumberOfStops">'+ data.numberOfStops +'</span></strong>\n<br><br>' +
-        '                                    <a class="user" href="/bookflight.html?id='+ data.id +'"><button type="button" class="btn btn-success">Book</button></a>\n' +
+        nesto +
         '                                </div>\n' +
         '                            </div>\n' +
         '                        </div>\n' +
         '                    </div>');
     $(selectedElement).append(flightData)
+
+    if (!confirmed && false){
+        $("#cancelAir"+data.id).click(function () {
+
+            $.get({
+                url: 'api/flight/decline?id' + data.id,
+                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                success: function (data) {
+                    window.location.reload(true);
+                },
+                error: function (e) {
+                    alert('Failed to carry out operation');
+                }
+            });
+
+
+        });
+    }
+
+
 }

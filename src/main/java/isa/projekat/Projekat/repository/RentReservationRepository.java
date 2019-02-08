@@ -26,4 +26,9 @@ public interface RentReservationRepository extends JpaRepository<RentReservation
 
     void deleteById(Long id);
 
+
+
+   // List<Object> findStatisticsDaily();
+
+
 }

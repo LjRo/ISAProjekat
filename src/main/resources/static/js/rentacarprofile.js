@@ -18,6 +18,10 @@ $(document).ready(function () {
        window.location.href =  window.location.href.match(/^.*\//)+ "editRentACar.html?id=" + pId;
     });
 
+    $('#statistics').click(function () {
+       window.location.href = window.location.href.match(/^.*\//)+ "graphics.html?id=" + pId;
+    });
+
 
     $('#quickReservations').click(function () {
         window.location.href =  window.location.href.match(/^.*\//)+ "quickRent.html?id=" + pId;
