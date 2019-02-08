@@ -26,4 +26,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Override
     Optional<Order> findById(Long aLong);
+
+    @Query(value = "SELECT o.* FROM orders o" +
+            " LEFT OUTER JOIN orders_reservations oq ON oq.order_id = o.id" +
+            " WHERE oq.reservations_id = ?1", nativeQuery = true)
+    Order findByReservationId(Long id);
+
 }
