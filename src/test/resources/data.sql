@@ -9,8 +9,24 @@ INSERT into Users (type, username, first_name, last_name, password, address, cit
 values (0,'normal@gmail.com','pera','peric','$2a$10$KzK60SLUUU8UKH/rtkZsYuRjc.9D1G.HJgmDnRzJDVl6y3V4/X64u','adr1','city1',true,'123-456-1234',0);
 
 
+INSERT INTO AUTHORITY (name) VALUES ('ROLE_USER');
+INSERT INTO AUTHORITY (name) VALUES ('ROLE_ADMIN');
+INSERT INTO AUTHORITY (name) VALUES ('ROLE_ADMIN_AIRLINE');
+INSERT INTO AUTHORITY (name) VALUES ('ROLE_ADMIN_HOTEL');
+INSERT INTO AUTHORITY (name) VALUES ('ROLE_ADMIN_RENT');
+
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (1, 1);
+
+
+
 INSERT INTO airlines (name, address_id, description, has_food, has_extra_luggage, has_other_services, food_price, luggage_price)
 VALUES ('AirSerbia',1, 'Aeroport Nikole Tesle Belgrade', true, true, false, 50, 100);
+
+
+INSERT into Users (type, username, first_name, last_name, password, address, city, enabled, phone_number,administrated_airline_id,password_changed)
+values (2,'airline@gmail.com','airline','airlinovic','$2a$10$Zz/H94PBqMWVWQlRgCw6GORvl8pIxR8yll1UX/SIy6U7JVO0LF2OW','adr4','city4',true,'123-456-1234',1,true);
+
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (2, 3);
 
 insert into flights (c_columns, c_rows, distance, duration, land_time, number_of_stops, price, segments, start_time, airline_id, finish_id, start_id)
 values (2,2,100,2,'2019-2-20 23:59:59',0,100,2,'2019-2-15 23:59:59',1,1,1);

@@ -61,7 +61,7 @@ public class FlightControllerTest {
 
     @WithMockUser(roles = {"USER"})
     @Test
-    public void all() throws Exception {
+    public void isOrderingTest() throws Exception {
         mockMvc.perform(get("/api/order" + "/" + DB_ID+"/isOrdering")).andExpect(status().is5xxServerError());
     }
 

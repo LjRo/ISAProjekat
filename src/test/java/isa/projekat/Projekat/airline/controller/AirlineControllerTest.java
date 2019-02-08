@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AirlineControllerTest {
 
     private static final String URL_PREFIX = "/api/airline";
@@ -26,6 +26,7 @@ public class AirlineControllerTest {
 
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+
 
     private MockMvc mockMvc;
 
@@ -36,6 +37,36 @@ public class AirlineControllerTest {
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
+
+
+/*
+
+    private String accessToken;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Autowired
+    FilterChainProxy springSecurityFilterChain;
+
+    @PostConstruct
+    public void init() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilters(springSecurityFilterChain)
+                .build();
+
+        UserData ud = new UserData();
+        ud.setEmail("airline@gmail.com");
+        ud.setPassword("123");
+
+
+        ResponseEntity<String> responseEntityRent = restTemplate.postForEntity("/api/login", ud, String.class);
+        accessToken = responseEntityRent.getBody();
+
+        accessToken = accessToken.substring(1, accessToken.length()-1);
+
+
+    }*/
+
 
     @WithMockUser
     @Test
