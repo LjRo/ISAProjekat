@@ -8,6 +8,10 @@ public class FlightSearchData {
     private Date startDate;
     private Date landDate;
 
+    public FlightSearchData() {
+        super();
+    }
+
     public String getCityFrom() {
         return cityFrom;
     }

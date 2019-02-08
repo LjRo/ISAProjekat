@@ -17,6 +17,10 @@ public class AirlineEditData {
     private BigDecimal luggagePrice;
     private BigDecimal foodPrice;
 
+    public AirlineEditData() {
+        super();
+    }
+
     public Long getId() {
         return id;
     }

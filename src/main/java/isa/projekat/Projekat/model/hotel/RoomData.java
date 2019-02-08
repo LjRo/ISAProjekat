@@ -1,6 +1,8 @@
 package isa.projekat.Projekat.model.hotel;
 
-public class RoomData {
+import java.io.Serializable;
+
+public class RoomData implements Serializable {
     private String name;
     private RoomType roomType;
     private int numberOfPeople;
@@ -10,6 +12,7 @@ public class RoomData {
     private int floor;
 
     public RoomData() {
+        super();
     }
 
     public String getName() { return name;}

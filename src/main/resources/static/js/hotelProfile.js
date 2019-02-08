@@ -11,11 +11,26 @@ function SortByName(a, b){
     return ((aFloor < bFloor) ? -1 : ((aFloor > bFloor) ? 1 : 0));
 }
 
+
+
+
 $(document).ready(function () {
 
     var pId = getUrlParameter('id');
     var search = getUrlParameter('search');
     var hotelPrices = undefined;
+
+
+    $.get({
+        url: '/rating/check?id='+pId+'&type=5',
+        success: function (rating) {
+            generateStars(rating,"#addStarsRent");
+        },
+        error : function (e) {
+
+        }
+    });
+
 
     $.get({
         url: '/api/hotel/findById=' + pId,
@@ -86,6 +101,7 @@ $(document).ready(function () {
                                     addRoom(data.content[i], pId, selRoomType,false);
                                 }
                                 setPagingButtons(data.totalPages, data.totalElements);
+                                checkUserType();
                             }
 
 
@@ -166,8 +182,108 @@ $(document).ready(function () {
 
 
             }
+
+            if(shouldLoadStats(pId))
+            {
+
+
+
+
+                $.get({
+                    url : '/api/airline/' + id + '/yearlyTickets',
+                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                    success : function(data) {
+
+                        if (data != null)
+                        {
+                            plotYearly(data,"#chartContainerYearly", "Yearly Ticket Sales");
+                        } else {
+
+                        }
+                    }
+                });
+
+                $.get({
+                    url : '/api/airline/' + id + '/monthlyTickets',
+                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                    success : function(data) {
+
+                        if (data != null)
+                        {
+                            plotYearly(data,"#chartContainerMonthly", "Monthly Ticket Sales");
+                        } else {
+
+                        }
+                    }
+                });
+
+
+                $.get({
+                    url : '/api/airline/' + id + '/weeklyTickets',
+                    headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                    success : function(data) {
+
+                        if (data != null)
+                        {
+                            plotYearly(data,"#chartContainerWeekly", "Weekly Ticket Sales");
+                        } else {
+
+                        }
+                    }
+                });
+
+                $('#filterBtn').unbind('click').bind('click', function(event) {
+                    event.preventDefault();
+
+                    var fromDate = $("#fromDate").val();
+                    var toDate = $("#toDate").val();
+
+                    $.post({
+                        url: '/api/airline/' + id + '/profitFromInterval',
+                        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                        data: JSON.stringify({sDate: fromDate, eDate:toDate}),
+                        contentType: 'application/json',
+                        success: function (data) {
+
+                            if (data != null) {
+                                plotIncome(data, "#chartContainerSpecific", "Income");
+                            } else {
+
+                            }
+                        }
+                    });
+                });
+            }
+
+            $.get({
+                url: '/api/rooms/' + pId + '/quick',
+                headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                success: function (data) {
+                    if (data != null) {
+                        if (data.length > 0)
+                        {
+
+                            data.forEach(function (entry) {
+                                var price=entry.price;
+                                /*var type = entry.room.roomType;
+                                hotelPrices.forEach(function (pricesEntry) {
+                                    if(pricesEntry.roomType.id == type.id)
+                                        price = pricesEntry.price * entry.nightsStaying;
+                                }); */
+
+                                var newPrice = price * (1-hotel.fastDiscount/100).toFixed(2);
+                                addRoom(entry.room,hotel.id,newPrice,true,entry.id,entry.arrivalDate.substring(0,10),entry.departureDate.substring(0,10),price)
+                            });
+                        }
+                    }
+
+                }
+            });
+
         }
     });
+
+
 
     $.get({
         url: '/api/flight/allFutureOrders',
@@ -185,29 +301,7 @@ $(document).ready(function () {
         }
     });
 
-    $.get({
-        url: '/api/rooms/' + pId + '/quick',
-        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
-        success: function (data) {
-            if (data != null) {
-                if (data.length > 0)
-                {
 
-                    data.forEach(function (entry) {
-                        var price='Unknown';
-                        var type = entry.room.roomType;
-                        entry.hotel.hotelPriceList.forEach(function (pricesEntry) {
-                           if(pricesEntry.roomType.id == type.id)
-                               price = pricesEntry.price * entry.nightsStaying;
-                        });
-                        var newPrice = price * (1-entry.hotel.fastDiscount/100).toFixed(2);
-                        addRoom(entry.room,entry.hotel.id,newPrice,true,entry.id,entry.arrivalDate.substring(0,10),entry.departureDate.substring(0,10),price)
-                    });
-                }
-            }
-
-        }
-    });
 
 
 
@@ -310,6 +404,51 @@ $(document).ready(function () {
 
 });
 
+function shouldLoadStats(pId) {
+    $.get({
+        url: '/api/user/userType',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
+            if(data!=3)
+                $('#resultAvailable').html('No right to this function');
+
+            $('#FindAvailable').on('click',function () {
+                var start= ($('input[name="StartAvailable"]').val());
+                var end= ($('input[name="EndAvailable"]').val());
+                var what = $('select[name="what"]').val();
+                var where;
+                if(what == true)
+                {
+                    where = 'findAvailable';
+                }
+                else
+                    where = 'findUnavailable';
+                if(start !='' && end !='')
+                    $.get({
+                        url : '/api/rooms/' + where + '?hotelId=' + pId + '&start=' + start + '&end=' + end,
+                        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                        success : function(data) {
+                            if (data != null)
+                            {
+                                $('#resultAvailable').html(data).fadeIn().delay(3000).fadeOut();
+                            } else {
+                                $('#resultAvailable').html('No data found').fadeIn().delay(3000).fadeOut();
+                            }
+                        },
+                        error: function () {
+                            $('#resultAvailable').attr('color','red').html('Error occurd').fadeIn().delay(3000).fadeOut().removeAttr('color');
+                        }
+                    });
+                else {
+                    $('#resultAvailable').attr('color','red').html('Select dates..').fadeIn().delay(3000).fadeOut().removeAttr('color');
+                }
+
+            });
+
+        },
+    });
+    return false;
+}
 
 function fillOrders(data) {
     $("#listReservations").append('<option value= "' + data.id + '"> Order ' + data.id + '</option>');
@@ -321,7 +460,7 @@ function checkUserType() {
         url: '/api/user/userType',
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (data) {
-            if (data == -1) {
+            if (data != 0) {
                 $(".user").remove();
             }
             if (data != 3) {
@@ -348,7 +487,7 @@ function addRoom(room,hotelId,price,quick,reservationId,startDate,EndDate,oldPri
     var departure = getUrlParameter('departure');
     arrival = (arrival==undefined||arrival=='')?'':'&arrival='+arrival;
     departure = (departure==undefined||departure=='')?'':'&departure='+departure;
-
+    var extra = '';
     var display = 'none';
     var newPrice = '';
     var addingToId = '';
@@ -369,6 +508,7 @@ function addRoom(room,hotelId,price,quick,reservationId,startDate,EndDate,oldPri
         addingToId='Quick';
         display='inherit';
         datesText = 'Start date:<strong>'+ startDate + '</strong>  End Date:<strong>' +  EndDate +'</strong>';
+        extra = 'Q';
     }
 
 
@@ -395,12 +535,7 @@ function addRoom(room,hotelId,price,quick,reservationId,startDate,EndDate,oldPri
         '                                                        <div class="col-md-3">' +
         '                                                            <h5>$'+ strike1 + pricing  + strike2 +'</h5>' +
                                                                            newPrice      +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <br>' +
+        '<div id="addStars'+ extra + room.id+'"></div>' +
         '                                                            Floor: <strong><span id="Floor">' + room.floor + '</span></strong>' +
         '                                                            <div>' + advice + '</div>' +
         '                                                            <br>' +
@@ -410,6 +545,35 @@ function addRoom(room,hotelId,price,quick,reservationId,startDate,EndDate,oldPri
         '                                                    </div>' +
         '                                                </div>' +
         '                                            </div>');
+
+    if (quick){
+        $.get({
+            url: '/rating/check?id='+room.id+'&type=3',
+            success: function (rating) {
+                generateStars(rating,"#addStarsQ" + room.id);
+            },
+            error : function (e) {
+
+            }
+        });
+    }else {
+        $.get({
+            url: '/rating/check?id='+room.id+'&type=3',
+            success: function (rating) {
+                generateStars(rating,"#addStars" + room.id);
+            },
+            error : function (e) {
+
+            }
+        });
+    }
+
+
+
+
+
+
+
     if(quick)
     {
         $('#quickListings').append(tr);
@@ -520,6 +684,30 @@ function setPagingButtons(MaxPages, MaxElements) {
         $('#next').attr('href', "#");
 }
 
+function generateStars(average, selector){
+    //  $('#addStars' + id).append(res);
+    var res;
+
+    for (var i = 0; i < 5; i++){
+        if (i > average){
+            if (average >= i/2){
+                res =  $('<i id="star1" class="fa fa-star-half-o"></i>');
+            }else {
+                res =  $('<i id="star1" class="fa fa-star-o"></i>');
+            }
+        } else {
+            if (i == average){
+                res =  $('<i id="star1" class="fa fa-star-o"></i>');
+            }else
+                res =  $('<i id="star1" class="fa fa-star"></i>');
+        }
+
+        $(selector).append(res);
+    }
+    res = $('<br>');
+    $(selector).append(res);
+}
+
 
 function makeMap() {
     var myMap = new ymaps.Map('map', {
@@ -542,13 +730,7 @@ function makeMap() {
         .add(myPlacemark);
 }
 
-function makeStars(Rating) {
-    var FullStars = Rating.toFixed(0);
-    for (var i = 1; i < FullStars; i++) {
 
-    }
-
-}
 function addParameterToURL(param,start_url){
     var url = start_url;
     url += (url.split('?')[1] ? '&':'?') + param;

@@ -48,6 +48,18 @@ public class RoomController {
         return roomService.findAll(pageRequestProvider.provideRequest(page));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @GetMapping(value = "api/rooms/findAvailable", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Integer findAvailable(@RequestParam Long hotelId,@RequestParam String start,@RequestParam String end) {
+        return roomService.getAvailableUnavailabeRooms(hotelId,true,start,end);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
+    @GetMapping(value = "api/rooms/findUnavailable", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Integer findUnavailable(@RequestParam Long hotelId,@RequestParam String start,@RequestParam String end) {
+        return roomService.getAvailableUnavailabeRooms(hotelId,false,start,end);
+    }
+
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value = "api/rooms/{idHotel}/quick", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<ReservationHotel> listQuickReservations(@PathVariable Long idHotel){

@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -136,8 +135,12 @@ public class CarService {
         RentReservation newReservation = new RentReservation();
         Cars rentedCar = optionalCars.get();
 
-        Order order = orderRepository.getOne(idOrder);
-
+        //Order order = orderRepository.getOne(idOrder);
+        Optional<Order> orderOptional = orderRepository.findById(idOrder);
+        if (!orderOptional.isPresent()){
+            return false;
+        }
+        Order order = orderOptional.get();
         // not same user
         if (!order.getPlacedOrder().equals(user))
             return false;

@@ -34,8 +34,6 @@ public class RentCarsService {
         }else {
             return rentACar.get();
         }
-
-
     }
 
     @Transactional
@@ -51,10 +49,6 @@ public class RentCarsService {
             return  false;
 
         rent.setFastDiscount(rentACar.getFastDiscount());
-       /* rent.setBronzeDiscount(rentACar.getBronzeDiscount());
-        rent.setSilverDiscount(rentACar.getSilverDiscount());
-        rent.setGoldDiscount(rentACar.getGoldDiscount());
-        */
         rent.getAddress().setAddressName(rentACar.getAddress().getAddressName());
         rent.getAddress().setLatitude(rentACar.getAddress().getLatitude());
         rent.getAddress().setLongitude(rentACar.getAddress().getLongitude());
@@ -65,10 +59,6 @@ public class RentCarsService {
         rent.setName(rentACar.getName());
 
         rentCarRepository.save(rent);
-
-        //entityManager.persist(rent.getAddress());
-        //entityManager.persist(rent);
-
         return  true;
     }
 
@@ -95,22 +85,18 @@ public class RentCarsService {
     @Transactional(readOnly = true)
     public List<RentACar> findAllByName(String name, String startDate, String endDate){
         List<RentACar> list = rentCarRepository.findAllByName(name,startDate,endDate);
-
         for (RentACar a: list) {
             a.setAdmins(null);
         }
-
         return list;
     }
 
     @Transactional(readOnly = true)
     public List<RentACar> findAllByLocation(String city, String startDate, String endDate){
         List<RentACar> list =  rentCarRepository.findAllByCity(city,startDate,endDate);
-
         for (RentACar a: list) {
             a.setAdmins(null);
         }
-
         return list;
     }
 

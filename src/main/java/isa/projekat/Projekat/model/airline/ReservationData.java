@@ -15,6 +15,7 @@ public class ReservationData {
 
 
     public ReservationData() {
+        super();
     }
 
     public Long getFlight() {

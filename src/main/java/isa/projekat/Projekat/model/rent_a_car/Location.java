@@ -30,6 +30,7 @@ public class Location implements Serializable {
     private Boolean active = true;
 
     public Location() {
+        super();
         active = true;
     }
 

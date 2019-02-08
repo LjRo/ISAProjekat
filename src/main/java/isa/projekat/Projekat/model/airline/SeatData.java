@@ -9,6 +9,7 @@ public class SeatData {
     private List<Seat> seats;
 
     public SeatData() {
+        super();
     }
 
     public Integer getSegments() {

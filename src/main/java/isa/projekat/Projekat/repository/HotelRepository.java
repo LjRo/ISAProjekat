@@ -24,11 +24,12 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "AND ro.id NOT IN (Select r.room_id " +
             "from reservation_hotel r " +
             "where (r.fast is null or r.fast is false) AND " +
+            " r.room_id in (select ho.id from rooms ho where ho.hotel_id =ro.hotel_id ) AND" +
             "(((r.arrival_date >= ?1 AND r.departure_date <=  ?2) OR " +
             "(r.arrival_date >= ?1 AND r.arrival_date <=  ?2) or " +
-            "(r.departure_date >= ?1 AND r.departure_date <= ?2 )) AND r.hotel_id = ro.hotel_id )))",nativeQuery = true)
+            "(r.departure_date >= ?1 AND r.departure_date <= ?2 )))))",nativeQuery = true)
           public List<Hotel> returnAvailableHotels(String arrivalDate, String departureDate, String location , String name);
 
-
-
+    @Query(value ="Select h from hotels h left join hotels_hotel_services hhs on h.id = hhs.id and  hhs.hotel_service_id = ?1",nativeQuery = true)
+        Hotel returnHotelServicesForHotel(Long hotelId);
 }

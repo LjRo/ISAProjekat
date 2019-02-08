@@ -42,7 +42,7 @@ $(document).ready(function () {
                     });
                 }
                 if (data.rentReservation != undefined){
-                    guiRent(data, sel);
+                    guiRent(data.rentReservation, sel);
                 }
                 if (data.reservationHotel != undefined){
                     guiHotel(data.reservationHotel.room);
@@ -90,7 +90,7 @@ function guiRent(rentReservation, selectedElement) {
 
         var car = rentReservation.rentedCar;
         var pricing =  rentReservation.price;
-        var normal = car.dailyPrice * daysBetween(rentReservation.startDate, rentReservation.endDate);
+        //var normal = car.dailyPrice * daysBetween(rentReservation.startDate, rentReservation.endDate);
         var tr = $(
             '<div class="card mb-1">' +
             '                                                <div class="card-body">' +
@@ -109,7 +109,6 @@ function guiRent(rentReservation, selectedElement) {
             '                                                        </div>' +
             '                                                        <div class="col-md-3">' +
             '                                                            <h5>$' + pricing +'</h5>' +
-            '                                                            <h6 style="text-decoration: line-through">$'+ normal+'</h6>                         ' +
             '                                                            <i class="fa fa-star"></i>' +
             '                                                            <i class="fa fa-star"></i>' +
             '                                                            <i class="fa fa-star"></i>' +

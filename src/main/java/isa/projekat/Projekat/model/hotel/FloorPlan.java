@@ -24,6 +24,7 @@ public class FloorPlan implements Serializable {
     private int floorNumber;
 
     public FloorPlan() {
+        super();
     }
 
     public Long getId() {

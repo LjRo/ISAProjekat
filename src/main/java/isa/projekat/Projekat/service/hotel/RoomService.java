@@ -10,11 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RoomService {
@@ -71,7 +69,20 @@ public class RoomService {
         return (idays==0)?1:idays;
     }
 
+    @Transactional(readOnly = true)
+    public Integer getAvailableUnavailabeRooms(Long hotelId,Boolean areAvailable,String start,String end) {
+        List<Room> rooms;
+        if(areAvailable)
+            rooms = roomRepository.returnRoomsAvailable(hotelId,start,end);
+        else
+            rooms = roomRepository.returnRoomsUnavailalbe(hotelId,start,end);
+        if(rooms !=null)
+            return  rooms.size();
+        else
+            return 0;
+    }
 
+    @Transactional(readOnly = true)
     public Room findById( Long id) {
         Optional<Room> oRoom = roomRepository.findById(id);
         if(oRoom.isPresent())
@@ -145,6 +156,16 @@ public class RoomService {
 
         String services = reservationHotelData.getServices();
         List<HotelServices> servicesList = new ArrayList<>();
+        BigDecimal cumulativePrice = new BigDecimal(0);
+        Set<HotelPriceList> priceList = room.getHotel().getHotelPriceList();
+
+        for(HotelPriceList stock : priceList){
+            if(stock.getRoomType().equals(room.getRoomType()))
+            {
+                cumulativePrice =  stock.getPrice().multiply(new BigDecimal(days));
+            }
+        }
+
         if(services!="")
         {
             if(services.contains(","))
@@ -155,7 +176,13 @@ public class RoomService {
                     Long tmp = Long.parseLong(list[i]);
                     Optional<HotelServices> optional = hotelServicesRepository.findById(tmp);
                     if(optional.isPresent())
-                        servicesList.add(optional.get());
+                    {
+                        HotelServices newHotelService = optional.get();
+                        cumulativePrice.add(newHotelService.getPrice());
+                        servicesList.add(newHotelService);
+
+                    }
+
                 }
             }
             else {
@@ -174,8 +201,10 @@ public class RoomService {
             Order pendingOrder = reservation.get();
             Room roomFound = exists.get();
             ReservationHotel newReservation = new ReservationHotel();
+
+
             newReservation.setNightsStaying((int)days);
-            newReservation.setHotel(roomFound.getHotel());
+            newReservation.setPrice(cumulativePrice);
             newReservation.setUserOrder(pendingOrder);
             newReservation.setArrivalDate(arrival);
             newReservation.setPeople(roomFound.getNumberOfPeople());

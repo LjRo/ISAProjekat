@@ -74,7 +74,12 @@ public class FlightService {
 
     @Transactional(readOnly = true)
     public List<Order> findAllOrders(Long id){
-        return orderRepository.findAllByPlacedOrderId(id);
+        List<Order> list = orderRepository.findAllByPlacedOrderId(id);
+        if (list == null){
+            return null;
+        }else {
+            return list;
+        }
     }
 
     @Transactional(readOnly = true)

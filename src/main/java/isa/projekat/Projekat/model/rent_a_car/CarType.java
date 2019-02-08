@@ -17,6 +17,7 @@ public class CarType implements Serializable {
 
 
     public CarType() {
+        super();
     }
 
     public Long getId() {

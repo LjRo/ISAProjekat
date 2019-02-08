@@ -39,9 +39,13 @@ public class Room implements Serializable {
     private String discount;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference(value="hotel_rooms")
     private Hotel hotel;
+
+
 
     public Room() {
         super();

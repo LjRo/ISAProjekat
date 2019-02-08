@@ -19,6 +19,7 @@ public class FlightData {
     private List<Long> stopIDs;
 
     public FlightData() {
+        super();
     }
 
     public FlightData(Long startID, Long destID, Date startDate, Date finishDate, Double length, Double distance, BigDecimal price, Integer segments, Integer columns, Integer rows, Integer stopCount, List<Long> stopIDs) {

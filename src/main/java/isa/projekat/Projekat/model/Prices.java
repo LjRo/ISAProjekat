@@ -16,6 +16,10 @@ public class Prices {
     @Column(nullable = false)
     private String priceName;
 
+    public Prices() {
+        super();
+    }
+
     public String getPriceName() {
         return priceName;
     }

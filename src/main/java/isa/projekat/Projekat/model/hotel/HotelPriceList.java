@@ -29,6 +29,7 @@ public class HotelPriceList implements Serializable {
     private Date starts;
 
     public HotelPriceList() {
+        super();
     }
 
     public Long getId() {

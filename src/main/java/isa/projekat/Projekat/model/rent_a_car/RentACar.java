@@ -33,26 +33,10 @@ public class RentACar implements Serializable {
     @JsonManagedReference(value = "list_cars")
     private List<Cars> cars = new ArrayList<>();
 
-   // @OneToMany(cascade = CascadeType.ALL, mappedBy = "administratedRent")
     @OneToMany(mappedBy = "administratedRent", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "rent_admins")
     private List<User> admins = new ArrayList<>();
 
-    //private  User admin;
-
-    //@OneToMany moved to car offices
-    //private List<Location> branches = new ArrayList<>();
-    /*
-    @Column
-    private int bronzeDiscount = 0;
-
-    @Column
-    private int silverDiscount = 0;
-
-    @Column
-    private int goldDiscount = 0;
-
-    */
     @Column(nullable = false)
     private int fastDiscount;
 

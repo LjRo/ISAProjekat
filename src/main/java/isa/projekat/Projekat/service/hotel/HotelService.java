@@ -33,9 +33,6 @@ public class HotelService {
     @Autowired
     private HotelServicesRepository hotelServicesRepository;
 
-    @Autowired
-    private HotelReservationRepository hotelReservationRepository;
-
     @Autowired LocationRepository locationRepository;
 
     @Autowired
@@ -69,12 +66,12 @@ public class HotelService {
     @Transactional(readOnly = true)
     public HotelServices findHotelServiceById(Long id){
         Optional<HotelServices> item = hotelServicesRepository.findById(id);
+        hotelRepository.returnHotelServicesForHotel(id);
         if(!item.isPresent())
         {
             return  null;
         }
         HotelServices hotelServices = item.get();
-        hotelServices.getHotel().setAdmins(null);
         return hotelServices;
     }
 
@@ -143,8 +140,8 @@ public class HotelService {
 
         target.getFloorPlans().add(newFloorPlan);
 
-        entityManager.persist(newFloorPlan);
-        entityManager.persist(target);
+        hotelRepository.save(target);
+        floorRepository.save(newFloorPlan);
         return true;
     }
 
@@ -154,12 +151,13 @@ public class HotelService {
         if(!checkIfAdminAndCorrectAdmin(id,user))
             return false;
         Hotel target = user.getAdministratedHotel();
-        FloorPlan selected = floorRepository.findById(idFloor).get();
-
+        Optional<FloorPlan> optionalFloorPlan = floorRepository.findById(idFloor);
+        if(!optionalFloorPlan.isPresent())
+            return false;
+        FloorPlan selected = optionalFloorPlan.get();
         target.getFloorPlans().remove(selected);
         floorRepository.delete(selected);
-
-        entityManager.persist(target);
+        hotelRepository.save(target);
         return true;
     }
 
@@ -255,7 +253,10 @@ public class HotelService {
 
     @Transactional
     public boolean editHotelServices(HotelServices hotelServices, User user) {
-        if(!checkIfAdminAndCorrectAdmin(hotelServices.getHotel().getId(),user))
+        Hotel found = hotelRepository.returnHotelServicesForHotel(hotelServices.getId());
+        if(found==null)
+            return false;
+        if(!checkIfAdminAndCorrectAdmin(found.getId(),user))
             return false;
         Optional<HotelServices> foundHotelServices = hotelServicesRepository.findById(hotelServices.getId());
         if(foundHotelServices.isPresent())
@@ -271,15 +272,18 @@ public class HotelService {
 
     @Transactional
     public boolean removeHotelService(HotelServices hotelServices, User user) {
-            if(!checkIfAdminAndCorrectAdmin(hotelServices.getHotel().getId(),user))
+            Hotel found = hotelRepository.returnHotelServicesForHotel(hotelServices.getId());
+            if(found==null)
+                return false;
+            if(!checkIfAdminAndCorrectAdmin(found.getId(),user))
                 return false;
             Optional<HotelServices> foundHotelServices = hotelServicesRepository.findById(hotelServices.getId());
             if(foundHotelServices.isPresent())
             {
                 HotelServices removing = foundHotelServices.get();
-                Hotel target = hotelRepository.findById(hotelServices.getHotel().getId()).get();
+                Hotel target = hotelRepository.findById(found.getId()).get();
                 target.getHotelServices().remove(removing);
-                removing.setHotel(null);
+
                 hotelServicesRepository.delete(removing);
                 return true;
             }
@@ -288,13 +292,18 @@ public class HotelService {
 
 
 
-
     @SuppressWarnings("Duplicates")
     private boolean checkIfAdminAndCorrectAdmin(Long id,User adminToCheck){
         if(adminToCheck.getAdministratedHotel() == null) {
             return false;
         }
-        Hotel hotel = hotelRepository.findById(id).get();
+        Optional<Hotel> optionalHotel = hotelRepository.findById(id);
+        if(!optionalHotel.isPresent())
+        {
+            return false;
+        }
+
+        Hotel hotel = optionalHotel.get();
 
         if(!hotel.getAdmins().contains(adminToCheck))
         {

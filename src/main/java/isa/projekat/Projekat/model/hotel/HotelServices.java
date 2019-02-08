@@ -1,7 +1,5 @@
 package isa.projekat.Projekat.model.hotel;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -22,9 +20,7 @@ public class HotelServices implements Serializable {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @JsonBackReference(value="hotel_services")
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Hotel hotel;
+
 
     public HotelServices() {
         super();
@@ -55,13 +51,6 @@ public class HotelServices implements Serializable {
         this.price = newPrice;
     }
 
-    public Hotel getHotel() {
-        return hotel;
-    }
-
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -73,6 +62,7 @@ public class HotelServices implements Serializable {
         return (hotelServices.id.equals(this.id));
 
     }
+
 
     @Override
     public int hashCode() {

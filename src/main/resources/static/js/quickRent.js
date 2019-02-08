@@ -16,7 +16,7 @@ $(document).ready(function () {
                                 success : function(data) {
                                     if (data != null) {
                                         for ( var i in data) {
-                                            addRoom(data[i]);
+                                            addCar(data[i]);
                                         }
                                     }
                                 },
@@ -56,7 +56,7 @@ function fillInfo(data){
 }
 
 
-function addRoom(rentReservation) {
+function addCar(rentReservation) {
    var car = rentReservation.rentedCar;
 
 
@@ -82,17 +82,24 @@ function addRoom(rentReservation) {
         '                                                        <div class="col-md-3">' +
         '                                                            <h5>$' + pricing +'</h5>' +
         '                                                            <h6 style="text-decoration: line-through">$'+ normal+'</h6>                         ' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
+        '                                                            <div id="addStars'+ car.id+'"></div>                           ' +
         '                                                            <button type="button" id="buyButtonCar' + rentReservation.id +'" class="btn btn-primary  btn-outline-secondary rounded-0 mb-1" style="margin-left: 5px">Reserve</button>' +
         '                                                        </div>' +
         '                                                    </div>' +
         '                                                </div>' +
         '                                            </div>');
     $('#addListings').append(tr);
+
+    $.get({
+        url: '/rating/check?id='+car.id+'&type=1',
+        success: function (rating) {
+            generateStars(rating,"#addStars" + car.id);
+        },
+        error : function (e) {
+
+        }
+    });
+
     $('#' + 'buyButtonCar' +  rentReservation.id).click(function () {
 
         var airlineReservationId =  $('select[name="selectAirlineReservations"]').val();
@@ -131,7 +138,29 @@ function addRoom(rentReservation) {
     });
 
 }
+function generateStars(average, selector){
+    //  $('#addStars' + id).append(res);
+    var res;
 
+    for (var i = 0; i < 5; i++){
+        if (i > average){
+            if (average >= i/2){
+                res =  $('<i id="star1" class="fa fa-star-half-o"></i>');
+            }else {
+                res =  $('<i id="star1" class="fa fa-star-o"></i>');
+            }
+        } else {
+            if (i == average){
+                res =  $('<i id="star1" class="fa fa-star-o"></i>');
+            }else
+                res =  $('<i id="star1" class="fa fa-star"></i>');
+        }
+
+        $(selector).append(res);
+    }
+    res = $('<br>');
+    $(selector).append(res);
+}
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
         sURLVariables = sPageURL.split('&'),

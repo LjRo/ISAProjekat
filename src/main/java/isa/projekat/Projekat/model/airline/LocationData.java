@@ -12,6 +12,10 @@ public class LocationData {
 
     private double longitude;
 
+    public LocationData() {
+        super();
+    }
+
     public String getAddressName() {
         return addressName;
     }

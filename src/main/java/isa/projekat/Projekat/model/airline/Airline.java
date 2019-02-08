@@ -58,8 +58,9 @@ public class Airline implements Serializable {
     @JsonManagedReference(value = "airline_admins")
     private List<User> admins;
 
-    public Airline() {
 
+    public Airline() {
+        super();
     }
 
 

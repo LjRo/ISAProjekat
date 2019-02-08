@@ -8,6 +8,10 @@ public class AirlineData {
     private Location address;
     private String description;
 
+    public AirlineData() {
+        super();
+    }
+
     public Long getId() {
         return id;
     }

@@ -27,6 +27,16 @@ $(document).ready(function () {
         window.location.href = window.location.href.match(/^.*\//)+ "addCar.html?idrent=" + pId;
     });
 
+    $.get({
+        url: '/rating/check?id='+pId+'&type=4',
+        success: function (rating) {
+            generateStars(rating,"#addStarsRent");
+        },
+        error : function (e) {
+
+        }
+    });
+
 
     $.get({
         url : 'api/office/all?id='+ getUrlParameter('id'),
@@ -78,6 +88,7 @@ $(document).ready(function () {
                                         for( var i = 0; i < data.numberOfElements; i++) {
                                             //for ( var us in data.content) {
                                             addCar(data.content[i]);
+
                                         }
                                         setPagingButtons(data.totalPages,data.totalElements);
                                     }
@@ -93,6 +104,7 @@ $(document).ready(function () {
                                     if (data != null && data.numberOfElements > 0) {
                                         for( var i = 0; i < data.numberOfElements; i++) {
                                             //for ( var us in data.content) {
+
                                             addCar(data.content[i]);
                                         }
                                         setPagingButtons(data.totalPages,data.totalElements);
@@ -216,10 +228,7 @@ function setPagingButtons(MaxPages, MaxElements) {
     $('#TotalListings').html("Found "+ MaxElements + " cars");
     var pId = getUrlParameter('id');
 
-
-
     if (getUrlParameter("carTypeId") != undefined){
-
 
         var locStart = $("#locationOptionStart option:selected").val();
         var locEnd = $("#locationOptionEnd option:selected").val();
@@ -249,16 +258,11 @@ function setPagingButtons(MaxPages, MaxElements) {
         previousElement.attr("href",adr);
 
     }else {
-
         var adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+next + '&pageLocation=' +  getUrlParameter('pageLocation');
         nextElement.attr("href", adr);
         adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+previous +'&pageLocation=' + getUrlParameter('pageLocation');
         previousElement.attr("href",adr);
     }
-
-
-
-
     if (previous < 0)
         previousElement.attr('href', "");
     if (next >= MaxPages)
@@ -314,9 +318,6 @@ function setPagingButtonsLocation(MaxPages, MaxElements) {
         adr = window.location.href.match(/^.*\//) + 'rentacarprofile.html?id='+pId+'&page='+getUrlParameter('page')+'&pageLocation='+previous;
         previousElement.attr("href",adr);
     }
-
-
-
     if (previous < 0)
         previousElement.attr('href', "");
     if (next >= MaxPages)
@@ -331,7 +332,7 @@ function addLocation(location) {
     var d2 = $(' <div class="card-body"></div>');
     var d3 = $(' <div class="row"></div>');
     var d4 = $('<div class="col-md-3"></div>');
-   var d5 = $(' <img class ="card-img" src="assets/img/map.svg">');
+    var d5 = $(' <img class ="card-img" src="assets/img/map.svg">');
 
 
     var d7 = $(' <div class="col-md-6 border-right"></div>');
@@ -346,10 +347,6 @@ function addLocation(location) {
     var d23 = $(' <button type="button" id="editButtonLocation'+ location.id +'" class="btn btn-primary admin-rentacar btn-outline-secondary rounded-0 mb-1">Edit</button>');
     d13.append(d23);
 
-
-
-
-
     //Picture
     d4.append(d5);
     d3.append(d4);
@@ -360,9 +357,6 @@ function addLocation(location) {
     d7.append(d10);
     d7.append(d11);
     d3.append(d7);
-
-
-
 
 
     d3.append(d13);
@@ -414,7 +408,7 @@ function addCar(car) {
         q1 =  $(' <h5 style="text-decoration: line-through">$'+ car.dailyPrice  +'</h5>');
     }
 
-
+    var dq1 = $('<div id="addStars'+ car.id+'"></div>')
     var d15 = $('<i id="star1" class="fa fa-star"></i>');
     var d16 = $('<i id="star2" class="fa fa-star"></i>');
     var d17 = $('<i id="star3" class="fa fa-star"></i>');
@@ -445,12 +439,16 @@ function addCar(car) {
     //Price, stars, more info, buttons
     d13.append(d14);
     d13.append(q1);
-    d13.append(d15);
-    d13.append(d16);
-    d13.append(d17);
-    d13.append(d18);
-    d13.append(d19);
-    d13.append(d20);
+    //d13.append(d15);
+    //d13.append(d16);
+    //d13.append(d17);
+    //d13.append(d18);
+    //d13.append(d19);
+    //d13.append(d20);
+
+    d13.append(dq1);
+    //d13.append(generateStars(stars))
+
    // d13.append(d21);
     d13.append(d22);
     d13.append(d23);
@@ -481,6 +479,17 @@ function addCar(car) {
     }
 
 
+    $.get({
+        url: '/rating/check?id='+car.id+'&type=1',
+        success: function (rating) {
+           generateStars(rating,"#addStars" + car.id);
+        },
+        error : function (e) {
+
+        }
+    });
+
+
 
 
 
@@ -497,6 +506,29 @@ function addCar(car) {
 }
 
 
+function generateStars(average, selector){
+    //  $('#addStars' + id).append(res);
+    var res;
+
+    for (var i = 0; i < 5; i++){
+        if (i > average){
+            if (average >= i/2){
+                res =  $('<i id="star1" class="fa fa-star-half-o"></i>');
+            }else {
+                res =  $('<i id="star1" class="fa fa-star-o"></i>');
+            }
+        } else {
+           if (i == average){
+               res =  $('<i id="star1" class="fa fa-star-o"></i>');
+           }else
+            res =  $('<i id="star1" class="fa fa-star"></i>');
+        }
+
+        $(selector).append(res);
+    }
+    res = $('<br>');
+    $(selector).append(res);
+}
 
 
 var getUrlParameter = function getUrlParameter(sParam) {
