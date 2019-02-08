@@ -2,7 +2,6 @@ package isa.projekat.Projekat.model.rent_a_car;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import isa.projekat.Projekat.model.airline.Order;
-import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;

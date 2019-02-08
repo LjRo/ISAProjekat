@@ -140,8 +140,8 @@ public class HotelService {
 
         target.getFloorPlans().add(newFloorPlan);
 
-        entityManager.persist(newFloorPlan);
-        entityManager.persist(target);
+        hotelRepository.save(target);
+        floorRepository.save(newFloorPlan);
         return true;
     }
 
@@ -151,12 +151,13 @@ public class HotelService {
         if(!checkIfAdminAndCorrectAdmin(id,user))
             return false;
         Hotel target = user.getAdministratedHotel();
-        FloorPlan selected = floorRepository.findById(idFloor).get();
-
+        Optional<FloorPlan> optionalFloorPlan = floorRepository.findById(idFloor);
+        if(!optionalFloorPlan.isPresent())
+            return false;
+        FloorPlan selected = optionalFloorPlan.get();
         target.getFloorPlans().remove(selected);
         floorRepository.delete(selected);
-
-        entityManager.persist(target);
+        hotelRepository.save(target);
         return true;
     }
 
@@ -296,7 +297,13 @@ public class HotelService {
         if(adminToCheck.getAdministratedHotel() == null) {
             return false;
         }
-        Hotel hotel = hotelRepository.findById(id).get();
+        Optional<Hotel> optionalHotel = hotelRepository.findById(id);
+        if(!optionalHotel.isPresent())
+        {
+            return false;
+        }
+
+        Hotel hotel = optionalHotel.get();
 
         if(!hotel.getAdmins().contains(adminToCheck))
         {

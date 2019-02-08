@@ -264,12 +264,13 @@ $(document).ready(function () {
                         {
 
                             data.forEach(function (entry) {
-                                var price='Unknown';
-                                var type = entry.room.roomType;
+                                var price=entry.price;
+                                /*var type = entry.room.roomType;
                                 hotelPrices.forEach(function (pricesEntry) {
                                     if(pricesEntry.roomType.id == type.id)
                                         price = pricesEntry.price * entry.nightsStaying;
-                                });
+                                }); */
+
                                 var newPrice = price * (1-hotel.fastDiscount/100).toFixed(2);
                                 addRoom(entry.room,hotel.id,newPrice,true,entry.id,entry.arrivalDate.substring(0,10),entry.departureDate.substring(0,10),price)
                             });

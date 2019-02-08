@@ -2,13 +2,10 @@ package isa.projekat.Projekat.model.rent_a_car;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import isa.projekat.Projekat.model.Rating;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 
 @Entity

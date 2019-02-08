@@ -1,14 +1,12 @@
 package isa.projekat.Projekat.model.hotel;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import isa.projekat.Projekat.model.airline.Order;
 import isa.projekat.Projekat.model.user.User;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -38,10 +36,14 @@ public class ReservationHotel implements Serializable {
     private int People;
 
     @Column
-    private boolean fast = false;
+    private BigDecimal price;
 
     @OneToMany
     private List<HotelServices> services;
+
+    @Column
+    private boolean fast = false;
+
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JsonBackReference(value = "hotels_bla")
@@ -56,6 +58,14 @@ public class ReservationHotel implements Serializable {
 
     public ReservationHotel(){
         super();
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public User getUser() {

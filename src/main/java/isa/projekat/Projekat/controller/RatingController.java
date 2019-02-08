@@ -2,18 +2,15 @@ package isa.projekat.Projekat.controller;
 
 
 import isa.projekat.Projekat.model.Rating;
-import isa.projekat.Projekat.model.rent_a_car.RentReservation;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.RatingService;
 import isa.projekat.Projekat.service.user_auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
