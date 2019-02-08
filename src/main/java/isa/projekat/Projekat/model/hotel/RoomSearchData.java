@@ -1,6 +1,8 @@
 package isa.projekat.Projekat.model.hotel;
 
-public class RoomSearchData {
+import java.io.Serializable;
+
+public class RoomSearchData implements Serializable {
 
     private Long hotelId;
     private int numberOfPeople;
@@ -14,7 +16,7 @@ public class RoomSearchData {
     private Long type;
 
     public RoomSearchData(){
-
+        super();
     }
 
     public Long getHotelId() {

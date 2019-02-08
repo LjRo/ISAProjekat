@@ -253,6 +253,20 @@ function fillData(data) {
     $('#addFlight').attr("href","addFlight.html?id="+data.id);
     $('#addLocation').attr("href","addLocation.html?id="+data.id);
 
+
+    $.get({
+        url: '/rating/check?id='+data.id+'&type=6',
+        success: function (rating) {
+            generateStars(rating,"#addStarAir");
+        },
+        error : function (e) {
+
+        }
+    });
+
+
+
+
     var foodIcon = '';
     var luggageIcon = '';
     var otherIcon = '';
@@ -330,7 +344,7 @@ function fillFlight(data) {
         '                                </div>\n' +
         '                                <div class="col-md-3">\n' +
         '                                    <h5>' + data.price + '$</h5>\n' +
-        '                                    <br>\n' +
+        '<div id="addStars'+ data.id+'"></div>' +
         '                                    Number of stops: <strong><span id="NumberOfStops">'+ data.numberOfStops +'</span></strong>\n<br><br>' +
         '                                    <a class="user" href="/bookflight.html?id='+ data.id +'"><button type="button" class="btn btn-success">Book</button></a>\n' +
         '                                </div>\n' +
@@ -340,6 +354,17 @@ function fillFlight(data) {
     var bookBtn = "";
     tr.append(flightData).append(bookBtn);
     table.row.add(tr).draw();
+
+    $.get({
+        url: '/rating/check?id='+data.id+'&type=3',
+        success: function (rating) {
+            generateStars(rating,"#addStars" + data.id);
+        },
+        error : function (e) {
+
+        }
+    });
+
 }
 
 function fillQuickFlight(data,us) {
@@ -365,7 +390,7 @@ function fillQuickFlight(data,us) {
         '                                <div class="col-md-3">\n' +
         '                                    <h5><s>' + data.price + '$</s></h5>\n' +
         '                                    <h5 style="color:red">' + data.price*0.95 + '$</h5>\n' +
-        '                                    <br>\n' +
+        '<div id="addStarsQ'+ us+'"></div>' +
         '                                    Number of stops: <strong><span id="NumberOfStops">'+ data.numberOfStops +'</span></strong>\n<br><br>' +
         '                                    <button name="'+ us +'" type="button" class="btn btn-success quickBtn">Quick Book</button>\n' +
         '                                </div>\n' +
@@ -375,6 +400,17 @@ function fillQuickFlight(data,us) {
     var bookBtn = "";
     tr.append(flightData).append(bookBtn);
     table.row.add(tr).draw();
+
+    $.get({
+        url: '/rating/check?id='+data.id+'&type=2',
+        success: function (rating) {
+            generateStars(rating,"#addStarsQ" + us);
+        },
+        error : function (e) {
+
+        }
+    });
+
 
     $('.quickBtn').unbind('click').bind('click', function(event) {
         event.preventDefault();
@@ -624,3 +660,27 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
 };
 
+
+function generateStars(average, selector){
+    //  $('#addStars' + id).append(res);
+    var res;
+
+    for (var i = 0; i < 5; i++){
+        if (i > average){
+            if (average >= i/2){
+                res =  $('<i id="star1" class="fa fa-star-half-o"></i>');
+            }else {
+                res =  $('<i id="star1" class="fa fa-star-o"></i>');
+            }
+        } else {
+            if (i == average){
+                res =  $('<i id="star1" class="fa fa-star-o"></i>');
+            }else
+                res =  $('<i id="star1" class="fa fa-star"></i>');
+        }
+
+        $(selector).append(res);
+    }
+    res = $('<br>');
+    $(selector).append(res);
+}

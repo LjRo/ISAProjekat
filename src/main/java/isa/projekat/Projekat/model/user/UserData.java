@@ -12,6 +12,9 @@ public class UserData {
     private Double points;
     private int type;
 
+    public UserData() {
+        super();
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;

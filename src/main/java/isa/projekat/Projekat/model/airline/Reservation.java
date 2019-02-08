@@ -46,7 +46,9 @@ public class Reservation {
     @JsonBackReference(value = "seat_reservation")
     private Seat seat;
 
-
+    public Reservation() {
+        super();
+    }
 
     public Flight getFlight() {
         return flight;

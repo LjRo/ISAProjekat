@@ -15,6 +15,7 @@ public class RoomType implements Serializable {
     private String name;
 
     public RoomType() {
+        super();
     }
 
     public Long getId() {

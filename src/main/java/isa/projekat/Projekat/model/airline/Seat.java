@@ -33,6 +33,7 @@ public class Seat {
     private boolean quick;
 
     public Seat() {
+        super();
     }
 
     public Seat(int row, int column, BigDecimal price, Reservation reservation, boolean taken, boolean quick) {

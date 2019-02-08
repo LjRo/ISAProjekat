@@ -7,6 +7,7 @@ import isa.projekat.Projekat.model.airline.Airline;
 import isa.projekat.Projekat.model.airline.Order;
 import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.hotel.Hotel;
+import isa.projekat.Projekat.model.hotel.ReservationHotel;
 import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import isa.projekat.Projekat.model.rent_a_car.RentReservation;
 import org.joda.time.DateTime;
@@ -92,6 +93,10 @@ public class User implements UserDetails {
     @JsonManagedReference(value = "user_rent_reservation")
     private List<RentReservation> rentReservations;
 
+    @OneToMany
+    @JsonManagedReference(value = "hotels_bla")
+    private List<ReservationHotel> reservationHotels;
+
     @Column
     private Timestamp lastPasswordResetDate;
 
@@ -101,6 +106,15 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
     private List<Authority> authorities;
 
+
+
+    // RentACar stuff
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JsonBackReference(value = "rent_admins")
+    private RentACar administratedRent;
+
+
+
     public List<RentReservation> getRentReservations() {
         return rentReservations;
     }
@@ -109,10 +123,13 @@ public class User implements UserDetails {
         this.rentReservations = rentReservations;
     }
 
-    // RentACar stuff
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JsonBackReference(value = "rent_admins")
-    private RentACar administratedRent;
+    public List<ReservationHotel> getReservationHotels() {
+        return reservationHotels;
+    }
+
+    public void setReservationHotels(List<ReservationHotel> reservationHotels) {
+        this.reservationHotels = reservationHotels;
+    }
 
     public Airline getAdministratedAirline() {
         return administratedAirline;
@@ -122,7 +139,11 @@ public class User implements UserDetails {
         this.administratedAirline = administratedAirline;
     }
 
-public Hotel getAdministratedHotel() {
+    public User() {
+        super();
+    }
+
+    public Hotel getAdministratedHotel() {
         return administratedHotel;
     }
 
@@ -137,9 +158,6 @@ public Hotel getAdministratedHotel() {
     public void setAdministratedRent(RentACar administratedRent) {
         this.administratedRent = administratedRent;
     }
-
-    //
-
 
     public Long getId() {
         return id;
@@ -250,8 +268,6 @@ public Hotel getAdministratedHotel() {
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
-
-
 
     public Timestamp getLastPasswordResetDate() {
         return lastPasswordResetDate;

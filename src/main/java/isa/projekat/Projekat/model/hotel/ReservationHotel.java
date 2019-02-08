@@ -3,8 +3,6 @@ package isa.projekat.Projekat.model.hotel;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import isa.projekat.Projekat.model.airline.Order;
 import isa.projekat.Projekat.model.user.User;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,8 +19,6 @@ public class ReservationHotel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private User user;
 
     @Column(nullable = false)
     private Date arrivalDate;
@@ -42,22 +38,26 @@ public class ReservationHotel implements Serializable {
     @Column
     private BigDecimal price;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @Fetch(value = FetchMode.SUBSELECT)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<HotelServices> services;
 
     @Column
     private boolean fast = false;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JsonBackReference(value = "hotels_bla")
+    private User user;
+
+    @ManyToOne
     @JsonBackReference(value = "rooms")
     private Order userOrder;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
     private Room room;
 
     public ReservationHotel(){
-
+        super();
     }
 
     public BigDecimal getPrice() {

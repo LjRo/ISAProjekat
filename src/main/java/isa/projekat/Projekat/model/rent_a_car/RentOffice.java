@@ -25,6 +25,7 @@ public class RentOffice implements Serializable {
 
 
     public RentOffice() {
+        super();
     }
 
     public Long getId() {

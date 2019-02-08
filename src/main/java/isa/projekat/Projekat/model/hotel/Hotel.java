@@ -1,7 +1,6 @@
 package isa.projekat.Projekat.model.hotel;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import isa.projekat.Projekat.model.Rating;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
 
@@ -38,17 +37,14 @@ public class Hotel implements Serializable {
     private Set<HotelPriceList> hotelPriceList;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference(value="hotel_services")
     private Set<HotelServices> hotelServices = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "hotel")
     @JsonManagedReference(value="hotel_rooms")
     private Set<Room> rooms = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Rating> ratings = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hotel", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hotel", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "floors")
     private Set<FloorPlan> floorPlans = new HashSet<>();
 
@@ -61,6 +57,7 @@ public class Hotel implements Serializable {
 
 
     public Hotel() {
+        super();
     }
 
     public Long getId() {
@@ -135,13 +132,6 @@ public class Hotel implements Serializable {
         this.rooms = rooms;
     }
 
-    public Set<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(Set<Rating> ratings) {
-        this.ratings = ratings;
-    }
 
     public Set<FloorPlan> getFloorPlans() {
         return floorPlans;

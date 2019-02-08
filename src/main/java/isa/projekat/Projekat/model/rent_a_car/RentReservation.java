@@ -2,7 +2,6 @@ package isa.projekat.Projekat.model.rent_a_car;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import isa.projekat.Projekat.model.airline.Order;
-import isa.projekat.Projekat.model.airline.Reservation;
 import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
@@ -29,6 +28,9 @@ public class RentReservation {
     @JsonBackReference(value = "user_rent_reservation")
     private User user;
 
+    @ManyToOne
+    private Cars rentedCar;
+
     @Column
     private Date startDate;
 
@@ -45,8 +47,7 @@ public class RentReservation {
     private Integer numberOfPeople;
 
     // One car can be rented in different periods
-    @ManyToOne
-    private Cars rentedCar;
+
 
 
 
@@ -55,7 +56,9 @@ public class RentReservation {
 
     private BigDecimal price;
 
-
+    public RentReservation() {
+        super();
+    }
 
     public BigDecimal getPrice() {
         return price;
@@ -71,9 +74,6 @@ public class RentReservation {
 
     public void setFastReservation(Boolean fastReservation) {
         this.fastReservation = fastReservation;
-    }
-
-    public RentReservation() {
     }
 
     public Integer getNumberOfPeople() {

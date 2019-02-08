@@ -1,11 +1,8 @@
 package isa.projekat.Projekat.model;
 
-import isa.projekat.Projekat.model.airline.Airline;
-import isa.projekat.Projekat.model.airline.Flight;
-import isa.projekat.Projekat.model.hotel.Hotel;
-import isa.projekat.Projekat.model.hotel.Room;
-import isa.projekat.Projekat.model.rent_a_car.Cars;
-import isa.projekat.Projekat.model.rent_a_car.RentACar;
+import isa.projekat.Projekat.model.airline.Reservation;
+import isa.projekat.Projekat.model.hotel.ReservationHotel;
+import isa.projekat.Projekat.model.rent_a_car.RentReservation;
 import isa.projekat.Projekat.model.user.User;
 
 import javax.persistence.*;
@@ -23,29 +20,20 @@ public class Rating implements Serializable {
     @Column(nullable = false)
     private int userRating;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Column(nullable = false) //1- airlines , 2 - flight , 3- hotel , 4-rooms , 5 - rentacar , 6 - cars
+    @Column(nullable = false) //1- cars , 2 - flight , 3- rooms  4-rentacar , 5 - hotel , 6 - airlines
     private int type;
 
-    @ManyToOne
-    private Airline airline;
+    @ManyToOne(targetEntity = Reservation.class)
+    private Reservation flightReservation;
 
-    @ManyToOne
-    private Flight flight;
+    @ManyToOne(targetEntity = ReservationHotel.class)
+    private ReservationHotel hotelReservation;
 
-    @ManyToOne
-    private Hotel hotel;
-
-    @ManyToOne
-    private Room room;
-
-    @ManyToOne
-    private RentACar rentACar;
-
-    @ManyToOne
-    private Cars cars;
+    @ManyToOne(targetEntity = RentReservation.class)
+    private RentReservation rentReservation;
 
 
     public Rating() {
@@ -68,7 +56,6 @@ public class Rating implements Serializable {
         this.userRating = userRating;
     }
 
-
     public User getUser() {
         return user;
     }
@@ -85,51 +72,27 @@ public class Rating implements Serializable {
         this.type = type;
     }
 
-    public Airline getAirline() {
-        return airline;
+    public Reservation getFlightReservation() {
+        return flightReservation;
     }
 
-    public void setAirline(Airline airline) {
-        this.airline = airline;
+    public void setFlightReservation(Reservation flightReservation) {
+        this.flightReservation = flightReservation;
     }
 
-    public Flight getFlight() {
-        return flight;
+    public ReservationHotel getHotelReservation() {
+        return hotelReservation;
     }
 
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public void setHotelReservation(ReservationHotel hotelReservation) {
+        this.hotelReservation = hotelReservation;
     }
 
-    public Hotel getHotel() {
-        return hotel;
+    public RentReservation getRentReservation() {
+        return rentReservation;
     }
 
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-    }
-
-    public RentACar getRentACar() {
-        return rentACar;
-    }
-
-    public void setRentACar(RentACar rentACar) {
-        this.rentACar = rentACar;
-    }
-
-    public Cars getCars() {
-        return cars;
-    }
-
-    public void setCars(Cars cars) {
-        this.cars = cars;
+    public void setRentReservation(RentReservation rentReservation) {
+        this.rentReservation = rentReservation;
     }
 }

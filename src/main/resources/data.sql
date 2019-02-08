@@ -182,14 +182,6 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (6, 5);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (7, 1);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (8, 1);
 
-/*companies.sql*/
-
-
-
-INSERT INTO ratings(user_rating,user_id,type,hotel_id)
-VALUES (3,1,3,1);
-
-
 
 INSERT INTO room_type (name)
 VALUES ('Single Beds');
@@ -228,20 +220,20 @@ VALUES (1,5);
 INSERT INTO hotels_room_types(hotel_id,room_types_id)
 VALUES (1,6);
 
-INSERT INTO hotel_services(id,name,price,hotel_id)
-VALUES (1,'WiFi',20,1);
-INSERT INTO hotel_services(id,name,price,hotel_id)
-VALUES (2,'Pool',100,1);
-INSERT INTO hotel_services(id,name,price,hotel_id)
-VALUES (3,'Parking',150,1);
-INSERT INTO hotel_services(id,name,price,hotel_id)
-VALUES (4,'Restaurant',200,1);
-INSERT INTO hotel_services(id,name,price,hotel_id)
-VALUES (5,'Wellness',250,1);
-INSERT INTO hotel_services(id,name,price,hotel_id)
-VALUES (6,'Spa center',400,1);
-INSERT INTO hotel_services(id,name,price,hotel_id)
-VALUES (7,'Transport to Airport',100,1);
+INSERT INTO hotel_services(id,name,price)
+VALUES (1,'WiFi',20);
+INSERT INTO hotel_services(id,name,price)
+VALUES (2,'Pool',100);
+INSERT INTO hotel_services(id,name,price)
+VALUES (3,'Parking',150);
+INSERT INTO hotel_services(id,name,price)
+VALUES (4,'Restaurant',200);
+INSERT INTO hotel_services(id,name,price)
+VALUES (5,'Wellness',250);
+INSERT INTO hotel_services(id,name,price)
+VALUES (6,'Spa center',400);
+INSERT INTO hotel_services(id,name,price)
+VALUES (7,'Transport to Airport',100);
 
 INSERT INTO hotels_hotel_services(hotel_id,hotel_services_id)
 VALUES (1,1);
@@ -315,11 +307,11 @@ VALUES (3, '2019-01-01', '2019-01-15' ,14, '2019-01-01' , 3 ,2, null );
 INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id)
 VALUES (5, '2019-01-10', '2019-01-15' ,14, '2019-01-01' ,4,3, null );
 
-INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id,fast)
-VALUES (4, '2019-03-03', '2019-03-15' ,12, null , 3 ,null , null,true );
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id,fast,price)
+VALUES (4, '2019-03-03', '2019-03-15' ,12, null , 3 ,null , null,true ,1400);
 
-INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id,fast)
-VALUES (3, '2019-05-10', '2019-05-15' ,5, null ,4,null , null,true );
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id,fast,price)
+VALUES (3, '2019-05-10', '2019-05-15' ,5, null ,4,null , null,true,1200 );
 
 /*destinations*/
 insert into airlines_destinations (airline_id, destinations_id) values (1,1);
