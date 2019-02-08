@@ -445,7 +445,7 @@ function checkUserType() {
         url: '/api/user/userType',
         headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
         success: function (data) {
-            if (data == -1) {
+            if (data != 0) {
                 $(".user").remove();
             }
             if (data != 3) {
