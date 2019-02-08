@@ -46,9 +46,6 @@ public class ReservationHotel implements Serializable {
     private boolean fast = false;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Hotel hotel;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonBackReference(value = "rooms")
     private Order userOrder;
 
@@ -129,14 +126,6 @@ public class ReservationHotel implements Serializable {
 
     public void setFast(boolean fast) {
         this.fast = fast;
-    }
-
-    public Hotel getHotel() {
-        return hotel;
-    }
-
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
     }
 
     public Order getUserOrder() {

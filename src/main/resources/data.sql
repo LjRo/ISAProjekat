@@ -301,17 +301,17 @@ INSERT INTO hotels_hotel_price_list(hotel_id,hotel_price_list_id)
 VALUES (2,7);
 
 
-INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,hotel_id,room_id,user_id,user_order_id)
-VALUES (3, '2019-01-01', '2019-01-15' ,14, '2019-01-01', 1 , 3 ,2, null );
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id)
+VALUES (3, '2019-01-01', '2019-01-15' ,14, '2019-01-01' , 3 ,2, null );
 
-INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,hotel_id,room_id,user_id,user_order_id)
-VALUES (5, '2019-01-10', '2019-01-15' ,14, '2019-01-01', 1 ,4,3, null );
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id)
+VALUES (5, '2019-01-10', '2019-01-15' ,14, '2019-01-01' ,4,3, null );
 
-INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,hotel_id,room_id,user_id,user_order_id,fast)
-VALUES (4, '2019-03-03', '2019-03-15' ,12, null, 1 , 3 ,null , null,true );
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id,fast)
+VALUES (4, '2019-03-03', '2019-03-15' ,12, null , 3 ,null , null,true );
 
-INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,hotel_id,room_id,user_id,user_order_id,fast)
-VALUES (3, '2019-05-10', '2019-05-15' ,5, null, 1 ,4,null , null,true );
+INSERT INTO reservation_hotel (people,arrival_date, departure_date,nights_staying,reservation_date,room_id,user_id,user_order_id,fast)
+VALUES (3, '2019-05-10', '2019-05-15' ,5, null ,4,null , null,true );
 
 /*destinations*/
 insert into airlines_destinations (airline_id, destinations_id) values (1,1);

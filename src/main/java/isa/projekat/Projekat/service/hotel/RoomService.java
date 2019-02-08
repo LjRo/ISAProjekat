@@ -71,7 +71,20 @@ public class RoomService {
         return (idays==0)?1:idays;
     }
 
+    @Transactional(readOnly = true)
+    public Integer getAvailableUnavailabeRooms(Long hotelId,Boolean areAvailable,String start,String end) {
+        List<Room> rooms;
+        if(areAvailable)
+            rooms = roomRepository.returnRoomsAvailable(hotelId,start,end);
+        else
+            rooms = roomRepository.returnRoomsUnavailalbe(hotelId,start,end);
+        if(rooms !=null)
+            return  rooms.size();
+        else
+            return 0;
+    }
 
+    @Transactional(readOnly = true)
     public Room findById( Long id) {
         Optional<Room> oRoom = roomRepository.findById(id);
         if(oRoom.isPresent())
@@ -175,7 +188,7 @@ public class RoomService {
             Room roomFound = exists.get();
             ReservationHotel newReservation = new ReservationHotel();
             newReservation.setNightsStaying((int)days);
-            newReservation.setHotel(roomFound.getHotel());
+            //newReservation.setHotel(roomFound.getHotel());
             newReservation.setUserOrder(pendingOrder);
             newReservation.setArrivalDate(arrival);
             newReservation.setPeople(roomFound.getNumberOfPeople());
