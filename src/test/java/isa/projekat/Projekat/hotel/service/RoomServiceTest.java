@@ -1,6 +1,8 @@
 package isa.projekat.Projekat.hotel.service;
 
 import isa.projekat.Projekat.model.airline.Order;
+import isa.projekat.Projekat.model.hotel.Hotel;
+import isa.projekat.Projekat.model.hotel.ReservationHotel;
 import isa.projekat.Projekat.model.hotel.ReservationHotelData;
 import isa.projekat.Projekat.model.hotel.Room;
 import isa.projekat.Projekat.model.user.User;
@@ -31,7 +33,7 @@ public class RoomServiceTest {
     private RoomService roomService;
 
     @Mock
-    private Room room;
+    private Room roomMock;
 
     @Mock
     private User userMock;
@@ -48,14 +50,39 @@ public class RoomServiceTest {
     @Mock
     private Order orderMock;
 
+    @Mock
+    private Hotel hotelMock;
 
     @Test
     @Transactional
     public void testReserve(){
-        ReservationHotelData reservationHotelData = new ReservationHotelData(DB_ID,DB_ID,DB_ID,"","2019-01-10","2019-01-15");
+
+        ReservationHotelData reservationHotelData = new ReservationHotelData(DB_ID,DB_ID,DB_ID,"","2019-04-10","2019-04-15");
+        when(roomRepository.checkIfAvailableStill(DB_ID,"2019-04-10","2019-04-15")).thenReturn(roomMock);
         when(orderRepository.findById(DB_ID)).thenReturn(Optional.of(orderMock));
+        when(roomRepository.findById(DB_ID)).thenReturn(Optional.of(roomMock));
+        when(roomMock.getHotel()).thenReturn(new Hotel());
         int response  = roomService.reserveRoom(reservationHotelData,userMock);
-        assertEquals(response,3); //2F
+        assertEquals(response,0);
+    }
+
+    @Test
+    @Transactional
+    public void testFailReserve() {
+
+        ReservationHotelData reservationHotelData = new ReservationHotelData(DB_ID, DB_ID, DB_ID, "", "2019-04-10", "2019-04-15");
+        when(orderRepository.findById(DB_ID)).thenReturn(Optional.of(orderMock));
+        int response = roomService.reserveRoom(reservationHotelData, userMock);
+        assertEquals(response, 3);
+    }
+
+    @Test
+    @Transactional
+    public void testFailReserve2(){
+        ReservationHotelData reservationHotelData = new ReservationHotelData(DB_ID,DB_ID,DB_ID,"","2019-04-10","2019-04-15");
+        when(hotelReservationRepository.findByUserOrder_Id(DB_ID)).thenReturn(new ReservationHotel());
+        int response  = roomService.reserveRoom(reservationHotelData,userMock);
+        assertEquals(response,2);
     }
 
 

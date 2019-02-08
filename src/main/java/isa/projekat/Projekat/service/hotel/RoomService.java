@@ -163,11 +163,13 @@ public class RoomService {
         {
             Set<HotelPriceList> priceList = room.getHotel().getHotelPriceList();
 
-            for(HotelPriceList stock : priceList){
-                if(stock.getRoomType().equals(room.getRoomType()))
-                {
-                    cumulativePrice =  stock.getPrice().multiply(new BigDecimal(days));
-                }
+            if(priceList != null)
+                if(priceList.size()>0)
+                    for(HotelPriceList stock : priceList){
+                    if(stock.getRoomType().equals(room.getRoomType()))
+                    {
+                        cumulativePrice =  stock.getPrice().multiply(new BigDecimal(days));
+                    }
             }
         }
         if(services!="")
