@@ -32,37 +32,28 @@ public class FloorController {
     private UserService userService;
 
     @PermitAll
-    @RequestMapping(value = "api/floor/findById", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/floor/findById", produces = {MediaType.APPLICATION_JSON_VALUE})
     public FloorPlan findById(@RequestParam long id) {
         return floorService.findById(id);
     }
 
 
     @PermitAll
-    @RequestMapping(value = "api/floor/findAllByHotelId", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/floor/findAllByHotelId", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Set<FloorPlan> findAllByHotelId(@RequestParam long id) {
         return floorService.findByHotelIdOrderedByFloorNumberAsc(id);
     }
 
-    @RequestMapping(value = "api/floor/{id}/editFloor", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @PostMapping(value = "api/floor/{id}/editFloor", consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @PreAuthorize("hasRole('ROLE_ADMIN_HOTEL')")
     @AdminEnabledCheck
-    public ResponseEntity<?> addRoomType(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody FloorPlan floorPlan){
+    public ResponseEntity<Map<String,String>> addRoomType(@PathVariable Long id, HttpServletRequest httpServletRequest, @RequestBody FloorPlan floorPlan){
         User user =  getUser(httpServletRequest);
         return  responseTransaction(floorService.editFloorPlan(floorPlan,id,user));
     }
 
-
-
-
-
-
-
-
-
-
     @SuppressWarnings("Duplicates")
-    private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){
+    private ResponseEntity<Map<String,String>> responseTransaction(Boolean resultOfTransaction ){
         Map<String, String> result = new HashMap<>();
         if(resultOfTransaction )
         {

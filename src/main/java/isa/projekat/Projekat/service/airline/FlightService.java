@@ -113,12 +113,16 @@ public class FlightService {
 
     @Transactional
     public Boolean finishOrder(Long id,String email) {
-
-        if(!orderRepository.findById(id).isPresent()) {
+        Order target;
+        if(orderRepository.findById(id).isPresent()) {
+            target = orderRepository.findById(id).get();
+        } else {
             return false;
         }
-        Order target = orderRepository.findById(id).get();
         User req = userRepository.findByUsername(email);
+        if(req  == null) {
+            return false;
+        }
 
         for(Order o: req.getOrders()) {
             if(o.getId().equals(target.getId())) {
@@ -133,11 +137,17 @@ public class FlightService {
 
     @Transactional(readOnly = true)
     public Boolean isOrdering(Long id,String email) {
-        if(!orderRepository.findById(id).isPresent()) {
+        User req = userRepository.findByUsername(email);
+        if(req == null) {
             return false;
         }
-        User req = userRepository.findByUsername(email);
-        Order target = orderRepository.findById(id).get();
+
+        Order target;
+        if(orderRepository.findById(id).isPresent()) {
+            target = orderRepository.findById(id).get();
+        } else {
+            return false;
+        }
 
         for(Order o: req.getOrders()) {
             if(o.getId().equals(target.getId())) {

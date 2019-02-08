@@ -23,19 +23,19 @@ public class Order implements Serializable {
     private Long id;
 
     @OneToMany
-    @JsonManagedReference("reservations")
+    @JsonManagedReference(value = "reservations")
     private List<Reservation> reservations;
 
     @OneToOne
-    @JsonManagedReference("rent")
+    @JsonManagedReference(value = "rent")
     private RentReservation rentReservation;
 
     @OneToOne
-    @JsonManagedReference("rooms")
+    @JsonManagedReference(value = "rooms")
     private ReservationHotel reservationHotel;
 
     @ManyToOne
-    @JsonBackReference("placed_orders")
+    @JsonBackReference(value = "placed_orders")
     private User placedOrder;
 
     @Column
