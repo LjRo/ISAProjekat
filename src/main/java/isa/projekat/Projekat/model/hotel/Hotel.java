@@ -41,12 +41,10 @@ public class Hotel implements Serializable {
     @JsonManagedReference(value="hotel_services")
     private Set<HotelServices> hotelServices = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hotel")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "hotel")
     @JsonManagedReference(value="hotel_rooms")
     private Set<Room> rooms = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Rating> ratings = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hotel", fetch = FetchType.EAGER)
     @JsonManagedReference(value = "floors")
@@ -136,13 +134,6 @@ public class Hotel implements Serializable {
         this.rooms = rooms;
     }
 
-    public Set<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(Set<Rating> ratings) {
-        this.ratings = ratings;
-    }
 
     public Set<FloorPlan> getFloorPlans() {
         return floorPlans;

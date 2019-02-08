@@ -36,7 +36,7 @@ $(document).ready(function () {
             success: function (data) {
                 var sel = '#orderListings';
                 $(sel).append('<h6> Order id: ' + data.id+ ' </h6>');
-                if (data.reservations != undefined) {
+               /* if (data.reservations != undefined) {
                     data.reservations.forEach(function (entry) {
                         guiAriline(entry.flight,sel, entry.name, entry.lastName, entry.confirmed);
                     });
@@ -46,7 +46,7 @@ $(document).ready(function () {
                 }
                 if (data.reservationHotel != undefined){
                     guiHotel(data.reservationHotel.room);
-                }
+                }*/
 
             },
             error:function (message) {

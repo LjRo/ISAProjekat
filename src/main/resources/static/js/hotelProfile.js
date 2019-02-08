@@ -11,11 +11,25 @@ function SortByName(a, b){
     return ((aFloor < bFloor) ? -1 : ((aFloor > bFloor) ? 1 : 0));
 }
 
+
+
+
 $(document).ready(function () {
 
     var pId = getUrlParameter('id');
     var search = getUrlParameter('search');
     var hotelPrices = undefined;
+
+    $.get({
+        url: '/rating/check?id='+pId+'&type=5',
+        success: function (rating) {
+            generateStars(rating,"#addStarsRent");
+        },
+        error : function (e) {
+
+        }
+    });
+
 
     $.get({
         url: '/api/hotel/findById=' + pId,
@@ -348,7 +362,7 @@ function addRoom(room,hotelId,price,quick,reservationId,startDate,EndDate,oldPri
     var departure = getUrlParameter('departure');
     arrival = (arrival==undefined||arrival=='')?'':'&arrival='+arrival;
     departure = (departure==undefined||departure=='')?'':'&departure='+departure;
-
+    var extra = '';
     var display = 'none';
     var newPrice = '';
     var addingToId = '';
@@ -369,6 +383,7 @@ function addRoom(room,hotelId,price,quick,reservationId,startDate,EndDate,oldPri
         addingToId='Quick';
         display='inherit';
         datesText = 'Start date:<strong>'+ startDate + '</strong>  End Date:<strong>' +  EndDate +'</strong>';
+        extra = 'Q';
     }
 
 
@@ -395,12 +410,7 @@ function addRoom(room,hotelId,price,quick,reservationId,startDate,EndDate,oldPri
         '                                                        <div class="col-md-3">' +
         '                                                            <h5>$'+ strike1 + pricing  + strike2 +'</h5>' +
                                                                            newPrice      +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <i class="fa fa-star"></i>' +
-        '                                                            <br>' +
+        '<div id="addStars'+ extra + room.id+'"></div>' +
         '                                                            Floor: <strong><span id="Floor">' + room.floor + '</span></strong>' +
         '                                                            <div>' + advice + '</div>' +
         '                                                            <br>' +
@@ -410,6 +420,35 @@ function addRoom(room,hotelId,price,quick,reservationId,startDate,EndDate,oldPri
         '                                                    </div>' +
         '                                                </div>' +
         '                                            </div>');
+
+    if (quick){
+        $.get({
+            url: '/rating/check?id='+room.id+'&type=3',
+            success: function (rating) {
+                generateStars(rating,"#addStarsQ" + room.id);
+            },
+            error : function (e) {
+
+            }
+        });
+    }else {
+        $.get({
+            url: '/rating/check?id='+room.id+'&type=3',
+            success: function (rating) {
+                generateStars(rating,"#addStars" + room.id);
+            },
+            error : function (e) {
+
+            }
+        });
+    }
+
+
+
+
+
+
+
     if(quick)
     {
         $('#quickListings').append(tr);
@@ -520,6 +559,30 @@ function setPagingButtons(MaxPages, MaxElements) {
         $('#next').attr('href', "#");
 }
 
+function generateStars(average, selector){
+    //  $('#addStars' + id).append(res);
+    var res;
+
+    for (var i = 0; i < 5; i++){
+        if (i > average){
+            if (average >= i/2){
+                res =  $('<i id="star1" class="fa fa-star-half-o"></i>');
+            }else {
+                res =  $('<i id="star1" class="fa fa-star-o"></i>');
+            }
+        } else {
+            if (i == average){
+                res =  $('<i id="star1" class="fa fa-star-o"></i>');
+            }else
+                res =  $('<i id="star1" class="fa fa-star"></i>');
+        }
+
+        $(selector).append(res);
+    }
+    res = $('<br>');
+    $(selector).append(res);
+}
+
 
 function makeMap() {
     var myMap = new ymaps.Map('map', {
@@ -542,13 +605,7 @@ function makeMap() {
         .add(myPlacemark);
 }
 
-function makeStars(Rating) {
-    var FullStars = Rating.toFixed(0);
-    for (var i = 1; i < FullStars; i++) {
 
-    }
-
-}
 function addParameterToURL(param,start_url){
     var url = start_url;
     url += (url.split('?')[1] ? '&':'?') + param;
