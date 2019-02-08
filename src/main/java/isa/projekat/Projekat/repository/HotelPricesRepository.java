@@ -8,5 +8,4 @@ import org.springframework.stereotype.Component;
 @Component
 public interface HotelPricesRepository extends JpaRepository<HotelPriceList, Long> {
 
-
 }

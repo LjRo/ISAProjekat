@@ -185,6 +185,30 @@ $(document).ready(function () {
         }
     });
 
+    $.get({
+        url: '/api/rooms/' + pId + '/quick',
+        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+        success: function (data) {
+            if (data != null) {
+                if (data.length > 0)
+                {
+
+                    data.forEach(function (entry) {
+                        var price='Unknown';
+                        var type = entry.room.roomType;
+                        entry.hotel.hotelPriceList.forEach(function (pricesEntry) {
+                           if(pricesEntry.roomType.id == type.id)
+                               price = pricesEntry.price * entry.nightsStaying;
+                        });
+                        var newPrice = price * (1-entry.hotel.fastDiscount/100).toFixed(2);
+                        addRoom(entry.room,entry.hotel.id,newPrice,true,entry.id,entry.arrivalDate.substring(0,10),entry.departureDate.substring(0,10),price)
+                    });
+                }
+            }
+
+        }
+    });
+
 
 
     $('#addRoom').click(function () {
@@ -319,24 +343,32 @@ function addService(services) {
 }
 
 
-function addRoom(room,hotelId,price,quick) {
+function addRoom(room,hotelId,price,quick,reservationId,startDate,EndDate,oldPrice) {
     var arrival = getUrlParameter('arrival');
     var departure = getUrlParameter('departure');
     arrival = (arrival==undefined||arrival=='')?'':'&arrival='+arrival;
     departure = (departure==undefined||departure=='')?'':'&departure='+departure;
 
     var display = 'none';
+    var newPrice = '';
     var addingToId = '';
     var advice = 'Click search to check if available';
+    var datesText = '';
+    var strike1 = '',strike2 = '';
     if(arrival != '' && departure !='')
     {
         advice='';
         display='inherit';
     }
-
     if(quick){
+        newPrice = '<h5>$'  + price  + '</h5><br/>';
+        price = oldPrice;
+        strike1 = '<strike>'
+        strike2 = '</strike>'
         advice ='';
-        addingToId='quick';
+        addingToId='Quick';
+        display='inherit';
+        datesText = 'Start date:<strong>'+ startDate + '</strong>  End Date:<strong>' +  EndDate +'</strong>';
     }
 
 
@@ -358,9 +390,11 @@ function addRoom(room,hotelId,price,quick) {
         '                                                            <div style="height: 33%;width:25%;float:right;">Rooms: <strong></br><div id="numberRooms"  style="width:auto;float: left">' + room.numberOfRooms + '</div><img height="16" src="assets/img/room.svg" style="margin-top: 5px" width="16"></strong></div>' +
         '                                                            <div style="height: 33%;width:25%;float:right;">Beds: <strong></br><div id="numberBeds"  style="width:auto;float: left">' + room.numberOfBeds  +  '</div> <img src="assets/img/bed.png" style="margin-top: 5px"></strong></div>' +
         '                                                            <div style="height: 33%;width:25%;float:right;">No.: <strong></br><div id="roomNumber"  style="width:auto;float: left">' + room.roomNumber + '</div><img src="assets/img/roomkey.png" style="margin-top: 5px"></strong></div>' +
+        datesText +
         '                                                        </div>' +
         '                                                        <div class="col-md-3">' +
-        '                                                            <h5>$' + pricing  +'</h5>' +
+        '                                                            <h5>$'+ strike1 + pricing  + strike2 +'</h5>' +
+                                                                           newPrice      +
         '                                                            <i class="fa fa-star"></i>' +
         '                                                            <i class="fa fa-star"></i>' +
         '                                                            <i class="fa fa-star"></i>' +
@@ -379,23 +413,20 @@ function addRoom(room,hotelId,price,quick) {
     if(quick)
     {
         $('#quickListings').append(tr);
-        var orderId = $('select[name="selectOrder"]').val();
 
-        $('#' + 'reserveRoom' + addingToId +  room.id).click(function () {
+        $('#' + 'reserveRoomQuick' +  room.id).click(function () {
+            var orderId = $('select[name="selectorder"]').val();
             if(orderId == undefined)
             {
-                $('qerror').text('Select order to which you want to add').fadeIn().delay(3000).fadeOut();
+                $('#qerror').html('Select order to which you want to add').fadeIn().delay(3000).fadeOut();
                 return;
             }
             $.post({
-                url: "api/rooms/reserveRoom",
+                url: "api/rooms/quickReserve",
                 data: JSON.stringify({
-                    hotelId: hotelId,
-                    roomId : id,
-                    reservationId: orderId,
-                    services :services ,
-                    arrivalDate: arrival,
-                    departureDate: departure,
+                    roomId : room.id,
+                    orderId: orderId,
+                    reservationId: reservationId,
                 }),
                 dataType: "json",
                 headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
@@ -408,7 +439,7 @@ function addRoom(room,hotelId,price,quick) {
                     }
                     else
                     {
-                        $('#error').html(message.body).fadeIn().delay(3000).fadeOut();
+                        $('#qerror').html(message.body).fadeIn().delay(3000).fadeOut();
                     }
                 },
                 error: function (data) {

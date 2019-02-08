@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FlightService {
@@ -41,14 +42,14 @@ public class FlightService {
         }
     }
 
-    public Order findOrderById(Long id) {
-        if(orderRepository.findById(id).isPresent()) {
-            return orderRepository.findById(id).get();
-        } else {
+    @Transactional(readOnly = true)
+    public Order findOrderById(Long id){
+        Optional<Order> ord = orderRepository.findById(id);
+        if (!ord.isPresent())
             return null;
-        }
+        else
+            return ord.get();
     }
-
 
     @Transactional(readOnly = true)
     public SeatData findSeatDataById(Long id) {
@@ -127,6 +128,8 @@ public class FlightService {
         }
         return false;
     }
+
+
     @Transactional(readOnly = true)
     public Boolean isOrdering(Long id,String email) {
         User req = userRepository.findByUsername(email);

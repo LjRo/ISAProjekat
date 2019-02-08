@@ -203,6 +203,8 @@ public class CarService {
         if (rentReservation.getOrder() != null)
             return false; // someone already ordered it
 
+        ord.setRentReservation(rentReservation);
+
         rentReservation.setOrder(ord);
 
         rentReservation.setUser(user);

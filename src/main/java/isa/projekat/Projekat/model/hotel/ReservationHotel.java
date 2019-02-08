@@ -29,7 +29,7 @@ public class ReservationHotel implements Serializable {
     @Column(nullable = false)
     private Date departureDate;
 
-    @Column(nullable = false)
+    @Column
     private Date reservationDate;
 
     @Column(nullable = false)
