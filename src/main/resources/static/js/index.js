@@ -45,7 +45,7 @@ $(document).ready(function () {
                     guiRent(data.rentReservation, sel);
                 }
                 if (data.reservationHotel != undefined){
-                    guiHotel(data.reservationHotel.room);
+                    guiHotel(data.reservationHotel);
                 }
 
             },
@@ -163,7 +163,9 @@ function guiRent(rentReservation, selectedElement) {
 
 }
 
-var guiHotel = function (room, selectedElement) {
+var guiHotel = function (hotel, selectedElement) {
+    var room = hotel.room;
+
     var price = room.hotel.priceList;
     var hotelId = room.hotel.id;
 

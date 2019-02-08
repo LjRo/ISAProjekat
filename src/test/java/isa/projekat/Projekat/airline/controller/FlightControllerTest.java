@@ -2,19 +2,25 @@ package isa.projekat.Projekat.airline.controller;
 
 import isa.projekat.Projekat.TestUtil;
 import isa.projekat.Projekat.model.airline.FlightSearchData;
+import isa.projekat.Projekat.model.user.UserTokenState;
+import isa.projekat.Projekat.security.auth.JwtAuthenticationRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -25,7 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FlightControllerTest {
 
     private static final String URL_PREFIX = "/api/flight";
@@ -34,10 +40,34 @@ public class FlightControllerTest {
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
+
     private MockMvc mockMvc;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    /*@Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }*/
+
+    @Autowired
+    private FilterChainProxy filterChainProxy;
+
+    private String accessToken;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @PostConstruct
+    public void init() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilters(filterChainProxy).build();
+        ResponseEntity<UserTokenState> responseEntitySys = restTemplate.postForEntity("/auth/login",
+                new JwtAuthenticationRequest("airline@gmail.com", "123"), UserTokenState.class);
+        accessToken = responseEntitySys.getBody().getAccessToken();
+
+    }
+
 
     @Before
     public void setup() {
@@ -61,7 +91,7 @@ public class FlightControllerTest {
 
     @WithMockUser(roles = {"USER"})
     @Test
-    public void all() throws Exception {
+    public void isOrderingTest() throws Exception {
         mockMvc.perform(get("/api/order" + "/" + DB_ID+"/isOrdering")).andExpect(status().is5xxServerError());
     }
 

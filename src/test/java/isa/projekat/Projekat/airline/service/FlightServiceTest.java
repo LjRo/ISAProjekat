@@ -64,18 +64,21 @@ public class FlightServiceTest {
     private Seat seatMock;
 
     @Mock
+    private Seat reservationMock;
+
+    @Mock
     private User userMock;
 
     @InjectMocks
     private FlightService flightService;
 
     @Test
-    public void testFinishOrderPass() {
+    public void testFinishOrderFail2() {
         when(orderRepositoryMock.findById(DB_ID)).thenReturn(Optional.of(orderMock));
-        when(userRepositoryMock.findByUsername("pera@peric.com")).thenReturn(userMock);
+        when(userRepositoryMock.findByUsername("pera@peric.com")).thenReturn(null);
         when(userMock.getOrders()).thenReturn(Arrays.asList(orderMock));
         when(orderMock.getId()).thenReturn(DB_ID);
-        assertTrue(flightService.finishOrder(DB_ID,"pera@peric.com"));
+        assertFalse(flightService.finishOrder(DB_ID,"pera@xyz.com"));
 
     }
 

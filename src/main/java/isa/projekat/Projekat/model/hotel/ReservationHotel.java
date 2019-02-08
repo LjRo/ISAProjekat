@@ -38,7 +38,7 @@ public class ReservationHotel implements Serializable {
     @Column
     private BigDecimal price;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     private List<HotelServices> services;
 
     @Column

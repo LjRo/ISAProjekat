@@ -22,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @PutMapping(value = "api/user/updateInfo", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasAnyRole('USER','ROLE_ADMIN','ROLE_ADMIN_AIRLINE','ROLE_ADMIN_HOTEL','ROLE_ADMIN_RENT')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_ADMIN_AIRLINE','ROLE_ADMIN_HOTEL','ROLE_ADMIN_RENT')")
     public void updateInfo(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping(value = "api/user/profile",produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasAnyRole('USER','ROLE_ADMIN','ROLE_ADMIN_AIRLINE','ROLE_ADMIN_HOTEL','ROLE_ADMIN_RENT')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_ADMIN_AIRLINE','ROLE_ADMIN_HOTEL','ROLE_ADMIN_RENT')")
     public UserData getProfileData(HttpServletRequest req) {
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping(value = "api/user/findAllFriends",produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<UserData> findAllFriends(HttpServletRequest req) {
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -59,14 +59,14 @@ public class UserController {
     }
 
     @GetMapping(value = "api/user/findAllUsers", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<User> findAllNormalusers(HttpServletRequest req) {
         return userService.getAllNormalUsers();
     }
 
 
     @GetMapping(value = "api/user/findSpecificFriends", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<User> findAllFriends(@RequestBody String search, HttpServletRequest req) {
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @GetMapping(value = "api/user/findAllFriendRequests", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<UserData> findAllFriendRequests(HttpServletRequest req) {
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -91,7 +91,7 @@ public class UserController {
     }
 
     @PostMapping(value = "api/user/sendFriendRequest", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public void sendFriendRequest(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -99,7 +99,7 @@ public class UserController {
     }
 
     @PostMapping(value = "api/user/acceptFriendRequest", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public void acceptFriendRequest(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -118,7 +118,7 @@ public class UserController {
     }
 
     @PostMapping(value = "api/user/denyFriendRequest", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public void denyFriendRequest(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -127,7 +127,7 @@ public class UserController {
     }
 
     @PostMapping(value = "api/user/removeFriend", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public void removeFriend(@RequestBody UserData ud, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -136,7 +136,7 @@ public class UserController {
     }
 
     @GetMapping(value = "api/user/{id}/friendStatus", produces = {MediaType.TEXT_PLAIN_VALUE})
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public String getUserFriendStatus(@PathVariable Long id, HttpServletRequest req){
 
         String authToken = jwtTokenUtils.getToken(req);
