@@ -7,20 +7,19 @@ import isa.projekat.Projekat.model.rent_a_car.RentACar;
 import isa.projekat.Projekat.model.rent_a_car.RentReservation;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.*;
-import isa.projekat.Projekat.service.rent_a_car.CarService;
+import isa.projekat.Projekat.service.rent_a_car.RentCarsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -30,7 +29,7 @@ public class RentServiceTest {
 
 
     @InjectMocks
-    private CarService carService;
+    private RentCarsService rentCarsService;
 
     @Mock
     private CarRepository carRepository;
@@ -68,16 +67,14 @@ public class RentServiceTest {
     @Test
     @Transactional
     public void testAddCar() {
-        ArrayList<User> list = new ArrayList<>();
-        list.add(userMock);
-        when(carsMock.getType()).thenReturn(carTypeMock);
-        when(carTypeMock.getId()).thenReturn(DB_ID);
-        when(rentACarMock.getAdmins()).thenReturn(list);
-        when(carTypeRepository.findById(DB_ID));
-        Mockito.when(rentCarRepository.findById(DB_ID)).thenReturn(Optional.of(rentACarMock));
-        Boolean isTrue = carService.addCars(carsMock,userMock,DB_ID);
-        assertTrue(isTrue);
+        List a = new ArrayList();
+        RentACar rentACar = new RentACar();
+        a.add(rentACar);
+        when(rentCarRepository.findAll()).thenReturn(a);
+        List<RentACar> got = rentCarsService.findAll();
+        assertEquals(got,a);
     }
+
 
 
 }
