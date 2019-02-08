@@ -41,7 +41,7 @@ public class Hotel implements Serializable {
     @JsonManagedReference(value="hotel_services")
     private Set<HotelServices> hotelServices = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hotel")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "hotel")
     @JsonManagedReference(value="hotel_rooms")
     private Set<Room> rooms = new HashSet<>();
 

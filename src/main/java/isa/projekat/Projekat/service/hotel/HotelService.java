@@ -33,9 +33,6 @@ public class HotelService {
     @Autowired
     private HotelServicesRepository hotelServicesRepository;
 
-    @Autowired
-    private HotelReservationRepository hotelReservationRepository;
-
     @Autowired LocationRepository locationRepository;
 
     @Autowired
@@ -285,7 +282,6 @@ public class HotelService {
             }
             return false;
         }
-
 
 
 
