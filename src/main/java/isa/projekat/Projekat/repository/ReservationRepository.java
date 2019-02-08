@@ -32,9 +32,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     void CleanUp();
 
 
+    @Query(value = "SELECT r.* FROM reservations r LEFT OUTER JOIN orders o ON o.id = r.order_id WHERE o.placed_order_id != ?1 AND NOT r.confirmed", nativeQuery = true)
+    List<Reservation> invited(Long userId);
+
 
     List<Reservation> findAllByUserId(Long userId);
-
 
 
 }

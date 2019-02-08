@@ -3,6 +3,7 @@ package isa.projekat.Projekat.controller.rent_a_car;
 import isa.projekat.Projekat.aspects.AdminEnabledCheck;
 import isa.projekat.Projekat.model.rent_a_car.Cars;
 import isa.projekat.Projekat.model.rent_a_car.RentReservation;
+import isa.projekat.Projekat.model.rent_a_car.TransferData;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.security.TokenUtils;
 import isa.projekat.Projekat.service.rent_a_car.CarService;
@@ -95,7 +96,28 @@ public class CarController {
         return responseTransaction(carService.reserveCar(rentReservation.getRentedCar().getId(), idrent, user, rentReservation, idAir));
     }
 
+    /*
+    @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @GetMapping(value = "api/cars/getDaily")
+    public List<TransferData> dailyStatistics(HttpServletRequest request){
+        User user = getUser(request);
+        return carService.findStatisticsDaily(user);
+    }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @GetMapping(value = "api/cars/getMonthly")
+    public List<TransferData> monthlyStatistics(HttpServletRequest request){
+        User user = getUser(request);
+        return carService.findMonthlyStatistics(user);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
+    @GetMapping(value = "api/cars/getYearly")
+    public List<TransferData> yearlyStatistics(HttpServletRequest request){
+        User user = getUser(request);
+        return carService.findYearlyStatistics(user);
+    }
+    */
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value = "api/cars/{idReservation}/{idOrder}/quickReserve", consumes = {MediaType.APPLICATION_JSON_VALUE})

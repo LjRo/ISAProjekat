@@ -59,7 +59,7 @@ public class FlightController {
 
     }
 
-    @RequestMapping(value = "api/order/{id}/confirm", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "api/order/{orderId}/confirm", produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity confirmOrder(@PathVariable Long orderId, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
@@ -68,7 +68,7 @@ public class FlightController {
         return ResponseFormatter.format(flightService.finishOrder(orderId,email),false);
     }
 
-    @RequestMapping(value = "api/order/{id}/isOrdering", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "api/order/{orderId}/isOrdering", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('ROLE_USER')")
     public Boolean isOrdering(@PathVariable Long orderId, HttpServletRequest req){
         String authToken = jwtTokenUtils.getToken(req);
@@ -165,7 +165,13 @@ public class FlightController {
         return flightService.cancelRent(id,user);
     }
 
-
+    @GetMapping(value = "api/flight/AllInvites")
+    public List<Reservation> listToAccept(HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return flightService.findInvites(user);
+    }
 
 
     @RequestMapping(value= "api/flight/{id}/order", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})

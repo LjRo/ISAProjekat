@@ -101,7 +101,7 @@ function addArticle(rentacar) {
         '</a>' +
         '<p class="description">Address: <span style = "color:black">'+ 'Click to see google maps' + '</span></p>' +
         '<p class="description">'+ rentacar.description +'</p>' +
-        '<a class="edit-rentacar admin" href="editrentacar.html?id=' + rentacar.id +'&name='+ rentacar.name +'&description='+ rentacar.description + '"><img src="/../assets/img/edit.png" style="height:16px;width16px;"></a> ' +
-        '<a id="' + rentacar.id + '" class="delete-rentacar admin" href="rentacars.html"><img src="assets/img/delete.png" style="height:16px;width16px;"></a> '+
+        '<a class="edit-rentacar admin" href="editrentacar.html?id=' + rentacar.id +'&name='+ rentacar.name +'&description='+ rentacar.description + '"></a> ' +
+        '<a id="' + rentacar.id + '" class="delete-rentacar admin" href="rentacars.html"></a> '+
         '</div>');
 }

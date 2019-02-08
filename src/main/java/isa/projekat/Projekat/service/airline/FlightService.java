@@ -49,6 +49,12 @@ public class FlightService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public List<Reservation> findInvites(User user){
+        return reservationRepository.invited(user.getId());
+    }
+
+
     @Transactional
     public Boolean cancelOrder(Long idOrder, User user){
 
@@ -68,7 +74,7 @@ public class FlightService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.HOUR, -3);
-        if (cal.after(new Date())){
+        if ((new Date().after(cal.getTime()))){
             return false; // can't cancel
         }
 
@@ -116,7 +122,7 @@ public class FlightService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DATE, -3);
-        if (!cal.after(new Date())){
+        if ((new Date().after(cal.getTime()))){
             return false; // can't cancel
         }
 
@@ -150,9 +156,13 @@ public class FlightService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DATE, -3);
-        if (!cal.after(new Date())){
+        if ((new Date().after(cal.getTime()))){
             return false; // can't cancel
         }
+
+        order.setReservationHotel(null);
+        orderRepository.save(order);
+        hotelReservationRepository.deleteById(reservationHotel.getId());
 
         return true;
     }
@@ -213,6 +223,8 @@ public class FlightService {
 
         reservation.setConfirmed(true);
         reservationRepository.save(reservation);
+
+
         return true;
 
     }

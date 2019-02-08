@@ -27,8 +27,10 @@ public interface RentReservationRepository extends JpaRepository<RentReservation
     void deleteById(Long id);
 
 
-
-   // List<Object> findStatisticsDaily();
+   /* @Query(value = "SELECT COUNT(rr.id) " +
+            " FROM rent_reservation rr " +
+            " WHERE rr.id IN (SELECT r.id FROM rent_reservation r WHERE ?1 between r.start_date and r.end_date GROUP BY r.id) ")
+    Long findStatisticsDaily(String date);*/
 
 
 }

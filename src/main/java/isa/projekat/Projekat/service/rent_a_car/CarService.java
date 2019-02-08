@@ -1,10 +1,7 @@
 package isa.projekat.Projekat.service.rent_a_car;
 
 import isa.projekat.Projekat.model.airline.Order;
-import isa.projekat.Projekat.model.rent_a_car.CarType;
-import isa.projekat.Projekat.model.rent_a_car.Cars;
-import isa.projekat.Projekat.model.rent_a_car.RentACar;
-import isa.projekat.Projekat.model.rent_a_car.RentReservation;
+import isa.projekat.Projekat.model.rent_a_car.*;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -59,15 +57,84 @@ public class CarService {
             return null;
     }
 
+
+    /*
+    @SuppressWarnings("Duplicates")
     @Transactional(readOnly = true)
-    public List<Object> findStatisticsDaily(){
+    public List<TransferData> findStatisticsDaily(User user){
+
         int info = 30;
 
+        Date nowTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowTime);
+        calendar.add(Calendar.DATE,-30);
+        Point tmp = new Point();
+
+        SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
+
+        String strDate = sm.format(new Date());
+
+        TransferData td = new TransferData();
+
         for (int i = 0; i < 30; i++){
-            int a = 5;
+            calendar.add(Calendar.DATE,+1);
+            td.setUnits(rentReservationRepository.findStatisticsDaily(sm.format(calendar.getTime())));
+            td.setDate(calendar.getTimeInMillis());
         }
         return null;
     }
+
+    @SuppressWarnings("Duplicates")
+    @Transactional(readOnly = true)
+    public List<TransferData> findMonthlyStatistics(User user){
+
+        int info = 30;
+
+        Date nowTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowTime);
+        calendar.add(Calendar.MONTH,-12);
+        Point tmp = new Point();
+
+        SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
+
+        String strDate = sm.format(new Date());
+
+        TransferData td = new TransferData();
+
+        for (int i = 0; i < 30; i++){
+            calendar.add(Calendar.MONTH,+1);
+            td.setUnits(rentReservationRepository.findStatisticsDaily(sm.format(calendar.getTime())));
+            td.setDate(calendar.getTimeInMillis());
+        }
+        return null;
+    }
+    @SuppressWarnings("Duplicates")
+    @Transactional(readOnly = true)
+    public List<TransferData> findYearlyStatistics(User user){
+
+        int info = 30;
+
+        Date nowTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowTime);
+        calendar.add(Calendar.YEAR,-2);
+        Point tmp = new Point();
+
+        SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
+
+        String strDate = sm.format(new Date());
+
+        TransferData td = new TransferData();
+
+        for (int i = 0; i < 5; i++){
+            calendar.add(Calendar.YEAR,+1);
+            td.setUnits(rentReservationRepository.findStatisticsDaily(sm.format(calendar.getTime())));
+            td.setDate(calendar.getTimeInMillis());
+        }
+        return null;
+    } */
 
     @Transactional
     public boolean addCars(Cars cars, User user, Long id){
