@@ -44,7 +44,7 @@ public class ReservationHotel implements Serializable {
     private List<HotelServices> services;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "hotels_bla")
+    @JsonBackReference(value = "hotels_bla")
     private User user;
 
     @ManyToOne

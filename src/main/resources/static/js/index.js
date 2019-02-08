@@ -36,7 +36,7 @@ $(document).ready(function () {
             success: function (data) {
                 var sel = '#orderListings';
                 $(sel).append('<h6> Order id: ' + data.id+ ' </h6>');
-               /* if (data.reservations != undefined) {
+                if (data.reservations != undefined) {
                     data.reservations.forEach(function (entry) {
                         guiAriline(entry.flight,sel, entry.name, entry.lastName, entry.confirmed);
                     });
@@ -46,7 +46,7 @@ $(document).ready(function () {
                 }
                 if (data.reservationHotel != undefined){
                     guiHotel(data.reservationHotel.room);
-                }*/
+                }
 
             },
             error:function (message) {
@@ -90,7 +90,7 @@ function guiRent(rentReservation, selectedElement) {
 
         var car = rentReservation.rentedCar;
         var pricing =  rentReservation.price;
-        var normal = car.dailyPrice * daysBetween(rentReservation.startDate, rentReservation.endDate);
+        //var normal = car.dailyPrice * daysBetween(rentReservation.startDate, rentReservation.endDate);
         var tr = $(
             '<div class="card mb-1">' +
             '                                                <div class="card-body">' +
@@ -109,7 +109,6 @@ function guiRent(rentReservation, selectedElement) {
             '                                                        </div>' +
             '                                                        <div class="col-md-3">' +
             '                                                            <h5>$' + pricing +'</h5>' +
-            '                                                            <h6 style="text-decoration: line-through">$'+ normal+'</h6>                         ' +
             '                                                            <i class="fa fa-star"></i>' +
             '                                                            <i class="fa fa-star"></i>' +
             '                                                            <i class="fa fa-star"></i>' +

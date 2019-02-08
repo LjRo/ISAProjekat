@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -23,4 +24,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             " f.start_time >=?2 AND r.user_id = ?1", nativeQuery = true)
     List<Order> findAllFutureOrdersByUserIdAndDate(Long userId, String todayDate);
 
+    @Override
+    Optional<Order> findById(Long aLong);
 }
