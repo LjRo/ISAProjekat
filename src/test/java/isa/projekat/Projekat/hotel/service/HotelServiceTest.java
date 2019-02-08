@@ -3,9 +3,7 @@ package isa.projekat.Projekat.hotel.service;
 import isa.projekat.Projekat.model.hotel.*;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
-import isa.projekat.Projekat.repository.HotelRepository;
-import isa.projekat.Projekat.repository.HotelServicesRepository;
-import isa.projekat.Projekat.repository.RoomTypeRepository;
+import isa.projekat.Projekat.repository.*;
 import isa.projekat.Projekat.service.hotel.HotelService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,6 +63,15 @@ public class HotelServiceTest {
 
     @Mock
     private HotelServicesRepository hotelServicesRepository;
+
+    @Mock
+    private LocationRepository locationRepository;
+
+    @Mock
+    private FloorRepository floorRepository;
+
+    @Mock
+    private RoomRepository roomRepository;
 
     private LocalDate dateMock = LocalDate.now();
 
