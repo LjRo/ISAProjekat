@@ -109,6 +109,18 @@ public class FlightController {
         return flightService.findAllOrders(user.getId());
     }
 
+    @RequestMapping(value= "api/flight/{id}/cancel", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public Boolean cancelFlight(@PathVariable Long id, HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+        User user = userService.findByUsername(email);
+        return flightService.cancelFlight(id,user);
+    }
+
+
+
+
     @RequestMapping(value= "api/flight/{id}/order", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
     public Order findAllUserOrders(HttpServletRequest req, @PathVariable Long id){

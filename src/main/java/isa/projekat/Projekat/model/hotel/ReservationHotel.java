@@ -40,7 +40,7 @@ public class ReservationHotel implements Serializable {
     @Column
     private boolean fast = false;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     private List<HotelServices> services;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)

@@ -25,6 +25,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> returnFutureRentReservationByUser(Long userId, String todayDate);
 
 
+    void deleteById(Long id);
+
 
 
 

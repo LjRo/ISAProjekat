@@ -1,6 +1,8 @@
 package isa.projekat.Projekat.service.airline;
 
 import isa.projekat.Projekat.model.airline.*;
+import isa.projekat.Projekat.model.hotel.ReservationHotel;
+import isa.projekat.Projekat.model.rent_a_car.RentReservation;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.*;
 import org.joda.time.DateTime;
@@ -10,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class FlightService {
@@ -28,6 +27,11 @@ public class FlightService {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Autowired
+    private RentReservationRepository rentReservationRepository;
+    @Autowired
+    private HotelReservationRepository hotelReservationRepository;
+
     @Transactional(readOnly = true)
     public List<Flight> findAll() {
         return flightRepository.findAll();
@@ -41,6 +45,180 @@ public class FlightService {
             return null;
         }
     }
+
+    @Transactional
+    public Boolean cancelOrder(Long id, User user){
+
+
+        Optional<Order> orderOptional = orderRepository.findById(id);
+
+        if (!orderOptional.isPresent() || user == null){
+            return false;
+        }
+        Order order = orderOptional.get();
+
+        // not the user that placed the order
+        if (order.getPlacedOrder().getId().equals(user.getId())|| order.getReservations().size() == 0){
+            return  false;
+        }
+        Date date = order.getReservations().get(0).getFlight().getStartTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.HOUR, -3);
+        if (!cal.before(new Date())){
+            return false; // can't cancel
+        }
+
+        for (Reservation r : order.getReservations()) {
+            r.setFlight(null);
+            r.getSeat().setTaken(false);
+            r.getSeat().setReservation(null);
+            r.setSeat(null);
+            reservationRepository.save(r);
+            reservationRepository.deleteById(r.getId());
+        }
+
+        if (order.getRentReservation() != null){
+            RentReservation rentReservation = order.getRentReservation();
+
+            rentReservation.setRentedCar(null);
+            rentReservation.setStartLocation(null);
+            rentReservation.setEndLocation(null);
+            rentReservation.setUser(null);
+            rentReservationRepository.save(rentReservation);
+            rentReservationRepository.deleteById(rentReservation.getId());
+        }
+        if (order.getReservationHotel() != null){
+            ReservationHotel reservationHotel = order.getReservationHotel();
+
+            reservationHotel.setUser(null);
+            reservationHotel.setRoom(null);
+            reservationHotel.setServices(null);
+
+            hotelReservationRepository.save(reservationHotel);
+            hotelReservationRepository.deleteById(id);
+        }
+
+
+
+        return true;
+
+    }
+
+    // Id Order
+    @SuppressWarnings("Duplicates")
+    @Transactional
+    public Boolean cancelRent(Long id, User user){
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (!orderOptional.isPresent()){
+            return false;
+        }
+        Order order = orderOptional.get();
+        RentReservation rentReservation = order.getRentReservation();
+        if (rentReservation == null){
+            return false;
+        }
+
+        Date date = order.getRentReservation().getStartDate();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DAY_OF_MONTH, -3);
+        if (!cal.before(new Date())){
+            return false; // can't cancel
+        }
+
+        order.setRentReservation(null);
+        rentReservation.setUser(null);
+        rentReservation.setEndLocation(null);
+        rentReservation.setStartLocation(null);
+        rentReservation.setOrder(null);
+        rentReservation.setRentedCar(null);
+
+        rentReservationRepository.save(rentReservation);
+        rentReservationRepository.deleteById(rentReservation.getId());
+
+        return true;
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Transactional
+    public Boolean cancelHotel(Long id, User user){
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (!orderOptional.isPresent()){
+            return false;
+        }
+        Order order = orderOptional.get();
+        ReservationHotel reservationHotel = order.getReservationHotel();
+        if (reservationHotel == null){
+            return false;
+        }
+
+        Date date = order.getReservationHotel().getArrivalDate();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DAY_OF_MONTH, -3);
+        if (!cal.before(new Date())){
+            return false; // can't cancel
+        }
+
+        return true;
+    }
+
+    // For friends to cancel
+    @Transactional
+    public Boolean cancelFlight(Long id, User user){
+
+        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+
+        if (!optionalReservation.isPresent()){
+            return false;
+        }
+
+        Reservation reservation = optionalReservation.get();
+
+        if (!reservation.getUser().getId().equals(user)){
+            return false;
+        }
+
+        Order fromOrder = orderRepository.findByReservationId(id);
+        if (fromOrder == null){
+            return false;
+        }
+
+        fromOrder.getReservations().remove(reservation);
+
+        reservation.setUser(null);
+        reservation.setFlight(null);
+        reservation.setSeat(null);
+        reservation.setOrder(null);
+        reservationRepository.save(reservation);
+
+        reservationRepository.deleteById(reservation.getId());
+
+        return true;
+    }
+
+
+    @Transactional
+    public Boolean confirmFlight(Long id, User user){
+        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+
+        if (!optionalReservation.isPresent()){
+            return false;
+        }
+
+        Reservation reservation = optionalReservation.get();
+
+        if (!reservation.getUser().getId().equals(user.getId())){
+            return false;
+        }
+
+        reservation.setConfirmed(true);
+
+        return true;
+
+    }
+
 
     @Transactional(readOnly = true)
     public Order findOrderById(Long id){
