@@ -5,10 +5,7 @@ import isa.projekat.Projekat.model.airline.Flight;
 import isa.projekat.Projekat.model.airline.FlightData;
 import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.User;
-import isa.projekat.Projekat.repository.AirlineRepository;
-import isa.projekat.Projekat.repository.FlightRepository;
-import isa.projekat.Projekat.repository.LocationRepository;
-import isa.projekat.Projekat.repository.UserRepository;
+import isa.projekat.Projekat.repository.*;
 import isa.projekat.Projekat.service.airline.AirlineService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,9 +71,6 @@ public class AirlineServiceTest {
         List<Airline> airlines = airlineService.findAll();
         assertThat(airlines).hasSize(1);
 
-        verify(airlineRepositoryMock, times(1)).findAll();
-        verifyNoMoreInteractions(airlineRepositoryMock);
-
     }
 
     @Test
@@ -84,9 +80,6 @@ public class AirlineServiceTest {
         Airline dbAirline = airlineService.findById(new Long(1));
         assertEquals(airlineRepositoryMock.findById(DB_ID).get(), dbAirline);
 
-
-        verify(airlineRepositoryMock, times(2)).findById(DB_ID);
-        verifyNoMoreInteractions(airlineRepositoryMock);
     }
 
     @Test
@@ -109,7 +102,7 @@ public class AirlineServiceTest {
     }
 
     @Test
-    public void deleteLocationFalse() {
+    public void deleteLocationFail() {
         when(userRepositoryMock.findByUsername("admin@air.com")).thenReturn(userMock);
         when(userMock.getAdministratedAirline()).thenReturn(airlineMock);
         when(locationRepositoryMock.findById(LOC_ID)).thenReturn(Optional.of(locationMock));
@@ -119,7 +112,7 @@ public class AirlineServiceTest {
     }
 
     @Test
-    public void deleteLocationTrue() {
+    public void deleteLocationPass() {
         when(userRepositoryMock.findByUsername("admin@air.com")).thenReturn(userMock);
         when(userMock.getAdministratedAirline()).thenReturn(airlineMock);
         when(locationRepositoryMock.findById(LOC_ID)).thenReturn(Optional.of(locationMock));
@@ -166,13 +159,16 @@ public class AirlineServiceTest {
     @Test
     public void calculatedIntervalTest() {
         Object dummy[] = new Object[2];
+        Timestamp ts = Timestamp.valueOf(LocalDateTime.now());
 
-        dummy[0] = LocalDate.now();
+        dummy[0] = ts;
         dummy[1] = new BigDecimal("25.00");
+
         ArrayList<Object[]> dummyArray = new ArrayList<Object[]>();
         dummyArray.add(dummy);
 
         when(flightRepositoryMock.getProfitFromRange(DB_ID,dateMock,dateMock)).thenReturn(dummyArray);
+        assertEquals(airlineService.calculateIntervalProfit(DB_ID,dateMock,dateMock).get(dateMock), new BigDecimal("25.00"));
     }
 
 }

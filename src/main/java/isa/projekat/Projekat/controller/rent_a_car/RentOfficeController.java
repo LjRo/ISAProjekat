@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
@@ -38,13 +37,13 @@ public class RentOfficeController {
     private UserService userService;
 
     @PermitAll
-    @RequestMapping(value = "api/office/findAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/office/findAll", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<RentOffice> findAll(@RequestParam String page) {
         return rentOfficeService.findAll(pageRequestProvider.provideRequest(page));
     }
 
     @PermitAll
-    @RequestMapping(value = "api/office/findByIdAll", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/office/findByIdAll",  produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<RentOffice> findAllByRentACarId(@RequestParam long id,@RequestParam String page) {
 
         return rentOfficeService.findAllByRentACarId(id,pageRequestProvider.provideRequest(page));
@@ -53,7 +52,7 @@ public class RentOfficeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
-    @RequestMapping(value = "api/office/{idrent}/edit", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "api/office/{idrent}/edit", produces = {MediaType.APPLICATION_JSON_VALUE})
     public  boolean changed(@RequestBody RentOffice changed, @PathVariable Long idrent, HttpServletRequest httpServletRequest) {
         String authToken = jwtTokenUtils.getToken(httpServletRequest);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -75,8 +74,8 @@ public class RentOfficeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
-    @RequestMapping(value = "api/office/{rentid}/add",method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> addOffice(@PathVariable long rentid, @RequestBody RentOffice rentOffice, HttpServletRequest httpServletRequest) {
+    @PostMapping(value = "api/office/{rentid}/add", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Map<String,String>> addOffice(@PathVariable long rentid, @RequestBody RentOffice rentOffice, HttpServletRequest httpServletRequest) {
 
         String authToken = jwtTokenUtils.getToken(httpServletRequest);
         String email = jwtTokenUtils.getUsernameFromToken(authToken);
@@ -96,8 +95,8 @@ public class RentOfficeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN_RENT')")
     @AdminEnabledCheck
-    @RequestMapping(value = "api/office/{idrent}/remove", method =  RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> removeOffice(@PathVariable Long idrent,@RequestParam long id ,HttpServletRequest httpServletRequest){
+    @PostMapping(value = "api/office/{idrent}/remove", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Map<String,String>> removeOffice(@PathVariable Long idrent,@RequestParam long id ,HttpServletRequest httpServletRequest){
         User user = getUser(httpServletRequest);
         return responseTransaction(rentOfficeService.removeOffice(id,idrent,user));
     }
@@ -106,7 +105,7 @@ public class RentOfficeController {
 
 
     @SuppressWarnings("Duplicates")
-    private ResponseEntity<?> responseTransaction(Boolean resultOfTransaction ){
+    private ResponseEntity<Map<String,String>> responseTransaction(Boolean resultOfTransaction ){
         Map<String, String> result = new HashMap<>();
         if(resultOfTransaction )
         {

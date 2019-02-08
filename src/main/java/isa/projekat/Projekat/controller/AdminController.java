@@ -18,7 +18,7 @@ public class AdminController {
     private PricesService pricesService;
 
     @PermitAll
-    @RequestMapping(value = "api/pricesDiscount", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "api/pricesDiscount", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Float findDiscountPrice(@RequestParam String name)
     {
         Float value = pricesService.getPrice(name);
@@ -26,7 +26,7 @@ public class AdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "api/pricesDiscount/update", method = RequestMethod.POST)
+    @PostMapping(value = "api/pricesDiscount/update")
     public void addHotel(@RequestBody Prices prices, HttpServletRequest httpServletRequest) {
         pricesService.setPrice(prices);
     }

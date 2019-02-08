@@ -45,10 +45,21 @@ public class AirlineService {
     }
 
     @Transactional(readOnly = true)
-    public Airline findById(Long id) { return airlineRepository.findById(id).get(); }
+    public Airline findById(Long id) {
+        if(airlineRepository.findById(id).isPresent()) {
+            return airlineRepository.findById(id).get();
+        }
+        else {
+            return null;
+        }
+    }
 
     @Transactional(readOnly = true)
     public Location findLocationById(Long id, Long locId) {
+        if(!airlineRepository.findById(id).isPresent()) {
+            return null;
+        }
+
         List<Location> locs = airlineRepository.findById(id).get().getDestinations();
         for (Location loc : locs) {
             if(loc.getId().equals(locId)) {
@@ -56,36 +67,6 @@ public class AirlineService {
             }
         }
         return null;
-    }
-    @Transactional
-    public boolean updateAirlineData(AirlineData ad, String username) {
-
-       /* Airline target = findById(ad.getId());
-        User admin = userRepository.findByUsername(username);
-
-        if(target == null || ad.getAddress() == null || ad.getDescription().equals("") || ad.getName().equals("")){
-            return false;
-        }
-
-        if(target.getAdmins().contains(admin)) {
-            Optional<Location> optionalLocation = locationRepository.findById(ad.getAddress().getId());
-            Location found  = (optionalLocation.isPresent())?optionalLocation.get():null;
-            if(found==null)
-                return false;
-            found.setCountry(ad.getAddress().getCountry());
-            found.setLatitude(ad.getAddress().getLatitude());
-            found.setCity(ad.getAddress().getCity());
-            found.setLongitude(ad.getAddress().getLongitude());
-            found.setAddressName(ad.getAddress().getAddressName());
-            locationRepository.save(found);
-            target.setDescription(ad.getDescription());
-            target.setName(ad.getName());
-            return true;
-
-        }*/
-
-        return false;
-
     }
 
     @Transactional
@@ -105,6 +86,11 @@ public class AirlineService {
 
     @Transactional(readOnly = true)
     public List<Location> findAirlineDestinations(Long id) {
+
+        if(!airlineRepository.findById(id).isPresent()) {
+            return null;
+        }
+
         List<Location> locations = airlineRepository.findById(id).get().getDestinations();
         ArrayList<Location> res = new ArrayList<>();
         for(Location loc : locations ) {
@@ -179,6 +165,11 @@ public class AirlineService {
 
     @Transactional(readOnly = true)
     public List<Flight> findAllActiveFlights(Long id) {
+
+        if(!airlineRepository.findById(id).isPresent()) {
+            return null;
+        }
+
         List<Flight> allFlights = airlineRepository.findById(id).get().getFlights();
         ArrayList<Flight> result = new ArrayList<>();
         DateTime current = new DateTime();
@@ -226,31 +217,37 @@ public class AirlineService {
         User aAdmin = userRepository.findByUsername(email);
         Airline target = aAdmin.getAdministratedAirline();
 
+        if(!locationRepository.findById(locationId).isPresent()) {
+            return false;
+        }
+
         Location loc = locationRepository.findById(locationId).get();
 
         if(!target.getDestinations().contains(loc)) {
             return false;
         }
 
-        if(loc != null) {
-            if(loc.getActive()) {
-                loc.setActive(false);
-                locationRepository.save(loc);
-                return true;
-            } else {
-                return false;
-            }
+
+        if(loc.getActive()) {
+            loc.setActive(false);
+            locationRepository.save(loc);
+            return true;
         } else {
             return false;
         }
     }
 
     @Transactional
-    public Boolean addLocation (Location loc, Long id, String email) {
+    public Boolean addLocation (LocationData loc, Long id, String email) {
         User aAdmin = userRepository.findByUsername(email);
         Airline target = aAdmin.getAdministratedAirline();
 
         if(loc.getCity() != null && loc.getCountry() != null && loc.getAddressName() != null ) {
+
+            if(!airlineRepository.findById(id).isPresent()) {
+                return false;
+            }
+
             Airline air = airlineRepository.findById(id).get();
             if(!target.equals(air)) {
                 return false;
@@ -326,6 +323,11 @@ public class AirlineService {
 
     @Transactional(readOnly = true)
     public Long findLastSeat(Long id) {
+
+        if(!airlineRepository.findById(id).isPresent()) {
+            return null;
+        }
+
         Airline target = airlineRepository.findById(id).get();
         int val = target.getFlights().size() - 1;
         if(val == -1) {
@@ -437,7 +439,7 @@ public class AirlineService {
             } else if( value instanceof BigInteger) {
                 ret = new BigDecimal( (BigInteger) value );
             } else if( value instanceof Number ) {
-                ret = new BigDecimal( ((Number)value).doubleValue() );
+                ret =  BigDecimal.valueOf(((Number)value).doubleValue());
             } else {
                 throw new ClassCastException("Not possible to coerce ["+value+"] from class "+value.getClass()+" into a BigDecimal.");
             }
