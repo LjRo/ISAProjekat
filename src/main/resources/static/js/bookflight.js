@@ -6,6 +6,7 @@ var friendData;
 var airlineReservations = [];
 var seatDict = new Object();
 var selectedSeats = [];
+var orderId = 0;
 
 $(function () {
 
@@ -390,10 +391,30 @@ function confirmInput() {
                                     var url = window.location.href.match(/^.*\//) + 'rentacars.html?type=1&search='+data.finish.city + '&start=' + a + '&end='+d;
                                     window.location.replace(url);
                                 });
+
+
+
                                 $('#finishReservation').click(function () {
-                                    var url = window.location.href.match(/^.*\//) + 'checkout.html';
-                                    window.location.replace('');
+
+                                    $.ajax({
+                                        url: "api/order/confirmLast",
+                                        type: 'POST',
+                                        headers: {"Authorization": "Bearer " + localStorage.getItem('accessToken')},
+                                        contentType: 'application/json',
+                                        success: function (val) {
+                                            var url = window.location.href.match(/^.*\//) + 'index.html';
+                                            window.location.replace(url);
+                                        },
+                                        error: function(){
+                                            alert("Something went wrong...");
+                                            location.reload();
+                                        }
+                                    });
+
+
+
                                 });
+
                             }
                         }
                     });

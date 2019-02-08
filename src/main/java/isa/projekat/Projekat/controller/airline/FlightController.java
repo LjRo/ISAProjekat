@@ -76,6 +76,15 @@ public class FlightController {
         return flightService.isOrdering(orderId,email);
     }
 
+    @RequestMapping(value = "api/order/confirmLast", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity confirmLastOrder(HttpServletRequest req){
+        String authToken = jwtTokenUtils.getToken(req);
+        String email = jwtTokenUtils.getUsernameFromToken(authToken);
+
+        return ResponseFormatter.format(flightService.finishLastOrder(email),false);
+    }
+
     @RequestMapping(value = "api/flight/search", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole('USER')")
     public List<FlightSearchResultData> searchFlight(@RequestBody FlightSearchData searchData, HttpServletRequest req){

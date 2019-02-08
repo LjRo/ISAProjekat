@@ -3,6 +3,7 @@ package isa.projekat.Projekat.service.airline;
 import isa.projekat.Projekat.model.airline.*;
 import isa.projekat.Projekat.model.user.User;
 import isa.projekat.Projekat.repository.*;
+import isa.projekat.Projekat.service.user_auth.EmailService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class FlightService {
     private OrderRepository orderRepository;
     @Autowired
     private ReservationRepository reservationRepository;
+    @Autowired
+    private EmailService emailService;
 
     @Transactional(readOnly = true)
     public List<Flight> findAll() {
@@ -122,7 +125,31 @@ public class FlightService {
         for(Order o: req.getOrders()) {
             if(o.getId().equals(target.getId())) {
                 target.setFinished(true);
+                Flight fl = target.getReservations().get(0).getFlight();
                 orderRepository.save(target);
+                emailService.sendOrderMail(req,target,fl);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Transactional
+    public Boolean finishLastOrder(String email) {
+        User req = userRepository.findByUsername(email);
+        if(req  == null) {
+            return false;
+        }
+        List<Order> allOrders = req.getOrders();
+
+        for(int i = allOrders.size()-1; i >=0; i++) {
+
+            if(!allOrders.get(i).getFinished()) {
+                Order target = allOrders.get(i);
+                Flight fl = target.getReservations().get(0).getFlight();
+                target.setFinished(true);
+                orderRepository.save(target);
+                emailService.sendOrderMail(req, target, fl);
                 return true;
             }
         }
@@ -230,6 +257,7 @@ public class FlightService {
                     newRes.setConfirmed(true);
                 } else {
                     newRes.setConfirmed(false);
+                    emailService.sendInviteMail(requester,targetUser);
                 }
 
                 newRes.setName(targetUser.getFirstName());
@@ -258,7 +286,9 @@ public class FlightService {
             reservationRepository.save(newRes);
 
         }
+        requester.getOrders().add(nOrder);
         orderRepository.save(nOrder);
+        userRepository.save(requester);
         return true;
     }
 
