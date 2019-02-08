@@ -2,6 +2,7 @@ package isa.projekat.Projekat.hotel.controller;
 
 import isa.projekat.Projekat.TestUtil;
 import isa.projekat.Projekat.model.hotel.Hotel;
+import isa.projekat.Projekat.model.rent_a_car.Location;
 import isa.projekat.Projekat.model.user.UserTokenState;
 import isa.projekat.Projekat.security.auth.JwtAuthenticationRequest;
 import org.junit.Test;
@@ -30,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class HotelControllerTest {
 
-    private static final String URL_PREFIX = "/api/airline";
     private static final String URL_PREFIXH = "/api/hotel";
     private static final Long DB_ID = 1L;
 
@@ -81,5 +81,23 @@ public class HotelControllerTest {
         String json = TestUtil.json(hotel);
         this.mockMvc.perform(post(URL_PREFIXH+ "/addHotel").header("Authorization", "Bearer " + accessToken).contentType(contentType).content(json)).andExpect(status().is(403));
     }
+    @Transactional
+    @Test
+    public void editHotel() throws Exception {
+        Hotel hotel = new Hotel();
+        hotel.setId(DB_ID);
+        hotel.setName("na");
+        hotel.setDescription("d");
+        hotel.setFastDiscount(5);
+            Location location = new Location();
+            location.setAddressName("basd");
+            location.setCity("ads");
+            location.setLongitude(12.45);
+            location.setLatitude(35.45);
+            location.setCountry("asda");
+        hotel.setAddress(location);
 
+        String json = TestUtil.json(hotel);
+        this.mockMvc.perform(post(URL_PREFIXH+ "/editHotel").header("Authorization", "Bearer " + accessToken).contentType(contentType).content(json)).andExpect(status().is(202));
+    }
 }
