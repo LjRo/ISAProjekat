@@ -15,6 +15,16 @@ public class RoomData implements Serializable {
         super();
     }
 
+    public RoomData(String name, RoomType roomType, int numberOfPeople, int numberOfBeds, int numberOfRooms, int roomNumber, int floor) {
+        this.name = name;
+        this.roomType = roomType;
+        this.numberOfPeople = numberOfPeople;
+        this.numberOfBeds = numberOfBeds;
+        this.numberOfRooms = numberOfRooms;
+        this.roomNumber = roomNumber;
+        this.floor = floor;
+    }
+
     public String getName() { return name;}
 
     public void setName(String name) {this.name = name;}

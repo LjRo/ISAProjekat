@@ -320,7 +320,7 @@ public class FlightService {
         }
         List<Order> allOrders = req.getOrders();
 
-        for(int i = allOrders.size()-1; i >=0; i++) {
+        for(int i = allOrders.size()-1; i >=0; i--) {
 
             if(!allOrders.get(i).getFinished()) {
                 Order target = allOrders.get(i);

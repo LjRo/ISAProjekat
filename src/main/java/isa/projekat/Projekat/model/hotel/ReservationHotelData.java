@@ -15,9 +15,19 @@ public class ReservationHotelData implements Serializable {
         super();
     }
 
+    public ReservationHotelData(Long hotelId, Long roomId, Long reservationId, String services, String arrivalDate, String departureDate) {
+        this.hotelId = hotelId;
+        this.roomId = roomId;
+        this.reservationId = reservationId;
+        this.services = services;
+        this.arrivalDate = arrivalDate;
+        this.departureDate = departureDate;
+    }
+
     public Long getReservationId() {
         return reservationId;
     }
+
     public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
     }
