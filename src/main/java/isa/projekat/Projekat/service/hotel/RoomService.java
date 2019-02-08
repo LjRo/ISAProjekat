@@ -187,6 +187,8 @@ public class RoomService {
             Order pendingOrder = reservation.get();
             Room roomFound = exists.get();
             ReservationHotel newReservation = new ReservationHotel();
+
+
             newReservation.setNightsStaying((int)days);
             //newReservation.setHotel(roomFound.getHotel());
             newReservation.setUserOrder(pendingOrder);

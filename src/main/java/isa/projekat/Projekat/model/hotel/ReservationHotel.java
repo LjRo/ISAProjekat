@@ -8,6 +8,7 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +39,9 @@ public class ReservationHotel implements Serializable {
     @Column(nullable = false)
     private int People;
 
+    @Column
+    private BigDecimal price;
+
     @OneToMany(cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<HotelServices> services;
@@ -54,6 +58,14 @@ public class ReservationHotel implements Serializable {
 
     public ReservationHotel(){
 
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public User getUser() {
