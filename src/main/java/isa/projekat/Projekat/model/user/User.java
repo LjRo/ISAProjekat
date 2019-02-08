@@ -81,7 +81,7 @@ public class User implements UserDetails {
     private Hotel administratedHotel;
 
     @OneToMany
-    @JsonBackReference("placed_orders")
+    @JsonBackReference(value = "placed_orders")
     private List<Order> orders;
 
     @OneToMany
